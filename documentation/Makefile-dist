@@ -6,7 +6,7 @@ XMLTO = /usr/bin/xmlto
 XSLTPROC = /usr/bin/xsltproc
 WINE = /usr/bin/wine
 LANG = en
-LANGS_AVAIL = de en es fr it ja pt_BR ru
+LANGS_AVAIL = en
 
 all: html pdf
 

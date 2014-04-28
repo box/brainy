@@ -41,5 +41,3 @@ foreach (new RecursiveIteratorIterator($dhandle) as $fpath) {
         file_put_contents($webdir.'/'.$fname,$template);
      }
 }
-
-?>
