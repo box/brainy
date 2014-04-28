@@ -15,6 +15,8 @@ class CacheResourceCustomMemcacheTests extends CacheResourceCustomMysqlTests
 {
     public function setUp()
     {
+        $this->markTestSkipped('Skipping Memcached tests');
+
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->caching_type = 'memcachetest';

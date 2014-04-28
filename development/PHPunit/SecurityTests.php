@@ -230,7 +230,7 @@ class SecurityTests extends PHPUnit_Framework_TestCase
     {
         // NOTE: asp_tags cannot be changed by ini_set()
         if (!ini_get('asp_tags')) {
-            $this->fail( 'asp_tags are disabled' );
+            $this->markTestSkipped('asp_tags are disabled');
         }
         $this->smartyBC->security_policy->php_handling = Smarty::PHP_ALLOW;
         $this->assertEquals('hello world', $this->smartyBC->fetch('eval:<% echo "hello world"; %>'));

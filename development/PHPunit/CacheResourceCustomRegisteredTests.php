@@ -15,6 +15,8 @@ class CacheResourceCustomRegisteredTests extends CacheResourceCustomMysqlTests
 {
     public function setUp()
     {
+        $this->markTestSkipped('Skipping MySQL tests');
+
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
 

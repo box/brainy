@@ -81,6 +81,7 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase
      */
     public function testResourcePluginMysql()
     {
+        $this->markTestSkipped('Skipping MySQL tests');
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->assertEquals('hello world', $this->smarty->fetch('mysqltest:test.tpl'));
     }
@@ -89,6 +90,7 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase
      */
     public function testResourcePluginMysqlTimestamp()
     {
+        $this->markTestSkipped('Skipping MySQL tests');
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $tpl = $this->smarty->createTemplate('mysqltest:test.tpl');
         $this->assertEquals(strtotime("2010-12-25 22:00:00"), $tpl->source->timestamp);
@@ -98,6 +100,7 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase
      */
     public function testResourcePluginMysqlTimestampWithoutFetchTimestamp()
     {
+        $this->markTestSkipped('Skipping MySQL tests');
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $tpl = $this->smarty->createTemplate('mysqlstest:test.tpl');
         $this->assertEquals(strtotime("2010-12-25 22:00:00"), $tpl->source->timestamp);
@@ -107,6 +110,7 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase
      */
     public function testResourcePluginMysqlCompiledFilepath()
     {
+        $this->markTestSkipped('Skipping MySQL tests');
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $tpl = $this->smarty->createTemplate('mysqltest:test.tpl');
         $expected = realpath('./templates_c/'.sha1('mysqltest:test.tpl').'.mysqltest.test.tpl.php');
@@ -115,6 +119,7 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase
     }
     public function testResourcePluginMysqlCompiledFilepathCache()
     {
+        $this->markTestSkipped('Skipping MySQL tests');
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;

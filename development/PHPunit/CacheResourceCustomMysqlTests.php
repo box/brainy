@@ -13,6 +13,8 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->markTestSkipped('Skipping MySQL tests');
+
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->caching_type = 'mysqltest';

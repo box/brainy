@@ -467,7 +467,11 @@ class FileResourceTests extends PHPUnit_Framework_TestCase
             '../../foo.tpl' => 'relativity',
         );
 
-        chdir($dn . '/templates/relativity/theory/');
+        $newdest = $dn . '/templates/relativity/theory/';
+        chdir($newdest);
+        if (!file_exists($newdest . 'cache')) {
+            mkdir($newdest . 'cache');
+        }
         $this->_relativeMap($map, $cwd);
 
         $map = array(
@@ -501,7 +505,11 @@ class FileResourceTests extends PHPUnit_Framework_TestCase
             '././foo.tpl' => 'relativity',
         );
 
-        chdir($dn . '/templates/relativity/theory/einstein');
+        $newdest = $dn . '/templates/relativity/theory/einstein';
+        chdir($newdest);
+        if (!file_exists($newdest . '/cache')) {
+            mkdir($newdest . '/cache');
+        }
         $this->_relativeMap($map, $cwd);
 
         $map = array(
@@ -511,7 +519,11 @@ class FileResourceTests extends PHPUnit_Framework_TestCase
             './theory/theory.tpl' => 'theory',
         );
 
-        chdir($dn . '/templates/relativity/theory/einstein/');
+        $newdest = $dn . '/templates/relativity/theory/einstein/';
+        chdir($newdest);
+        if (!file_exists($newdest . 'cache')) {
+            mkdir($newdest . 'cache');
+        }
         $this->_relativeMap($map, $cwd);
 
         $map = array(
