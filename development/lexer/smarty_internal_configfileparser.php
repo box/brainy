@@ -8,7 +8,6 @@
 * @subpackage Compiler
 * @author Uwe Tews
 */
-
 class TPC_yyToken implements ArrayAccess
 {
     public $string = '';
@@ -925,3 +924,4 @@ static public $yy_action = array(
         } while ($yymajor != self::YYNOCODE && $this->yyidx >= 0);
     }
 }
+?>

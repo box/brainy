@@ -59,27 +59,35 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
             }
         }
         // compiled output
+        $output = '';
         if (isset($parameter['smarty_internal_index'])) {
-            $output = "<?php \$_smarty_tpl->createLocalArrayVariable($_attr[var], $_nocache, $_scope);\n\$_smarty_tpl->tpl_vars[$_attr[var]]->value$parameter[smarty_internal_index] = $_attr[value];";
+            $output .= "\$_smarty_tpl->createLocalArrayVariable($_attr[var], $_nocache, $_scope);\n";
+            $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]]->value$parameter[smarty_internal_index] = $_attr[value];\n";
         } else {
             // implement Smarty2's behaviour of variables assigned by reference
             if ($compiler->template->smarty instanceof SmartyBC) {
-                $output = "<?php if (isset(\$_smarty_tpl->tpl_vars[$_attr[var]])) {\$_smarty_tpl->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];";
-                $output .= "\n\$_smarty_tpl->tpl_vars[$_attr[var]]->value = $_attr[value]; \$_smarty_tpl->tpl_vars[$_attr[var]]->nocache = $_nocache; \$_smarty_tpl->tpl_vars[$_attr[var]]->scope = $_scope;";
-                $output .= "\n} else \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], $_nocache, $_scope);";
+                $output .= "if (isset(\$_smarty_tpl->tpl_vars[$_attr[var]])) {\n";
+                $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
+                $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->value = $_attr[value];\n";
+                $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->nocache = $_nocache;\n";
+                $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->scope = $_scope;\n";
+                $output .= "} else \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], $_nocache, $_scope);\n";
             } else {
-                $output = "<?php \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], $_nocache, $_scope);";
+                $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], $_nocache, $_scope);\n";
             }
         }
         if ($_scope == Smarty::SCOPE_PARENT) {
-            $output .= "\nif (\$_smarty_tpl->parent != null) \$_smarty_tpl->parent->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];";
+            $output .= "if (\$_smarty_tpl->parent != null) \$_smarty_tpl->parent->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
         } elseif ($_scope == Smarty::SCOPE_ROOT || $_scope == Smarty::SCOPE_GLOBAL) {
-            $output .= "\n\$_ptr = \$_smarty_tpl->parent; while (\$_ptr != null) {\$_ptr->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]]; \$_ptr = \$_ptr->parent; }";
+            $output .= "\$_ptr = \$_smarty_tpl->parent;\n";
+            $output .= "while (\$_ptr != null) {\n";
+            $output .= "  \$_ptr->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];";
+            $output .= "  \$_ptr = \$_ptr->parent;\n";
+            $output .= "}\n";
         }
         if ($_scope == Smarty::SCOPE_GLOBAL) {
-            $output .= "\nSmarty::\$global_tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];";
+            $output .= "Smarty::\$global_tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
         }
-        $output .= '?>';
 
         return $output;
     }

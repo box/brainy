@@ -24,3 +24,7 @@ node_modules/
 Thumbs.db
 desktop.ini
 *.sublime-project
+cache/
+*.tpl.php
+*.cache.php
+*.out

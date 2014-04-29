@@ -65,9 +65,6 @@
          				'QMARK'		=> '"?"',
          				'ID'			=> 'identifier',
          				'TEXT'		=> 'text',
-          				'FAKEPHPSTARTTAG'	=> 'Fake PHP start tag',
-          				'PHPSTARTTAG'	=> 'PHP start tag',
-          				'PHPENDTAG'	=> 'PHP end tag',
       						'LITERALSTART'  => 'Literal start',
       						'LITERALEND'    => 'Literal end',
          				'LDELSLASH' => 'closing tag',
@@ -112,10 +109,6 @@
      dollarid = /\$[0-9]*[a-zA-Z_]\w*/
      all = /[\S\s]+/
      emptyjava = /\{\}/
-     phpstarttag = /<\?(?:php\w+|=|[a-zA-Z]+)?/
-     phpendtag = /\?>/
-     aspstarttag = /<%/
-     aspendtag = /%>/
      slash = /\//
      ldel = /SMARTYldel\s*/
      rdel = /\s*SMARTYrdel/
@@ -143,8 +136,6 @@
      ptr = /\s*\->\s*/
      aptr = /\s*=>\s*/
      singlequotestring = /'[^'\\]*(?:\\.[^'\\]*)*'/
-     backtick = /`/
-     backtickdollar = /`\$/
      vert = /\|/
      andsym = /\s*\&\s*/
      qmark = /\s*\?\s*/
@@ -274,27 +265,8 @@
           $this->taglineno = $this->line;
        }
      }
-     phpstarttag {
-       if (in_array($this->value, Array('<?', '<?=', '<?php'))) {
-         $this->token = Smarty_Internal_Templateparser::TP_PHPSTARTTAG;
-       } elseif ($this->value == '<?xml') {
-           $this->token = Smarty_Internal_Templateparser::TP_XMLTAG;
-       } else {
-         $this->token = Smarty_Internal_Templateparser::TP_FAKEPHPSTARTTAG;
-         $this->value = substr($this->value, 0, 2);
-       }
-      }
-     phpendtag {
-       $this->token = Smarty_Internal_Templateparser::TP_PHPENDTAG;
-     }
      rdel {
        $this->token = Smarty_Internal_Templateparser::TP_TEXT;
-     }
-     aspstarttag {
-       $this->token = Smarty_Internal_Templateparser::TP_ASPSTARTTAG;
-     }
-     aspendtag {
-       $this->token = Smarty_Internal_Templateparser::TP_ASPENDTAG;
      }
      text {
        if ($this->mbstring_overload) {
@@ -477,10 +449,6 @@
      integer {
        $this->token = Smarty_Internal_Templateparser::TP_INTEGER;
      }
-     backtick {
-       $this->token = Smarty_Internal_Templateparser::TP_BACKTICK;
-       $this->yypopstate();
-     }
      vert {
        $this->token = Smarty_Internal_Templateparser::TP_VERT;
      }
@@ -579,23 +547,6 @@
          $this->yypopstate();
        }
      }
-     phpstarttag {
-       if (in_array($this->value, Array('<?', '<?=', '<?php'))) {
-         $this->token = Smarty_Internal_Templateparser::TP_PHPSTARTTAG;
-        } else {
-         $this->token = Smarty_Internal_Templateparser::TP_FAKEPHPSTARTTAG;
-         $this->value = substr($this->value, 0, 2);
-        }
-     }
-     phpendtag {
-       $this->token = Smarty_Internal_Templateparser::TP_PHPENDTAG;
-     }
-     aspstarttag {
-       $this->token = Smarty_Internal_Templateparser::TP_ASPSTARTTAG;
-     }
-     aspendtag {
-       $this->token = Smarty_Internal_Templateparser::TP_ASPENDTAG;
-     }
      text {
        if ($this->mbstring_overload) {
          $to = mb_strlen($this->data,'latin1');
@@ -666,12 +617,6 @@
      double_quote {
        $this->token = Smarty_Internal_Templateparser::TP_QUOTE;
        $this->yypopstate();
-     }
-     backtickdollar {
-       $this->token = Smarty_Internal_Templateparser::TP_BACKTICK;
-       $this->value = substr($this->value,0,-1);
-       $this->yypushstate(self::SMARTY);
-       $this->taglineno = $this->line;
      }
      dollarid {
        $this->token = Smarty_Internal_Templateparser::TP_DOLLARID;
@@ -787,4 +732,4 @@
      */
      }
 
-     
+

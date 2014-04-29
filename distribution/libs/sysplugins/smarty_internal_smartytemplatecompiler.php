@@ -88,6 +88,7 @@ class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCom
      */
     protected function doCompile($_content)
     {
+        echo $_content;
         /* here is where the compiling takes place. Smarty
           tags in the templates are replaces with PHP code,
           then written to compiled files. */
@@ -125,6 +126,7 @@ class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCom
         }
         // return compiled code
         // return str_replace(array("? >\n<?php","? ><?php"), array('',''), $this->parser->retvalue);
+        // var_dump($this->parser->retvalue);
         return $this->parser->retvalue;
     }
 

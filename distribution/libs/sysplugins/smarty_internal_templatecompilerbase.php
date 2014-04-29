@@ -231,8 +231,8 @@ abstract class Smarty_Internal_TemplateCompilerBase
         // template header code
         $template_header = '';
         if (!$this->suppressHeader) {
-            $template_header .= "<?php /* Smarty version " . Smarty::SMARTY_VERSION . ", created on " . strftime("%Y-%m-%d %H:%M:%S") . "\n";
-            $template_header .= "         compiled from \"" . $this->template->source->filepath . "\" */ ?>\n";
+            $template_header .= "<?php /* Brainy version " . Smarty::SMARTY_VERSION . ", created on " . strftime("%Y-%m-%d %H:%M:%S") . "\n";
+            $template_header .= "         compiled from \"" . $this->template->source->filepath . "\" */\n";
         }
 
         if (empty($this->template->source->components)) {
@@ -604,7 +604,10 @@ abstract class Smarty_Internal_TemplateCompilerBase
         }
         // loop through plugin dirs and find the plugin
         $function = 'smarty_' . $plugin_type . '_' . $plugin_name;
-        $file = $this->smarty->loadPlugin($function, false);
+        $file = $this->smarty->loadPlugin($function, true);
+        if ($file === true) {
+            return $function;
+        }
 
         if (is_string($file)) {
             if ($this->template->caching && ($this->nocache || $this->tag_nocache)) {
@@ -696,7 +699,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
                 $this->template->has_nocache_code = true;
                 $_output = addcslashes($content, '\'\\');
                 $_output = str_replace("^#^", "'", $_output);
-                $_output = "<?php echo '/*%%SmartyNocache:{$this->nocache_hash}%%*/" . $_output . "/*/%%SmartyNocache:{$this->nocache_hash}%%*/';?>\n";
+                $_output = "echo '/*%%SmartyNocache:{$this->nocache_hash}%%*/" . $_output . "/*/%%SmartyNocache:{$this->nocache_hash}%%*/';\n";
                 // make sure we include modifier plugins for nocache code
                 foreach ($this->modifier_plugins as $plugin_name => $dummy) {
                     if (isset($this->template->required_plugins['compiled'][$plugin_name]['modifier'])) {

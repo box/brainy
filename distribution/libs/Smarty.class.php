@@ -302,7 +302,7 @@ class Smarty extends Smarty_Internal_TemplateBase
     /**
      * template inheritance merge compiled includes
      * @var boolean
-     */    
+     */
     public $inheritance_merge_compiled_includes = true;
     /**
      * cache lifetime in seconds
@@ -867,7 +867,7 @@ class Smarty extends Smarty_Internal_TemplateBase
                     $this->template_dir[$k] = $v;
                 }
             }
-        } else {           
+        } else {
             $v = str_replace(array('//','\\\\'), DS, rtrim($template_dir, '/\\')) . DS;
             if ($key !== null) {
                 // override directory at specified index

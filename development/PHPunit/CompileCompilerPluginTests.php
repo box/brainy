@@ -45,5 +45,5 @@ class CompileCompilerPluginTests extends PHPUnit_Framework_TestCase
 }
 function mycompilerplugin($params, $compiler)
 {
-    return '<?php echo \'Hello World\';?>';
+    return 'echo \'Hello World\';';
 }

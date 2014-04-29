@@ -55,7 +55,7 @@ class Smarty_Internal_Compile_Section extends Smarty_Internal_CompileBase
         // maybe nocache because of nocache variables
         $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
 
-        $output = "<?php ";
+        $output = '';
 
         $section_name = $_attr['name'];
 
@@ -130,8 +130,6 @@ class Smarty_Internal_Compile_Section extends Smarty_Internal_CompileBase
         $output .= "{$section_props}['first']      = ({$section_props}['iteration'] == 1);\n";
         $output .= "{$section_props}['last']       = ({$section_props}['iteration'] == {$section_props}['total']);\n";
 
-        $output .= "?>";
-
         return $output;
     }
 
@@ -160,7 +158,7 @@ class Smarty_Internal_Compile_Sectionelse extends Smarty_Internal_CompileBase
         list($openTag, $nocache) = $this->closeTag($compiler, array('section'));
         $this->openTag($compiler, 'sectionelse', array('sectionelse', $nocache));
 
-        return "<?php endfor; else: ?>";
+        return "endfor;\nelse:\n";
     }
 
 }
@@ -193,9 +191,9 @@ class Smarty_Internal_Compile_Sectionclose extends Smarty_Internal_CompileBase
         list($openTag, $compiler->nocache) = $this->closeTag($compiler, array('section', 'sectionelse'));
 
         if ($openTag == 'sectionelse') {
-            return "<?php endif; ?>";
+            return "endif;\n";
         } else {
-            return "<?php endfor; endif; ?>";
+            return "endfor;\nendif;\n";
         }
     }
 

@@ -339,7 +339,6 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         // include code for plugins
         if (!$cache) {
             if (!empty($this->required_plugins['compiled'])) {
-                $plugins_string = '<?php ';
                 foreach ($this->required_plugins['compiled'] as $tmp) {
                     foreach ($tmp as $data) {
                         $file = addslashes($data['file']);
@@ -350,11 +349,10 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
                         }
                     }
                 }
-                $plugins_string .= '?>';
             }
             if (!empty($this->required_plugins['nocache'])) {
                 $this->has_nocache_code = true;
-                $plugins_string .= "<?php echo '/*%%SmartyNocache:{$this->properties['nocache_hash']}%%*/<?php \$_smarty = \$_smarty_tpl->smarty; ";
+                $plugins_string .= "echo '/*%%SmartyNocache:{$this->properties['nocache_hash']}%%*/\n\$_smarty = \$_smarty_tpl->smarty;\n";
                 foreach ($this->required_plugins['nocache'] as $tmp) {
                     foreach ($tmp as $data) {
                         $file = addslashes($data['file']);
@@ -365,14 +363,14 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
                         }
                     }
                 }
-                $plugins_string .= "?>/*/%%SmartyNocache:{$this->properties['nocache_hash']}%%*/';?>\n";
+                $plugins_string .= "/*/%%SmartyNocache:{$this->properties['nocache_hash']}%%*/';\n";
             }
         }
         // build property code
         $this->properties['has_nocache_code'] = $this->has_nocache_code;
         $output = '';
         if (!$this->source->recompiled) {
-            $output = "<?php /*%%SmartyHeaderCode:{$this->properties['nocache_hash']}%%*/";
+            $output = "/*%%SmartyHeaderCode:{$this->properties['nocache_hash']}%%*/";
             if ($this->smarty->direct_access_security) {
                 $output .= "if(!defined('SMARTY_DIR')) exit('no direct access allowed');\n";
             }
@@ -402,13 +400,13 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             $this->properties['unifunc'] = 'content_' . str_replace(array('.',','), '_', uniqid('', true));
         }
         if (!$this->source->recompiled) {
-            $output .= "\$_valid = \$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ',' . ($cache ? 'true' : 'false') . "); /*/%%SmartyHeaderCode%%*/?>\n";
-            $output .= '<?php if ($_valid && !is_callable(\'' . $this->properties['unifunc'] . '\')) {function ' . $this->properties['unifunc'] . '($_smarty_tpl) {?>';
+            $output .= "\$_valid = \$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ',' . ($cache ? 'true' : 'false') . "); /*/%%SmartyHeaderCode%%*/\n";
+            $output .= 'if ($_valid && !is_callable(\'' . $this->properties['unifunc'] . '\')) {function ' . $this->properties['unifunc'] . "(\$_smarty_tpl) {\n";
         }
         $output .= $plugins_string;
         $output .= $content;
         if (!$this->source->recompiled) {
-            $output .= "<?php }} ?>\n";
+            $output .= "}\n}\n";
         }
 
         return $output;
@@ -475,7 +473,8 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             }
             $this->cached->valid = $is_valid;
         } else {
-            $this->mustCompile = !$is_valid;        }
+            $this->mustCompile = !$is_valid;
+        }
         // store data in reusable Smarty_Template_Compiled
         if (!$cache) {
             $this->compiled->_properties = $properties;

@@ -74,12 +74,11 @@ class Smarty_Internal_Compile_Private_Object_Function extends Smarty_Internal_Co
         if (empty($_assign)) {
             // This tag does create output
             $compiler->has_output = true;
-            $output = "<?php echo {$return};?>\n";
+            return "echo {$return};\n";
         } else {
-            $output = "<?php \$_smarty_tpl->assign({$_assign},{$return});?>\n";
+            return "\$_smarty_tpl->assign({$_assign},{$return});\n";
         }
 
-        return $output;
     }
 
 }

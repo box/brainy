@@ -321,7 +321,7 @@ class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase
                 $compiler->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBODY);
             }
             $compiler->has_code = false;
-            return;
+            return '';
         }
         if (isset($compiler->template->block_data[$_name]) && !isset($compiler->template->block_data[$_name]['compiled'])) {
             $_output = Smarty_Internal_Compile_Block::compileChildBlock($compiler, $_name);

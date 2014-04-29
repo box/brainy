@@ -35,6 +35,21 @@ abstract class _smarty_parsetree
      */
     abstract public function to_smarty_php();
 
+    /**
+     * Return escaped data
+     *
+     * @param string $toEscape
+     * @return string escaped string
+     */
+    protected function escape_data($toEscape) {
+        $out = addslashes($toEscape);
+        $out = str_replace("\n", '\n', $out);
+        $out = str_replace("\r", '\r', $out);
+        $out = str_replace("\t", '\t', $out);
+        $out = str_replace('$', '\$', $out);
+        return $out;
+    }
+
 }
 
 /**
@@ -288,13 +303,11 @@ class _smarty_template_buffer extends _smarty_parsetree
                     $key = $key + 2;
                     continue;
                 }
-            }
+            }/*
             if (substr($code, -1) == '<') {
                 $subtree = $this->subtrees[$key]->to_smarty_php();
                 if (substr($subtree, 0, 1) == '?') {
                     $code = substr($code, 0, strlen($code) - 1) . '<<?php ?>?' . substr($subtree, 1);
-                } elseif ($this->parser->asp_tags && substr($subtree, 0, 1) == '%') {
-                    $code = substr($code, 0, strlen($code) - 1) . '<<?php ?>%' . substr($subtree, 1);
                 } else {
                     $code .= $subtree;
                 }
@@ -317,11 +330,11 @@ class _smarty_template_buffer extends _smarty_parsetree
                     $code .= $subtree;
                 }
                 continue;
-            }
+            }*/
             $code .= $this->subtrees[$key]->to_smarty_php();
         }
 
-        return $code;
+        return $code . "\n";
     }
 
 }
@@ -354,7 +367,7 @@ class _smarty_text extends _smarty_parsetree
      */
     public function to_smarty_php()
     {
-        return $this->data;
+        return 'echo "' . addslashes($this->data) . "\";\n";
     }
 
 }
@@ -387,7 +400,7 @@ class _smarty_linebreak extends _smarty_parsetree
      */
     public function to_smarty_php()
     {
-        return $this->data;
+        return 'echo "' . addslashes($this->data) . "\";\n";
     }
 
 }

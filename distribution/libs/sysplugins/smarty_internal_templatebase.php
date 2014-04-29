@@ -138,7 +138,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                     }
                     try {
                         ob_start();
-                        eval("?>" . $code);
+                        eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
                         unset($code);
                     } catch (Exception $e) {
                         ob_get_clean();
@@ -148,7 +148,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                     if (!$_template->compiled->exists || ($_template->smarty->force_compile && !$_template->compiled->isCompiled)) {
                         $_template->compileTemplateSource();
                         $code = file_get_contents($_template->compiled->filepath);
-                        eval("?>" . $code);
+                        eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
                         unset($code);
                         $_template->compiled->loaded = true;
                         $_template->compiled->isCompiled = true;
@@ -162,7 +162,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                             // recompile and load again
                             $_template->compileTemplateSource();
                             $code = file_get_contents($_template->compiled->filepath);
-                            eval("?>" . $code);
+                            eval("?>" . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
                             unset($code);
                             $_template->compiled->isCompiled = true;
                         }

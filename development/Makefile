@@ -7,4 +7,4 @@ template-compiler:
 	cd lexer; php Create_Template_Parser.php
 
 unit-test:
-	cd PHPunit; phpunit smartytests.php
+	cd PHPunit; ./_phpunit-tests.sh
