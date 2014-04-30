@@ -48,9 +48,7 @@ class Smarty_Internal_Compile_Capture extends Smarty_Internal_CompileBase
         $assign = isset($_attr['assign']) ? $_attr['assign'] : 'null';
         $append = isset($_attr['append']) ? $_attr['append'] : 'null';
 
-        $compiler->_capture_stack[0][] = array($buffer, $assign, $append, $compiler->nocache);
-        // maybe nocache because of nocache variables
-        $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
+        $compiler->_capture_stack[0][] = array($buffer, $assign, $append);
         $_output = "\$_smarty_tpl->_capture_stack[0][] = array($buffer, $assign, $append);\nob_start();\n";
 
         return $_output;
@@ -77,12 +75,8 @@ class Smarty_Internal_Compile_CaptureClose extends Smarty_Internal_CompileBase
     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
-        // must endblock be nocache?
-        if ($compiler->nocache) {
-            $compiler->tag_nocache = true;
-        }
 
-        list($buffer, $assign, $append, $compiler->nocache) = array_pop($compiler->_capture_stack[0]);
+        list($buffer, $assign, $append) = array_pop($compiler->_capture_stack[0]);
 
         $_output  = "list(\$_capture_buffer, \$_capture_assign, \$_capture_append) = array_pop(\$_smarty_tpl->_capture_stack[0]);\n";
         $_output .= "if (!empty(\$_capture_buffer)) {\n";

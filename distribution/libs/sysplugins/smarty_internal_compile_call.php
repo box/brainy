@@ -60,13 +60,7 @@ class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase
         if ($compiler->compiles_template_function) {
             $compiler->called_functions[] = trim($_name, "'\"");
         }
-        unset($_attr['name'], $_attr['assign'], $_attr['nocache']);
-        // set flag (compiled code of {function} must be included in cache file
-        if ($compiler->nocache || $compiler->tag_nocache) {
-            $_nocache = 'true';
-        } else {
-            $_nocache = 'false';
-        }
+        unset($_attr['name'], $_attr['assign']);
         $_paramsArray = array();
         foreach ($_attr as $_key => $_value) {
             if (is_int($_key)) {
@@ -107,17 +101,16 @@ class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase
         }
 
         $_params = 'array(' . implode(",", $_paramsArray) . ')';
-        $_hash = str_replace('-', '_', $compiler->template->properties['nocache_hash']);
         // was there an assign attribute
         if (isset($_assign)) {
             if ($compiler->template->caching) {
-                $_output = "ob_start(); Smarty_Internal_Function_Call_Handler::call ({$call_cache},\$_smarty_tpl,{$_params},'{$_hash}',{$_nocache}); \$_smarty_tpl->assign({$_assign}, ob_get_clean());\n";
+                $_output = "ob_start(); Smarty_Internal_Function_Call_Handler::call ({$call_cache},\$_smarty_tpl,{$_params}); \$_smarty_tpl->assign({$_assign}, ob_get_clean());\n";
             } else {
                 $_output = "ob_start(); {$call_function}(\$_smarty_tpl,{$_params}); \$_smarty_tpl->assign({$_assign}, ob_get_clean());\n";
             }
         } else {
             if ($compiler->template->caching) {
-                $_output = "Smarty_Internal_Function_Call_Handler::call ({$call_cache},\$_smarty_tpl,{$_params},'{$_hash}',{$_nocache});\n";
+                $_output = "Smarty_Internal_Function_Call_Handler::call ({$call_cache},\$_smarty_tpl,{$_params});\n";
             } else {
                 $_output = "{$call_function}(\$_smarty_tpl,{$_params});\n";
             }

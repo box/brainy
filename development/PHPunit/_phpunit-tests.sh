@@ -1,2 +1,2 @@
 #!/bin/sh
-phpunit -d asp_tags=On --verbose --colors _runAllTests.php
+phpunit --verbose --colors --stop-on-error _runAllTests.php

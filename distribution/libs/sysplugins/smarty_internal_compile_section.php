@@ -51,9 +51,7 @@ class Smarty_Internal_Compile_Section extends Smarty_Internal_CompileBase
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
-        $this->openTag($compiler, 'section', array('section', $compiler->nocache));
-        // maybe nocache because of nocache variables
-        $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
+        $this->openTag($compiler, 'section', array('section'));
 
         $output = '';
 
@@ -155,8 +153,8 @@ class Smarty_Internal_Compile_Sectionelse extends Smarty_Internal_CompileBase
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
-        list($openTag, $nocache) = $this->closeTag($compiler, array('section'));
-        $this->openTag($compiler, 'sectionelse', array('sectionelse', $nocache));
+        list($openTag) = $this->closeTag($compiler, array('section'));
+        $this->openTag($compiler, 'sectionelse', array('sectionelse'));
 
         return "endfor;\nelse:\n";
     }
@@ -183,12 +181,7 @@ class Smarty_Internal_Compile_Sectionclose extends Smarty_Internal_CompileBase
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
-        // must endblock be nocache?
-        if ($compiler->nocache) {
-            $compiler->tag_nocache = true;
-        }
-
-        list($openTag, $compiler->nocache) = $this->closeTag($compiler, array('section', 'sectionelse'));
+        list($openTag) = $this->closeTag($compiler, array('section', 'sectionelse'));
 
         if ($openTag == 'sectionelse') {
             return "endif;\n";

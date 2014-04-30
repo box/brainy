@@ -68,17 +68,4 @@ class CompileCaptureTests extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate('eval:{capture assign=foo}hello {capture assign=bar}this is my {/capture}world{/capture}{$foo} {$bar}');
         $this->assertEquals("hello world this is my ", $this->smarty->fetch($tpl),'This failure pops up only during PHPunit test ?????');
     }
-    public function testCompileCaptureNocache1()
-    {
-        $this->smarty->assign('foo', 1);
-        $this->smarty->caching = 1;
-        $this->assertContains('foo 1', $this->smarty->fetch('test_capture_nocache.tpl'));
-    }
-    public function testCompileCaptureNocache2()
-    {
-        $this->smarty->assign('foo', 2);
-        $this->smarty->caching = 1;
-        $this->assertTrue($this->smarty->isCached('test_capture_nocache.tpl'));
-        $this->assertContains('foo 2', $this->smarty->fetch('test_capture_nocache.tpl'));
-    }
 }

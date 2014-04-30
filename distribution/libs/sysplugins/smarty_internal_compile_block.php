@@ -42,7 +42,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
      * @var array
      * @see Smarty_Internal_CompileBase
      */
-    public $option_flags = array('hide', 'append', 'prepend', 'nocache');
+    public $option_flags = array('hide', 'append', 'prepend');
 
     /**
      * Attribute definition: Overwrites base class.
@@ -86,9 +86,6 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
             self::$block_data[$_name]['source'] =
                 "{$compiler->smarty->left_delimiter}private_child_block name={$_attr['name']} file='{$compiler->template->source->filepath}' type='{$compiler->template->source->type}' resource='{$compiler->template->template_resource}'" .
                 " uid='{$compiler->template->source->uid}' line={$compiler->lex->line}";
-            if ($_attr['nocache']) {
-                self::$block_data[$_name]['source'] .= ' nocache';
-            }
             self::$block_data[$_name]['source'] .= $compiler->smarty->right_delimiter;
 
             $save = array($_attr, $compiler->inheritance);
@@ -99,14 +96,9 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
             $compiler->has_code = false;
             return;
         }
-        // must merge includes
-        if ($_attr['nocache'] == true) {
-            $compiler->tag_nocache = true;
-        }
-        $save = array($_attr, $compiler->inheritance, $compiler->parser->current_buffer, $compiler->nocache);
+        $save = array($_attr, $compiler->inheritance, $compiler->parser->current_buffer);
         $this->openTag($compiler, 'block', $save);
         $compiler->inheritance = true;
-        $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
 
         $compiler->parser->current_buffer = new _smarty_template_buffer($compiler->parser);
         $compiler->has_code = false;
@@ -162,36 +154,27 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
         }
         $_tpl->tpl_vars = $compiler->template->tpl_vars;
         $_tpl->variable_filters = $compiler->template->variable_filters;
-        $_tpl->properties['nocache_hash'] = $compiler->template->properties['nocache_hash'];
         $_tpl->allow_relative_path = true;
         $_tpl->compiler->inheritance = true;
         $_tpl->compiler->suppressHeader = true;
         $_tpl->compiler->suppressFilter = true;
         $_tpl->compiler->suppressTemplatePropertyHeader = true;
         $_tpl->compiler->suppressMergedTemplates = true;
-        $nocache = $compiler->nocache || $compiler->tag_nocache;
         if (strpos($compiler->template->block_data[$_name]['source'], self::parent) !== false) {
-            $_output = str_replace(self::parent, $compiler->parser->current_buffer->to_smarty_php(), $_tpl->compiler->compileTemplate($_tpl, $nocache));
+            $_output = str_replace(self::parent, $compiler->parser->current_buffer->to_smarty_php(), $_tpl->compiler->compileTemplate($_tpl));
         } elseif ($compiler->template->block_data[$_name]['mode'] == 'prepend') {
-            $_output = $_tpl->compiler->compileTemplate($_tpl, $nocache) . $compiler->parser->current_buffer->to_smarty_php();
+            $_output = $_tpl->compiler->compileTemplate($_tpl) . $compiler->parser->current_buffer->to_smarty_php();
         } elseif ($compiler->template->block_data[$_name]['mode'] == 'append') {
-            $_output = $compiler->parser->current_buffer->to_smarty_php() . $_tpl->compiler->compileTemplate($_tpl, $nocache);
+            $_output = $compiler->parser->current_buffer->to_smarty_php() . $_tpl->compiler->compileTemplate($_tpl);
         } elseif (!empty($compiler->template->block_data[$_name])) {
-            $_output = $_tpl->compiler->compileTemplate($_tpl, $nocache);
+            $_output = $_tpl->compiler->compileTemplate($_tpl);
         }
         $compiler->template->properties['file_dependency'] = array_merge($compiler->template->properties['file_dependency'], $_tpl->properties['file_dependency']);
         $compiler->template->properties['function'] = array_merge($compiler->template->properties['function'], $_tpl->properties['function']);
         $compiler->merged_templates = array_merge($compiler->merged_templates, $_tpl->compiler->merged_templates);
         $compiler->template->variable_filters = $_tpl->variable_filters;
-        if ($_tpl->has_nocache_code) {
-            $compiler->template->has_nocache_code = true;
-        }
         foreach ($_tpl->required_plugins as $key => $tmp1) {
-            if ($compiler->nocache && $compiler->template->caching) {
-                $code = 'nocache';
-            } else {
-                $code = $key;
-            }
+            $code = $key;
             foreach ($tmp1 as $name => $tmp) {
                 foreach ($tmp as $type => $data) {
                     $compiler->template->required_plugins[$code][$name][$type] = $data;
@@ -335,12 +318,6 @@ class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase
         unset($compiler->template->block_data[$_name]['compiled']);
         // reset flags
         $compiler->parser->current_buffer = $saved_data[2];
-        if ($compiler->nocache) {
-            $compiler->tag_nocache = true;
-        }
-        $compiler->nocache = $saved_data[3];
-        // $_output content has already nocache code processed
-        $compiler->suppressNocacheProcessing = true;
 
         return $_output;
     }
@@ -386,19 +363,13 @@ class Smarty_Internal_Compile_Private_Child_Block extends Smarty_Internal_Compil
         unset ($compiler->template->source);
         $exists = $compiler->template->source->exists;
 
-
-        // must merge includes
-        if ($_attr['nocache'] == true) {
-            $compiler->tag_nocache = true;
-        }
-        $save = array($_attr, $compiler->nocache);
+        $save = array($_attr);
 
         // set trace back to child block
         $compiler->pushTrace(trim($_attr['file'], "\"'"), trim($_attr['uid'], "\"'"), $_attr['line'] - $compiler->lex->line);
 
         $this->openTag($compiler, 'private_child_block', $save);
 
-        $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
         $compiler->has_code = false;
 
         return true;
@@ -432,7 +403,6 @@ class Smarty_Internal_Compile_Private_Child_Blockclose extends Smarty_Internal_C
         // end of child block
         $compiler->popTrace();
 
-        $compiler->nocache = $saved_data[1];
         $compiler->has_code = false;
 
         return true;

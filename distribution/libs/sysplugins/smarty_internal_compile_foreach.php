@@ -64,9 +64,7 @@ class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase
             $key = null;
         }
 
-        $this->openTag($compiler, 'foreach', array('foreach', $compiler->nocache, $item, $key));
-        // maybe nocache because of nocache variables
-        $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
+        $this->openTag($compiler, 'foreach', array('foreach', $item, $key));
 
         if (isset($_attr['name'])) {
             $name = $_attr['name'];
@@ -188,8 +186,8 @@ class Smarty_Internal_Compile_Foreachelse extends Smarty_Internal_CompileBase
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
-        list($openTag, $nocache, $item, $key) = $this->closeTag($compiler, array('foreach'));
-        $this->openTag($compiler, 'foreachelse', array('foreachelse', $nocache, $item, $key));
+        list($openTag, $item, $key) = $this->closeTag($compiler, array('foreach'));
+        $this->openTag($compiler, 'foreachelse', array('foreachelse', $item, $key));
 
         return "}\nif (!\$_smarty_tpl->tpl_vars[$item]->_loop) {\n";
     }
@@ -216,12 +214,7 @@ class Smarty_Internal_Compile_Foreachclose extends Smarty_Internal_CompileBase
     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
-        // must endblock be nocache?
-        if ($compiler->nocache) {
-            $compiler->tag_nocache = true;
-        }
-
-        list($openTag, $compiler->nocache, $item, $key) = $this->closeTag($compiler, array('foreach', 'foreachelse'));
+        list($openTag, $item, $key) = $this->closeTag($compiler, array('foreach', 'foreachelse'));
 
         return "}\n";
     }

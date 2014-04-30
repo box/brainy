@@ -39,7 +39,7 @@ abstract class Smarty_Internal_CompileBase
      *
      * @var array
      */
-    public $option_flags = array('nocache');
+    public $option_flags = array();
 
     /**
      * This function checks if the attributes passed are valid

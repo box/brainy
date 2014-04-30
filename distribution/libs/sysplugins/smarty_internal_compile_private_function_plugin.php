@@ -49,10 +49,6 @@ class Smarty_Internal_Compile_Private_Function_Plugin extends Smarty_Internal_Co
 
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
-        if ($_attr['nocache'] === true) {
-            $compiler->tag_nocache = true;
-        }
-        unset($_attr['nocache']);
         // convert attributes into parameter array string
         $_paramsArray = array();
         foreach ($_attr as $_key => $_value) {

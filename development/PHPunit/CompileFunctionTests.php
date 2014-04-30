@@ -103,28 +103,4 @@ class CompileFunctionTests extends PHPUnit_Framework_TestCase
         $tpl->assign('foo', 'bar');
         $this->assertContains('foo bar', $this->smarty->fetch($tpl));
     }
-    /**
-    * test external function definition nocache call
-    */
-    public function testExternalDefinedFunctionNocachedCall1()
-    {
-        $this->smarty->caching = 1;
-        $this->smarty->cache_lifetime = 1000;
-        $this->smarty->clearAllCache();
-        $tpl = $this->smarty->createTemplate('test_template_function_nocache_call.tpl');
-        $tpl->assign('foo', 'foo');
-        $this->assertContains('foo foo', $this->smarty->fetch($tpl));
-    }
-    /**
-    * test external function definition nocache call 2
-    */
-    public function testExternalDefinedFunctionNocachedCall2()
-    {
-        $this->smarty->caching = 1;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('test_template_function_nocache_call.tpl');
-        $this->assertTrue($this->smarty->isCached($tpl));
-        $tpl->assign('foo', 'bar');
-        $this->assertContains('bar bar', $this->smarty->fetch($tpl));
-    }
 }

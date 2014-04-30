@@ -40,15 +40,11 @@ class Smarty_Internal_Compile_Private_Registered_Block extends Smarty_Internal_C
             // opening tag of block plugin
             // check and get attributes
             $_attr = $this->getAttributes($compiler, $args);
-            if ($_attr['nocache']) {
-                $compiler->tag_nocache = true;
+            if (isset($compiler->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$tag])) {
+               $tag_info = $compiler->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$tag];
+            } else {
+               $tag_info = $compiler->default_handler_plugins[Smarty::PLUGIN_BLOCK][$tag];
             }
-               unset($_attr['nocache']);
-               if (isset($compiler->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$tag])) {
-                   $tag_info = $compiler->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$tag];
-               } else {
-                   $tag_info = $compiler->default_handler_plugins[Smarty::PLUGIN_BLOCK][$tag];
-               }
             // convert attributes into parameter array string
             $_paramsArray = array();
             foreach ($_attr as $_key => $_value) {
@@ -63,9 +59,7 @@ class Smarty_Internal_Compile_Private_Registered_Block extends Smarty_Internal_C
             }
             $_params = 'array(' . implode(",", $_paramsArray) . ')';
 
-            $this->openTag($compiler, $tag, array($_params, $compiler->nocache));
-            // maybe nocache because of nocache variables or nocache plugin
-            $compiler->nocache = !$tag_info[1] | $compiler->nocache | $compiler->tag_nocache;
+            $this->openTag($compiler, $tag, array($_params));
             $function = $tag_info[0];
             // compile code
             if (!is_array($function)) {
@@ -76,13 +70,9 @@ class Smarty_Internal_Compile_Private_Registered_Block extends Smarty_Internal_C
                 return "\$_smarty_tpl->smarty->_tag_stack[] = array('{$tag}', {$_params}); \$_block_repeat=true; echo {$function[0]}::{$function[1]}({$_params}, null, \$_smarty_tpl, \$_block_repeat);while (\$_block_repeat) { ob_start();\n";
             }
         } else {
-            // must endblock be nocache?
-            if ($compiler->nocache) {
-                $compiler->tag_nocache = true;
-            }
             $base_tag = substr($tag, 0, -5);
-            // closing tag of block plugin, restore nocache
-            list($_params, $compiler->nocache) = $this->closeTag($compiler, $base_tag);
+            // closing tag of block plugin
+            list($_params) = $this->closeTag($compiler, $base_tag);
             // This tag does create output
             $compiler->has_output = true;
                if (isset($compiler->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$base_tag])) {

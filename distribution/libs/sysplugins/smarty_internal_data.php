@@ -47,21 +47,20 @@ class Smarty_Internal_Data
      *
      * @param  array|string         $tpl_var the template variable name(s)
      * @param  mixed                $value   the value to assign
-     * @param  boolean              $nocache if true any output of this variable will be not cached
      * @param  boolean              $scope   the scope the variable will have  (local,parent or root)
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function assign($tpl_var, $value = null, $nocache = false)
+    public function assign($tpl_var, $value = null)
     {
         if (is_array($tpl_var)) {
             foreach ($tpl_var as $_key => $_val) {
                 if ($_key != '') {
-                    $this->tpl_vars[$_key] = new Smarty_variable($_val, $nocache);
+                    $this->tpl_vars[$_key] = new Smarty_variable($_val);
                 }
             }
         } else {
             if ($tpl_var != '') {
-                $this->tpl_vars[$tpl_var] = new Smarty_variable($value, $nocache);
+                $this->tpl_vars[$tpl_var] = new Smarty_variable($value);
             }
         }
 
@@ -73,13 +72,12 @@ class Smarty_Internal_Data
      *
      * @param  string               $varname the global variable name
      * @param  mixed                $value   the value to assign
-     * @param  boolean              $nocache if true any output of this variable will be not cached
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function assignGlobal($varname, $value = null, $nocache = false)
+    public function assignGlobal($varname, $value = null)
     {
         if ($varname != '') {
-            Smarty::$global_tpl_vars[$varname] = new Smarty_variable($value, $nocache);
+            Smarty::$global_tpl_vars[$varname] = new Smarty_variable($value);
             $ptr = $this;
             while ($ptr instanceof Smarty_Internal_Template) {
                 $ptr->tpl_vars[$varname] = clone Smarty::$global_tpl_vars[$varname];
@@ -94,13 +92,12 @@ class Smarty_Internal_Data
      *
      * @param string $tpl_var the template variable name
      * @param mixed $ &$value the referenced value to assign
-     * @param  boolean              $nocache if true any output of this variable will be not cached
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function assignByRef($tpl_var, &$value, $nocache = false)
+    public function assignByRef($tpl_var, &$value)
     {
         if ($tpl_var != '') {
-            $this->tpl_vars[$tpl_var] = new Smarty_variable(null, $nocache);
+            $this->tpl_vars[$tpl_var] = new Smarty_variable(null);
             $this->tpl_vars[$tpl_var]->value = &$value;
         }
 
@@ -113,10 +110,9 @@ class Smarty_Internal_Data
      * @param  array|string         $tpl_var the template variable name(s)
      * @param  mixed                $value   the value to append
      * @param  boolean              $merge   flag if array elements shall be merged
-     * @param  boolean              $nocache if true any output of this variable will be not cached
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function append($tpl_var, $value = null, $merge = false, $nocache = false)
+    public function append($tpl_var, $value = null, $merge = false)
     {
         if (is_array($tpl_var)) {
             // $tpl_var is an array, ignore $value
@@ -125,7 +121,7 @@ class Smarty_Internal_Data
                     if (!isset($this->tpl_vars[$_key])) {
                         $tpl_var_inst = $this->getVariable($_key, null, true, false);
                         if ($tpl_var_inst instanceof Undefined_Smarty_Variable) {
-                            $this->tpl_vars[$_key] = new Smarty_variable(null, $nocache);
+                            $this->tpl_vars[$_key] = new Smarty_variable(null);
                         } else {
                             $this->tpl_vars[$_key] = clone $tpl_var_inst;
                         }
@@ -147,7 +143,7 @@ class Smarty_Internal_Data
                 if (!isset($this->tpl_vars[$tpl_var])) {
                     $tpl_var_inst = $this->getVariable($tpl_var, null, true, false);
                     if ($tpl_var_inst instanceof Undefined_Smarty_Variable) {
-                        $this->tpl_vars[$tpl_var] = new Smarty_variable(null, $nocache);
+                        $this->tpl_vars[$tpl_var] = new Smarty_variable(null);
                     } else {
                         $this->tpl_vars[$tpl_var] = clone $tpl_var_inst;
                     }
@@ -485,12 +481,6 @@ class Smarty_Variable
      */
     public $value = null;
     /**
-     * if true any output of this variable will be not cached
-     *
-     * @var boolean
-     */
-    public $nocache = false;
-    /**
      * the scope the variable will have  (local,parent or root)
      *
      * @var int
@@ -501,13 +491,11 @@ class Smarty_Variable
      * create Smarty variable object
      *
      * @param mixed   $value   the value to assign
-     * @param boolean $nocache if true any output of this variable will be not cached
      * @param int     $scope   the scope the variable will have  (local,parent or root)
      */
-    public function __construct($value = null, $nocache = false, $scope = Smarty::SCOPE_LOCAL)
+    public function __construct($value = null, $scope = Smarty::SCOPE_LOCAL)
     {
         $this->value = $value;
-        $this->nocache = $nocache;
         $this->scope = $scope;
     }
 
@@ -534,18 +522,14 @@ class Smarty_Variable
 class Undefined_Smarty_Variable
 {
     /**
-     * Returns FALSE for 'nocache' and NULL otherwise.
+     * Returns NULL
      *
      * @param  string $name
-     * @return bool
+     * @return null
      */
     public function __get($name)
     {
-        if ($name == 'nocache') {
-            return false;
-        } else {
-            return null;
-        }
+        return null;
     }
 
     /**

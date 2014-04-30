@@ -649,7 +649,6 @@ class Smarty_Internal_Utility
                 "smarty_internal_compile_if.php" => true,
                 "smarty_internal_compile_include.php" => true,
                 "smarty_internal_compile_ldelim.php" => true,
-                "smarty_internal_compile_nocache.php" => true,
                 "smarty_internal_compile_private_block_plugin.php" => true,
                 "smarty_internal_compile_private_function_plugin.php" => true,
                 "smarty_internal_compile_private_modifier.php" => true,

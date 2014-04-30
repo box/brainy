@@ -44,9 +44,6 @@ class Smarty_Internal_Compile_Extends extends Smarty_Internal_CompileBase
     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
-        if ($_attr['nocache'] === true) {
-            $compiler->trigger_template_error('nocache option not allowed', $compiler->lex->taglineno);
-        }
         if (strpos($_attr['file'], '$_tmp') !== false) {
             $compiler->trigger_template_error('illegal value for file attribute', $compiler->lex->taglineno);
         }

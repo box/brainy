@@ -367,7 +367,7 @@ class _smarty_text extends _smarty_parsetree
      */
     public function to_smarty_php()
     {
-        return 'echo "' . addslashes($this->data) . "\";\n";
+        return 'echo "' . $this->escape_data($this->data) . "\";\n";
     }
 
 }
@@ -400,7 +400,7 @@ class _smarty_linebreak extends _smarty_parsetree
      */
     public function to_smarty_php()
     {
-        return 'echo "' . addslashes($this->data) . "\";\n";
+        return 'echo "' . $this->escape_data($this->data) . "\";\n";
     }
 
 }

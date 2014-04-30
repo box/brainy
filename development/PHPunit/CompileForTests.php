@@ -96,7 +96,7 @@ class CompileForTests extends PHPUnit_Framework_TestCase
         $this->assertEquals("876", $this->smarty->fetch($tpl));
     }
     /*
-    *  test for and nocache
+    *  test for
     */
     public function testForNocacheVar1()
     {
@@ -111,22 +111,6 @@ class CompileForTests extends PHPUnit_Framework_TestCase
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 5}{$x} {/for}');
         $tpl->assign('foo',4,true);
-        $this->assertTrue($this->smarty->isCached($tpl));
-        $this->assertEquals("4 5 ", $this->smarty->fetch($tpl));
-    }
-    public function testForNocacheTag1()
-    {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 5 nocache}{$x} {/for}');
-        $tpl->assign('foo',1);
-        $this->assertFalse($this->smarty->isCached($tpl));
-        $this->assertEquals("1 2 3 4 5 ", $this->smarty->fetch($tpl));
-    }
-    public function testForNocacheTag2()
-    {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 5 nocache}{$x} {/for}');
-        $tpl->assign('foo',4);
         $this->assertTrue($this->smarty->isCached($tpl));
         $this->assertEquals("4 5 ", $this->smarty->fetch($tpl));
     }

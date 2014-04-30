@@ -44,13 +44,6 @@
     }
 
     public function compileVariable($variable) {
-        if (strpos($variable,'(') == 0) {
-            // not a variable variable
-            $var = trim($variable,'\'');
-            $this->compiler->tag_nocache=$this->compiler->tag_nocache|$this->template->getVariable($var, null, true, false)->nocache;
-            $this->template->properties['variables'][$var] = $this->compiler->tag_nocache|$this->compiler->nocache;
-        }
-//       return '(isset($_smarty_tpl->tpl_vars['. $variable .'])?$_smarty_tpl->tpl_vars['. $variable .']->value:$_smarty_tpl->getVariable('. $variable .')->value)';
         return '$_smarty_tpl->tpl_vars['. $variable .']->value';
     }
 }

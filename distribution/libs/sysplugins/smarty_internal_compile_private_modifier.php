@@ -119,7 +119,7 @@ class Smarty_Internal_Compile_Private_Modifier extends Smarty_Internal_CompileBa
                                     }
                                 }
                             }
-                            if (isset($compiler->template->required_plugins['nocache'][$modifier][Smarty::PLUGIN_MODIFIER]['file']) || isset($compiler->template->required_plugins['compiled'][$modifier][Smarty::PLUGIN_MODIFIER]['file'])) {
+                            if (isset($compiler->template->required_plugins['compiled'][$modifier][Smarty::PLUGIN_MODIFIER]['file'])) {
                                 // was a plugin
                                 $compiler->known_modifier_type[$modifier] = 4;
                             } else {

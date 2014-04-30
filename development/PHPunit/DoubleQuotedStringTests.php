@@ -52,48 +52,6 @@ class DoubleQuotedStringTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hello blahbuh World', $this->smarty->fetch($tpl));
     }
     /**
-     * test vars with backtick in double quoted strings
-     */
-    public function testVarsBacktickInDoubleQuotedString1()
-    {
-        $tpl = $this->smarty->createTemplate('eval:{$bar=\'blah\'}{$foo="Hello `$bar`.test World"}{$foo}', null, null, $this->smarty);
-        $this->assertEquals('Hello blah.test World', $this->smarty->fetch($tpl));
-    }
-    public function testVarsBacktickInDoubleQuotedString2()
-    {
-        $tpl = $this->smarty->createTemplate('eval:{$bar=\'blah\'}{$buh=\'buh\'}{$foo="Hello `$bar``$buh`.test World"}{$foo}', null, null, $this->smarty);
-        $this->assertEquals('Hello blahbuh.test World', $this->smarty->fetch($tpl));
-    }
-    /**
-     * test variable vars with backtick in double quoted strings
-     */
-    public function testVariableVarsBacktickInDoubleQuotedString()
-    {
-        $tpl = $this->smarty->createTemplate('eval:{$barbuh=\'blah\'}{$buh=\'buh\'}{$foo="Hello `$bar{$buh}`.test World"}{$foo}', null, null, $this->smarty);
-        $this->assertEquals('Hello blah.test World', $this->smarty->fetch($tpl));
-    }
-    /**
-     * test array vars with backtick in double quoted strings
-     */
-    public function testArrayVarsBacktickInDoubleQuotedString1()
-    {
-        $tpl = $this->smarty->createTemplate('eval:{$bar[1][2]=\'blah\'}{$foo="Hello `$bar.1.2`.test World"}{$foo}', null, null, $this->smarty);
-        $this->assertEquals('Hello blah.test World', $this->smarty->fetch($tpl));
-    }
-    public function testArrayVarsBacktickInDoubleQuotedString2()
-    {
-        $tpl = $this->smarty->createTemplate('eval:{$bar[1][2]=\'blah\'}{$foo="Hello `$bar[1][2]`.test World"}{$foo}', null, null, $this->smarty);
-        $this->assertEquals('Hello blah.test World', $this->smarty->fetch($tpl));
-    }
-    /**
-     * test expression in backtick in double quoted strings
-     */
-    public function testExpressionBacktickInDoubleQuotedString()
-    {
-        $tpl = $this->smarty->createTemplate('eval:{$a=1}{"`$a+1`"}', null, null, $this->smarty);
-        $this->assertEquals('2', $this->smarty->fetch($tpl));
-    }
-    /**
      * test smartytag in double quoted strings
      */
     public function testSmartytagInDoubleQuotedString1()

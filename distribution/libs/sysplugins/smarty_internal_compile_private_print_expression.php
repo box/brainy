@@ -30,7 +30,7 @@ class Smarty_Internal_Compile_Private_Print_Expression extends Smarty_Internal_C
     * @var array
     * @see Smarty_Internal_CompileBase
     */
-    public $option_flags = array('nocache', 'nofilter');
+    public $option_flags = array('nofilter');
 
     /**
     * Compiles code for gererting output from any expression
@@ -44,10 +44,6 @@ class Smarty_Internal_Compile_Private_Print_Expression extends Smarty_Internal_C
     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
-        // nocache option
-        if ($_attr['nocache'] === true) {
-            $compiler->tag_nocache = true;
-        }
         // filter handling
         if ($_attr['nofilter'] === true) {
             $_filter = 'false';
@@ -135,13 +131,8 @@ class Smarty_Internal_Compile_Private_Print_Expression extends Smarty_Internal_C
         $plugin_name = "smarty_variablefilter_{$name}";
         $path = $compiler->smarty->loadPlugin($plugin_name, false);
         if ($path) {
-            if ($compiler->template->caching) {
-                $compiler->template->required_plugins['nocache'][$name][Smarty::FILTER_VARIABLE]['file'] = $path;
-                $compiler->template->required_plugins['nocache'][$name][Smarty::FILTER_VARIABLE]['function'] = $plugin_name;
-            } else {
-                $compiler->template->required_plugins['compiled'][$name][Smarty::FILTER_VARIABLE]['file'] = $path;
-                $compiler->template->required_plugins['compiled'][$name][Smarty::FILTER_VARIABLE]['function'] = $plugin_name;
-            }
+            $compiler->template->required_plugins['compiled'][$name][Smarty::FILTER_VARIABLE]['file'] = $path;
+            $compiler->template->required_plugins['compiled'][$name][Smarty::FILTER_VARIABLE]['function'] = $plugin_name;
         } else {
             // not found
             return false;

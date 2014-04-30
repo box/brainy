@@ -31,20 +31,9 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
         $this->required_attributes = array('var', 'value');
         $this->shorttag_order = array('var', 'value');
         $this->optional_attributes = array('scope');
-        $_nocache = 'null';
         $_scope = Smarty::SCOPE_LOCAL;
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
-        // nocache ?
-        if ($compiler->tag_nocache || $compiler->nocache) {
-            $_nocache = 'true';
-            // create nocache var to make it know for further compiling
-            if (isset($compiler->template->tpl_vars[trim($_attr['var'], "'")])) {
-                $compiler->template->tpl_vars[trim($_attr['var'], "'")]->nocache = true;
-            } else {
-                $compiler->template->tpl_vars[trim($_attr['var'], "'")] = new Smarty_variable(null, true);
-            }
-        }
         // scope setup
         if (isset($_attr['scope'])) {
             $_attr['scope'] = trim($_attr['scope'], "'\"");
@@ -61,7 +50,7 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
         // compiled output
         $output = '';
         if (isset($parameter['smarty_internal_index'])) {
-            $output .= "\$_smarty_tpl->createLocalArrayVariable($_attr[var], $_nocache, $_scope);\n";
+            $output .= "\$_smarty_tpl->createLocalArrayVariable($_attr[var], null, $_scope);\n";
             $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]]->value$parameter[smarty_internal_index] = $_attr[value];\n";
         } else {
             // implement Smarty2's behaviour of variables assigned by reference
@@ -69,11 +58,11 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
                 $output .= "if (isset(\$_smarty_tpl->tpl_vars[$_attr[var]])) {\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->value = $_attr[value];\n";
-                $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->nocache = $_nocache;\n";
+                $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->nocache = null;\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->scope = $_scope;\n";
-                $output .= "} else \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], $_nocache, $_scope);\n";
+                $output .= "} else \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], null, $_scope);\n";
             } else {
-                $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], $_nocache, $_scope);\n";
+                $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], null, $_scope);\n";
             }
         }
         if ($_scope == Smarty::SCOPE_PARENT) {

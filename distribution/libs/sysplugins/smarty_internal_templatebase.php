@@ -142,12 +142,14 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                         unset($code);
                     } catch (Exception $e) {
                         ob_get_clean();
+                        echo $code;
                         throw $e;
                     }
                 } else {
                     if (!$_template->compiled->exists || ($_template->smarty->force_compile && !$_template->compiled->isCompiled)) {
                         $_template->compileTemplateSource();
                         $code = file_get_contents($_template->compiled->filepath);
+                        echo $code;
                         eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
                         unset($code);
                         $_template->compiled->loaded = true;
@@ -187,6 +189,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                         array_shift($_template->_capture_stack);
                     } catch (Exception $e) {
                         ob_get_clean();
+                        echo $code;
                         throw $e;
                     }
                 }
@@ -207,6 +210,8 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 }
             }
             $_output = ob_get_clean();
+            // echo $_output;
+            // return;
             if (!$_template->source->recompiled && empty($_template->properties['file_dependency'][$_template->source->uid])) {
                 $_template->properties['file_dependency'][$_template->source->uid] = array($_template->source->filepath, $_template->source->timestamp, $_template->source->type);
             }
@@ -222,53 +227,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
             }
             if ($this->smarty->debugging) {
                 Smarty_Internal_Debug::end_render($_template);
-            }
-            // write to cache when nessecary
-            if (!$_template->source->recompiled && ($_template->caching == Smarty::CACHING_LIFETIME_SAVED || $_template->caching == Smarty::CACHING_LIFETIME_CURRENT)) {
-                if ($this->smarty->debugging) {
-                    Smarty_Internal_Debug::start_cache($_template);
-                }
-                $_template->properties['has_nocache_code'] = false;
-                // get text between non-cached items
-                $cache_split = preg_split("!/\*%%SmartyNocache:{$_template->properties['nocache_hash']}%%\*\/(.+?)/\*/%%SmartyNocache:{$_template->properties['nocache_hash']}%%\*/!s", $_output);
-                // get non-cached items
-                preg_match_all("!/\*%%SmartyNocache:{$_template->properties['nocache_hash']}%%\*\/(.+?)/\*/%%SmartyNocache:{$_template->properties['nocache_hash']}%%\*/!s", $_output, $cache_parts);
-                $output = '';
-                // loop over items, stitch back together
-                foreach ($cache_split as $curr_idx => $curr_split) {
-                    // escape PHP tags in template content
-                    $output .= preg_replace('/(<%|%>|<\?php|<\?|\?>)/', "<?php echo '\$1'; ?>\n", $curr_split);
-                    if (isset($cache_parts[0][$curr_idx])) {
-                        $_template->properties['has_nocache_code'] = true;
-                        // remove nocache tags from cache output
-                        $output .= preg_replace("!/\*/?%%SmartyNocache:{$_template->properties['nocache_hash']}%%\*/!", '', $cache_parts[0][$curr_idx]);
-                    }
-                }
-                if (!$no_output_filter && !$_template->has_nocache_code && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
-                    $output = Smarty_Internal_Filter_Handler::runFilter('output', $output, $_template);
-                }
-                // rendering (must be done before writing cache file because of {function} nocache handling)
-                $_smarty_tpl = $_template;
-                try {
-                    ob_start();
-                    eval("?>" . $output);
-                    $_output = ob_get_clean();
-                } catch (Exception $e) {
-                    ob_get_clean();
-                    throw $e;
-                }
-                // write cache file content
-                $_template->writeCachedContent($output);
-                if ($this->smarty->debugging) {
-                    Smarty_Internal_Debug::end_cache($_template);
-                }
-            } else {
-                // var_dump('renderTemplate', $_template->has_nocache_code, $_template->template_resource, $_template->properties['nocache_hash'], $_template->parent->properties['nocache_hash'], $_output);
-                if (!empty($_template->properties['nocache_hash']) && !empty($_template->parent->properties['nocache_hash'])) {
-                    // replace nocache_hash
-                    $_output = str_replace("{$_template->properties['nocache_hash']}", $_template->parent->properties['nocache_hash'], $_output);
-                    $_template->parent->has_nocache_code = $_template->parent->has_nocache_code || $_template->has_nocache_code;
-                }
             }
         } else {
             if ($this->smarty->debugging) {
@@ -295,7 +253,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 Smarty_Internal_Debug::end_cache($_template);
             }
         }
-        if ((!$this->caching || $_template->has_nocache_code || $_template->source->recompiled) && !$no_output_filter && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
+        if ((!$this->caching || $_template->source->recompiled) && !$no_output_filter && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
             $_output = Smarty_Internal_Filter_Handler::runFilter('output', $_output, $_template);
         }
         if (isset($this->error_reporting)) {
@@ -303,44 +261,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
         }
         // display or fetch
         if ($display) {
-            if ($this->caching && $this->cache_modified_check) {
-                $_isCached = $_template->isCached() && !$_template->has_nocache_code;
-                $_last_modified_date = @substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 0, strpos($_SERVER['HTTP_IF_MODIFIED_SINCE'], 'GMT') + 3);
-                if ($_isCached && $_template->cached->timestamp <= strtotime($_last_modified_date)) {
-                    switch (PHP_SAPI) {
-                        case 'cgi':         // php-cgi < 5.3
-                        case 'cgi-fcgi':    // php-cgi >= 5.3
-                        case 'fpm-fcgi':    // php-fpm >= 5.3.3
-                        header('Status: 304 Not Modified');
-                        break;
-
-                        case 'cli':
-                        if (/* ^phpunit */!empty($_SERVER['SMARTY_PHPUNIT_DISABLE_HEADERS'])/* phpunit$ */) {
-                            $_SERVER['SMARTY_PHPUNIT_HEADERS'][] = '304 Not Modified';
-                        }
-                        break;
-
-                        default:
-                        header($_SERVER['SERVER_PROTOCOL'].' 304 Not Modified');
-                        break;
-                    }
-                } else {
-                    switch (PHP_SAPI) {
-                        case 'cli':
-                        if (/* ^phpunit */!empty($_SERVER['SMARTY_PHPUNIT_DISABLE_HEADERS'])/* phpunit$ */) {
-                            $_SERVER['SMARTY_PHPUNIT_HEADERS'][] = 'Last-Modified: ' . gmdate('D, d M Y H:i:s', $_template->cached->timestamp) . ' GMT';
-                        }
-                        break;
-
-                        default:
-                        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $_template->cached->timestamp) . ' GMT');
-                        break;
-                    }
-                    echo $_output;
-                }
-            } else {
-                echo $_output;
-            }
+            echo $_output;
             // debug output
             if ($this->smarty->debugging) {
                 Smarty_Internal_Debug::display_debug($_template);

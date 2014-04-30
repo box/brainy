@@ -52,22 +52,16 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
      */
     public $mustCompile = null;
     /**
-     * flag if template does contain nocache code sections
-     * @var bool
-     */
-    public $has_nocache_code = false;
-    /**
      * special compiled and cached template properties
      * @var array
      */
     public $properties = array('file_dependency' => array(),
-        'nocache_hash' => '',
         'function' => array());
     /**
      * required plugins
      * @var array
      */
-    public $required_plugins = array('compiled' => array(), 'nocache' => array());
+    public $required_plugins = array('compiled' => array());
     /**
      * Global smarty instance
      * @var Smarty
@@ -220,7 +214,9 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         $this->properties['unifunc'] = 'content_' . str_replace(array('.',','), '_', uniqid('', true));
         $content = $this->createTemplateCodeFrame($content, true);
         $_smarty_tpl = $this;
-        eval("?>" . $content);
+        // echo '---------------------', "\n", $content;
+        // return;
+        eval($content);
         $this->cached->valid = true;
         $this->cached->processed = true;
 
@@ -294,13 +290,11 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
      * @param integer $cache_lifetime life time of cache data
      * @param array   $vars           optional  variables to assign
      * @param int     $parent_scope   scope in which {include} should execute
-     * @param string  $hash           nocache hash code
      * @returns string template content
      */
-    public function setupInlineSubTemplate($template, $cache_id, $compile_id, $caching, $cache_lifetime, $data, $parent_scope, $hash)
+    public function setupInlineSubTemplate($template, $cache_id, $compile_id, $caching, $cache_lifetime, $data, $parent_scope)
     {
         $tpl = new $this->smarty->template_class($template, $this->smarty, $this, $cache_id, $compile_id, $caching, $cache_lifetime);
-        $tpl->properties['nocache_hash']  = $hash;
         // get variables from calling scope
         if ($parent_scope == Smarty::SCOPE_LOCAL) {
             $tpl->tpl_vars = $this->tpl_vars;
@@ -350,27 +344,11 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
                     }
                 }
             }
-            if (!empty($this->required_plugins['nocache'])) {
-                $this->has_nocache_code = true;
-                $plugins_string .= "echo '/*%%SmartyNocache:{$this->properties['nocache_hash']}%%*/\n\$_smarty = \$_smarty_tpl->smarty;\n";
-                foreach ($this->required_plugins['nocache'] as $tmp) {
-                    foreach ($tmp as $data) {
-                        $file = addslashes($data['file']);
-                        if (is_Array($data['function'])) {
-                            $plugins_string .= addslashes("if (!is_callable(array('{$data['function'][0]}','{$data['function'][1]}'))) include '{$file}';\n");
-                        } else {
-                            $plugins_string .= addslashes("if (!is_callable('{$data['function']}')) include '{$file}';\n");
-                        }
-                    }
-                }
-                $plugins_string .= "/*/%%SmartyNocache:{$this->properties['nocache_hash']}%%*/';\n";
-            }
         }
         // build property code
-        $this->properties['has_nocache_code'] = $this->has_nocache_code;
         $output = '';
         if (!$this->source->recompiled) {
-            $output = "/*%%SmartyHeaderCode:{$this->properties['nocache_hash']}%%*/";
+            $output = "/*%%SmartyHeaderCode%%*/";
             if ($this->smarty->direct_access_security) {
                 $output .= "if(!defined('SMARTY_DIR')) exit('no direct access allowed');\n";
             }
@@ -424,8 +402,6 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
      */
     public function decodeProperties($properties, $cache = false)
     {
-        $this->has_nocache_code = $properties['has_nocache_code'];
-        $this->properties['nocache_hash'] = $properties['nocache_hash'];
         if (isset($properties['cache_lifetime'])) {
             $this->properties['cache_lifetime'] = $properties['cache_lifetime'];
         }
@@ -487,13 +463,12 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
      * Template code runtime function to create a local Smarty variable for array assignments
      *
      * @param string $tpl_var tempate variable name
-     * @param bool   $nocache cache mode of variable
      * @param int    $scope   scope of variable
      */
-    public function createLocalArrayVariable($tpl_var, $nocache = false, $scope = Smarty::SCOPE_LOCAL)
+    public function createLocalArrayVariable($tpl_var, $scope = Smarty::SCOPE_LOCAL)
     {
         if (!isset($this->tpl_vars[$tpl_var])) {
-            $this->tpl_vars[$tpl_var] = new Smarty_variable(array(), $nocache, $scope);
+            $this->tpl_vars[$tpl_var] = new Smarty_variable(array(), $scope);
         } else {
             $this->tpl_vars[$tpl_var] = clone $this->tpl_vars[$tpl_var];
             if ($scope != Smarty::SCOPE_LOCAL) {
