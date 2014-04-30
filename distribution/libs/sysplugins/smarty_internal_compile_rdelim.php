@@ -31,7 +31,7 @@ class Smarty_Internal_Compile_Rdelim extends Smarty_Internal_CompileBase
         // this tag does not return compiled code
         $compiler->has_code = true;
 
-        return $compiler->smarty->right_delimiter;
+        return 'echo "' . $compiler->smarty->right_delimiter . '";';
     }
 
 }

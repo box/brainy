@@ -77,30 +77,6 @@ class CompileFunctionTests extends PHPUnit_Framework_TestCase
     {
         $tpl = $this->smarty->createTemplate('eval:{include file=\'template_function_lib.tpl\'}{call name=template_func1}');
         $tpl->assign('foo', 'foo');
-        $this->assertContains('foo foo', $this->smarty->fetch($tpl));
-    }
-    /**
-    * test external function definition cached
-    */
-    public function testExternalDefinedFunctionCached1()
-    {
-        $this->smarty->caching = 1;
-        $this->smarty->cache_lifetime = 1000;
-        $this->smarty->clearAllCache();
-        $tpl = $this->smarty->createTemplate('test_template_function.tpl');
-        $tpl->assign('foo', 'foo');
-        $this->assertContains('foo foo', $this->smarty->fetch($tpl));
-    }
-    /**
-    * test external function definition cached 2
-    */
-    public function testExternalDefinedFunctionCached2()
-    {
-        $this->smarty->caching = 1;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('test_template_function.tpl');
-        $this->assertTrue($this->smarty->isCached($tpl));
-        $tpl->assign('foo', 'bar');
-        $this->assertContains('foo bar', $this->smarty->fetch($tpl));
+        $this->assertContains('foo', $this->smarty->fetch($tpl));
     }
 }

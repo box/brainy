@@ -82,12 +82,12 @@ class SpacingTests extends PHPUnit_Framework_TestCase
     public function testTagText2()
     {
         $tpl = $this->smarty->createTemplate("eval:A\n{assign var=zoo value='blah'}\nB");
-        $this->assertEquals("A\nB", $this->smarty->fetch($tpl));
+        $this->assertEquals("A\n\nB", $this->smarty->fetch($tpl));
     }
     public function testTagText3()
     {
         $tpl = $this->smarty->createTemplate("eval:E{assign var=zoo value='blah'}\nF");
-        $this->assertEquals("EF", $this->smarty->fetch($tpl));
+        $this->assertEquals("E\nF", $this->smarty->fetch($tpl));
     }
     public function testTagText4()
     {

@@ -102,7 +102,7 @@ class FilterTests extends PHPUnit_Framework_TestCase
     {
         function mypostfilter($input)
         {
-            return '{$foo}' . $input;
+            return 'echo "{\$foo}";' . $input;
         }
         $this->smarty->registerFilter(Smarty::FILTER_POST,'mypostfilter');
         $tpl = $this->smarty->createTemplate('eval:{" hello world"}');
@@ -125,7 +125,7 @@ class FilterTests extends PHPUnit_Framework_TestCase
     public function testRegisteredVariableFilter2()
     {
         $var = new VarFilter();
-        
+
         $this->smarty->registerFilter(Smarty::FILTER_VARIABLE,array($var, 'variablefilter'));
         $tpl = $this->smarty->createTemplate('string:{$foo}');
         $tpl->assign('foo', 'bar');
@@ -137,7 +137,7 @@ Class VarFilter {
          function variablefilter($input, $smarty)
         {
             return 'var{$foo}' . $input;
-        }   
+        }
 }
 
 function myoutputfilter($input)

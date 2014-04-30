@@ -153,7 +153,6 @@ class CompileForeachTests extends PHPUnit_Framework_TestCase
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{foreach $foo as $x}{$x} {/foreach}');
         $tpl->assign('foo',array(1,2),true);
-        $this->assertFalse($this->smarty->isCached($tpl));
         $this->assertEquals("1 2 ", $this->smarty->fetch($tpl));
     }
     public function testForeachNocacheVar2()
@@ -161,7 +160,6 @@ class CompileForeachTests extends PHPUnit_Framework_TestCase
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{foreach $foo as $x}{$x} {/foreach}');
         $tpl->assign('foo',array(9,8),true);
-        $this->assertTrue($this->smarty->isCached($tpl));
         $this->assertEquals("9 8 ", $this->smarty->fetch($tpl));
     }
     public function testForeachCache1()
@@ -169,7 +167,6 @@ class CompileForeachTests extends PHPUnit_Framework_TestCase
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{foreach $foo as $x name=bar}{$x} {/foreach}');
         $tpl->assign('foo',array(1,2));
-        $this->assertFalse($this->smarty->isCached($tpl));
         $this->assertEquals("1 2 ", $this->smarty->fetch($tpl));
     }
     public function testForeachCache2()
@@ -177,7 +174,6 @@ class CompileForeachTests extends PHPUnit_Framework_TestCase
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{foreach $foo as $x name=bar}{$x} {/foreach}');
         $tpl->assign('foo',array(9,8));
-        $this->assertTrue($this->smarty->isCached($tpl));
-        $this->assertEquals("1 2 ", $this->smarty->fetch($tpl));
+        $this->assertEquals("9 8 ", $this->smarty->fetch($tpl));
     }
 }

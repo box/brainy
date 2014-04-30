@@ -69,7 +69,7 @@ class DelimiterTests extends PHPUnit_Framework_TestCase
     {
         $this->smarty->left_delimiter = '{=';
         $this->smarty->right_delimiter = '=}';
-        $tpl = $this->smarty->createTemplate('eval:{=assign var=foo value="hello world" nocache=}{=$foo=}');
+        $tpl = $this->smarty->createTemplate('eval:{=assign var=foo value="hello world"=}{=$foo=}');
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
 }

@@ -2442,7 +2442,7 @@ static public $yy_action = array(
 #line 546 "smarty_internal_templateparser.y"
     function yy_r90(){
     self::$prefix_number++;
-    $this->compiler->prefix_code[] = '<?php $_tmp'.self::$prefix_number.'='.$this->yystack[$this->yyidx + 0]->minor.';?>';
+    $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.$this->yystack[$this->yyidx + 0]->minor.";\n";
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor.$this->yystack[$this->yyidx + -1]->minor.'$_tmp'.self::$prefix_number;
     }
 #line 2445 "smarty_internal_templateparser.php"
@@ -2694,7 +2694,7 @@ static public $yy_action = array(
                 $par = implode(',',$this->yystack[$this->yyidx + -1]->minor);
                 if (strncasecmp($par,'$_smarty_tpl->getConfigVariable',strlen('$_smarty_tpl->getConfigVariable')) === 0) {
                     self::$prefix_number++;
-                    $this->compiler->prefix_code[] = '<?php $_tmp'.self::$prefix_number.'='.str_replace(')',', false)',$par).';?>';
+                    $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.str_replace(')',', false)',$par).";\n";
                     $isset_par = '$_tmp'.self::$prefix_number;
                 } else {
                     $isset_par=str_replace("')->value","',null,true,false)->value",$par);
@@ -2732,7 +2732,7 @@ static public $yy_action = array(
         $this->compiler->trigger_template_error (self::Err2);
     }
     self::$prefix_number++;
-    $this->compiler->prefix_code[] = '<?php $_tmp'.self::$prefix_number.'='.$this->compileVariable("'".$this->yystack[$this->yyidx + -3]->minor."'").';?>';
+    $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.$this->compileVariable("'".$this->yystack[$this->yyidx + -3]->minor."'").';';
     $this->_retvalue = '$_tmp'.self::$prefix_number.'('. implode(',',$this->yystack[$this->yyidx + -1]->minor) .')';
     }
 #line 2735 "smarty_internal_templateparser.php"

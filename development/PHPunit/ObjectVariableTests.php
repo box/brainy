@@ -65,26 +65,6 @@ class ObjectVariableTests extends PHPUnit_Framework_TestCase
         $tpl->assign('object', $object);
         $this->assertEquals('hello world', $this->smarty->fetch($tpl));
     }
-    /**
-    * test  object variable in double quoted string
-    */
-    public function testObjectVariableOutputDoubleQuotes()
-    {
-        $object = new VariableObject;
-        $tpl = $this->smarty->createTemplate('string:{"double quoted `$object->hello` okay"}');
-        $tpl->assign('object', $object);
-        $this->assertEquals('double quoted hello_world okay', $this->smarty->fetch($tpl));
-    }
-    /**
-    * test  object variable in double quoted string as include name
-    */
-    public function testObjectVariableOutputDoubleQuotesInclude()
-    {
-        $object = new VariableObject;
-        $tpl = $this->smarty->createTemplate('string:{include file="`$object->hello`_test.tpl"}');
-        $tpl->assign('object', $object);
-        $this->assertEquals('hello world', $this->smarty->fetch($tpl));
-    }
 }
 
 Class VariableObject {

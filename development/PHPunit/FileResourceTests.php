@@ -197,7 +197,7 @@ class FileResourceTests extends PHPUnit_Framework_TestCase
     public function testIsCachedTouchedSourcePrepare()
     {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        sleep(1);
+        sleep(0.5);
         touch ($tpl->source->filepath);
     }
     public function testIsCachedTouchedSource()

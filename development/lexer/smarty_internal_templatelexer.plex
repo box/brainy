@@ -57,7 +57,6 @@
          				'AT'		=> '@',
          				'HATCH'		=> '#',
          				'QUOTE'		=> '"',
-         				'BACKTICK'		=> '`',
          				'VERT'		=> '|',
          				'DOT'			=> '.',
          				'COMMA'		=> '","',
@@ -105,7 +104,7 @@
      %line $this->line
      linebreak = /[\t ]*[\r\n]+[\t ]*/
      text = /[\S\s]/
-     textdoublequoted = /([^"\\]*?)((?:\\.[^"\\]*?)*?)(?=(SMARTYldel|\$|`\$|"))/
+     textdoublequoted = /([^"\\]*?)((?:\\.[^"\\]*?)*?)(?=(SMARTYldel|\$|"))/
      dollarid = /\$[0-9]*[a-zA-Z_]\w*/
      all = /[\S\s]+/
      emptyjava = /\{\}/
@@ -274,7 +273,7 @@
        } else {
          $to = strlen($this->data);
        }
-       preg_match("/{$this->ldel}|<\?|\?>|<%|%>/",$this->data,$match,PREG_OFFSET_CAPTURE,$this->counter);
+       preg_match("/{$this->ldel}/",$this->data,$match,PREG_OFFSET_CAPTURE,$this->counter);
        if (isset($match[0][1])) {
          $to = $match[0][1];
        }
@@ -553,7 +552,7 @@
        } else {
          $to = strlen($this->data);
        }
-       preg_match("/{$this->ldel}\/?literal{$this->rdel}|<\?|<%|\?>|%>/",$this->data,$match,PREG_OFFSET_CAPTURE,$this->counter);
+       preg_match("/{$this->ldel}\/?literal{$this->rdel}/",$this->data,$match,PREG_OFFSET_CAPTURE,$this->counter);
        if (isset($match[0][1])) {
          $to = $match[0][1];
        } else {

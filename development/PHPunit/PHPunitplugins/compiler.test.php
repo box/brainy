@@ -10,7 +10,7 @@ class smarty_compiler_test extends Smarty_Internal_CompileBase
 
         $this->openTag($compiler, 'test');
 
-        return "<?php echo 'test output'; ?>";
+        return "echo 'test output';\n";
     }
 
 }

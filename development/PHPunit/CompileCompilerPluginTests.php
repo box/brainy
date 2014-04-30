@@ -30,7 +30,7 @@ class CompileCompilerPluginTests extends PHPUnit_Framework_TestCase
     {
         $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'compilerplugin', 'mycompilerplugin');
         $tpl = $this->smarty->createTemplate('compilerplugintest.tpl');
-        $this->assertEquals("Hello World", $this->smarty->fetch($tpl));
+        $this->assertEquals("Hello World", trim($this->smarty->fetch($tpl)));
     }
     /**
     * test compiler plugin tag in compiled template file
@@ -40,7 +40,7 @@ class CompileCompilerPluginTests extends PHPUnit_Framework_TestCase
         $this->smarty->force_compile = false;
         $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'compilerplugin', 'mycompilerplugin');
         $tpl = $this->smarty->createTemplate('compilerplugintest.tpl');
-        $this->assertEquals("Hello World", $this->smarty->fetch($tpl));
+        $this->assertEquals("Hello World", trim($this->smarty->fetch($tpl)));
     }
 }
 function mycompilerplugin($params, $compiler)

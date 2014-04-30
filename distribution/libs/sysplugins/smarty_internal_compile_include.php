@@ -143,7 +143,8 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
                     $tpl->properties['file_dependency'][$tpl->source->uid] = array($tpl->source->filepath, $tpl->source->timestamp, $tpl->source->type);
                     $compiler->template->properties['file_dependency'] = array_merge($compiler->template->properties['file_dependency'], $tpl->properties['file_dependency']);
                     // remove header code
-                    $compiled_code = preg_replace("/(\/\*%%SmartyHeaderCode%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%\*\/\n)/s", '', $compiled_code);
+                    $compiled_code = preg_replace("/(<\?php \/\* Brainy(.+?)\/\*\/%%SmartyHeaderCode%%\*\/\n)/s", '', $compiled_code);
+                    // $compiled_code = preg_replace("/(\/\*%%SmartyHeaderCode%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%\*\/\n)/s", '', $compiled_code);
                     $compiler->merged_templates[$tpl->properties['unifunc']] = $compiled_code;
                     $has_compiled_template = true;
                     unset ($tpl);

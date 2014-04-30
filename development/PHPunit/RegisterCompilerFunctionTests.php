@@ -88,24 +88,24 @@ class RegisterCompilerFunctionTests extends PHPUnit_Framework_TestCase
 }
 function mycompilerfunction($params, $smarty)
 {
-    return "<?php echo 'hello world {$params['var']}'?>";
+    return "echo 'hello world {$params['var']}';\n";
 }
 function mycompilerfunctionopen($params, $smarty)
 {
-    return "<?php echo 'open tag'?>";
+    return "echo 'open tag';\n";
 }
 function mycompilerfunctionclose($params, $smarty)
 {
-    return "<?php echo 'close tag'?>";
+    return "echo 'close tag';\n";
 }
 class mycompilerfunctionclass
 {
     static function execute($params, $smarty)
     {
-        return "<?php echo 'hello world {$params['var1']}'?>";
+        return "echo 'hello world {$params['var1']}';\n";
     }
     public function compile($params, $smarty)
     {
-        return "<?php echo 'hello world {$params['var2']}'?>";
+        return "echo 'hello world {$params['var2']}';\n";
     }
 }

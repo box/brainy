@@ -103,7 +103,6 @@ class CompileForTests extends PHPUnit_Framework_TestCase
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 5}{$x} {/for}');
         $tpl->assign('foo',1,true);
-        $this->assertFalse($this->smarty->isCached($tpl));
         $this->assertEquals("1 2 3 4 5 ", $this->smarty->fetch($tpl));
     }
     public function testForNocacheVar2()
@@ -111,7 +110,6 @@ class CompileForTests extends PHPUnit_Framework_TestCase
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 5}{$x} {/for}');
         $tpl->assign('foo',4,true);
-        $this->assertTrue($this->smarty->isCached($tpl));
         $this->assertEquals("4 5 ", $this->smarty->fetch($tpl));
     }
     public function testForCache1()
@@ -119,15 +117,6 @@ class CompileForTests extends PHPUnit_Framework_TestCase
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 2}{$x} {/for}');
         $tpl->assign('foo',1);
-        $this->assertFalse($this->smarty->isCached($tpl));
-        $this->assertEquals("1 2 ", $this->smarty->fetch($tpl));
-    }
-    public function testForCache2()
-    {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 2}{$x} {/for}');
-        $tpl->assign('foo',6);
-        $this->assertTrue($this->smarty->isCached($tpl));
         $this->assertEquals("1 2 ", $this->smarty->fetch($tpl));
     }
 }

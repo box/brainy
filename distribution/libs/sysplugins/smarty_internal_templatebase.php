@@ -137,7 +137,8 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                         Smarty_Internal_Debug::start_render($_template);
                     }
                     try {
-                        // echo $code;
+                        // if (strpos($code, 'foo') !== false)
+                        //     echo 'code: ', $code;
                         ob_start();
                         eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
                         unset($code);
@@ -149,7 +150,8 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                     if (!$_template->compiled->exists || ($_template->smarty->force_compile && !$_template->compiled->isCompiled)) {
                         $_template->compileTemplateSource();
                         $code = file_get_contents($_template->compiled->filepath);
-                        echo $code;
+                        // if (strpos($code, 'hello world') === false && strpos($code, 'smarty_template_function_functest') === false && strpos($code, 'test_recursive_includes') === false)
+                        //     echo $code;
                         eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
                         unset($code);
                         $_template->compiled->loaded = true;

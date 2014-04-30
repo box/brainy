@@ -68,13 +68,13 @@ class DefaultPluginHandlerTests extends PHPUnit_Framework_TestCase
     {
         $this->smarty->assign('foo','bar');
         $this->smarty->caching = 1;
-        $this->assertEquals("staticmodifier bar", $this->smarty->fetch('test_default_static_modifier.tpl'));
+        $this->assertEquals("staticmodifier bar", trim($this->smarty->fetch('test_default_static_modifier.tpl')));
     }
     public function testDefaultModifierStaticClassMethodCaching2()
     {
         $this->smarty->assign('foo','bar');
         $this->smarty->caching = 1;
-        $this->assertEquals("staticmodifier bar", $this->smarty->fetch('test_default_static_modifier.tpl'));
+        $this->assertEquals("staticmodifier bar", trim($this->smarty->fetch('test_default_static_modifier.tpl')));
     }
 
 }

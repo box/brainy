@@ -119,13 +119,13 @@ class CompileIncludeTests extends PHPUnit_Framework_TestCase
         $this->smarty->assign('foo',1);
         $this->smarty->assign('bar','bar');
         $content = $this->smarty->fetch('test_recursive_includes.tpl');
-        $this->assertContains("before 1 bar<br>\nbefore 2 bar<br>\nbefore 3 bar<br>\nafter 3 bar<br>\nafter 2 bar<br>\nafter 1 bar<br>", $content);
+        $this->assertContains("before 1 bar<br>\nbefore 2 bar<br>\nbefore 3 bar<br>\n\nafter 3 bar<br>\n\nafter 2 bar<br>\n\nafter 1 bar<br>", $content);
     }
     public function testRecursiveIncludes2()
     {
         $this->smarty->assign('foo',1);
         $this->smarty->assign('bar','bar');
         $content = $this->smarty->fetch('test_recursive_includes2.tpl');
-        $this->assertContains("before 1 bar<br>\nbefore 3 bar<br>\nbefore 5 bar<br>\nafter 5 bar<br>\nafter 3 bar<br>\nafter 1 bar<br>", $content);
+        $this->assertContains("before 1 bar<br>\nbefore 3 bar<br>\nbefore 5 bar<br>\n\nafter 5 bar<br>\n\nafter 3 bar<br>\n\nafter 1 bar<br>", $content);
     }
 }

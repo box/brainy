@@ -545,7 +545,7 @@ expr(res)        ::= value(v1) INSTANCEOF(i) ID(id). {
 
 expr(res)        ::= value(v1) INSTANCEOF(i) value(v2). {
     self::$prefix_number++;
-    $this->compiler->prefix_code[] = '<?php $_tmp'.self::$prefix_number.'='.v2.';?>';
+    $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.v2.";\n";
     res = v1.i.'$_tmp'.self::$prefix_number;
 }
 
@@ -864,7 +864,7 @@ function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
                 $par = implode(',',p);
                 if (strncasecmp($par,'$_smarty_tpl->getConfigVariable',strlen('$_smarty_tpl->getConfigVariable')) === 0) {
                     self::$prefix_number++;
-                    $this->compiler->prefix_code[] = '<?php $_tmp'.self::$prefix_number.'='.str_replace(')',', false)',$par).';?>';
+                    $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.str_replace(')',', false)',$par).";\n";
                     $isset_par = '$_tmp'.self::$prefix_number;
                 } else {
                     $isset_par=str_replace("')->value","',null,true,false)->value",$par);
@@ -903,7 +903,7 @@ method(res)     ::= DOLLAR ID(f) OPENP params(p) CLOSEP.  {
         $this->compiler->trigger_template_error (self::Err2);
     }
     self::$prefix_number++;
-    $this->compiler->prefix_code[] = '<?php $_tmp'.self::$prefix_number.'='.$this->compileVariable("'".f."'").';?>';
+    $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.$this->compileVariable("'".f."'").';';
     res = '$_tmp'.self::$prefix_number.'('. implode(',',p) .')';
 }
 

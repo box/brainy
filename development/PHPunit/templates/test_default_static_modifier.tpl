@@ -1,1 +1,1 @@
-{$foo|mydefaultstaticmodifier nocache}
+{$foo|mydefaultstaticmodifier}

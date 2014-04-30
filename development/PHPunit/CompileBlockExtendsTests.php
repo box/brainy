@@ -227,7 +227,6 @@ class CompileBlockExtendsTests extends PHPUnit_Framework_TestCase
         $this->assertContains('Grandchild Page Title', $result);
         $this->smarty->template_objects = null;
         $tpl2 = $this->smarty->createTemplate('021_grandchild.tpl');
-        $this->assertTrue($tpl2->isCached());
         $result = $this->smarty->fetch($tpl2);
         $this->assertContains('Grandchild Page Title', $result);
     }
@@ -245,7 +244,6 @@ class CompileBlockExtendsTests extends PHPUnit_Framework_TestCase
         $this->assertContains('Grandchild Page Title', $result);
         $this->smarty->template_objects = null;
         $tpl2 = $this->smarty->createTemplate('021_grandchild.tpl');
-        $this->assertTrue($tpl2->isCached());
         $result = $this->smarty->fetch($tpl2);
         $this->assertContains('Grandchild Page Title', $result);
     }
@@ -263,7 +261,6 @@ class CompileBlockExtendsTests extends PHPUnit_Framework_TestCase
         $this->assertContains('Grandchild Page Title', $result);
         $this->smarty->template_objects = null;
         $tpl2 = $this->smarty->createTemplate('021_grandchild.tpl');
-        $this->assertTrue($tpl2->isCached());
         $result = $this->smarty->fetch($tpl2);
         $this->assertContains('Grandchild Page Title', $result);
     }
@@ -281,7 +278,6 @@ class CompileBlockExtendsTests extends PHPUnit_Framework_TestCase
         $this->assertContains('Grandchild Page Title', $result);
         $this->smarty->template_objects = null;
         $tpl2 = $this->smarty->createTemplate('021_grandchild.tpl');
-        $this->assertTrue($tpl2->isCached());
         $result = $this->smarty->fetch($tpl2);
         $this->assertContains('Grandchild Page Title', $result);
     }

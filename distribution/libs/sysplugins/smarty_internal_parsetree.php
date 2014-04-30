@@ -49,11 +49,11 @@ abstract class _smarty_parsetree
      * @return string escaped string
      */
     protected function escape_data($toEscape) {
-        $out = addslashes($toEscape);
-        $out = str_replace("\n", '\n', $out);
+        $out = str_replace("\n", '\n', $toEscape);
         $out = str_replace("\r", '\r', $out);
         $out = str_replace("\t", '\t', $out);
         $out = str_replace('$', '\$', $out);
+        $out = str_replace('"', '\"', $out);
         return $out;
     }
 
