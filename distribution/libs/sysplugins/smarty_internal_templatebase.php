@@ -137,12 +137,12 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                         Smarty_Internal_Debug::start_render($_template);
                     }
                     try {
+                        // echo $code;
                         ob_start();
                         eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
                         unset($code);
                     } catch (Exception $e) {
                         ob_get_clean();
-                        echo $code;
                         throw $e;
                     }
                 } else {
@@ -189,7 +189,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                         array_shift($_template->_capture_stack);
                     } catch (Exception $e) {
                         ob_get_clean();
-                        echo $code;
+                        if (isset($code)) echo $code;
                         throw $e;
                     }
                 }

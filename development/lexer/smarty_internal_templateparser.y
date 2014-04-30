@@ -241,13 +241,13 @@ smartytag(res)   ::= LDEL ID(i) PTR ID(m) attributes(a). {
 
                   // tag with modifier and optional Smarty2 style attributes
 smartytag(res)   ::= LDEL ID(i) modifierlist(l)attributes(a). {
-    res = '<?php ob_start();?>'.$this->compiler->compileTag(i,a).'<?php echo ';
+    res = 'ob_start();'.$this->compiler->compileTag(i,a).'echo ';
     res .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>l,'value'=>'ob_get_clean()')).'?>';
 }
 
                   // registered object tag with modifiers
 smartytag(res)   ::= LDEL ID(i) PTR ID(me) modifierlist(l) attributes(a). {
-    res = '<?php ob_start();?>'.$this->compiler->compileTag(i,a,array('object_methode'=>me)).'<?php echo ';
+    res = 'ob_start();'.$this->compiler->compileTag(i,a,array('object_methode'=>me)).'echo ';
     res .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>l,'value'=>'ob_get_clean()')).'?>';
 }
 
@@ -661,7 +661,7 @@ value(res)    ::= varindexed(vi) DOUBLECOLON static_class_access(r). {
                   // Smarty tag
 value(res)       ::= smartytag(st) RDEL. {
     self::$prefix_number++;
-    $this->compiler->prefix_code[] = '<?php ob_start();?>'.st.'<?php $_tmp'.self::$prefix_number.'=ob_get_clean();?>';
+    $this->compiler->prefix_code[] = 'ob_start();'.st.'$_tmp'.self::$prefix_number.'=ob_get_clean();';
     res = '$_tmp'.self::$prefix_number;
 }
 

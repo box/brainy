@@ -36,6 +36,13 @@ abstract class _smarty_parsetree
     abstract public function to_smarty_php();
 
     /**
+     * Return buffer
+     *
+     * @return string buffer content
+     */
+    abstract public function to_inline_data();
+
+    /**
      * Return escaped data
      *
      * @param string $toEscape
@@ -81,6 +88,14 @@ class _smarty_tag extends _smarty_parsetree
     }
 
     /**
+     * @return string
+     */
+    public function to_inline_data()
+    {
+        return $this->data;
+    }
+
+    /**
      * Return buffer content
      *
      * @return string content
@@ -98,7 +113,7 @@ class _smarty_tag extends _smarty_parsetree
     public function assign_to_var()
     {
         $var = sprintf('$_tmp%d', ++Smarty_Internal_Templateparser::$prefix_number);
-        $this->parser->compiler->prefix_code[] = sprintf('<?php ob_start();?>%s<?php %s=ob_get_clean();?>', $this->data, $var);
+        $this->parser->compiler->prefix_code[] = sprintf('ob_start();%s%s=ob_get_clean();', $this->data, $var);
 
         return $var;
     }
@@ -124,6 +139,14 @@ class _smarty_code extends _smarty_parsetree
     {
         $this->parser = $parser;
         $this->data = $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function to_inline_data()
+    {
+        return $this->to_smarty_php();
     }
 
     /**
@@ -172,9 +195,9 @@ class _smarty_doublequoted extends _smarty_parsetree
         $last_subtree = count($this->subtrees) - 1;
         if ($last_subtree >= 0 && $this->subtrees[$last_subtree] instanceof _smarty_tag && $this->subtrees[$last_subtree]->saved_block_nesting < $this->parser->block_nesting_level) {
             if ($subtree instanceof _smarty_code) {
-                $this->subtrees[$last_subtree]->data .= '<?php echo ' . $subtree->data . ';?>';
+                $this->subtrees[$last_subtree]->data .= 'echo ' . $subtree->data . ';';
             } elseif ($subtree instanceof _smarty_dq_content) {
-                $this->subtrees[$last_subtree]->data .= '<?php echo "' . $subtree->data . '";?>';
+                $this->subtrees[$last_subtree]->data .= 'echo "' . $subtree->data . '";';
             } else {
                 $this->subtrees[$last_subtree]->data .= $subtree->data;
             }
@@ -184,6 +207,14 @@ class _smarty_doublequoted extends _smarty_parsetree
         if ($subtree instanceof _smarty_tag) {
             $this->parser->block_nesting_level = count($this->parser->compiler->_tag_stack);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function to_inline_data()
+    {
+        return $this->to_smarty_php();
     }
 
     /**
@@ -238,6 +269,14 @@ class _smarty_dq_content extends _smarty_parsetree
     }
 
     /**
+     * @return string
+     */
+    public function to_inline_data()
+    {
+        return $this->data;
+    }
+
+    /**
      * Return content as double quoted string
      *
      * @return string doubled quoted string
@@ -286,6 +325,19 @@ class _smarty_template_buffer extends _smarty_parsetree
     }
 
     /**
+     * @return string
+     */
+    public function to_inline_data()
+    {
+        $code = '';
+        for ($key = 0, $cnt = count($this->subtrees); $key < $cnt; $key++) {
+            $code .= $this->subtrees[$key]->to_inline_data();
+        }
+
+        return $code . "\n";
+    }
+
+    /**
      * Sanitize and merge subtree buffers together
      *
      * @return string template code content
@@ -299,38 +351,11 @@ class _smarty_template_buffer extends _smarty_parsetree
                     $key = $key + 1;
                     continue;
                 }
-                if (substr($this->subtrees[$key]->data, -1) == '<' && $this->subtrees[$key + 1]->data == '' && substr($this->subtrees[$key + 2]->data, -1) == '?') {
-                    $key = $key + 2;
-                    continue;
-                }
-            }/*
-            if (substr($code, -1) == '<') {
-                $subtree = $this->subtrees[$key]->to_smarty_php();
-                if (substr($subtree, 0, 1) == '?') {
-                    $code = substr($code, 0, strlen($code) - 1) . '<<?php ?>?' . substr($subtree, 1);
-                } else {
-                    $code .= $subtree;
-                }
-                continue;
+                // if (substr($this->subtrees[$key]->data, -1) == '<' && $this->subtrees[$key + 1]->data == '' && substr($this->subtrees[$key + 2]->data, -1) == '?') {
+                //     $key = $key + 2;
+                //     continue;
+                // }
             }
-            if ($this->parser->asp_tags && substr($code, -1) == '%') {
-                $subtree = $this->subtrees[$key]->to_smarty_php();
-                if (substr($subtree, 0, 1) == '>') {
-                    $code = substr($code, 0, strlen($code) - 1) . '%<?php ?>>' . substr($subtree, 1);
-                } else {
-                    $code .= $subtree;
-                }
-                continue;
-            }
-            if (substr($code, -1) == '?') {
-                $subtree = $this->subtrees[$key]->to_smarty_php();
-                if (substr($subtree, 0, 1) == '>') {
-                    $code = substr($code, 0, strlen($code) - 1) . '?<?php ?>>' . substr($subtree, 1);
-                } else {
-                    $code .= $subtree;
-                }
-                continue;
-            }*/
             $code .= $this->subtrees[$key]->to_smarty_php();
         }
 
@@ -358,6 +383,14 @@ class _smarty_text extends _smarty_parsetree
     {
         $this->parser = $parser;
         $this->data = $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function to_inline_data()
+    {
+        return $this->escape_data($this->data);
     }
 
     /**
@@ -394,7 +427,15 @@ class _smarty_linebreak extends _smarty_parsetree
     }
 
     /**
-     * Return linebrak
+     * @return string
+     */
+    public function to_inline_data()
+    {
+        return $this->escape_data($this->data);
+    }
+
+    /**
+     * Return linebreak
      *
      * @return string linebreak
      */

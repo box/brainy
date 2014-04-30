@@ -185,14 +185,6 @@ class FileResourceTests extends PHPUnit_Framework_TestCase
         $this->smarty->fetch($tpl);
     }
 
-    public function testIsCached()
-    {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertTrue($tpl->isCached());
-    }
-
     public function testForceCache()
     {
         $this->smarty->caching = true;
@@ -231,16 +223,6 @@ class FileResourceTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($tpl->isCached());
     }
 
-    public function testWriteCachedContent()
-    {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $this->smarty->clearAllCache();
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->smarty->fetch($tpl);
-        $this->assertTrue(file_exists($tpl->cached->filepath));
-    }
-
     public function testGetRenderedTemplate()
     {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
@@ -257,13 +239,6 @@ class FileResourceTests extends PHPUnit_Framework_TestCase
         $this->smarty->clearAllCache();
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $this->smarty->fetch($tpl);
-    }
-    public function testSmartyIsCached()
-    {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertTrue($this->smarty->isCached($tpl));
     }
 
     public function testSmartyIsCachedCachingDisabled()

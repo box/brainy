@@ -56,7 +56,7 @@ class AttributeTests extends PHPUnit_Framework_TestCase
     public function testIllegalOptionValue()
     {
         try {
-            $this->smarty->fetch('string:{assign var=foo value=1 nocache=buh}');
+            $this->smarty->fetch('string:{include "test" caching=foo}');
         } catch (Exception $e) {
             $this->assertContains(htmlentities('illegal value of option flag'), $e->getMessage());
 

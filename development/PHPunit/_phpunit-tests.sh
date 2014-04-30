@@ -1,2 +1,2 @@
 #!/bin/sh
-phpunit --verbose --colors --stop-on-error _runAllTests.php
+phpunit --verbose --colors --stop-on-failure _runAllTests.php

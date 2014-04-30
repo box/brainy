@@ -214,9 +214,10 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         $this->properties['unifunc'] = 'content_' . str_replace(array('.',','), '_', uniqid('', true));
         $content = $this->createTemplateCodeFrame($content, true);
         $_smarty_tpl = $this;
-        // echo '---------------------', "\n", $content;
-        // return;
-        eval($content);
+        /*
+        return false;
+        eval('?>' . $content);
+        */
         $this->cached->valid = true;
         $this->cached->processed = true;
 
@@ -356,22 +357,6 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         if ($cache) {
             // remove compiled code of{function} definition
             unset($this->properties['function']);
-            if (!empty($this->smarty->template_functions)) {
-                // copy code of {function} tags called in nocache mode
-                foreach ($this->smarty->template_functions as $name => $function_data) {
-                    if (isset($function_data['called_nocache'])) {
-                        foreach ($function_data['called_functions'] as $func_name) {
-                            $this->smarty->template_functions[$func_name]['called_nocache'] = true;
-                        }
-                    }
-                }
-                 foreach ($this->smarty->template_functions as $name => $function_data) {
-                    if (isset($function_data['called_nocache'])) {
-                        unset($function_data['called_nocache'], $function_data['called_functions'], $this->smarty->template_functions[$name]['called_nocache']);
-                        $this->properties['function'][$name] = $function_data;
-                    }
-                }
-            }
         }
         $this->properties['version'] = Smarty::SMARTY_VERSION;
         if (!isset($this->properties['unifunc'])) {

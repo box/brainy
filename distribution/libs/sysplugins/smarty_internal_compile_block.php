@@ -161,7 +161,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
         $_tpl->compiler->suppressTemplatePropertyHeader = true;
         $_tpl->compiler->suppressMergedTemplates = true;
         if (strpos($compiler->template->block_data[$_name]['source'], self::parent) !== false) {
-            $_output = str_replace(self::parent, $compiler->parser->current_buffer->to_smarty_php(), $_tpl->compiler->compileTemplate($_tpl));
+            $_output = str_replace(self::parent, trim($compiler->parser->current_buffer->to_inline_data()), $_tpl->compiler->compileTemplate($_tpl));
         } elseif ($compiler->template->block_data[$_name]['mode'] == 'prepend') {
             $_output = $_tpl->compiler->compileTemplate($_tpl) . $compiler->parser->current_buffer->to_smarty_php();
         } elseif ($compiler->template->block_data[$_name]['mode'] == 'append') {

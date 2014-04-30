@@ -2225,13 +2225,13 @@ static public $yy_action = array(
 #line 2222 "smarty_internal_templateparser.php"
 #line 243 "smarty_internal_templateparser.y"
     function yy_r29(){
-    $this->_retvalue = '<?php ob_start();?>'.$this->compiler->compileTag($this->yystack[$this->yyidx + -2]->minor,$this->yystack[$this->yyidx + 0]->minor).'<?php echo ';
+    $this->_retvalue = 'ob_start();'.$this->compiler->compileTag($this->yystack[$this->yyidx + -2]->minor,$this->yystack[$this->yyidx + 0]->minor).'echo ';
     $this->_retvalue .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>$this->yystack[$this->yyidx + -1]->minor,'value'=>'ob_get_clean()')).'?>';
     }
 #line 2228 "smarty_internal_templateparser.php"
 #line 249 "smarty_internal_templateparser.y"
     function yy_r30(){
-    $this->_retvalue = '<?php ob_start();?>'.$this->compiler->compileTag($this->yystack[$this->yyidx + -4]->minor,$this->yystack[$this->yyidx + 0]->minor,array('object_methode'=>$this->yystack[$this->yyidx + -2]->minor)).'<?php echo ';
+    $this->_retvalue = 'ob_start();'.$this->compiler->compileTag($this->yystack[$this->yyidx + -4]->minor,$this->yystack[$this->yyidx + 0]->minor,array('object_methode'=>$this->yystack[$this->yyidx + -2]->minor)).'echo ';
     $this->_retvalue .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>$this->yystack[$this->yyidx + -1]->minor,'value'=>'ob_get_clean()')).'?>';
     }
 #line 2234 "smarty_internal_templateparser.php"
@@ -2519,7 +2519,7 @@ static public $yy_action = array(
 #line 662 "smarty_internal_templateparser.y"
     function yy_r110(){
     self::$prefix_number++;
-    $this->compiler->prefix_code[] = '<?php ob_start();?>'.$this->yystack[$this->yyidx + -1]->minor.'<?php $_tmp'.self::$prefix_number.'=ob_get_clean();?>';
+    $this->compiler->prefix_code[] = 'ob_start();'.$this->yystack[$this->yyidx + -1]->minor.'$_tmp'.self::$prefix_number.'=ob_get_clean();';
     $this->_retvalue = '$_tmp'.self::$prefix_number;
     }
 #line 2522 "smarty_internal_templateparser.php"
