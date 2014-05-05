@@ -112,8 +112,6 @@ class Smarty_Internal_Templateparser#line 80 "smarty_internal_templateparser.php
         } else {
             $this->php_handling = $this->smarty->php_handling;
         }
-        $this->is_xml = false;
-        $this->asp_tags = (ini_get('asp_tags') != '0');
         $this->current_buffer = $this->root_buffer = new _smarty_template_buffer($this);
     }
 
