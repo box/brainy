@@ -358,6 +358,9 @@ class _smarty_template_buffer extends _smarty_parsetree
             }
             $code .= $this->subtrees[$key]->to_smarty_php();
         }
+        if (empty($code)) {
+            return '';
+        }
 
         return $code . "\n";
     }
@@ -400,6 +403,9 @@ class _smarty_text extends _smarty_parsetree
      */
     public function to_smarty_php()
     {
+        if (empty($this->data)) {
+            return '';
+        }
         return 'echo "' . $this->escape_data($this->data) . "\";\n";
     }
 
