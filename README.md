@@ -1,4 +1,4 @@
-# Brainy
+![Brainy](https://gitenterprise.inside-box.net/mbasta/brainy/raw/fixes/documentation/brainy.png)
 
 Brainy is a replacement for the popular [Smarty](http://www.smarty.net/)
 templating language. It is a fork from the Smarty 3 trunk.
