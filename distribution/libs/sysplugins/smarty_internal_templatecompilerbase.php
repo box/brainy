@@ -338,35 +338,34 @@ abstract class Smarty_Internal_TemplateCompilerBase
                 }
                 // check if tag is registered
                 foreach (array(Smarty::PLUGIN_COMPILER, Smarty::PLUGIN_FUNCTION, Smarty::PLUGIN_BLOCK) as $plugin_type) {
-                    if (isset($this->smarty->registered_plugins[$plugin_type][$tag])) {
-                        // if compiler function plugin call it now
-                        if ($plugin_type == Smarty::PLUGIN_COMPILER) {
-                            $new_args = array();
-                            foreach ($args as $key => $mixed) {
-                                if (is_array($mixed)) {
-                                    $new_args = array_merge($new_args, $mixed);
-                                } else {
-                                    $new_args[$key] = $mixed;
-                                }
-                            }
-                            $function = $this->smarty->registered_plugins[$plugin_type][$tag][0];
-                            if (!is_array($function)) {
-                                return $function($new_args, $this);
-                            } elseif (is_object($function[0])) {
-                                return $this->smarty->registered_plugins[$plugin_type][$tag][0][0]->$function[1]($new_args, $this);
+                    if (!isset($this->smarty->registered_plugins[$plugin_type][$tag])) continue;
+                    // if compiler function plugin call it now
+                    if ($plugin_type == Smarty::PLUGIN_COMPILER) {
+                        $new_args = array();
+                        foreach ($args as $key => $mixed) {
+                            if (is_array($mixed)) {
+                                $new_args = array_merge($new_args, $mixed);
                             } else {
-                                return call_user_func_array($function, array($new_args, $this));
+                                $new_args[$key] = $mixed;
                             }
                         }
-                        // compile registered function or block function
-                        if ($plugin_type == Smarty::PLUGIN_FUNCTION || $plugin_type == Smarty::PLUGIN_BLOCK) {
-                            return $this->callTagCompiler('private_registered_' . $plugin_type, $args, $parameter, $tag);
+                        $function = $this->smarty->registered_plugins[$plugin_type][$tag][0];
+                        if (!is_array($function)) {
+                            return $function($new_args, $this);
+                        } elseif (is_object($function[0])) {
+                            return $this->smarty->registered_plugins[$plugin_type][$tag][0][0]->$function[1]($new_args, $this);
+                        } else {
+                            return call_user_func_array($function, array($new_args, $this));
                         }
+                    }
+                    // compile registered function or block function
+                    if ($plugin_type == Smarty::PLUGIN_FUNCTION || $plugin_type == Smarty::PLUGIN_BLOCK) {
+                        return $this->callTagCompiler('private_registered_' . $plugin_type, $args, $parameter, $tag);
                     }
                 }
                 // check plugins from plugins folder
                 foreach ($this->smarty->plugin_search_order as $plugin_type) {
-                    if ($plugin_type == Smarty::PLUGIN_COMPILER && $this->smarty->loadPlugin('smarty_compiler_' . $tag) && (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this))) {
+                    if ($plugin_type == Smarty::PLUGIN_COMPILER && $this->smarty->loadPlugin('smarty_compiler_' . $tag, true) && (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this))) {
                         $plugin = 'smarty_compiler_' . $tag;
                         if (is_callable($plugin)) {
                             // convert arguments format for old compiler plugins
@@ -434,6 +433,8 @@ abstract class Smarty_Internal_TemplateCompilerBase
                         }
                     }
                 }
+                $this->trigger_template_error("unknown compiler tag \"" . $tag . "\"", $this->lex->taglineno);
+
             } else {
                 // compile closing tag of block function
                 $base_tag = substr($tag, 0, -5);
@@ -467,7 +468,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
                         return call_user_func_array($function, array($args, $this));
                     }
                 }
-                if ($this->smarty->loadPlugin('smarty_compiler_' . $tag)) {
+                if ($this->smarty->loadPlugin('smarty_compiler_' . $tag, true)) {
                     $plugin = 'smarty_compiler_' . $tag;
                     if (is_callable($plugin)) {
                         return $plugin($args, $this->smarty);
@@ -480,8 +481,8 @@ abstract class Smarty_Internal_TemplateCompilerBase
                     }
                     throw new SmartyException("Plugin \"{$tag}\" not callable");
                 }
+                $this->trigger_template_error("unknown tag \"" . $tag . "\"", $this->lex->taglineno);
             }
-            $this->trigger_template_error("unknown tag \"" . $tag . "\"", $this->lex->taglineno);
         }
     }
 
@@ -508,7 +509,8 @@ abstract class Smarty_Internal_TemplateCompilerBase
         }
         // lazy load internal compiler plugin
         $class_name = 'Smarty_Internal_Compile_' . $tag;
-        if ($this->smarty->loadPlugin($class_name)) {
+        // echo $class_name . "\n";
+        if ($this->smarty->loadPlugin($class_name, true)) {
             // check if tag allowed by security
             if (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this)) {
                 // use plugin if found

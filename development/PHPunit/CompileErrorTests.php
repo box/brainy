@@ -44,7 +44,7 @@ class CompileErrorTests extends PHPUnit_Framework_TestCase
         try {
             $this->smarty->fetch('eval:{unknown}');
         } catch (Exception $e) {
-            $this->assertContains('unknown tag "unknown"', $e->getMessage());
+            $this->assertContains('unknown compiler tag "unknown"', $e->getMessage());
 
             return;
         }

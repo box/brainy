@@ -118,7 +118,7 @@ class Smarty_Internal_Templateparser#line 80 "smarty_internal_templateparser.php
     }
 
     public function compileVariable($variable) {
-        return 'smarty_array_lookup($_smarty_tpl->tpl_vars, '. $variable .', Smarty_Variable::dummy())->value';
+        return 'smarty_array_lookup($_smarty_tpl->tpl_vars, '. $variable .', new Smarty_Variable)->value';
     }
 #line 117 "smarty_internal_templateparser.php"
 
@@ -2874,7 +2874,7 @@ static public $yy_action = array(
 #line 2871 "smarty_internal_templateparser.php"
 #line 1095 "smarty_internal_templateparser.y"
     function yy_r185(){
-    $this->_retvalue = new _smarty_code($this, '(string)smarty_array_lookup($_smarty_tpl->tpl_vars, \''. substr($this->yystack[$this->yyidx + 0]->minor,1) .'\', Smarty_Variable::dummy())->value');
+    $this->_retvalue = new _smarty_code($this, '(string)smarty_array_lookup($_smarty_tpl->tpl_vars, \''. substr($this->yystack[$this->yyidx + 0]->minor,1) .'\', new Smarty_Variable)->value');
     }
 #line 2876 "smarty_internal_templateparser.php"
 #line 1099 "smarty_internal_templateparser.y"
