@@ -48,6 +48,6 @@ class CoreTests extends PHPUnit_Framework_TestCase
     */
     public function testLoadPluginSmartyPluginCounter()
     {
-        $this->assertTrue($this->smarty->loadPlugin('Smarty_Function_Counter') == true);
+        $this->assertTrue($this->smarty->loadPlugin('smarty_function_counter') == true);
     }
 }

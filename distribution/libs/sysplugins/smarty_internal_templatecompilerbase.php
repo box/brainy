@@ -545,7 +545,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
         }
         // loop through plugin dirs and find the plugin
         $function = 'smarty_' . $plugin_type . '_' . $plugin_name;
-        $file = $this->smarty->loadPlugin($function, true);
+        $file = $this->smarty->loadPlugin($function, false);
         if ($file === true) {
             return $function;
         }
