@@ -89,6 +89,28 @@ if (SMARTY_SPL_AUTOLOAD && set_include_path(get_include_path() . PATH_SEPARATOR 
     spl_autoload_register('smartyAutoload');
 }
 
+if (!function_exists('smarty_array_lookup')) {
+
+    /**
+     * @param array|null $arr
+     * @param string|int $key
+     * @param mixed|null|void $default
+     * @return mixed
+     * @throws InvalidArgumentException
+     */
+    function smarty_array_lookup($arr, $key, $default = null)
+    {
+        if (!is_int($key) && !is_string($key)) {
+            throw new InvalidArgumentException("Invalid array key");
+        }
+        if (!is_array($arr)) {
+            throw new InvalidArgumentException("Argument 1 was not an array!");
+        }
+
+        return isset($arr[$key]) ? $arr[$key] : $default;
+    }
+}
+
 /**
  * Load always needed external class files
  */
@@ -1285,7 +1307,7 @@ class Smarty extends Smarty_Internal_TemplateBase
      * @param  bool   $check       check if already loaded
      * @return string |boolean filepath of loaded file or false
      */
-    public function loadPlugin($plugin_name, $check = true)
+    public function loadPlugin($plugin_name, $check = false)
     {
         // if function or class exists, exit silently (already loaded)
         if ($check && (is_callable($plugin_name) || class_exists($plugin_name, false))) {

@@ -509,6 +509,13 @@ class Smarty_Variable
         return (string) $this->value;
     }
 
+    /**
+     * @return Smarty_Variable A dummy smarty variable
+     */
+    public static function dummy() {
+        return new Smarty_Variable('');
+    }
+
 }
 
 /**

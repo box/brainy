@@ -44,7 +44,7 @@
     }
 
     public function compileVariable($variable) {
-        return '$_smarty_tpl->tpl_vars['. $variable .']->value';
+        return 'smarty_array_lookup($_smarty_tpl->tpl_vars, '. $variable .', Smarty_Variable::dummy())->value';
     }
 }
 
@@ -1093,7 +1093,7 @@ doublequoted(res)          ::= doublequotedcontent(o). {
 }
 
 doublequotedcontent(res)           ::=  DOLLARID(i). {
-    res = new _smarty_code($this, '(string)$_smarty_tpl->tpl_vars[\''. substr(i,1) .'\']->value');
+    res = new _smarty_code($this, '(string)smarty_array_lookup($_smarty_tpl->tpl_vars, \''. substr(i,1) .'\', Smarty_Variable::dummy())->value');
 }
 
 doublequotedcontent(res)           ::=  LDEL variable(v) RDEL. {

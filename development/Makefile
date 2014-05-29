@@ -1,10 +1,7 @@
-all: config-compiler template-compiler unit-test
+all: parsers unit-test
 
-config-compiler:
-	cd lexer; php Create_Config_Parser.php
-
-template-compiler:
-	cd lexer; php Create_Template_Parser.php
+parsers:
+	cd lexer; make all
 
 unit-test:
 	cd PHPunit; ./_phpunit-tests.sh

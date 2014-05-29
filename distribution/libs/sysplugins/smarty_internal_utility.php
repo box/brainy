@@ -640,8 +640,6 @@ class Smarty_Internal_Utility
                 "smarty_internal_compile_capture.php" => true,
                 "smarty_internal_compile_config_load.php" => true,
                 "smarty_internal_compile_continue.php" => true,
-                "smarty_internal_compile_debug.php" => true,
-                "smarty_internal_compile_eval.php" => true,
                 "smarty_internal_compile_extends.php" => true,
                 "smarty_internal_compile_for.php" => true,
                 "smarty_internal_compile_foreach.php" => true,
