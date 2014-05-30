@@ -100,14 +100,7 @@ if (!function_exists('smarty_array_lookup')) {
      */
     function smarty_array_lookup($arr, $key, $default = null)
     {
-        if (!is_int($key) && !is_string($key)) {
-            throw new InvalidArgumentException("Invalid array key");
-        }
-        if (!is_array($arr)) {
-            throw new InvalidArgumentException("Argument 1 was not an array!");
-        }
-
-        return isset($arr[$key]) ? $arr[$key] : $default;
+        return isset($arr[$key]) ? $arr[$key] : new Smarty_Variable;
     }
 }
 
