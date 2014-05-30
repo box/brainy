@@ -25,9 +25,13 @@ templating language. It is a fork from the Smarty 3 trunk.
 
 ## Differences from Smarty
 
+While Brainy will work as a drop-in replacement for Smarty in most
+applications, there are some differences that may make it difficult to switch.
+
+
 ### Incompatibilities
 
-- Arbitrary PHP is disallowed.
+- Inline and arbitrary PHP is disallowed for security reasons.
   - PHP tags: `<?php ?>`
   - Shorthand PHP tags: `<? ?>`
   - ASP tags: `<% %>`
@@ -37,7 +41,18 @@ templating language. It is a fork from the Smarty 3 trunk.
 - Backticks in template strings no longer function like curly braces in PHP.
 - Caching backends are removed (MySQL, Memcached).
 - `nocache` is always set to `true` and cannot be disabled.
-- Some other features are removed
-  - `{fetch}`
-  - `{debug}`
+- Some other features are removed:
+  - `{fetch}` is removed as it can result in unforseen performance and security
+    issues.
+  - `{debug}` is removed as it can reveal sensitive information.
 - Whitespace surrounding tags is not always treated the same as in Smarty.
+
+Additionally, undefined variables do not throw errors (similar to Smarty 2's
+behavior). For example:
+
+```php
+{if $foo}{$bar}{/if}
+```
+
+If either `$foo` or `$bar` are undefined, the template will simply return an
+empty string. In Smarty 3, the behavior is to throw an undefined index error.
