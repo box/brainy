@@ -81,7 +81,14 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
         // check if we process an inheritance child template
         if ($compiler->inheritance_child) {
             array_unshift(self::$nested_block_names, $_name);
-            $this->template->block_data[$_name]['source'] = '';
+            if (isset($compiler->template->block_data[$_name])) {
+                $compiler->template->block_data[$_name]['source'] = '';
+            } else {
+                $compiler->template->block_data[$_name] = array(
+                    'source' => '',
+                    'mode' => '',
+                );
+            }
             // build {block} for child block
             self::$block_data[$_name]['source'] =
                 "{$compiler->smarty->left_delimiter}private_child_block name={$_attr['name']} file='{$compiler->template->source->filepath}' type='{$compiler->template->source->type}' resource='{$compiler->template->template_resource}'" .

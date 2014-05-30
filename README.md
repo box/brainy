@@ -13,14 +13,9 @@ templating language. It is a fork from the Smarty 3 trunk.
   `eval` and injecting arbitrary PHP into a template.
 
 
-## Where is Brainy headed?
+## Minimum Requirements
 
-- **Phase 1**: Provide a clean, drop-in replacement for Smarty that generates
-  cleaner code and increases code quality.
-- **Phase 2**: Provide a backwards-compatible interface for allowing templates
-  to compile asynchronously.
-- **Phase 3**: Allow templates to be compiled to [Hack](http://hacklang.org/)
-  and add full async support.
+- PHP 5.3 or higher
 
 
 ## Differences from Smarty
@@ -53,6 +48,7 @@ applications, there are some differences that may make it difficult to switch.
   - `{fetch}` is removed as it can result in unforseen performance and security
     issues.
   - `{debug}` is removed as it can reveal sensitive information.
+  - URL-based debugging
 - Whitespace surrounding tags is not always treated the same as in Smarty.
 
 Additionally, undefined variables do not throw errors (similar to Smarty 2's
@@ -64,3 +60,13 @@ behavior). For example:
 
 If either `$foo` or `$bar` are undefined, the template will simply return an
 empty string. In Smarty 3, the behavior is to throw an undefined index error.
+
+
+## Where is Brainy headed?
+
+- **Phase 1**: Provide a clean, drop-in replacement for Smarty that generates
+  cleaner code and increases code quality.
+- **Phase 2**: Provide a backwards-compatible interface for allowing templates
+  to compile asynchronously.
+- **Phase 3**: Allow templates to be compiled to [Hack](http://hacklang.org/)
+  and add full async support.

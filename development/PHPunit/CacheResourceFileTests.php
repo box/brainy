@@ -367,56 +367,6 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase
         $this->assertTrue(file_exists($tpl2->cached->filepath));
         $this->assertFalse(file_exists($tpl3->cached->filepath));
     }
-    public function testClearCacheCacheFile()
-    {
-        $this->markTestSkipped('Skipping MySQL tests');
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $this->smarty->use_sub_dirs = false;
-        $this->smarty->clearAllCache();
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $tpl->writeCachedContent('hello world');
-        $tpl2 = $this->smarty->createTemplate('helloworld.tpl',null,'bar');
-        $tpl2->writeCachedContent('hello world');
-        $tpl3 = $this->smarty->createTemplate('helloworld.tpl','buh|blar');
-        $tpl3->writeCachedContent('hello world');
-        $tpl4 = $this->smarty->createTemplate('helloworld2.tpl');
-        $tpl4->writeCachedContent('hello world');
-        $this->assertTrue(file_exists($tpl->cached->filepath));
-        $this->assertTrue(file_exists($tpl2->cached->filepath));
-        $this->assertTrue(file_exists($tpl3->cached->filepath));
-        $this->assertTrue(file_exists($tpl4->cached->filepath));
-        $this->assertEquals(3, $this->smarty->clearCache('helloworld.tpl'));
-        $this->assertFalse(file_exists($tpl->cached->filepath));
-        $this->assertFalse(file_exists($tpl2->cached->filepath));
-        $this->assertFalse(file_exists($tpl3->cached->filepath));
-        $this->assertTrue(file_exists($tpl4->cached->filepath));
-    }
-    public function testClearCacheCacheFileSub()
-    {
-        $this->markTestSkipped('Skipping MySQL tests');
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $this->smarty->use_sub_dirs = true;
-        $this->smarty->clearAllCache();
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $tpl->writeCachedContent('hello world');
-        $tpl2 = $this->smarty->createTemplate('helloworld.tpl',null,'bar');
-        $tpl2->writeCachedContent('hello world');
-        $tpl3 = $this->smarty->createTemplate('helloworld.tpl','buh|blar');
-        $tpl3->writeCachedContent('hello world');
-        $tpl4 = $this->smarty->createTemplate('helloworld2.tpl');
-        $tpl4->writeCachedContent('hello world');
-        $this->assertTrue(file_exists($tpl->cached->filepath));
-        $this->assertTrue(file_exists($tpl2->cached->filepath));
-        $this->assertTrue(file_exists($tpl3->cached->filepath));
-        $this->assertTrue(file_exists($tpl4->cached->filepath));
-        $this->assertEquals(3, $this->smarty->clearCache('helloworld.tpl'));
-        $this->assertFalse(file_exists($tpl->cached->filepath));
-        $this->assertFalse(file_exists($tpl2->cached->filepath));
-        $this->assertFalse(file_exists($tpl3->cached->filepath));
-        $this->assertTrue(file_exists($tpl4->cached->filepath));
-    }
 
     public function testSharing()
     {

@@ -77,61 +77,6 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($tpl->compiled->filepath);
     }
     /**
-     * test resource plugin rendering of a custom resource
-     */
-    public function testResourcePluginMysql()
-    {
-        $this->markTestSkipped('Skipping MySQL tests');
-        $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
-        $this->assertEquals('hello world', $this->smarty->fetch('mysqltest:test.tpl'));
-    }
-    /**
-     * test resource plugin timestamp of a custom resource
-     */
-    public function testResourcePluginMysqlTimestamp()
-    {
-        $this->markTestSkipped('Skipping MySQL tests');
-        $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
-        $tpl = $this->smarty->createTemplate('mysqltest:test.tpl');
-        $this->assertEquals(strtotime("2010-12-25 22:00:00"), $tpl->source->timestamp);
-    }
-    /**
-     * test resource plugin timestamp of a custom resource with only fetch() implemented
-     */
-    public function testResourcePluginMysqlTimestampWithoutFetchTimestamp()
-    {
-        $this->markTestSkipped('Skipping MySQL tests');
-        $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
-        $tpl = $this->smarty->createTemplate('mysqlstest:test.tpl');
-        $this->assertEquals(strtotime("2010-12-25 22:00:00"), $tpl->source->timestamp);
-    }
-    /**
-     * test resource plugin compiledFilepath of a custom resource
-     */
-    public function testResourcePluginMysqlCompiledFilepath()
-    {
-        $this->markTestSkipped('Skipping MySQL tests');
-        $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
-        $tpl = $this->smarty->createTemplate('mysqltest:test.tpl');
-        $expected = realpath('./templates_c/'.sha1('mysqltest:test.tpl').'.mysqltest.test.tpl.php');
-        $this->assertTrue(!!$expected);
-        $this->assertEquals($expected, realpath($tpl->compiled->filepath));
-    }
-    public function testResourcePluginMysqlCompiledFilepathCache()
-    {
-        $this->markTestSkipped('Skipping MySQL tests');
-        $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $this->smarty->force_compile = true;
-        $this->smarty->fetch('mysqltest:test.tpl');
-        $tpl = $this->smarty->createTemplate('mysqltest:test.tpl');
-        $expected = realpath('./templates_c/'.sha1('mysqltest:test.tpl').'.mysqltest.test.tpl.cache.php');
-        $this->assertTrue(!!$expected);
-        $this->assertEquals($expected, realpath($tpl->compiled->filepath));
-        $this->smarty->caching = false;
-    }
-    /**
      * test resource plugin timesatmp
      */
     public function testResourcePluginTimestamp()

@@ -7,7 +7,9 @@
  */
 
 include '_runTest.inc.php';
+ini_set('error_reporting', E_STRICT);
 ini_set('max_execution_time', 800);
+ini_set('date.timezone', 'UTC');
 ini_set('memory_limit', '3500M');
 /**
  * class for running test suite

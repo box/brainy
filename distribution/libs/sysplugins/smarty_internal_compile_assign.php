@@ -58,11 +58,10 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
                 $output .= "if (isset(\$_smarty_tpl->tpl_vars[$_attr[var]])) {\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->value = $_attr[value];\n";
-                $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->nocache = null;\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->scope = $_scope;\n";
-                $output .= "} else \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], null, $_scope);\n";
+                $output .= "} else \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_Variable($_attr[value], $_scope);\n";
             } else {
-                $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_variable($_attr[value], null, $_scope);\n";
+                $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_Variable($_attr[value], $_scope);\n";
             }
         }
         if ($_scope == Smarty::SCOPE_PARENT) {

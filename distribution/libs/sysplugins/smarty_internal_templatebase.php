@@ -43,8 +43,8 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
         }
         // create template object if necessary
         $_template = ($template instanceof $this->template_class)
-        ? $template
-        : $this->smarty->createTemplate($template, $cache_id, $compile_id, $parent, false);
+            ? $template
+            : $this->smarty->createTemplate($template, $cache_id, $compile_id, $parent, false);
         // if called by Smarty object make sure we use current caching status
         if ($this instanceof Smarty) {
             $_template->caching = $this->caching;
@@ -83,32 +83,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
         }
         if (isset($this->smarty->error_reporting)) {
             $_smarty_old_error_level = error_reporting($this->smarty->error_reporting);
-        }
-        // check URL debugging control
-        if (!$this->smarty->debugging && $this->smarty->debugging_ctrl == 'URL') {
-            if (isset($_SERVER['QUERY_STRING'])) {
-                $_query_string = $_SERVER['QUERY_STRING'];
-            } else {
-                $_query_string = '';
-            }
-            if (false !== strpos($_query_string, $this->smarty->smarty_debug_id)) {
-                if (false !== strpos($_query_string, $this->smarty->smarty_debug_id . '=on')) {
-                    // enable debugging for this browser session
-                    setcookie('SMARTY_DEBUG', true);
-                    $this->smarty->debugging = true;
-                } elseif (false !== strpos($_query_string, $this->smarty->smarty_debug_id . '=off')) {
-                    // disable debugging for this browser session
-                    setcookie('SMARTY_DEBUG', false);
-                    $this->smarty->debugging = false;
-                } else {
-                    // enable debugging for this page
-                    $this->smarty->debugging = true;
-                }
-            } else {
-                if (isset($_COOKIE['SMARTY_DEBUG'])) {
-                    $this->smarty->debugging = true;
-                }
-            }
         }
         // must reset merge template date
         $_template->smarty->merged_templates_func = array();
