@@ -62,6 +62,11 @@ If either `$foo` or `$bar` are undefined, the template will simply return an
 empty string. In Smarty 3, the behavior is to throw an undefined index error.
 
 
+### Added Features
+
+- `stripwhitespace` filter: This functions similarly to `trimwhitespace`, but does not strip HTML comments and does not account for HTML elements like `<pre>` or `<textarea>`. For many applications, these features are not necessary and using `stripwhitespace` instead of `trimwhitespace` can greatly improve performance.
+
+
 ## Where is Brainy headed?
 
 - **Phase 1**: Provide a clean, drop-in replacement for Smarty that generates

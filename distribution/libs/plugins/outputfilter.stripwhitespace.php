@@ -1,0 +1,42 @@
+<?php
+/**
+ * Smarty plugin
+ *
+ * @package Smarty
+ * @subpackage PluginsFilter
+ */
+
+/**
+ * Smarty stripwhitespace outputfilter plugin
+ *
+ * Strip all unnecessary whitespace from HTML markup.
+ * This does not modify
+ *
+ * @author   Matt Basa
+ * @param string                   $source input string
+ * @param Smarty_Internal_Template $smarty Smarty object
+ * @return string filtered output
+ */
+function smarty_outputfilter_stripwhitespace($source, Smarty_Internal_Template $smarty) {
+    $_store = 0;
+    $_offset = 0;
+
+    $whitespace = '\015\012|\015|\012';
+
+    // Unify Line-Breaks to \n
+    $source = preg_replace("/\015\012|\015|\012/", "\n", $source);
+
+    $expressions = array(
+        // replace multiple spaces between tags by a single space
+        // can't remove them entirely, becaue that might break poorly implemented CSS display:inline-block elements
+        '#(:SMARTY@!@|>)\s+(?=@!@SMARTY:|<)#s' => '\1 \2',
+        // remove spaces between attributes (but not in attribute values!)
+        '#(([a-z0-9]\s*=\s*(["\'])[^\3]*?\3)|<[a-z0-9_]+)\s+([a-z/>])#is' => '\1 \4',
+        // note: for some very weird reason trim() seems to remove spaces inside attributes.
+        // maybe a \0 byte or something is interfering?
+        '#^\s+<#Ss' => '<',
+        '#>\s+$#Ss' => '>',
+    );
+
+    return preg_replace( array_keys($expressions), array_values($expressions), $source );
+}
