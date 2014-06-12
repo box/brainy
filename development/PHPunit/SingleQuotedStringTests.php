@@ -23,6 +23,15 @@ class SingleQuotedStringTests extends PHPUnit_Framework_TestCase
     }
 
     /**
+    * test single quotes out of context
+    */
+    public function testSingleQuotesOutsideString()
+    {
+        $tpl = $this->smarty->createTemplate('eval:This isn\'t part of a string');
+        $this->assertEquals('This isn\'t part of a string', $this->smarty->fetch($tpl));
+    }
+
+    /**
     * test simple single quoted string
     */
     public function testSimpleSingleQuotedString()

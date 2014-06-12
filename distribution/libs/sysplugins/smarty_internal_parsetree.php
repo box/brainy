@@ -43,6 +43,22 @@ abstract class _smarty_parsetree
     abstract public function to_inline_data();
 
     /**
+     * @param string|null|void $data
+     * @return string
+     */
+    public function echo_data($data = null) {
+        if (is_null($data)) {
+            $data = $this->to_inline_data();
+        }
+        if (strpos($data, '\\') === false) {
+            $data = str_replace("'", "\\'", $data);
+            return "echo '$data';\n";
+        } else {
+            return 'echo "' . $data . "\";\n";
+        }
+    }
+
+    /**
      * Return escaped data
      *
      * @param string $toEscape
@@ -216,7 +232,7 @@ class _smarty_doublequoted extends _smarty_parsetree
             if ($subtree instanceof _smarty_code) {
                 $this->subtrees[$last_subtree]->data .= 'echo ' . $subtree->data . ';';
             } elseif ($subtree instanceof _smarty_dq_content) {
-                $this->subtrees[$last_subtree]->data .= 'echo "' . $subtree->data . '";';
+                $this->subtrees[$last_subtree]->data .= $this->echo_data($subtree->data);
             } else {
                 $this->subtrees[$last_subtree]->data .= $subtree->data;
             }
@@ -391,14 +407,14 @@ class _smarty_template_buffer extends _smarty_parsetree
                 $buffer .= $node->to_inline_data();
             } else {
                 if (!empty($buffer)) {
-                    $code .= 'echo "' . $buffer . "\";\n";
+                    $code .= $this->echo_data($buffer);
                     $buffer = '';
                 }
                 $code .= $node->to_smarty_php();
             }
         }
         if (!empty($buffer)) {
-            $code .= 'echo "' . $buffer . "\";\n";
+            $code .= $this->echo_data($buffer);
         }
         return $code;
     }
@@ -448,10 +464,7 @@ class _smarty_text extends _smarty_parsetree
      */
     public function to_smarty_php()
     {
-        if ($this->data === '') {
-            return '';
-        }
-        return 'echo "' . $this->to_inline_data() . "\";\n";
+        return $this->echo_data();
     }
 
     /**
@@ -499,7 +512,7 @@ class _smarty_linebreak extends _smarty_parsetree
      */
     public function to_smarty_php()
     {
-        return 'echo "' . $this->to_inline_data() . "\";\n";
+        return $this->echo_data();
     }
 
     /**
