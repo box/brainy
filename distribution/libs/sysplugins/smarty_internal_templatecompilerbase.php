@@ -515,6 +515,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
             if (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this)) {
                 // use plugin if found
                 self::$_tag_objects[$tag] = new $class_name;
+                self::$_tag_objects[$tag]->template = $this->template;
                 // compile this tag
                 return self::$_tag_objects[$tag]->compile($args, $this, $param1, $param2, $param3);
             }
