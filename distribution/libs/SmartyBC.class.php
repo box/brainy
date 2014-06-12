@@ -35,7 +35,7 @@
 require_once(dirname(__FILE__) . '/Smarty.class.php');
 
 /**
- * Smarty Backward Compatability Wrapper Class
+ * Smarty Backward Compatibility Wrapper Class
  *
  * @package Smarty
  */
@@ -55,8 +55,6 @@ class SmartyBC extends Smarty
     public function __construct(array $options=array())
     {
         parent::__construct($options);
-        // register {php} tag
-        $this->registerPlugin('block', 'php', 'smarty_php_tag');
     }
 
     /**
@@ -440,20 +438,4 @@ class SmartyBC extends Smarty
         trigger_error("Smarty error: $error_msg", $error_type);
     }
 
-}
-
-/**
- * Smarty {php}{/php} block function
- *
- * @param array   $params   parameter list
- * @param string  $content  contents of the block
- * @param object  $template template object
- * @param boolean &$repeat  repeat flag
- * @return string content re-formatted
- */
-function smarty_php_tag($params, $content, $template, &$repeat)
-{
-    eval($content);
-
-    return '';
 }

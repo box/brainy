@@ -38,6 +38,14 @@ applications, there are some differences that may make it difficult to switch.
   - PHP blocks: `{php}`
   - `{eval}`
   - `{include_php}`
+- The `html_*` plugins are not included with the main installation:
+  - `html_checkboxes`
+  - `html_image`
+  - `html_options`
+  - `html_radios`
+  - `html_select_date`
+  - `html_select_time`
+  - `html_table`
 - Backticks in template strings no longer function like curly braces in PHP.
 - Caching backends are removed (MySQL, Memcached).
 - `nocache` is always set to `true` and cannot be disabled.
