@@ -17,6 +17,9 @@ templating language. It is a fork from the Smarty 3 trunk.
 
 - PHP 5.3 or higher
 
+Unlike Smarty 3, PHP 5.2.x is not a supported platform. Use Brainy with old
+versions of PHP at your own risk.
+
 
 ## Differences from Smarty
 

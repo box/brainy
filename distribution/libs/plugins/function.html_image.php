@@ -38,15 +38,18 @@ function smarty_function_html_image($params, $template)
 {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
-    $alt = '';
-    $file = '';
-    $height = '';
-    $width = '';
-    $extra = '';
-    $prefix = '';
-    $suffix = '';
-    $path_prefix = '';
-    $basedir = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '';
+    $options = array(
+        'alt' => '',
+        'file' => '',
+        'height' => '',
+        'width' => '',
+        'extra' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'path_prefix' => '',
+        'basedir' => isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '',
+    );
+
     foreach ($params as $_key => $_val) {
         switch ($_key) {
             case 'file':
@@ -55,12 +58,12 @@ function smarty_function_html_image($params, $template)
             case 'dpi':
             case 'path_prefix':
             case 'basedir':
-                $$_key = $_val;
+                $options[$_key] = $_val;
                 break;
 
             case 'alt':
                 if (!is_array($_val)) {
-                    $$_key = smarty_function_escape_special_chars($_val);
+                    $options[$_key] = smarty_function_escape_special_chars($_val);
                 } else {
                     throw new SmartyException ("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
                 }
@@ -68,13 +71,13 @@ function smarty_function_html_image($params, $template)
 
             case 'link':
             case 'href':
-                $prefix = '<a href="' . $_val . '">';
-                $suffix = '</a>';
+                $options['prefix'] = '<a href="' . $_val . '">';
+                $options['suffix'] = '</a>';
                 break;
 
             default:
                 if (!is_array($_val)) {
-                    $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
+                    $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
                 } else {
                     throw new SmartyException ("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
                 }
@@ -82,16 +85,16 @@ function smarty_function_html_image($params, $template)
         }
     }
 
-    if (empty($file)) {
+    if (empty($options['file'])) {
         trigger_error("html_image: missing 'file' parameter", E_USER_NOTICE);
 
         return;
     }
 
-    if ($file[0] == '/') {
-        $_image_path = $basedir . $file;
+    if ($options['file'][0] == '/') {
+        $_image_path = $options['basedir'] . $options['file'];
     } else {
-        $_image_path = $file;
+        $_image_path = $options['file'];
     }
 
     // strip file protocol
@@ -99,13 +102,13 @@ function smarty_function_html_image($params, $template)
         $params['file'] = substr($params['file'], 7);
     }
 
-    $protocol = strpos($params['file'], '://');
-    if ($protocol !== false) {
-        $protocol = strtolower(substr($params['file'], 0, $protocol));
+    $options['protocol'] = strpos($params['file'], '://');
+    if ($options['protocol'] !== false) {
+        $options['protocol'] = strtolower(substr($params['file'], 0, $options['protocol']));
     }
 
     if (isset($template->smarty->security_policy)) {
-        if ($protocol) {
+        if ($options['protocol']) {
             // remote resource (or php stream, …)
             if (!$template->smarty->security_policy->isTrustedUri($params['file'])) {
                 return;
@@ -137,10 +140,10 @@ function smarty_function_html_image($params, $template)
         }
 
         if (!isset($params['width'])) {
-            $width = $_image_data[0];
+            $options['width'] = $_image_data[0];
         }
         if (!isset($params['height'])) {
-            $height = $_image_data[1];
+            $options['height'] = $_image_data[1];
         }
     }
 
@@ -153,9 +156,15 @@ function smarty_function_html_image($params, $template)
             $dpi_default = 96;
         }
         $_resize = $dpi_default / $params['dpi'];
-        $width = round($width * $_resize);
-        $height = round($height * $_resize);
+        $options['width'] = round($options['width'] * $_resize);
+        $options['height'] = round($options['height'] * $_resize);
     }
 
-    return $prefix . '<img src="' . $path_prefix . $file . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '"' . $extra . ' />' . $suffix;
+    return $options['prefix'] .
+        '<img src="' . $options['path_prefix'] . $options['file'] .
+        '" alt="' . $options['alt'] .
+        '" width="' . $options['width'] .
+        '" height="' . $options['height'] .
+        '"' . $options['extra'] . ' />' .
+        $options['suffix'];
 }

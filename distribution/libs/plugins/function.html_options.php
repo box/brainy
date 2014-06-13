@@ -37,36 +37,38 @@ function smarty_function_html_options($params, $template)
 {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
-    $name = null;
-    $values = null;
-    $options = null;
-    $selected = null;
-    $output = null;
-    $id = null;
-    $class = null;
+    $options = array(
+        'name' => null,
+        'values' => null,
+        'options' => null,
+        'selected' => null,
+        'output' => null,
+        'id' => null,
+        'class' => null,
 
-    $extra = '';
+        'extra' => '',
+    );
 
     foreach ($params as $_key => $_val) {
         switch ($_key) {
             case 'name':
             case 'class':
             case 'id':
-                $$_key = (string) $_val;
+                $options[$_key] = (string) $_val;
                 break;
 
             case 'options':
-                $options = (array) $_val;
+                $options['options'] = (array) $_val;
                 break;
 
             case 'values':
             case 'output':
-                $$_key = array_values((array) $_val);
+                $options[$_key] = array_values((array) $_val);
                 break;
 
             case 'selected':
                 if (is_array($_val)) {
-                    $selected = array();
+                    $options['selected'] = array();
                     foreach ($_val as $_sel) {
                         if (is_object($_sel)) {
                             if (method_exists($_sel, "__toString")) {
@@ -78,16 +80,16 @@ function smarty_function_html_options($params, $template)
                         } else {
                             $_sel = smarty_function_escape_special_chars((string) $_sel);
                         }
-                        $selected[$_sel] = true;
+                        $options['selected'][$_sel] = true;
                     }
                 } elseif (is_object($_val)) {
                     if (method_exists($_val, "__toString")) {
-                        $selected = smarty_function_escape_special_chars((string) $_val->__toString());
+                        $options['selected'] = smarty_function_escape_special_chars((string) $_val->__toString());
                     } else {
                         trigger_error("html_options: selected attribute is an object of class '". get_class($_val) ."' without __toString() method", E_USER_NOTICE);
                     }
                 } else {
-                    $selected = smarty_function_escape_special_chars((string) $_val);
+                    $options['selected'] = smarty_function_escape_special_chars((string) $_val);
                 }
                 break;
 
@@ -101,7 +103,7 @@ function smarty_function_html_options($params, $template)
                     }
 
                     if ($_val === true || $_val === $_key) {
-                        $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_key) . '"';
+                        $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_key) . '"';
                     }
 
                     break;
@@ -110,7 +112,7 @@ function smarty_function_html_options($params, $template)
 
             default:
                 if (!is_array($_val)) {
-                    $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
+                    $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
                 } else {
                     trigger_error("html_options: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
                 }
@@ -118,7 +120,7 @@ function smarty_function_html_options($params, $template)
         }
     }
 
-    if (!isset($options) && !isset($values)) {
+    if (empty($options['options']) && empty($options['values'])) {
         /* raise error here? */
 
         return '';
@@ -127,21 +129,21 @@ function smarty_function_html_options($params, $template)
     $_html_result = '';
     $_idx = 0;
 
-    if (isset($options)) {
-        foreach ($options as $_key => $_val) {
-            $_html_result .= smarty_function_html_options_optoutput($_key, $_val, $selected, $id, $class, $_idx);
+    if (isset($options['options'])) {
+        foreach ($options['options'] as $_key => $_val) {
+            $_html_result .= smarty_function_html_options_optoutput($_key, $_val, $options['selected'], $options['id'], $options['class'], $_idx);
         }
     } else {
-        foreach ($values as $_i => $_key) {
-            $_val = isset($output[$_i]) ? $output[$_i] : '';
-            $_html_result .= smarty_function_html_options_optoutput($_key, $_val, $selected, $id, $class, $_idx);
+        foreach ($options['values'] as $_i => $_key) {
+            $_val = isset($options['output'][$_i]) ? $options['output'][$_i] : '';
+            $_html_result .= smarty_function_html_options_optoutput($_key, $_val, $options['selected'], $options['id'], $options['class'], $_idx);
         }
     }
 
-    if (!empty($name)) {
-        $_html_class = !empty($class) ? ' class="'.$class.'"' : '';
-        $_html_id = !empty($id) ? ' id="'.$id.'"' : '';
-        $_html_result = '<select name="' . $name . '"' . $_html_class . $_html_id . $extra . '>' . "\n" . $_html_result . '</select>' . "\n";
+    if (!empty($options['name'])) {
+        $_html_class = !empty($options['class']) ? ' class="'.$options['class'].'"' : '';
+        $_html_id = !empty($options['id']) ? ' id="'.$options['id'].'"' : '';
+        $_html_result = '<select name="' . $options['name'] . '"' . $_html_class . $_html_id . $options['extra'] . '>' . "\n" . $_html_result . '</select>' . "\n";
     }
 
     return $_html_result;
