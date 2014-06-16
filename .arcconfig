@@ -1,5 +1,0 @@
-{
-    "project_id" : "box_brainy",
-    "lint_engine" : "Box_Lint_Engine",
-    "lint.paths_to_ignore": "^(lib\\/Sabre\\/|lib\\/Net\\/|js\\/modernizr\\.js|js\\/section_|db\\/migrations\\/|js\\/vendor\\/)"
-}

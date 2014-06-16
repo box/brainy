@@ -97,8 +97,7 @@ if (!function_exists('smarty_array_lookup')) {
      * @return mixed
      * @throws InvalidArgumentException
      */
-    function smarty_array_lookup($arr, $key, $default = null)
-    {
+    function smarty_array_lookup($arr, $key, $default = null) {
         return isset($arr[$key]) ? $arr[$key] : new Smarty_Variable;
     }
 }
