@@ -19,8 +19,7 @@
  * @return string with compiled code
  */
 
-function smarty_modifiercompiler_lower($params, $compiler)
-{
+function smarty_modifiercompiler_lower($params, $compiler) {
     if (Smarty::$_MBSTRING) {
         return 'mb_strtolower(' . $params[0] . ', \'' . addslashes(Smarty::$_CHARSET) . '\')' ;
     }

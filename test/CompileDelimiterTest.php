@@ -11,27 +11,23 @@
 */
 class CompileDelimiterTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test delimiter tag test
     */
-    public function testLeftDelimiter()
-    {
+    public function testLeftDelimiter() {
         $tpl = $this->smarty->createTemplate('eval:x{ldelim}x');
         $this->assertEquals('x{x', $this->smarty->fetch($tpl));
     }
-    public function testRightDelimiter()
-    {
+    public function testRightDelimiter() {
         $tpl = $this->smarty->createTemplate('eval:x{rdelim}x');
         $this->assertEquals('x}x', $this->smarty->fetch($tpl));
     }

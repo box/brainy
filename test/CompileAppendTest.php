@@ -11,26 +11,22 @@
 */
 class CompileAppendTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test aappand tag
     */
-    public function testAppend1()
-    {
+    public function testAppend1() {
         $this->assertEquals("12", $this->smarty->fetch('eval:{$foo=1}{append var=foo value=2}{foreach $foo as $bar}{$bar}{/foreach}'));
     }
-    public function testAppend2()
-    {
+    public function testAppend2() {
         $this->smarty->assign('foo',1);
         $this->assertEquals("12", $this->smarty->fetch('eval:{append var=foo value=2}{foreach $foo as $bar}{$bar}{/foreach}'));
     }

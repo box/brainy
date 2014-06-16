@@ -11,43 +11,37 @@
 */
 class CoreTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * loadPlugin test unkown plugin
     */
-    public function testLoadPluginErrorReturn()
-    {
+    public function testLoadPluginErrorReturn() {
         $this->assertFalse($this->smarty->loadPlugin('Smarty_Not_Known'));
     }
     /**
     * loadPlugin test Smarty_Internal_Debug exists
     */
-    public function testLoadPluginSmartyInternalDebug()
-    {
+    public function testLoadPluginSmartyInternalDebug() {
         $this->assertTrue($this->smarty->loadPlugin('Smarty_Internal_Debug') == true);
     }
     /**
     * loadPlugin test $template_class exists
     */
-    public function testLoadPluginSmartyTemplateClass()
-    {
+    public function testLoadPluginSmartyTemplateClass() {
         $this->assertTrue($this->smarty->loadPlugin($this->smarty->template_class) == true);
     }
     /**
     * loadPlugin test loaging from plugins_dir
     */
-    public function testLoadPluginSmartyPluginCounter()
-    {
+    public function testLoadPluginSmartyPluginCounter() {
         $this->assertTrue($this->smarty->loadPlugin('smarty_function_counter') == true);
     }
 }

@@ -11,47 +11,40 @@
 */
 class ConfigVarTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smarty->clearCompiledTemplate();
         $this->smarty->clearAllCache();
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test config varibales loading all sections
     */
-    public function testConfigNumber()
-    {
+    public function testConfigNumber() {
         $this->smarty->configLoad('test.conf');
         $this->assertEquals("123.4", $this->smarty->fetch('eval:{#Number#}'));
     }
-    public function testConfigText()
-    {
+    public function testConfigText() {
         $this->smarty->configLoad('test.conf');
         $this->assertEquals("123bvc", $this->smarty->fetch('eval:{#text#}'));
     }
-    public function testConfigLine()
-    {
+    public function testConfigLine() {
         $this->smarty->configLoad('test.conf');
         $this->assertEquals("123 This is a line", $this->smarty->fetch('eval:{#line#}'));
     }
-    public function testConfigVariableGlobalSections()
-    {
+    public function testConfigVariableGlobalSections() {
         $this->smarty->configLoad('test.conf');
         $this->assertEquals("Welcome to Smarty! Global Section1 Global Section2", $this->smarty->fetch('eval:{#title#} {#sec1#} {#sec2#}'));
     }
     /**
     * test config variables loading section2
     */
-    public function testConfigVariableSection2()
-    {
+    public function testConfigVariableSection2() {
          $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->smarty->configLoad('test.conf', 'section2');
         $this->assertEquals("Welcome to Smarty! Global Section1 Hello Section2", $this->smarty->fetch('eval:{#title#} {#sec1#} {#sec2#}'));
@@ -59,24 +52,21 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test config variables loading section special char
     */
-    public function testConfigVariableSectionSpecialChar()
-    {
+    public function testConfigVariableSectionSpecialChar() {
         $this->smarty->configLoad('test.conf', '/');
         $this->assertEquals("Welcome to Smarty! special char", $this->smarty->fetch('eval:{#title#} {#sec#}'));
     }
     /**
     * test config variables loading section foo/bar
     */
-    public function testConfigVariableSectionFooBar()
-    {
+    public function testConfigVariableSectionFooBar() {
         $this->smarty->configLoad('test.conf', 'foo/bar');
         $this->assertEquals("Welcome to Smarty! section foo/bar", $this->smarty->fetch('eval:{#title#} {#sec#}'));
     }
     /**
     * test config variables loading indifferent scopes
     */
-    public function testConfigVariableScope()
-    {
+    public function testConfigVariableScope() {
         $this->smarty->configLoad('test.conf', 'section2');
         $tpl = $this->smarty->createTemplate('eval:{#title#} {#sec1#} {#sec2#}');
         $tpl->configLoad('test.conf', 'section1');
@@ -86,19 +76,16 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test config variables loading section2 from template
     */
-    public function testConfigVariableSection2Template()
-    {
+    public function testConfigVariableSection2Template() {
         $this->assertEquals("Welcome to Smarty! Global Section1 Hello Section2", $this->smarty->fetch('eval:{config_load file=\'test.conf\' section=\'section2\'}{#title#} {#sec1#} {#sec2#}'));
     }
-    public function testConfigVariableSection2TemplateShorttags()
-    {
+    public function testConfigVariableSection2TemplateShorttags() {
        $this->assertEquals("Welcome to Smarty! Global Section1 Hello Section2", $this->smarty->fetch('eval:{config_load \'test.conf\' \'section2\'}{#title#} {#sec1#} {#sec2#}'));
     }
     /**
     * test config varibales loading local
     */
-    public function testConfigVariableLocal()
-    {
+    public function testConfigVariableLocal() {
         $this->assertEquals("Welcome to Smarty!", $this->smarty->fetch('eval:{config_load file=\'test.conf\' scope=\'local\'}{#title#}'));
         // global must be empty
         $this->assertEquals("", $this->smarty->getConfigVars('title'));
@@ -106,8 +93,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test config varibales loading parent
     */
-    public function testConfigVariableParent()
-    {
+    public function testConfigVariableParent() {
         $this->assertEquals("Welcome to Smarty!", $this->smarty->fetch('eval:{config_load file=\'test.conf\' scope=\'parent\'}{#title#}'));
         // global is parent must not be empty
         $this->assertEquals("Welcome to Smarty!", $this->smarty->getConfigVars('title'));
@@ -115,8 +101,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test config varibales loading global
     */
-    public function testConfigVariableGlobal()
-    {
+    public function testConfigVariableGlobal() {
         $this->assertEquals("Welcome to Smarty!", $this->smarty->fetch('eval:{config_load file=\'test.conf\' scope=\'global\'}{#title#}'));
         // global is parent must not be empty
         $this->assertEquals("Welcome to Smarty!", $this->smarty->getConfigVars('title'));
@@ -125,8 +110,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     * test config variables of hidden sections
     * shall display variables from hidden section
     */
-    public function testConfigVariableHidden()
-    {
+    public function testConfigVariableHidden() {
         $this->smarty->config_read_hidden = true;
         $this->smarty->configLoad('test.conf','hidden');
         $this->assertEquals("Welcome to Smarty!Hidden Section", $this->smarty->fetch('eval:{#title#}{#hiddentext#}'));
@@ -135,8 +119,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     * test config variables of disabled hidden sections
     * shall display not variables from hidden section
     */
-    public function testConfigVariableHiddenDisable()
-    {
+    public function testConfigVariableHiddenDisable() {
         $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->smarty->config_read_hidden = false;
         $this->smarty->configLoad('test.conf','hidden');
@@ -145,41 +128,35 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test config varibales loading all sections from template
     */
-    public function testConfigVariableAllSectionsTemplate()
-    {
+    public function testConfigVariableAllSectionsTemplate() {
         $this->smarty->config_overwrite = true;
         $this->assertEquals("Welcome to Smarty! Global Section1 Global Section2", $this->smarty->fetch('eval:{config_load file=\'test.conf\'}{#title#} {#sec1#} {#sec2#}'));
     }
     /**
     * test config varibales overwrite
     */
-    public function testConfigVariableOverwrite()
-    {
+    public function testConfigVariableOverwrite() {
         $this->assertEquals("Overwrite2", $this->smarty->fetch('eval:{config_load file=\'test.conf\'}{#overwrite#}'));
     }
-    public function testConfigVariableOverwrite2()
-    {
+    public function testConfigVariableOverwrite2() {
         $this->assertEquals("Overwrite3", $this->smarty->fetch('eval:{config_load file=\'test.conf\'}{config_load file=\'test2.conf\'}{#overwrite#}'));
     }
     /**
     * test config varibales overwrite false
     */
-    public function testConfigVariableOverwriteFalse()
-    {
+    public function testConfigVariableOverwriteFalse() {
         $this->smarty->config_overwrite = false;
         $this->assertEquals("Overwrite1Overwrite2Overwrite3Welcome to Smarty! Global Section1 Global Section2", $this->smarty->fetch('eval:{config_load file=\'test.conf\'}{config_load file=\'test2.conf\'}{foreach #overwrite# as $over}{$over}{/foreach}{#title#} {#sec1#} {#sec2#}'));
     }
     /**
     * test config varibales array
     */
-    public function testConfigVariableArray1()
-    {
+    public function testConfigVariableArray1() {
         $this->smarty->config_overwrite = false;
         $this->smarty->assign('foo',1);
         $this->assertEquals("Overwrite2", $this->smarty->fetch('eval:{config_load file=\'test.conf\'}{config_load file=\'test2.conf\'}{$smarty.config.overwrite[$foo]}'));
     }
-    public function testConfigVariableArray2()
-    {
+    public function testConfigVariableArray2() {
         $this->smarty->config_overwrite = false;
         $this->smarty->assign('foo',2);
         $this->assertEquals("Overwrite3", $this->smarty->fetch('eval:{config_load file=\'test.conf\'}{config_load file=\'test2.conf\'}{#overwrite#.$foo}'));
@@ -187,24 +164,21 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test config varibales booleanize on
     */
-    public function testConfigVariableBooleanizeOn()
-    {
+    public function testConfigVariableBooleanizeOn() {
         $this->smarty->config_booleanize = true;
         $this->assertEquals("passed", $this->smarty->fetch('eval:{config_load file=\'test.conf\'}{if #booleanon# === true}passed{/if}'));
     }
     /**
     * test config varibales booleanize off
     */
-    public function testConfigVariableBooleanizeOff()
-    {
+    public function testConfigVariableBooleanizeOff() {
         $this->smarty->config_booleanize = false;
         $this->assertEquals("passed", $this->smarty->fetch('eval:{config_load file=\'test.conf\'}{if #booleanon# == \'on\'}passed{/if}'));
     }
     /**
     * test config file syntax error
     */
-    public function testConfigSyntaxError()
-    {
+    public function testConfigSyntaxError() {
         try {
             $this->smarty->fetch('eval:{config_load file=\'test_error.conf\'}');
         } catch (Exception $e) {
@@ -217,16 +191,14 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test getConfigVars
     */
-    public function testConfigGetSingleConfigVar()
-    {
+    public function testConfigGetSingleConfigVar() {
         $this->smarty->configLoad('test.conf');
         $this->assertEquals("Welcome to Smarty!", $this->smarty->getConfigVars('title'));
     }
     /**
     * test getConfigVars return all variables
     */
-    public function testConfigGetAllConfigVars()
-    {
+    public function testConfigGetAllConfigVars() {
         $this->smarty->configLoad('test.conf');
         $vars = $this->smarty->getConfigVars();
         $this->assertTrue(is_array($vars));
@@ -236,8 +208,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test clearConfig for single variable
     */
-    public function testConfigClearSingleConfigVar()
-    {
+    public function testConfigClearSingleConfigVar() {
         $this->smarty->configLoad('test.conf');
         $this->smarty->clearConfig('title');
         $this->assertEquals("", $this->smarty->getConfigVars('title'));
@@ -245,8 +216,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test clearConfig for all variables
     */
-    public function testConfigClearConfigAll()
-    {
+    public function testConfigClearConfigAll() {
         $this->smarty->configLoad('test.conf');
         $this->smarty->clearConfig();
         $vars = $this->smarty->getConfigVars();
@@ -256,8 +226,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test config vars on data object
     */
-    public function testConfigTextData()
-    {
+    public function testConfigTextData() {
         $data = $this->smarty->createData();
         $data->configLoad('test.conf');
         $this->assertEquals("123bvc", $this->smarty->fetch('eval:{#text#}', $data));
@@ -265,8 +234,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test getConfigVars on data object
     */
-    public function testConfigGetSingleConfigVarData()
-    {
+    public function testConfigGetSingleConfigVarData() {
         $data = $this->smarty->createData();
         $data->configLoad('test.conf');
         $this->assertEquals("Welcome to Smarty!", $data->getConfigVars('title'));
@@ -274,8 +242,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test getConfigVars return all variables on data object
     */
-    public function testConfigGetAllConfigVarsData()
-    {
+    public function testConfigGetAllConfigVarsData() {
         $data = $this->smarty->createData();
         $data->configLoad('test.conf');
         $vars = $data->getConfigVars();
@@ -286,8 +253,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test clearConfig for single variable on data object
     */
-    public function testConfigClearSingleConfigVarData()
-    {
+    public function testConfigClearSingleConfigVarData() {
         $data = $this->smarty->createData();
         $data->configLoad('test.conf');
         $data->clearConfig('title');
@@ -297,8 +263,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test clearConfig for all variables on data object
     */
-    public function testConfigClearConfigAllData()
-    {
+    public function testConfigClearConfigAllData() {
         $data = $this->smarty->createData();
         $data->configLoad('test.conf');
         $data->clearConfig();
@@ -309,8 +274,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test config vars on template object
     */
-    public function testConfigTextTemplate()
-    {
+    public function testConfigTextTemplate() {
         $tpl = $this->smarty->createTemplate('eval:{#text#}');
         $tpl->configLoad('test.conf');
         $this->assertEquals("123bvc", $this->smarty->fetch($tpl));
@@ -318,8 +282,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test getConfigVars on template object
     */
-    public function testConfigGetSingleConfigVarTemplate()
-    {
+    public function testConfigGetSingleConfigVarTemplate() {
         $tpl = $this->smarty->createTemplate('eval:{#text#}');
         $tpl->configLoad('test.conf');
         $this->assertEquals("Welcome to Smarty!", $tpl->getConfigVars('title'));
@@ -327,8 +290,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test getConfigVars return all variables on template object
     */
-    public function testConfigGetAllConfigVarsTemplate()
-    {
+    public function testConfigGetAllConfigVarsTemplate() {
         $tpl = $this->smarty->createTemplate('eval:{#text#}');
         $tpl->configLoad('test.conf');
         $vars = $tpl->getConfigVars();
@@ -339,8 +301,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test clearConfig for single variable on template object
     */
-    public function testConfigClearSingleConfigVarTemplate()
-    {
+    public function testConfigClearSingleConfigVarTemplate() {
         $tpl = $this->smarty->createTemplate('eval:{#text#}');
         $tpl->configLoad('test.conf');
         $tpl->clearConfig('title');
@@ -350,8 +311,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test clearConfig for all variables on template object
     */
-    public function testConfigClearConfigAllTemplate()
-    {
+    public function testConfigClearConfigAllTemplate() {
         $tpl = $this->smarty->createTemplate('eval:{#text#}');
         $tpl->configLoad('test.conf');
         $tpl->clearConfig();
@@ -363,8 +323,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     /**
     * test config varibales loading from absolute file path
     */
-    public function testConfigAbsolutePath()
-    {
+    public function testConfigAbsolutePath() {
         $file = realpath($this->smarty->getConfigDir(0) . 'test.conf');
         $this->smarty->configLoad($file);
         $this->assertEquals("123.4", $this->smarty->fetch('eval:{#Number#}'));

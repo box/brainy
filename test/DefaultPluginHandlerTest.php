@@ -11,8 +11,7 @@
 */
 class DefaultPluginHandlerTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
@@ -20,58 +19,47 @@ class DefaultPluginHandlerTest extends PHPUnit_Framework_TestCase
         $this->smarty->registerDefaultPluginHandler('my_plugin_handler');
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testDefaultFunctionScript()
-    {
+    public function testDefaultFunctionScript() {
         $this->assertEquals("scriptfunction foo bar", $this->smarty->fetch('test_default_function_script.tpl'));
     }
-    public function testDefaultFunctionScriptNotCachable1()
-    {
+    public function testDefaultFunctionScriptNotCachable1() {
         $this->smarty->assign('foo','foo');
         $this->smarty->caching = 1;
         $this->assertEquals("scriptfunction foo", $this->smarty->fetch('test_default_function_script_notcachable.tpl'));
     }
-    public function testDefaultFunctionScriptNotCachable2()
-    {
+    public function testDefaultFunctionScriptNotCachable2() {
         $this->smarty->assign('foo','bar');
         $this->smarty->caching = 1;
         $this->assertEquals("scriptfunction bar", $this->smarty->fetch('test_default_function_script_notcachable.tpl'));
     }
 
-    public function testDefaultFunctionLocal()
-    {
+    public function testDefaultFunctionLocal() {
         $this->assertEquals("localfunction foo bar", $this->smarty->fetch('test_default_function_local.tpl'));
     }
-    public function testDefaultCompilerFunctionScript()
-    {
+    public function testDefaultCompilerFunctionScript() {
         $this->assertEquals("scriptcompilerfunction foo bar", $this->smarty->fetch('test_default_compiler_function_script.tpl'));
     }
-    public function testDefaultBlockScript()
-    {
+    public function testDefaultBlockScript() {
         $this->assertEquals("scriptblock foo bar", $this->smarty->fetch('test_default_block_script.tpl'));
     }
-    public function testDefaultModifierScript()
-    {
+    public function testDefaultModifierScript() {
         $this->smarty->assign('foo','bar');
         $this->assertEquals("scriptmodifier default bar", $this->smarty->fetch('test_default_modifier_script.tpl'));
     }
-    public function testDefaultModifier()
-    {
+    public function testDefaultModifier() {
         $this->smarty->assign('foo','bar');
         $this->assertEquals("localmodifier bar", $this->smarty->fetch('test_default_modifier.tpl'));
     }
-    public function testDefaultModifierStaticClassMethodCaching1()
-    {
+    public function testDefaultModifierStaticClassMethodCaching1() {
         $this->smarty->assign('foo','bar');
         $this->smarty->caching = 1;
         $this->assertEquals("staticmodifier bar", trim($this->smarty->fetch('test_default_static_modifier.tpl')));
     }
-    public function testDefaultModifierStaticClassMethodCaching2()
-    {
+    public function testDefaultModifierStaticClassMethodCaching2() {
         $this->smarty->assign('foo','bar');
         $this->smarty->caching = 1;
         $this->assertEquals("staticmodifier bar", trim($this->smarty->fetch('test_default_static_modifier.tpl')));
@@ -79,8 +67,7 @@ class DefaultPluginHandlerTest extends PHPUnit_Framework_TestCase
 
 }
 
-function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cachable)
-{
+function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cachable) {
     switch ($type) {
         case Smarty::PLUGIN_FUNCTION:
             switch ($tag) {
@@ -145,11 +132,9 @@ function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cach
         return false;
     }
  }
-function default_local_function_tag ($params, $template)
-{
+function default_local_function_tag ($params, $template) {
     return 'localfunction '.$params['value'];
 }
-function default_local_modifier ($input)
-{
+function default_local_modifier ($input) {
     return 'localmodifier '.$input;
 }

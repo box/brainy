@@ -123,8 +123,7 @@ class PEAR_Exception extends Exception
      * @param int|Exception|PEAR_Error|array|null exception cause
      * @param int|null exception code or null
      */
-    public function __construct($message, $p2 = null, $p3 = null)
-    {
+    public function __construct($message, $p2 = null, $p3 = null) {
         if (is_int($p2)) {
             $code = $p2;
             $this->cause = null;
@@ -158,26 +157,22 @@ class PEAR_Exception extends Exception
      * @param string $label The name of the observer. Use this if you want
      *                         to remove it later with removeObserver()
      */
-    public static function addObserver($callback, $label = 'default')
-    {
+    public static function addObserver($callback, $label = 'default') {
         self::$_observers[$label] = $callback;
     }
 
-    public static function removeObserver($label = 'default')
-    {
+    public static function removeObserver($label = 'default') {
         unset(self::$_observers[$label]);
     }
 
     /**
      * @return int unique identifier for an observer
      */
-    public static function getUniqueId()
-    {
+    public static function getUniqueId() {
         return self::$_uniqueid++;
     }
 
-    private function signal()
-    {
+    private function signal() {
         foreach (self::$_observers as $func) {
             if (is_callable($func)) {
                 call_user_func($func, $this);
@@ -217,8 +212,7 @@ class PEAR_Exception extends Exception
      * </pre>
      * @return array
      */
-    public function getErrorData()
-    {
+    public function getErrorData() {
         return array();
     }
 
@@ -227,8 +221,7 @@ class PEAR_Exception extends Exception
      * @access public
      * @return Exception|array The context of the exception
      */
-    public function getCause()
-    {
+    public function getCause() {
         return $this->cause;
     }
 
@@ -236,8 +229,7 @@ class PEAR_Exception extends Exception
      * Function must be public to call on caused exceptions
      * @param array
      */
-    public function getCauseMessage(&$causes)
-    {
+    public function getCauseMessage(&$causes) {
         $trace = $this->getTraceSafe();
         $cause = array('class'   => get_class($this),
                        'message' => $this->message,
@@ -293,8 +285,7 @@ class PEAR_Exception extends Exception
         }
     }
 
-    public function getTraceSafe()
-    {
+    public function getTraceSafe() {
         if (!isset($this->_trace)) {
             $this->_trace = $this->getTrace();
             if (empty($this->_trace)) {
@@ -306,22 +297,19 @@ class PEAR_Exception extends Exception
         return $this->_trace;
     }
 
-    public function getErrorClass()
-    {
+    public function getErrorClass() {
         $trace = $this->getTraceSafe();
 
         return $trace[0]['class'];
     }
 
-    public function getErrorMethod()
-    {
+    public function getErrorMethod() {
         $trace = $this->getTraceSafe();
 
         return $trace[0]['function'];
     }
 
-    public function __toString()
-    {
+    public function __toString() {
         if (isset($_SERVER['REQUEST_URI'])) {
             return $this->toHtml();
         }
@@ -329,8 +317,7 @@ class PEAR_Exception extends Exception
         return $this->toText();
     }
 
-    public function toHtml()
-    {
+    public function toHtml() {
         $trace = $this->getTraceSafe();
         $causes = array();
         $this->getCauseMessage($causes);
@@ -384,8 +371,7 @@ class PEAR_Exception extends Exception
         return $html;
     }
 
-    public function toText()
-    {
+    public function toText() {
         $causes = array();
         $this->getCauseMessage($causes);
         $causeMsg = '';

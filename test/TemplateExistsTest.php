@@ -11,29 +11,25 @@
 */
 class TemplateExistsTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test $smarty->templateExists true
     */
-    public function testSmartyTemplateExists()
-    {
+    public function testSmartyTemplateExists() {
         $this->assertTrue($this->smarty->templateExists('helloworld.tpl'));
     }
     /**
     * test $smarty->templateExists false
     */
-    public function testSmartyTemplateNotExists()
-    {
+    public function testSmartyTemplateNotExists() {
         $this->assertFalse($this->smarty->templateExists('notthere.tpl'));
     }
 }

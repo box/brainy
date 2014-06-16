@@ -11,31 +11,27 @@
  */
 class XmlTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
      * test standard xml
      */
-    public function testXml()
-    {
+    public function testXml() {
         $tpl = $this->smarty->createTemplate('xml.tpl');
         $this->assertEquals('<?xml version="1.0" encoding="UTF-8"?>', $this->smarty->fetch($tpl));
     }
     /**
      * test standard xml Smarty::PHP_QUOTE
      */
-    public function testXmlPhpQuote()
-    {
+    public function testXmlPhpQuote() {
         $this->smarty->security_policy->php_handling = Smarty::PHP_QUOTE;
         $tpl = $this->smarty->createTemplate('xml.tpl');
         $this->assertEquals('<?xml version="1.0" encoding="UTF-8"?>', $this->smarty->fetch($tpl));
@@ -43,8 +39,7 @@ class XmlTest extends PHPUnit_Framework_TestCase
     /**
      * test standard xml Smarty::PHP_ALLOW
      */
-    public function testXmlPhpAllow()
-    {
+    public function testXmlPhpAllow() {
         $this->smarty->security_policy->php_handling = Smarty::PHP_ALLOW;
         $tpl = $this->smarty->createTemplate('xml.tpl');
         $this->assertEquals('<?xml version="1.0" encoding="UTF-8"?>', $this->smarty->fetch($tpl));
@@ -52,8 +47,7 @@ class XmlTest extends PHPUnit_Framework_TestCase
     /**
      * test standard xml
      */
-    public function testXmlCaching()
-    {
+    public function testXmlCaching() {
         $this->smarty->security_policy->php_handling = Smarty::PHP_PASSTHRU;
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
@@ -63,8 +57,7 @@ class XmlTest extends PHPUnit_Framework_TestCase
     /*
     * test standard xml
     */
-    public function testXmlCachingPhpQuote()
-    {
+    public function testXmlCachingPhpQuote() {
         $this->smarty->security_policy->php_handling = Smarty::PHP_QUOTE;
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
@@ -75,8 +68,7 @@ class XmlTest extends PHPUnit_Framework_TestCase
     /*
     * test standard xml
     */
-    public function testXmlCachingPhpAllow()
-    {
+    public function testXmlCachingPhpAllow() {
         $this->smarty->security_policy->php_handling = Smarty::PHP_ALLOW;
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;

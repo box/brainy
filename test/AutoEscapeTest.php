@@ -11,23 +11,20 @@
 */
 class AutoEscapeTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->escape_html = true;
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test escape_html property
     */
-    public function testAutoEscape()
-    {
+    public function testAutoEscape() {
         $tpl = $this->smarty->createTemplate('eval:{$foo}');
         $tpl->assign('foo','<a@b.c>');
         $this->assertEquals("&lt;a@b.c&gt;", $this->smarty->fetch($tpl));

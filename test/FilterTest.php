@@ -11,23 +11,20 @@
  */
 class FilterTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
      * test autoload output filter
      */
-    public function testAutoloadOutputFilter()
-    {
+    public function testAutoloadOutputFilter() {
         $this->smarty->autoload_filters['output'] = 'trimwhitespace';
         $tpl = $this->smarty->createTemplate('eval:{"    <br>hello world"}');
         $this->assertEquals("<br>hello world", $this->smarty->fetch($tpl));
@@ -35,8 +32,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
     /**
      * test autoload variable filter
      */
-    public function testAutoloadVariableFilter()
-    {
+    public function testAutoloadVariableFilter() {
         $this->smarty->autoload_filters['variable'] = 'htmlspecialchars';
         $tpl = $this->smarty->createTemplate('eval:{"<test>"}');
         $this->assertEquals("&lt;test&gt;", $this->smarty->fetch($tpl));
@@ -44,14 +40,12 @@ class FilterTest extends PHPUnit_Framework_TestCase
     /**
      * test loaded filter
      */
-    public function testLoadedOutputFilter()
-    {
+    public function testLoadedOutputFilter() {
         $this->smarty->loadFilter(Smarty::FILTER_OUTPUT, 'trimwhitespace');
         $tpl = $this->smarty->createTemplate('eval:{"    <br>hello world"}');
         $this->assertEquals("<br>hello world", $this->smarty->fetch($tpl));
     }
-    public function testLoadedOutputFilterWrapper()
-    {
+    public function testLoadedOutputFilterWrapper() {
         $this->smartyBC->load_filter(Smarty::FILTER_OUTPUT, 'trimwhitespace');
         $tpl = $this->smartyBC->createTemplate('eval:{"    <br>hello world"}');
         $this->assertEquals("<br>hello world", $this->smartyBC->fetch($tpl));
@@ -59,14 +53,12 @@ class FilterTest extends PHPUnit_Framework_TestCase
     /**
      * test registered output filter
      */
-    public function testRegisteredOutputFilter()
-    {
+    public function testRegisteredOutputFilter() {
         $this->smarty->registerFilter(Smarty::FILTER_OUTPUT,'myoutputfilter');
         $tpl = $this->smarty->createTemplate('eval:{"hello   world"}');
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
-    public function testRegisteredOutputFilterWrapper()
-    {
+    public function testRegisteredOutputFilterWrapper() {
         $this->smartyBC->register_outputfilter('myoutputfilter');
         $tpl = $this->smartyBC->createTemplate('eval:{"hello   world"}');
         $this->assertEquals("hello world", $this->smartyBC->fetch($tpl));
@@ -74,10 +66,8 @@ class FilterTest extends PHPUnit_Framework_TestCase
     /**
      * test registered pre filter
      */
-    public function testRegisteredPreFilter()
-    {
-        function myprefilter($input)
-        {
+    public function testRegisteredPreFilter() {
+        function myprefilter($input) {
             return '{$foo}' . $input;
         }
         $this->smarty->registerFilter(Smarty::FILTER_PRE,'myprefilter');
@@ -88,8 +78,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
     /**
      * test registered pre filter class
      */
-    public function testRegisteredPreFilterClass()
-    {
+    public function testRegisteredPreFilterClass() {
         $this->smarty->registerFilter(Smarty::FILTER_PRE,array('myprefilterclass', 'myprefilter'));
         $tpl = $this->smarty->createTemplate('eval:{" hello world"}');
         $tpl->assign('foo', 'bar');
@@ -98,10 +87,8 @@ class FilterTest extends PHPUnit_Framework_TestCase
     /**
      * test registered post filter
      */
-    public function testRegisteredPostFilter()
-    {
-        function mypostfilter($input)
-        {
+    public function testRegisteredPostFilter() {
+        function mypostfilter($input) {
             return 'echo "{\$foo}";' . $input;
         }
         $this->smarty->registerFilter(Smarty::FILTER_POST,'mypostfilter');
@@ -112,8 +99,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
     /**
      * test variable filter
      */
-    public function testLoadedVariableFilter()
-    {
+    public function testLoadedVariableFilter() {
         $this->smarty->loadFilter("variable", "htmlspecialchars");
         $tpl = $this->smarty->createTemplate('eval:{$foo}');
         $tpl->assign('foo', '<?php ?>');
@@ -122,8 +108,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
    /**
      * test registered post filter
      */
-    public function testRegisteredVariableFilter2()
-    {
+    public function testRegisteredVariableFilter2() {
         $var = new VarFilter();
 
         $this->smarty->registerFilter(Smarty::FILTER_VARIABLE,array($var, 'variablefilter'));
@@ -134,21 +119,18 @@ class FilterTest extends PHPUnit_Framework_TestCase
 }
 
 Class VarFilter {
-         function variablefilter($input, $smarty)
-        {
+         function variablefilter($input, $smarty) {
             return 'var{$foo}' . $input;
         }
 }
 
-function myoutputfilter($input)
-{
+function myoutputfilter($input) {
     return str_replace('   ', ' ', $input);
 }
 
  class myprefilterclass
  {
-    static function myprefilter($input)
-    {
+    static function myprefilter($input) {
         return '{$foo}' . $input;
     }
 }

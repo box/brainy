@@ -11,22 +11,19 @@
 */
 class GetTemplateVarsTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test root getTemplateVars single value
     */
-    public function testGetSingleTemplateVarScopeRoot()
-    {
+    public function testGetSingleTemplateVarScopeRoot() {
         $this->smarty->assign('foo', 'bar');
         $this->smarty->assign('blar', 'buh');
         $this->assertEquals("bar", $this->smarty->getTemplateVars('foo'));
@@ -34,8 +31,7 @@ class GetTemplateVarsTest extends PHPUnit_Framework_TestCase
     /**
     * test root getTemplateVars all values
     */
-    public function testGetAllTemplateVarsScopeRoot()
-    {
+    public function testGetAllTemplateVarsScopeRoot() {
         $this->smarty->assign('foo', 'bar');
         $this->smarty->assign('blar', 'buh');
         $vars = $this->smarty->getTemplateVars();
@@ -47,8 +43,7 @@ class GetTemplateVarsTest extends PHPUnit_Framework_TestCase
     /**
     * test single variable with data object chain
     */
-    public function testGetSingleTemplateVarScopeAll()
-    {
+    public function testGetSingleTemplateVarScopeAll() {
         $data1 = new Smarty_Data($this->smarty);
         $data2 = new Smarty_Data($data1);
         $this->smarty->assign('foo', 'bar');
@@ -58,8 +53,7 @@ class GetTemplateVarsTest extends PHPUnit_Framework_TestCase
     /**
     * test get all variables with data object chain
     */
-    public function testGetAllTemplateVarsScopeAll()
-    {
+    public function testGetAllTemplateVarsScopeAll() {
         $data1 = new Smarty_Data($this->smarty);
         $data2 = new Smarty_Data($data1);
         $this->smarty->assign('foo', 'bar');
@@ -74,8 +68,7 @@ class GetTemplateVarsTest extends PHPUnit_Framework_TestCase
     /**
     * test get all variables with data object chain search parents disabled
     */
-    public function testGetAllTemplateVarsScopeAllNoParents()
-    {
+    public function testGetAllTemplateVarsScopeAllNoParents() {
         $data1 = new Smarty_Data($this->smarty);
         $data2 = new Smarty_Data($data1);
         $this->smarty->assign('foo', 'bar');
@@ -90,8 +83,7 @@ class GetTemplateVarsTest extends PHPUnit_Framework_TestCase
     /**
     * test get single variables with data object chain search parents disabled
     */
-    public function testGetSingleTemplateVarsScopeAllNoParents()
-    {
+    public function testGetSingleTemplateVarsScopeAllNoParents() {
          error_reporting(error_reporting() & ~(E_NOTICE|E_USER_NOTICE));
         $data1 = new Smarty_Data($this->smarty);
         $data2 = new Smarty_Data($data1);

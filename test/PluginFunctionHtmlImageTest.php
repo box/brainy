@@ -11,19 +11,16 @@
 */
 class PluginFunctionHtmlImageTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testFoo()
-    {
+    public function testFoo() {
         // TODO: UnitTests for {html_image}
     }
 }

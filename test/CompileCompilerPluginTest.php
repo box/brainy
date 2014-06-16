@@ -11,23 +11,20 @@
 */
 class CompileCompilerPluginTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test compiler plugin tag in template file
     */
-    public function testCompilerPluginFromTemplateFile()
-    {
+    public function testCompilerPluginFromTemplateFile() {
         $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'compilerplugin', 'mycompilerplugin');
         $tpl = $this->smarty->createTemplate('compilerplugintest.tpl');
         $this->assertEquals("Hello World", trim($this->smarty->fetch($tpl)));
@@ -35,15 +32,13 @@ class CompileCompilerPluginTest extends PHPUnit_Framework_TestCase
     /**
     * test compiler plugin tag in compiled template file
     */
-    public function testCompilerPluginFromCompiledTemplateFile()
-    {
+    public function testCompilerPluginFromCompiledTemplateFile() {
         $this->smarty->force_compile = false;
         $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'compilerplugin', 'mycompilerplugin');
         $tpl = $this->smarty->createTemplate('compilerplugintest.tpl');
         $this->assertEquals("Hello World", trim($this->smarty->fetch($tpl)));
     }
 }
-function mycompilerplugin($params, $compiler)
-{
+function mycompilerplugin($params, $compiler) {
     return 'echo \'Hello World\';';
 }

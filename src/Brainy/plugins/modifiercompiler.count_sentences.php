@@ -19,8 +19,7 @@
  * @param array $params parameters
  * @return string with compiled code
  */
-function smarty_modifiercompiler_count_sentences($params, $compiler)
-{
+function smarty_modifiercompiler_count_sentences($params, $compiler) {
     // find periods, question marks, exclamation marks with a word before but not after.
     return 'preg_match_all("#\w[\.\?\!](\W|$)#S' . Smarty::$_UTF8_MODIFIER . '", ' . $params[0] . ', $tmp)';
 }

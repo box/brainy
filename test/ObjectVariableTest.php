@@ -11,23 +11,20 @@
 */
 class ObjectVariableTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test simple object variable
     */
-    public function testObjectVariableOutput()
-    {
+    public function testObjectVariableOutput() {
         $object = new VariableObject;
         $tpl = $this->smarty->createTemplate('string:{$object->hello}');
         $tpl->assign('object', $object);
@@ -36,8 +33,7 @@ class ObjectVariableTest extends PHPUnit_Framework_TestCase
     /**
     * test simple object variable with variable property
     */
-    public function testObjectVariableOutputVariableProperty()
-    {
+    public function testObjectVariableOutputVariableProperty() {
         $object = new VariableObject;
         $this->smarty->disableSecurity();
         $tpl = $this->smarty->createTemplate('string:{$p=\'hello\'}{$object->$p}');
@@ -47,8 +43,7 @@ class ObjectVariableTest extends PHPUnit_Framework_TestCase
     /**
     * test simple object variable with method
     */
-    public function testObjectVariableOutputMethod()
-    {
+    public function testObjectVariableOutputMethod() {
         $object = new VariableObject;
         $tpl = $this->smarty->createTemplate('string:{$object->myhello()}');
         $tpl->assign('object', $object);
@@ -57,8 +52,7 @@ class ObjectVariableTest extends PHPUnit_Framework_TestCase
     /**
     * test simple object variable with method
     */
-    public function testObjectVariableOutputVariableMethod()
-    {
+    public function testObjectVariableOutputVariableMethod() {
         $object = new VariableObject;
         $this->smarty->disableSecurity();
         $tpl = $this->smarty->createTemplate('string:{$p=\'myhello\'}{$object->$p()}');
@@ -70,8 +64,7 @@ class ObjectVariableTest extends PHPUnit_Framework_TestCase
 Class VariableObject {
     public $hello = 'hello_world';
 
-    public function myhello()
-    {
+    public function myhello() {
         return 'hello world';
     }
 }

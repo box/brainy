@@ -34,8 +34,7 @@
  * @return string
  * @uses smarty_function_escape_special_chars()
  */
-function smarty_function_html_image($params, $template)
-{
+function smarty_function_html_image($params, $template) {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
     $options = array(

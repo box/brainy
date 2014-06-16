@@ -11,26 +11,22 @@
 */
 class PluginModifierLowerTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testDefault()
-    {
+    public function testDefault() {
         $result = "two convicts evade noose, jury hung.";
         $tpl = $this->smarty->createTemplate('eval:{"Two Convicts Evade Noose, Jury Hung."|lower}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testDefaultWithoutMbstring()
-    {
+    public function testDefaultWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "two convicts evade noose, jury hung.";
         $tpl = $this->smarty->createTemplate('eval:{"Two Convicts Evade Noose, Jury Hung."|lower}');
@@ -38,15 +34,13 @@ class PluginModifierLowerTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testUmlauts()
-    {
+    public function testUmlauts() {
         $result = "two convicts eväde nööse, jury hung.";
         $tpl = $this->smarty->createTemplate('eval:{"Two Convicts Eväde NöÖse, Jury Hung."|lower}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testUmlautsWithoutMbstring()
-    {
+    public function testUmlautsWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "two convicts eväde nööse, jury hung.";
         $tpl = $this->smarty->createTemplate('eval:{"Two Convicts Eväde NöÖse, Jury Hung."|lower}');

@@ -11,21 +11,18 @@
 */
 class DefaultConfigHandlerTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
         $this->smarty->disableSecurity();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testUnknownConfig()
-    {
+    public function testUnknownConfig() {
         try {
             $this->smarty->configLoad('foo.conf');
             $this->assertEquals("123.4", $this->smarty->fetch('eval:{#Number#}'));
@@ -37,8 +34,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception for none existing config has not been raised.');
     }
 
-    public function testRegisterNoneExistentHandlerFunction()
-    {
+    public function testRegisterNoneExistentHandlerFunction() {
         try {
             $this->smarty->registerDefaultConfigHandler('foo');
         } catch (Exception $e) {
@@ -49,22 +45,19 @@ class DefaultConfigHandlerTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception for non-callable function has not been raised.');
     }
 
-    public function testDefaultConfigHandlerReplacement()
-    {
+    public function testDefaultConfigHandlerReplacement() {
         $this->smarty->registerDefaultConfigHandler('my_config_handler');
         $this->smarty->configLoad('foo.conf');
         $this->assertEquals("bar", $this->smarty->fetch('eval:{#foo#}'));
     }
 
-    public function testDefaultConfigHandlerReplacementByConfigFile()
-    {
+    public function testDefaultConfigHandlerReplacementByConfigFile() {
         $this->smarty->registerDefaultConfigHandler('my_config_handler_file');
         $this->smarty->configLoad('foo.conf');
         $this->assertEquals("123.4", $this->smarty->fetch('eval:{#Number#}'));
     }
 
-    public function testDefaultConfigHandlerReturningFalse()
-    {
+    public function testDefaultConfigHandlerReturningFalse() {
         $this->smarty->registerDefaultConfigHandler('my_config_false');
         try {
             $this->smarty->configLoad('foo.conf');
@@ -77,8 +70,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception for none existing template has not been raised.');
     }
 
-    public function testConfigResourceDb4()
-    {
+    public function testConfigResourceDb4() {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->smarty->configLoad('db4:foo.conf');
         $this->assertEquals("bar", $this->smarty->fetch('eval:{#foo#}'));
@@ -86,19 +78,16 @@ class DefaultConfigHandlerTest extends PHPUnit_Framework_TestCase
 
 }
 
-function my_config_handler ($resource_type, $resource_name, &$config_source, &$config_timestamp, Smarty $smarty)
-{
+function my_config_handler ($resource_type, $resource_name, &$config_source, &$config_timestamp, Smarty $smarty) {
     $output = "foo = 'bar'\n";
     $config_source = $output;
     $config_timestamp = time();
 
     return true;
 }
-function my_config_handler_file ($resource_type, $resource_name, &$config_source, &$config_timestamp, Smarty $smarty)
-{
+function my_config_handler_file ($resource_type, $resource_name, &$config_source, &$config_timestamp, Smarty $smarty) {
     return $smarty->getConfigDir(0) . 'test.conf';
 }
-function my_config_false ($resource_type, $resource_name, &$config_source, &$config_timestamp, Smarty $smarty)
-{
+function my_config_false ($resource_type, $resource_name, &$config_source, &$config_timestamp, Smarty $smarty) {
     return false;
 }

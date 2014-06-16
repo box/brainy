@@ -50,8 +50,7 @@ class Smarty_Internal_Data
      * @param  boolean              $scope   the scope the variable will have  (local,parent or root)
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function assign($tpl_var, $value = null)
-    {
+    public function assign($tpl_var, $value = null) {
         if (is_array($tpl_var)) {
             foreach ($tpl_var as $_key => $_val) {
                 if ($_key != '') {
@@ -74,8 +73,7 @@ class Smarty_Internal_Data
      * @param  mixed                $value   the value to assign
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function assignGlobal($varname, $value = null)
-    {
+    public function assignGlobal($varname, $value = null) {
         if ($varname != '') {
             Smarty::$global_tpl_vars[$varname] = new Smarty_variable($value);
             $ptr = $this;
@@ -94,8 +92,7 @@ class Smarty_Internal_Data
      * @param mixed $ &$value the referenced value to assign
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function assignByRef($tpl_var, &$value)
-    {
+    public function assignByRef($tpl_var, &$value) {
         if ($tpl_var != '') {
             $this->tpl_vars[$tpl_var] = new Smarty_variable(null);
             $this->tpl_vars[$tpl_var]->value = &$value;
@@ -112,8 +109,7 @@ class Smarty_Internal_Data
      * @param  boolean              $merge   flag if array elements shall be merged
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function append($tpl_var, $value = null, $merge = false)
-    {
+    public function append($tpl_var, $value = null, $merge = false) {
         if (is_array($tpl_var)) {
             // $tpl_var is an array, ignore $value
             foreach ($tpl_var as $_key => $_val) {
@@ -172,8 +168,7 @@ class Smarty_Internal_Data
      * @param  boolean              $merge   flag if array elements shall be merged
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function appendByRef($tpl_var, &$value, $merge = false)
-    {
+    public function appendByRef($tpl_var, &$value, $merge = false) {
         if ($tpl_var != '' && isset($value)) {
             if (!isset($this->tpl_vars[$tpl_var])) {
                 $this->tpl_vars[$tpl_var] = new Smarty_variable();
@@ -201,8 +196,7 @@ class Smarty_Internal_Data
      * @param  boolean $search_parents include parent templates?
      * @return string  variable value or or array of variables
      */
-    public function getTemplateVars($varname = null, $_ptr = null, $search_parents = true)
-    {
+    public function getTemplateVars($varname = null, $_ptr = null, $search_parents = true) {
         if (isset($varname)) {
             $_var = $this->getVariable($varname, $_ptr, $search_parents, false);
             if (is_object($_var)) {
@@ -245,8 +239,7 @@ class Smarty_Internal_Data
      * @param  string|array         $tpl_var the template variable(s) to clear
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function clearAssign($tpl_var)
-    {
+    public function clearAssign($tpl_var) {
         if (is_array($tpl_var)) {
             foreach ($tpl_var as $curr_var) {
                 unset($this->tpl_vars[$curr_var]);
@@ -262,8 +255,7 @@ class Smarty_Internal_Data
      * clear all the assigned template variables.
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function clearAllAssign()
-    {
+    public function clearAllAssign() {
         $this->tpl_vars = array();
 
         return $this;
@@ -276,8 +268,7 @@ class Smarty_Internal_Data
      * @param  mixed                $sections    array of section names, single section or null
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function configLoad($config_file, $sections = null)
-    {
+    public function configLoad($config_file, $sections = null) {
         // load Config class
         $config = new Smarty_Internal_Config($config_file, $this->smarty, $this);
         $config->loadConfigVars($sections);
@@ -293,8 +284,7 @@ class Smarty_Internal_Data
      * @param  boolean $search_parents search also in parent data
      * @return object  the object of the variable
      */
-    public function getVariable($variable, $_ptr = null, $search_parents = true, $error_enable = true)
-    {
+    public function getVariable($variable, $_ptr = null, $search_parents = true, $error_enable = true) {
         if ($_ptr === null) {
             $_ptr = $this;
         } while ($_ptr !== null) {
@@ -327,8 +317,7 @@ class Smarty_Internal_Data
      * @param  string $variable the name of the config variable
      * @return mixed  the value of the config variable
      */
-    public function getConfigVariable($variable, $error_enable = true)
-    {
+    public function getConfigVariable($variable, $error_enable = true) {
         $_ptr = $this;
         while ($_ptr !== null) {
             if (isset($_ptr->config_vars[$variable])) {
@@ -352,8 +341,7 @@ class Smarty_Internal_Data
      * @param  string $variable the stream of the variable
      * @return mixed  the value of the stream variable
      */
-    public function getStreamVariable($variable)
-    {
+    public function getStreamVariable($variable) {
         $_result = '';
         $fp = fopen($variable, 'r+');
         if ($fp) {
@@ -378,8 +366,7 @@ class Smarty_Internal_Data
      * @param  string $varname variable name or null
      * @return string variable value or or array of variables
      */
-    public function getConfigVars($varname = null, $search_parents = true)
-    {
+    public function getConfigVars($varname = null, $search_parents = true) {
         $_ptr = $this;
         $var_array = array();
         while ($_ptr !== null) {
@@ -410,8 +397,7 @@ class Smarty_Internal_Data
      * @param  string               $varname variable name or null
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function clearConfig($varname = null)
-    {
+    public function clearConfig($varname = null) {
         if (isset($varname)) {
             unset($this->config_vars[$varname]);
         } else {
@@ -446,8 +432,7 @@ class Smarty_Data extends Smarty_Internal_Data
      * @param Smarty|array $_parent parent template
      * @param Smarty       $smarty  global smarty instance
      */
-    public function __construct ($_parent = null, $smarty = null)
-    {
+    public function __construct ($_parent = null, $smarty = null) {
         $this->smarty = $smarty;
         if (is_object($_parent)) {
             // when object set up back pointer
@@ -493,8 +478,7 @@ class Smarty_Variable
      * @param mixed   $value   the value to assign
      * @param int     $scope   the scope the variable will have  (local,parent or root)
      */
-    public function __construct($value = null, $scope = Smarty::SCOPE_LOCAL)
-    {
+    public function __construct($value = null, $scope = Smarty::SCOPE_LOCAL) {
         $this->value = $value;
         $this->scope = $scope;
     }
@@ -504,8 +488,7 @@ class Smarty_Variable
      *
      * @return string
      */
-    public function __toString()
-    {
+    public function __toString() {
         return (string) $this->value;
     }
 
@@ -527,8 +510,7 @@ class Undefined_Smarty_Variable
      * @param  string $name
      * @return null
      */
-    public function __get($name)
-    {
+    public function __get($name) {
         return null;
     }
 
@@ -537,8 +519,7 @@ class Undefined_Smarty_Variable
      *
      * @return string
      */
-    public function __toString()
-    {
+    public function __toString() {
         return "";
     }
 

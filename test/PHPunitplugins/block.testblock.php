@@ -15,8 +15,7 @@
 * @param object $template template object
 * @return string content re-formatted
 */
-function smarty_block_testblock($params, $content, $template, &$repeat)
-{
+function smarty_block_testblock($params, $content, $template, &$repeat) {
     static $loop = 0;
     if (isset($content)) {
         $loop++;

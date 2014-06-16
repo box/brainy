@@ -147,8 +147,7 @@ class PHP_ParserGenerator_State
      * of non-terminal actions, then the smaller is the one with the most
      * token actions.
      */
-    public static function stateResortCompare($a, $b)
-    {
+    public static function stateResortCompare($a, $b) {
         $n = $b->nNtAct - $a->nNtAct;
         if ($n === 0) {
             $n = $b->nTknAct - $a->nTknAct;
@@ -164,8 +163,7 @@ class PHP_ParserGenerator_State
      * @param  PHP_ParserGenerator_Config|0 $b
      * @return int
      */
-    public static function statecmp($a, $b)
-    {
+    public static function statecmp($a, $b) {
         for ($rc = 0; $rc == 0 && $a && $b;  $a = $a->bp, $b = $b->bp) {
             $rc = $a->rp->index - $b->rp->index;
             if ($rc === 0) {
@@ -188,8 +186,7 @@ class PHP_ParserGenerator_State
      * Hash a state based on its configuration
      * @return int
      */
-    private static function statehash(PHP_ParserGenerator_Config $a)
-    {
+    private static function statehash(PHP_ParserGenerator_Config $a) {
         $h = 0;
         while ($a) {
             $h = $h * 571 + $a->rp->index * 37 + $a->dot;
@@ -205,8 +202,7 @@ class PHP_ParserGenerator_State
      * @param PHP_ParserGenerator_Config
      * @return null|PHP_ParserGenerator_State
      */
-    public static function State_find(PHP_ParserGenerator_Config $key)
-    {
+    public static function State_find(PHP_ParserGenerator_Config $key) {
         if (!count(self::$x3a)) {
             return 0;
         }
@@ -234,8 +230,7 @@ class PHP_ParserGenerator_State
      * @return unknown
      */
     public static function State_insert(PHP_ParserGenerator_State $state,
-                                 PHP_ParserGenerator_Config $key)
-    {
+                                 PHP_ParserGenerator_Config $key) {
         $h = self::statehash($key);
         if (isset(self::$x3a[$h])) {
             $np = self::$x3a[$h];
@@ -277,8 +272,7 @@ class PHP_ParserGenerator_State
      *
      * @return array
      */
-    public static function State_arrayof()
-    {
+    public static function State_arrayof() {
         return self::$states;
     }
 }

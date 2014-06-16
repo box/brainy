@@ -14,8 +14,7 @@
  * @param DateTime|int|string $string  date object, timestamp or string that can be converted using strtotime()
  * @return int
  */
-function smarty_make_timestamp($string)
-{
+function smarty_make_timestamp($string) {
     if (empty($string)) {
         // use "now":
         return time();

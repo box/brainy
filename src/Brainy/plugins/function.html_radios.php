@@ -42,8 +42,7 @@
  * @return string
  * @uses smarty_function_escape_special_chars()
  */
-function smarty_function_html_radios($params, $template)
-{
+function smarty_function_html_radios($params, $template) {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
     $options = array(
@@ -157,8 +156,7 @@ function smarty_function_html_radios($params, $template)
     }
 }
 
-function smarty_function_html_radios_output($options, $value, $output)
-{
+function smarty_function_html_radios_output($options, $value, $output) {
     $_output = '';
 
     if (is_object($value)) {

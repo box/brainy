@@ -13,19 +13,16 @@ require_once(dirname(__FILE__) . '/helpers/_object_tostring.php');
 */
 class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testAssociativeArray()
-    {
+    public function testAssociativeArray() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="1800">Joe Schmoe</option>'
@@ -44,8 +41,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testSeparateArrays()
-    {
+    public function testSeparateArrays() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="56">Joe Schmoe</option>'
@@ -65,8 +61,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testIterator()
-    {
+    public function testIterator() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="1800">Joe Schmoe</option>'
@@ -85,8 +80,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testOptgroup()
-    {
+    public function testOptgroup() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<optgroup label="Sport">'
@@ -117,8 +111,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testNullString()
-    {
+    public function testNullString() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="null" selected="selected">null</option>'
@@ -151,8 +144,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testNullValue()
-    {
+    public function testNullValue() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="" selected="selected">empty string</option>'
@@ -189,8 +181,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testZeroValue()
-    {
+    public function testZeroValue() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="null">null</option>'
@@ -222,8 +213,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $tpl->fetch());
     }
-    public function testZeroStringValue()
-    {
+    public function testZeroStringValue() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="null">null</option>'
@@ -256,8 +246,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testEmptyStringValue()
-    {
+    public function testEmptyStringValue() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="null">null</option>'
@@ -290,8 +279,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testEmptyStringValues()
-    {
+    public function testEmptyStringValues() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="" selected="selected">empty string</option>'
@@ -328,8 +316,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testObject()
-    {
+    public function testObject() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="1800">Joe Schmoe</option>'
@@ -348,8 +335,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testObjectList()
-    {
+    public function testObjectList() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="1800">Joe Schmoe</option>'
@@ -369,13 +355,11 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
     }
 
     protected $_errors = array();
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext)
-    {
+    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
         $this->_errors[] = $errstr;
     }
 
-    public function testObjectNoString()
-    {
+    public function testObjectNoString() {
         $this->_errors = array();
         set_error_handler(array($this, 'error_handler'));
         $n = "\n";
@@ -400,8 +384,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
-    public function testObjectListNoString()
-    {
+    public function testObjectListNoString() {
         $this->_errors = array();
         set_error_handler(array($this, 'error_handler'));
         $n = "\n";
@@ -426,8 +409,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
-    public function testDisabled()
-    {
+    public function testDisabled() {
         $n = "\n";
         $expected = '<select name="foo" disabled="1">'
             . $n . '<option value="1800">Joe Schmoe</option>'
@@ -446,8 +428,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testDisabledStrict()
-    {
+    public function testDisabledStrict() {
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="1800">Joe Schmoe</option>'

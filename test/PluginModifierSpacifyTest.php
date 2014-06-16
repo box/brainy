@@ -11,26 +11,22 @@
 */
 class PluginModifierSpacifyTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testDefault()
-    {
+    public function testDefault() {
         $result = 'h e l l o   w ö r l d';
         $tpl = $this->smarty->createTemplate('eval:{"hello wörld"|spacify}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testCharacter()
-    {
+    public function testCharacter() {
         $result = 'h##e##l##l##o## ##w##ö##r##l##d';
         $tpl = $this->smarty->createTemplate('eval:{"hello wörld"|spacify:"##"}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));

@@ -21,8 +21,7 @@
  * @param Smarty_Internal_Template $template template object
  * @return string|null
  */
-function smarty_function_math($params, $template)
-{
+function smarty_function_math($params, $template) {
     static $_allowed_funcs = array(
         'int' => true, 'abs' => true, 'ceil' => true, 'cos' => true, 'exp' => true, 'floor' => true,
         'log' => true, 'log10' => true, 'max' => true, 'min' => true, 'pi' => true, 'pow' => true,

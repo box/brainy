@@ -11,8 +11,7 @@
 */
 class CacheResourceFileTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         // reset cache for unit test
@@ -20,13 +19,11 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    protected function relative($path)
-    {
+    protected function relative($path) {
         $path = str_replace( dirname(__FILE__), '.', $path );
         if (DS == "\\") {
             $path = str_replace( "\\", "/", $path );
@@ -38,8 +35,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
     /**
     * test getCachedFilepath with use_sub_dirs enabled
     */
-    public function testGetCachedFilepathSubDirs()
-    {
+    public function testGetCachedFilepathSubDirs() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
@@ -56,8 +52,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
     /**
     * test getCachedFilepath with cache_id
     */
-    public function testGetCachedFilepathCacheId()
-    {
+    public function testGetCachedFilepathCacheId() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
@@ -74,8 +69,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
     /**
     * test getCachedFilepath with compile_id
     */
-    public function testGetCachedFilepathCompileId()
-    {
+    public function testGetCachedFilepathCompileId() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
@@ -92,8 +86,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
     /**
     * test getCachedFilepath with cache_id and compile_id
     */
-    public function testGetCachedFilepathCacheIdCompileId()
-    {
+    public function testGetCachedFilepathCacheIdCompileId() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
@@ -110,8 +103,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
     /**
     * test cache->clear_all with cache_id and compile_id
     */
-    public function testClearCacheAllCacheIdCompileId()
-    {
+    public function testClearCacheAllCacheIdCompileId() {
         $this->smarty->clearAllCache();
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
@@ -124,8 +116,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
     /**
     * test cache->clear with cache_id and compile_id
     */
-    public function testClearCacheCacheIdCompileId()
-    {
+    public function testClearCacheCacheIdCompileId() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->clearAllCache();
@@ -144,8 +135,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(file_exists($tpl2->cached->filepath));
         $this->assertFalse(file_exists($tpl3->cached->filepath));
     }
-    public function testSmarty2ClearCacheCacheIdCompileId()
-    {
+    public function testSmarty2ClearCacheCacheIdCompileId() {
         $this->smartyBC->caching = true;
         $this->smartyBC->cache_lifetime = 1000;
         $this->smartyBC->clearAllCache();
@@ -165,8 +155,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($tpl3->cached->filepath));
     }
 
-    public function testSmarty2ClearCacheCacheIdCompileIdSub()
-    {
+    public function testSmarty2ClearCacheCacheIdCompileIdSub() {
         $this->smartyBC->caching = true;
         $this->smartyBC->cache_lifetime = 1000;
         $this->smartyBC->clearAllCache();
@@ -186,8 +175,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($tpl3->cached->filepath));
     }
 
-    public function testClearCacheCacheIdCompileId2()
-    {
+    public function testClearCacheCacheIdCompileId2() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = false;
@@ -206,8 +194,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($tpl2->cached->filepath));
         $this->assertTrue(file_exists($tpl3->cached->filepath));
     }
-    public function testSmarty2ClearCacheCacheIdCompileId2()
-    {
+    public function testSmarty2ClearCacheCacheIdCompileId2() {
         $this->smartyBC->caching = true;
         $this->smartyBC->cache_lifetime = 1000;
         $this->smartyBC->use_sub_dirs = false;
@@ -227,8 +214,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(file_exists($tpl3->cached->filepath));
     }
 
-    public function testClearCacheCacheIdCompileId2Sub()
-    {
+    public function testClearCacheCacheIdCompileId2Sub() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
@@ -247,8 +233,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($tpl2->cached->filepath));
         $this->assertTrue(file_exists($tpl3->cached->filepath));
     }
-    public function testClearCacheCacheIdCompileId3()
-    {
+    public function testClearCacheCacheIdCompileId3() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->clearAllCache();
@@ -267,8 +252,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($tpl2->cached->filepath));
         $this->assertTrue(file_exists($tpl3->cached->filepath));
     }
-    public function testClearCacheCacheIdCompileId3Sub()
-    {
+    public function testClearCacheCacheIdCompileId3Sub() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->clearAllCache();
@@ -287,8 +271,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($tpl2->cached->filepath));
         $this->assertTrue(file_exists($tpl3->cached->filepath));
     }
-    public function testClearCacheCacheIdCompileId4()
-    {
+    public function testClearCacheCacheIdCompileId4() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = false;
@@ -307,8 +290,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($tpl2->cached->filepath));
         $this->assertTrue(file_exists($tpl3->cached->filepath));
     }
-    public function testClearCacheCacheIdCompileId4Sub()
-    {
+    public function testClearCacheCacheIdCompileId4Sub() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
@@ -327,8 +309,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($tpl2->cached->filepath));
         $this->assertTrue(file_exists($tpl3->cached->filepath));
     }
-    public function testClearCacheCacheIdCompileId5()
-    {
+    public function testClearCacheCacheIdCompileId5() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = false;
@@ -347,8 +328,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(file_exists($tpl2->cached->filepath));
         $this->assertFalse(file_exists($tpl3->cached->filepath));
     }
-    public function testClearCacheCacheIdCompileId5Sub()
-    {
+    public function testClearCacheCacheIdCompileId5Sub() {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
@@ -368,9 +348,9 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($tpl3->cached->filepath));
     }
 
-    public function testSharing()
-    {
+    public function testSharing() {
         $smarty = new Smarty();
+        $smarty->setCompileDir(realpath('test' . DS . 'compiled' . DS));
         $smarty->caching = true;
         $_smarty = clone $smarty;
         $smarty->fetch('string:foo');
@@ -379,9 +359,9 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($smarty->_cacheresource_handlers['file'] === $_smarty->_cacheresource_handlers['file']);
     }
 
-    public function testExplicit()
-    {
+    public function testExplicit() {
         $smarty = new Smarty();
+        $smarty->setCompileDir(realpath('test' . DS . 'compiled' . DS));
         $smarty->caching = true;
         $_smarty = clone $smarty;
         $smarty->fetch('string:foo');

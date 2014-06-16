@@ -11,13 +11,11 @@ class Smarty_Resource_Ambiguous extends Smarty_Internal_Resource_File
     protected $directory;
     protected $segment;
 
-    public function __construct($directory)
-    {
+    public function __construct($directory) {
         $this->directory = rtrim($directory, "/\\") . DS;
     }
 
-    public function setSegment($segment)
-    {
+    public function setSegment($segment) {
         $this->segment = $segment;
     }
 
@@ -28,8 +26,7 @@ class Smarty_Resource_Ambiguous extends Smarty_Internal_Resource_File
      * @param  string $resource_name resource_name to make unique
      * @return string unique resource name
      */
-    protected function buildUniqueResourceName(Smarty $smarty, $resource_name, $is_config = false)
-    {
+    protected function buildUniqueResourceName(Smarty $smarty, $resource_name, $is_config = false) {
         return get_class($this) . '#' . $this->segment . '#' . $resource_name;
     }
 
@@ -39,8 +36,7 @@ class Smarty_Resource_Ambiguous extends Smarty_Internal_Resource_File
      * @param Smarty_Template_Source   $source    source object
      * @param Smarty_Internal_Template $_template template object
      */
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template=null)
-    {
+    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template=null) {
         $segment = '';
         if ($this->segment) {
             $segment = rtrim($this->segment, "/\\") . DS;

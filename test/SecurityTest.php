@@ -11,8 +11,7 @@
 */
 class SecurityTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
@@ -22,32 +21,28 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         $this->smarty->clearAllCache();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test that security is loaded
     */
-    public function testSecurityLoaded()
-    {
+    public function testSecurityLoaded() {
         $this->assertTrue(is_object($this->smarty->security_policy));
     }
 
     /**
     * test trusted PHP function
     */
-    public function testTrustedPHPFunction()
-    {
+    public function testTrustedPHPFunction() {
         $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{count($foo)}'));
     }
 
     /**
     * test not trusted PHP function
     */
-    public function testNotTrustedPHPFunction()
-    {
+    public function testNotTrustedPHPFunction() {
         $this->smarty->security_policy->php_functions = array('null');
         try {
             $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{count($foo)}');
@@ -62,8 +57,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test not trusted PHP function at disabled security
     */
-    public function testDisabledTrustedPHPFunction()
-    {
+    public function testDisabledTrustedPHPFunction() {
         $this->smarty->security_policy->php_functions = array('null');
         $this->smarty->disableSecurity();
         $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{count($foo)}'));
@@ -72,16 +66,14 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test trusted modifier
     */
-    public function testTrustedModifier()
-    {
+    public function testTrustedModifier() {
         $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{$foo|@count}'));
     }
 
     /**
     * test not trusted modifier
     */
-    public function testNotTrustedModifier()
-    {
+    public function testNotTrustedModifier() {
         $this->smarty->security_policy->php_modifiers = array('null');
         try {
             $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{$foo|@count}');
@@ -96,8 +88,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test not trusted modifier at disabled security
     */
-    public function testDisabledTrustedModifier()
-    {
+    public function testDisabledTrustedModifier() {
         $this->smarty->security_policy->php_modifiers = array('null');
         $this->smarty->disableSecurity();
         $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{$foo|@count}'));
@@ -106,8 +97,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test allowed tags
     */
-    public function testAllowedTags1()
-    {
+    public function testAllowedTags1() {
         $this->smarty->security_policy->allowed_tags = array('counter');
         $this->assertEquals("1", $this->smarty->fetch('eval:{counter start=1}'));
     }
@@ -115,8 +105,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test not allowed tag
     */
-    public function testNotAllowedTags2()
-    {
+    public function testNotAllowedTags2() {
         $this->smarty->security_policy->allowed_tags = array('counter');
         try {
             $this->smarty->fetch('eval:{counter}{cycle values="1,2"}');
@@ -131,8 +120,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test disabled tag
     */
-    public function testDisabledTags()
-    {
+    public function testDisabledTags() {
         $this->smarty->security_policy->disabled_tags = array('cycle');
         try {
             $this->smarty->fetch('eval:{counter}{cycle values="1,2"}');
@@ -147,13 +135,11 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test allowed modifier
     */
-    public function testAllowedModifier1()
-    {
+    public function testAllowedModifier1() {
         $this->smarty->security_policy->allowed_modifiers = array('capitalize');
         $this->assertEquals("Hello World", $this->smarty->fetch('eval:{"hello world"|capitalize}'));
     }
-    public function testAllowedModifier2()
-    {
+    public function testAllowedModifier2() {
         $this->smarty->security_policy->allowed_modifiers = array('upper');
         $this->assertEquals("HELLO WORLD", $this->smarty->fetch('eval:{"hello world"|upper}'));
     }
@@ -161,8 +147,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test not allowed modifier
     */
-    public function testNotAllowedModifier()
-    {
+    public function testNotAllowedModifier() {
         $this->smarty->security_policy->allowed_modifiers = array('upper');
         try {
             $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
@@ -177,8 +162,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test disabled modifier
     */
-    public function testDisabledModifier()
-    {
+    public function testDisabledModifier() {
         $this->smarty->security_policy->disabled_modifiers = array('lower');
         try {
             $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
@@ -193,8 +177,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test standard directory
     */
-    public function testStandardDirectory()
-    {
+    public function testStandardDirectory() {
         $content = $this->smarty->fetch('eval:{include file="helloworld.tpl"}');
         $this->assertEquals("hello world", $content);
     }
@@ -202,8 +185,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test trusted directory
     */
-    public function testTrustedDirectory()
-    {
+    public function testTrustedDirectory() {
         $this->smarty->security_policy->secure_dir = array('test' . DS . 'templates_2' . DS);
         $this->assertEquals("hello world", $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}'));
     }
@@ -211,8 +193,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test not trusted directory
     */
-    public function testNotTrustedDirectory()
-    {
+    public function testNotTrustedDirectory() {
         $this->smarty->security_policy->secure_dir = array('test' . DS . 'templates_3' . DS);
         try {
             $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}');
@@ -227,8 +208,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test disabled security for not trusted dir
     */
-    public function testDisabledTrustedDirectory()
-    {
+    public function testDisabledTrustedDirectory() {
         $this->smarty->disableSecurity();
         $this->assertEquals("hello world", $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}'));
     }
@@ -236,8 +216,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         /**
     * test trusted static class
     */
-    public function testTrustedStaticClass()
-    {
+    public function testTrustedStaticClass() {
         $this->smarty->security_policy->static_classes = array('mysecuritystaticclass');
         $tpl = $this->smarty->createTemplate('eval:{mysecuritystaticclass::square(5)}');
         $this->assertEquals('25', $this->smarty->fetch($tpl));
@@ -246,8 +225,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     /**
     * test not trusted PHP function
     */
-    public function testNotTrustedStaticClass()
-    {
+    public function testNotTrustedStaticClass() {
         $this->smarty->security_policy->static_classes = array('null');
         try {
             $this->smarty->fetch('eval:{mysecuritystaticclass::square(5)}');
@@ -259,8 +237,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception for not trusted static class has not been raised.');
     }
 
-    public function testChangedTrustedDirectory()
-    {
+    public function testChangedTrustedDirectory() {
         $this->smarty->security_policy->secure_dir = array(
             'test' . DS . 'templates_2' . DS,
         );
@@ -280,8 +257,7 @@ class mysecuritystaticclass
     const STATIC_CONSTANT_VALUE = 3;
     static $static_var = 5;
 
-    static function square($i)
-    {
+    static function square($i) {
         return $i*$i;
     }
 }

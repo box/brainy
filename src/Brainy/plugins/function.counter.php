@@ -19,8 +19,7 @@
  * @param Smarty_Internal_Template $template template object
  * @return string|null
  */
-function smarty_function_counter($params, $template)
-{
+function smarty_function_counter($params, $template) {
     static $counters = array();
 
     $name = (isset($params['name'])) ? $params['name'] : 'default';

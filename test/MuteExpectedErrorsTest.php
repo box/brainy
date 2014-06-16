@@ -11,26 +11,22 @@
  */
 class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     protected $_errors = array();
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext)
-    {
+    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
         $this->_errors[] = $errfile .' line ' . $errline;
     }
 
-    public function testMuted()
-    {
+    public function testMuted() {
         $this->_errors = array();
         set_error_handler(array($this, 'error_handler'));
         Smarty::muteExpectedErrors();
@@ -49,8 +45,7 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
-    public function testUnmuted()
-    {
+    public function testUnmuted() {
         $this->_errors = array();
         set_error_handler(array($this, 'error_handler'));
 
@@ -67,8 +62,7 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
-    public function testMutedCaching()
-    {
+    public function testMutedCaching() {
         $this->_errors = array();
         set_error_handler(array($this, 'error_handler'));
         Smarty::muteExpectedErrors();
@@ -88,8 +82,7 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
-    public function testUnmutedCaching()
-    {
+    public function testUnmutedCaching() {
         $this->_errors = array();
         set_error_handler(array($this, 'error_handler'));
 

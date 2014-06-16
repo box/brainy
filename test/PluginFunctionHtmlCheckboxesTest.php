@@ -13,19 +13,16 @@ require_once(dirname(__FILE__) . '/helpers/_object_tostring.php');
 */
 class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testAssociativeArray()
-    {
+    public function testAssociativeArray() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="1000" />Joe Schmoe</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="1001" checked="checked" />Jack Smith</label><br />'
@@ -44,8 +41,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testSeparateArrays()
-    {
+    public function testSeparateArrays() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="1000" />Joe Schmoe</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="1001" checked="checked" />Jack Smith</label><br />'
@@ -65,8 +61,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testIterator()
-    {
+    public function testIterator() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="1000" />Joe Schmoe</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="1001" checked="checked" />Jack Smith</label><br />'
@@ -86,8 +81,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testNoLabels()
-    {
+    public function testNoLabels() {
         $n = "\n";
         $expected = '<input type="checkbox" name="id[]" value="1000" />Joe Schmoe<br />'
             . $n . '<input type="checkbox" name="id[]" value="1001" checked="checked" />Jack Smith<br />'
@@ -106,8 +100,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testWithId()
-    {
+    public function testWithId() {
         $n = "\n";
         $expected = '<label for="id_1000"><input type="checkbox" name="id[]" value="1000" id="id_1000" />Joe Schmoe</label><br />'
             . $n . '<label for="id_1001"><input type="checkbox" name="id[]" value="1001" id="id_1001" checked="checked" />Jack Smith</label><br />'
@@ -126,8 +119,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testNullString()
-    {
+    public function testNullString() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="null" checked="checked" />null</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="" />empty string</label><br />'
@@ -148,8 +140,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testNullValue()
-    {
+    public function testNullValue() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="null" />null</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="" checked="checked" />empty string</label><br />'
@@ -170,8 +161,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testZeroValue()
-    {
+    public function testZeroValue() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="null" />null</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="" />empty string</label><br />'
@@ -192,8 +182,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testZeroStringValue()
-    {
+    public function testZeroStringValue() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="null" />null</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="" />empty string</label><br />'
@@ -214,8 +203,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testEmptyStringValue()
-    {
+    public function testEmptyStringValue() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="null" />null</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="" checked="checked" />empty string</label><br />'
@@ -236,8 +224,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testObject()
-    {
+    public function testObject() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="1000" />Joe Schmoe</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="1001" checked="checked" />Jack Smith</label><br />'
@@ -256,8 +243,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testObjectList()
-    {
+    public function testObjectList() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="1000" />Joe Schmoe</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="1001" checked="checked" />Jack Smith</label><br />'
@@ -277,13 +263,11 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
     }
 
     protected $_errors = array();
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext)
-    {
+    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
         $this->_errors[] = $errstr;
     }
 
-    public function testObjectNoString()
-    {
+    public function testObjectNoString() {
         $this->_errors = array();
         set_error_handler(array($this, 'error_handler'));
 
@@ -309,8 +293,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
-    public function testObjectListNoString()
-    {
+    public function testObjectListNoString() {
         $this->_errors = array();
         set_error_handler(array($this, 'error_handler'));
 
@@ -336,8 +319,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
-    public function testDisabled()
-    {
+    public function testDisabled() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="1000" disabled="1" />Joe Schmoe</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="1001" checked="checked" disabled="1" />Jack Smith</label><br />'
@@ -356,8 +338,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    public function testDisabledStrict()
-    {
+    public function testDisabledStrict() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="1000" disabled="disabled" />Joe Schmoe</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="1001" checked="checked" disabled="disabled" />Jack Smith</label><br />'

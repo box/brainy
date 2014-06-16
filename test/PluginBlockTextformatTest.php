@@ -12,26 +12,22 @@
 class PluginBlockTextformatTest extends PHPUnit_Framework_TestCase
 {
     protected $string = "\n\nThis is foo.\nThis is foo.\nThis is foo.\nThis is foo.\nThis is foo.\nThis is foo.\n\nThis is bar.\n\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\n\n";
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testDefault()
-    {
+    public function testDefault() {
         $result = "\n\nThis is foo. This is foo. This is foo.\nThis is foo. This is foo. This is foo.\n\nThis is bar.\n\nbar foo bar foo foo. bar foo bar foo\nfoo. bar foo bar foo foo. bar foo bar\nfoo foo. bar foo bar foo foo. bar foo\nbar foo foo. bar foo bar foo foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40}' . $this->string . '{/textformat}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testDefaultWithoutMbstring()
-    {
+    public function testDefaultWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "\n\nThis is foo. This is foo. This is foo.\nThis is foo. This is foo. This is foo.\n\nThis is bar.\n\nbar foo bar foo foo. bar foo bar foo\nfoo. bar foo bar foo foo. bar foo bar\nfoo foo. bar foo bar foo foo. bar foo\nbar foo foo. bar foo bar foo foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40}' . $this->string . '{/textformat}');
@@ -39,15 +35,13 @@ class PluginBlockTextformatTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testIndent()
-    {
+    public function testIndent() {
         $result = "\n\n    This is foo. This is foo. This is\n    foo. This is foo. This is foo. This\n    is foo.\n\n    This is bar.\n\n    bar foo bar foo foo. bar foo bar foo\n    foo. bar foo bar foo foo. bar foo\n    bar foo foo. bar foo bar foo foo.\n    bar foo bar foo foo. bar foo bar foo\n    foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4}' . $this->string . '{/textformat}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testIndentWithoutMbstring()
-    {
+    public function testIndentWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "\n\n    This is foo. This is foo. This is\n    foo. This is foo. This is foo. This\n    is foo.\n\n    This is bar.\n\n    bar foo bar foo foo. bar foo bar foo\n    foo. bar foo bar foo foo. bar foo\n    bar foo foo. bar foo bar foo foo.\n    bar foo bar foo foo. bar foo bar foo\n    foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4}' . $this->string . '{/textformat}');
@@ -55,15 +49,13 @@ class PluginBlockTextformatTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testIndentFirst()
-    {
+    public function testIndentFirst() {
         $result = "\n\n        This is foo. This is foo. This\n    is foo. This is foo. This is foo.\n    This is foo.\n\n        This is bar.\n\n        bar foo bar foo foo. bar foo bar\n    foo foo. bar foo bar foo foo. bar\n    foo bar foo foo. bar foo bar foo\n    foo. bar foo bar foo foo. bar foo\n    bar foo foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4 indent_first=4}' . $this->string . '{/textformat}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testIndentFirstWithoutMbstring()
-    {
+    public function testIndentFirstWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "\n\n        This is foo. This is foo. This\n    is foo. This is foo. This is foo.\n    This is foo.\n\n        This is bar.\n\n        bar foo bar foo foo. bar foo bar\n    foo foo. bar foo bar foo foo. bar\n    foo bar foo foo. bar foo bar foo\n    foo. bar foo bar foo foo. bar foo\n    bar foo foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4 indent_first=4}' . $this->string . '{/textformat}');
@@ -71,15 +63,13 @@ class PluginBlockTextformatTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testIndentchar()
-    {
+    public function testIndentchar() {
         $result = "\n\n####This is foo. This is foo. This is\n####foo. This is foo. This is foo. This\n####is foo.\n\n####This is bar.\n\n####bar foo bar foo foo. bar foo bar foo\n####foo. bar foo bar foo foo. bar foo\n####bar foo foo. bar foo bar foo foo.\n####bar foo bar foo foo. bar foo bar foo\n####foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4 indent_char="#"}' . $this->string . '{/textformat}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testIndentcharWithoutMbstring()
-    {
+    public function testIndentcharWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "\n\n####This is foo. This is foo. This is\n####foo. This is foo. This is foo. This\n####is foo.\n\n####This is bar.\n\n####bar foo bar foo foo. bar foo bar foo\n####foo. bar foo bar foo foo. bar foo\n####bar foo foo. bar foo bar foo foo.\n####bar foo bar foo foo. bar foo bar foo\n####foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4 indent_char="#"}' . $this->string . '{/textformat}');
@@ -87,15 +77,13 @@ class PluginBlockTextformatTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testIndentcharFirst()
-    {
+    public function testIndentcharFirst() {
         $result = "\n\n########This is foo. This is foo. This\n####is foo. This is foo. This is foo.\n####This is foo.\n\n########This is bar.\n\n########bar foo bar foo foo. bar foo bar\n####foo foo. bar foo bar foo foo. bar\n####foo bar foo foo. bar foo bar foo\n####foo. bar foo bar foo foo. bar foo\n####bar foo foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4 indent_first=4 indent_char="#"}' . $this->string . '{/textformat}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testIndentcharFirstWithoutMbstring()
-    {
+    public function testIndentcharFirstWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "\n\n########This is foo. This is foo. This\n####is foo. This is foo. This is foo.\n####This is foo.\n\n########This is bar.\n\n########bar foo bar foo foo. bar foo bar\n####foo foo. bar foo bar foo foo. bar\n####foo bar foo foo. bar foo bar foo\n####foo. bar foo bar foo foo. bar foo\n####bar foo foo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4 indent_first=4 indent_char="#"}' . $this->string . '{/textformat}');
@@ -103,15 +91,13 @@ class PluginBlockTextformatTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testWrapchar()
-    {
+    public function testWrapchar() {
         $result = "##    This is foo. This is foo. This is#foo. This is foo. This is foo. This#is foo.##    This is bar.##    bar foo bar foo foo. bar foo bar foo#foo. bar foo bar foo foo. bar foo#bar foo foo. bar foo bar foo foo.#bar foo bar foo foo. bar foo bar foo#foo.##";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4 wrap_char="#"}' . $this->string . '{/textformat}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testWrapcharWithoutMbstring()
-    {
+    public function testWrapcharWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "##    This is foo. This is foo. This is#foo. This is foo. This is foo. This#is foo.##    This is bar.##    bar foo bar foo foo. bar foo bar foo#foo. bar foo bar foo foo. bar foo#bar foo foo. bar foo bar foo foo.#bar foo bar foo foo. bar foo bar foo#foo.##";
         $tpl = $this->smarty->createTemplate('eval:{textformat wrap=40 indent=4 wrap_char="#"}' . $this->string . '{/textformat}');
@@ -119,15 +105,13 @@ class PluginBlockTextformatTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testStyleEmail()
-    {
+    public function testStyleEmail() {
         $result = "\n\nThis is foo. This is foo. This is foo. This is foo. This is foo. This is\nfoo.\n\nThis is bar.\n\nbar foo bar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo\nbar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo bar foo\nfoo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat style="email"}' . $this->string . '{/textformat}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testStyleEmailWithoutMbstring()
-    {
+    public function testStyleEmailWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "\n\nThis is foo. This is foo. This is foo. This is foo. This is foo. This is\nfoo.\n\nThis is bar.\n\nbar foo bar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo\nbar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo bar foo\nfoo.\n\n";
         $tpl = $this->smarty->createTemplate('eval:{textformat style="email"}' . $this->string . '{/textformat}');

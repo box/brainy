@@ -11,8 +11,7 @@
  */
 class RegisteredResourceTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->registerResource("rr", array("rr_get_template",
@@ -21,27 +20,23 @@ class RegisteredResourceTest extends PHPUnit_Framework_TestCase
                 "rr_get_trusted"));
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
      * test resource plugin rendering
      */
-    public function testResourcePlugin()
-    {
+    public function testResourcePlugin() {
         $this->assertEquals('hello world', $this->smarty->fetch('rr:test'));
     }
-    public function testClearCompiledResourcePlugin()
-    {
+    public function testClearCompiledResourcePlugin() {
         $this->assertEquals(1, $this->smarty->clearCompiledTemplate('rr:test'));
     }
     /**
      * test resource plugin timesatmp
      */
-    public function testResourcePluginTimestamp()
-    {
+    public function testResourcePluginTimestamp() {
         $tpl = $this->smarty->createTemplate('rr:test');
         $this->assertTrue(is_integer($tpl->source->timestamp));
         $this->assertEquals(10, strlen($tpl->source->timestamp));
@@ -49,8 +44,7 @@ class RegisteredResourceTest extends PHPUnit_Framework_TestCase
     /**
      * test compile_id change
      */
-    public function testResourceCompileIdChange()
-    {
+    public function testResourceCompileIdChange() {
         $this->smarty->registerResource('myresource', array('getSource','getTimestamp','getSecure','getTrusted'));
         $this->smarty->compile_id = 'a';
         $this->assertEquals('this is template 1', $this->smarty->fetch('myresource:some'));
@@ -65,44 +59,37 @@ class RegisteredResourceTest extends PHPUnit_Framework_TestCase
 /**
  * resource functions
  */
-function rr_get_template ($tpl_name, &$tpl_source, $smarty_obj)
-{
+function rr_get_template ($tpl_name, &$tpl_source, $smarty_obj) {
     // populating $tpl_source
     $tpl_source = '{$x="hello world"}{$x}';
 
     return true;
 }
 
-function rr_get_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj)
-{
+function rr_get_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj) {
     // $tpl_timestamp.
     $tpl_timestamp = (int) floor(time() / 100) * 100;
 
     return true;
 }
 
-function rr_get_secure($tpl_name, $smarty_obj)
-{
+function rr_get_secure($tpl_name, $smarty_obj) {
     // assume all templates are secure
     return true;
 }
 
-function rr_get_trusted($tpl_name, $smarty_obj)
-{
+function rr_get_trusted($tpl_name, $smarty_obj) {
     // not used for templates
 }
 
 // resource functions for compile_id change test
 
-function getSecure($name, $smarty)
-{
+function getSecure($name, $smarty) {
     return true;
 }
-function getTrusted($name, $smarty)
-{
+function getTrusted($name, $smarty) {
 }
-function getSource($name, &$source, $smarty)
-{
+function getSource($name, &$source, $smarty) {
     // we update a counter, so that we return a new source for every call
     static $counter = 0;
     $counter++;
@@ -112,8 +99,7 @@ function getSource($name, &$source, $smarty)
 
     return true;
 }
-function getTimestamp($name, &$timestamp, $smarty)
-{
+function getTimestamp($name, &$timestamp, $smarty) {
     // always pretend the template is brand new
     $timestamp = time();
 

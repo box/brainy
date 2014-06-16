@@ -11,22 +11,19 @@
  */
 class RegisterModifierTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
      * test register->modifier method for function
      */
-    public function testRegisterModifier()
-    {
+    public function testRegisterModifier() {
         $this->smarty->registerPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier', 'mymodifier');
         $this->assertEquals('mymodifier', $this->smarty->registered_plugins[Smarty::PLUGIN_MODIFIER]['testmodifier'][0]);
         $this->smarty->assign('foo', 'foo');
@@ -36,8 +33,7 @@ class RegisterModifierTest extends PHPUnit_Framework_TestCase
     /**
      * test register->modifier method for classes
      */
-    public function testRegisterModifierClass()
-    {
+    public function testRegisterModifierClass() {
         $this->smarty->registerPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier', array('mymodifierclass', 'static_method'));
         $this->smarty->assign('foo', 'foo');
         $this->smarty->assign('bar', 'bar');
@@ -46,8 +42,7 @@ class RegisterModifierTest extends PHPUnit_Framework_TestCase
     /**
      * test register->modifier method for objects
      */
-    public function testRegisterModifierObject()
-    {
+    public function testRegisterModifierObject() {
         $obj = new mymodifierclass;
         $this->smarty->registerPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier', array($obj, 'object_method'));
         $this->smarty->assign('foo', 'foo');
@@ -57,8 +52,7 @@ class RegisterModifierTest extends PHPUnit_Framework_TestCase
     /**
      * test unregister->modifier method
      */
-    public function testUnregisterModifier()
-    {
+    public function testUnregisterModifier() {
         $this->smarty->registerPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier', 'mymodifier');
         $this->smarty->unregisterPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier');
         $this->assertFalse(isset($this->smarty->registered_plugins[Smarty::PLUGIN_MODIFIER]['testmodifier']));
@@ -66,33 +60,28 @@ class RegisterModifierTest extends PHPUnit_Framework_TestCase
     /**
      * test unregister->modifier method not registered
      */
-    public function testUnregisterModifierNotRegistered()
-    {
+    public function testUnregisterModifierNotRegistered() {
         $this->smarty->unregisterPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier');
         $this->assertFalse(isset($this->smarty->registered_plugins[Smarty::PLUGIN_MODIFIER]['testmodifier']));
     }
     /**
      * test unregister->modifier method other registered
      */
-    public function testUnregisterModifierOtherRegistered()
-    {
+    public function testUnregisterModifierOtherRegistered() {
         $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testmodifier', 'mymodifier');
         $this->smarty->unregisterPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier');
         $this->assertTrue(isset($this->smarty->registered_plugins[Smarty::PLUGIN_BLOCK]['testmodifier']));
     }
 }
-function mymodifier($a, $b, $c)
-{
+function mymodifier($a, $b, $c) {
     return "$a function $b $c";
 }
 class mymodifierclass
 {
-    static function static_method($a, $b, $c)
-    {
+    static function static_method($a, $b, $c) {
         return "$a static $b $c";
     }
-    public function object_method($a, $b, $c)
-    {
+    public function object_method($a, $b, $c) {
         return "$a object $b $c";
     }
 }

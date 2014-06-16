@@ -11,26 +11,22 @@
 */
 class PluginModifierTruncateTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testDefault()
-    {
+    public function testDefault() {
         $result = 'Two Sisters Reunite after Eighteen Years at Checkout Counter.';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testDefaultWithoutMbstring()
-    {
+    public function testDefaultWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = 'Two Sisters Reunite after Eighteen Years at Checkout Counter.';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate}');
@@ -38,15 +34,13 @@ class PluginModifierTruncateTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testLength()
-    {
+    public function testLength() {
         $result = 'Two Sisters Reunite after...';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testLengthWithoutMbstring()
-    {
+    public function testLengthWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = 'Two Sisters Reunite after...';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30}');
@@ -54,15 +48,13 @@ class PluginModifierTruncateTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testEtc()
-    {
+    public function testEtc() {
         $result = 'Two Sisters Reunite after';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:""}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testEtcWithoutMbstring()
-    {
+    public function testEtcWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = 'Two Sisters Reunite after';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:""}');
@@ -70,15 +62,13 @@ class PluginModifierTruncateTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testEtc2()
-    {
+    public function testEtc2() {
         $result = 'Two Sisters Reunite after---';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:"---"}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testEtc2WithoutMbstring()
-    {
+    public function testEtc2WithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = 'Two Sisters Reunite after---';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:"---"}');
@@ -86,15 +76,13 @@ class PluginModifierTruncateTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testBreak()
-    {
+    public function testBreak() {
         $result = 'Two Sisters Reunite after Eigh';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:"":true}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testBreakWithoutMbstring()
-    {
+    public function testBreakWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = 'Two Sisters Reunite after Eigh';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:"":true}');
@@ -102,15 +90,13 @@ class PluginModifierTruncateTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testBreak2()
-    {
+    public function testBreak2() {
         $result = 'Two Sisters Reunite after E...';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:"...":true}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testBreak2WithoutMbstring()
-    {
+    public function testBreak2WithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = 'Two Sisters Reunite after E...';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:"...":true}');
@@ -118,15 +104,13 @@ class PluginModifierTruncateTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testMiddle()
-    {
+    public function testMiddle() {
         $result = 'Two Sisters Re..ckout Counter.';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:"..":true:true}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testMiddleWithoutMbstring()
-    {
+    public function testMiddleWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = 'Two Sisters Re..ckout Counter.';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate:30:"..":true:true}');

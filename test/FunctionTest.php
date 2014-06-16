@@ -11,22 +11,19 @@
 */
 class FunctionTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test unknown function error
     */
-    public function testUnknownFunction()
-    {
+    public function testUnknownFunction() {
         $this->smarty->enableSecurity();
         try {
             $this->smarty->fetch('eval:{unknown()}');

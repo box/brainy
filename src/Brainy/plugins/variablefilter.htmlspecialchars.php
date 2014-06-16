@@ -13,7 +13,6 @@
  * @param Smarty_Internal_Template $smarty Smarty object
  * @return string filtered output
  */
-function smarty_variablefilter_htmlspecialchars($source, $smarty)
-{
+function smarty_variablefilter_htmlspecialchars($source, $smarty) {
     return htmlspecialchars($source, ENT_QUOTES, Smarty::$_CHARSET);
 }

@@ -11,22 +11,19 @@
 */
 class CompileStripTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test strip tag
     */
-    public function testStrip()
-    {
+    public function testStrip() {
         $tpl = $this->smarty->createTemplate("eval:{strip}<table>\n </table>{/strip}");
         $this->assertEquals('<table></table>', $this->smarty->fetch($tpl));
     }

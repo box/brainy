@@ -18,8 +18,7 @@
  * @param array $params parameters
  * @return string with compiled code
 */
-function smarty_modifiercompiler_count_words($params, $compiler)
-{
+function smarty_modifiercompiler_count_words($params, $compiler) {
     if (Smarty::$_MBSTRING) {
         // return 'preg_match_all(\'#[\w\pL]+#' . Smarty::$_UTF8_MODIFIER . '\', ' . $params[0] . ', $tmp)';
         // expression taken from http://de.php.net/manual/en/function.str-word-count.php#85592

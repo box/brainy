@@ -156,8 +156,7 @@ class PHP_ParserGenerator
      * @param array
      * @return int
      */
-    public function handleflags($i, $argv)
-    {
+    public function handleflags($i, $argv) {
         if (!isset($argv[1]) || !isset(self::$options[$argv[$i][1]])) {
             throw new Exception('Command line syntax error: undefined option "' .  $argv[$i] . '"');
         }
@@ -182,8 +181,7 @@ class PHP_ParserGenerator
      * @param array
      * @return int
      */
-    public function handleswitch($i, $argv)
-    {
+    public function handleswitch($i, $argv) {
         $lv = 0;
         $dv = 0.0;
         $sv = $end = $cp = '';
@@ -249,8 +247,7 @@ class PHP_ParserGenerator
      * @param array valid options
      * @return int
      */
-    public function OptInit($a)
-    {
+    public function OptInit($a) {
         $errcnt = 0;
         $argv = $a;
         try {
@@ -278,8 +275,7 @@ class PHP_ParserGenerator
      * @param int
      * @return int
      */
-    private function argindex($n, $a)
-    {
+    private function argindex($n, $a) {
         $dashdash = 0;
         if (!is_array($a) || !count($a)) {
             return -1;
@@ -307,8 +303,7 @@ class PHP_ParserGenerator
      * @param  array the value of $argv
      * @return 0|string
      */
-    private function OptArg($i, $a)
-    {
+    private function OptArg($i, $a) {
         if (-1 == ($ind = $this->argindex($i, $a))) {
             return 0;
         }
@@ -319,8 +314,7 @@ class PHP_ParserGenerator
     /**
      * @return int number of arguments
      */
-    public function OptNArgs($a)
-    {
+    public function OptNArgs($a) {
         $cnt = $dashdash = 0;
         if (is_array($a) && count($a)) {
             for ($i = 1; $i < count($a); $i++) {
@@ -340,8 +334,7 @@ class PHP_ParserGenerator
     /**
      * Print out command-line options
      */
-    public function OptPrint()
-    {
+    public function OptPrint() {
         $max = 0;
         foreach (self::$options as $label => $info) {
             $len = strlen($label) + 1;
@@ -398,8 +391,7 @@ class PHP_ParserGenerator
     * Add the macro defined to the azDefine array.
     * @param string
     */
-    private function handle_D_option($z)
-    {
+    private function handle_D_option($z) {
         if ($a = strstr($z, '=')) {
             $z = substr($a, 1); // strip first =
         }
@@ -412,8 +404,7 @@ class PHP_ParserGenerator
 */
 
     /* The main program.  Parse the command line and do it... */
-    public function main()
-    {
+    public function main() {
         $lem = new PHP_ParserGenerator_Data;
 
         $this->OptInit($_SERVER['argv']);
@@ -544,8 +535,7 @@ class PHP_ParserGenerator
         return ($lem->errorcnt + $lem->nconflict);
     }
 
-    public function SetSize($n)
-    {
+    public function SetSize($n) {
         $this->size = $n + 1;
     }
 
@@ -565,8 +555,7 @@ class PHP_ParserGenerator
      *   The "next" pointers for elements in the lists a and b are
      *   changed.
      */
-    public static function merge($a, $b, $cmp, $offset)
-    {
+    public static function merge($a, $b, $cmp, $offset) {
         if ($a === 0) {
             $head = $b;
         } elseif ($b === 0) {
@@ -615,8 +604,7 @@ class PHP_ParserGenerator
     **   The "next" pointers for elements in list are changed.
     */
     #define LISTSIZE 30
-    public static function msort($list, $next, $cmp)
-    {
+    public static function msort($list, $next, $cmp) {
         if ($list === 0) {
             return $list;
         }
@@ -647,8 +635,7 @@ class PHP_ParserGenerator
     /* Find a good place to break "msg" so that its length is at least "min"
     ** but no more than "max".  Make the point as close to max as possible.
     */
-    public static function findbreak($msg, $min, $max)
-    {
+    public static function findbreak($msg, $min, $max) {
         if ($min >= strlen($msg)) {
             return strlen($msg);
         }
@@ -665,8 +652,7 @@ class PHP_ParserGenerator
         return $spot;
     }
 
-    public static function ErrorMsg($filename, $lineno, $format)
-    {
+    public static function ErrorMsg($filename, $lineno, $format) {
         /* Prepare a prefix to be prepended to every output line */
         if ($lineno > 0) {
             $prefix = sprintf("%20s:%d: ", $filename, $lineno);
@@ -709,8 +695,7 @@ class PHP_ParserGenerator
      * Duplicate the input file without comments and without actions
      * on rules
      */
-    public function Reprint()
-    {
+    public function Reprint() {
         printf("// Reprint of input file \"%s\".\n// Symbols:\n", $this->filename);
         $maxlen = 10;
         for ($i = 0; $i < $this->nsymbol; $i++) {

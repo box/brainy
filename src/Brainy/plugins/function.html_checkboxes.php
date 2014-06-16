@@ -42,8 +42,7 @@
  * @return string
  * @uses smarty_function_escape_special_chars()
  */
-function smarty_function_html_checkboxes($params, $template)
-{
+function smarty_function_html_checkboxes($params, $template) {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
     $options = array(
@@ -169,8 +168,7 @@ function smarty_function_html_checkboxes($params, $template)
 
 }
 
-function smarty_function_html_checkboxes_output($name, $value, $output, $selected, $extra, $separator, $labels, $label_ids, $escape=true)
-{
+function smarty_function_html_checkboxes_output($name, $value, $output, $selected, $extra, $separator, $labels, $label_ids, $escape=true) {
     $_output = '';
 
     if (is_object($value)) {

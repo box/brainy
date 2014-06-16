@@ -11,39 +11,34 @@
  */
 class ResourcePluginTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         // reset cache for unit test
         Smarty_Resource::$resources = array();
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
     /**
      * test resource plugin rendering
      */
-    public function testResourcePlugin()
-    {
+    public function testResourcePlugin() {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->assertEquals('hello world', $this->smarty->fetch('db:test'));
     }
     /**
      * test resource plugin rendering
      */
-    public function testResourcePluginObject()
-    {
+    public function testResourcePluginObject() {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->assertEquals('hello world', $this->smarty->fetch('db2:test'));
     }
     /**
      * test resource plugin rendering of a registered object
      */
-    public function testResourcePluginRegisteredInstance()
-    {
+    public function testResourcePluginRegisteredInstance() {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->smarty->loadPlugin('Smarty_Resource_Db2');
         $this->smarty->registerResource( 'db2a', new Smarty_Resource_Db2() );
@@ -52,8 +47,7 @@ class ResourcePluginTest extends PHPUnit_Framework_TestCase
     /**
      * test resource plugin rendering of a recompiling resource
      */
-    public function testResourcePluginRecompiled()
-    {
+    public function testResourcePluginRecompiled() {
         return;
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         try {
@@ -68,8 +62,7 @@ class ResourcePluginTest extends PHPUnit_Framework_TestCase
     /**
      * test resource plugin non-existent compiled cache of a recompiling resource
      */
-    public function testResourcePluginRecompiledCompiledFilepath()
-    {
+    public function testResourcePluginRecompiledCompiledFilepath() {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $tpl = $this->smarty->createTemplate('db2:test.tpl');
         $expected = realpath('test/compiled/'.sha1('db2:test.tpl').'.db2.test.tpl.php');
@@ -79,16 +72,14 @@ class ResourcePluginTest extends PHPUnit_Framework_TestCase
     /**
      * test resource plugin timesatmp
      */
-    public function testResourcePluginTimestamp()
-    {
+    public function testResourcePluginTimestamp() {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $tpl = $this->smarty->createTemplate('db:test');
         $this->assertTrue(is_integer($tpl->source->timestamp));
         $this->assertEquals(10, strlen($tpl->source->timestamp));
     }
 
-    public function testResourcePluginExtendsall()
-    {
+    public function testResourcePluginExtendsall() {
         $this->smarty->addPluginsDir( dirname(__FILE__) . "/plugins/");
         $this->smarty->setTemplateDir( array(
             'root' => 'test/templates',
@@ -101,8 +92,7 @@ class ResourcePluginTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->smarty->fetch('extendsall:extendsall.tpl'));
     }
 
-    public function testResourcePluginExtendsallOne()
-    {
+    public function testResourcePluginExtendsallOne() {
         $this->smarty->addPluginsDir( dirname(__FILE__) . "/plugins/");
         $this->smarty->setTemplateDir( array(
             'root' => 'test/templates',
@@ -115,8 +105,7 @@ class ResourcePluginTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->smarty->fetch('extendsall:extendsall2.tpl'));
     }
 
-    public function testSharing()
-    {
+    public function testSharing() {
         $smarty = new Smarty();
         $smarty->_resource_handlers = array();
         $_smarty = clone $smarty;
@@ -126,8 +115,7 @@ class ResourcePluginTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($smarty->_resource_handlers['eval'] === $_smarty->_resource_handlers['eval']);
     }
 
-    public function testExplicit()
-    {
+    public function testExplicit() {
         $smarty = new Smarty();
         $smarty->_resource_handlers = array();
         $_smarty = clone $smarty;

@@ -11,23 +11,20 @@
 */
 class ClearCacheTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test cache->clear_all method
     */
-    public function testClearCacheAll()
-    {
+    public function testClearCacheAll() {
         $this->smarty->clearAllCache();
         file_put_contents($this->smarty->getCacheDir() . 'dummy.php', 'test');
         $this->assertEquals(1, $this->smarty->clearAllCache());
@@ -35,14 +32,12 @@ class ClearCacheTest extends PHPUnit_Framework_TestCase
     /**
     * test cache->clear_all method not expired
     */
-    public function testClearCacheAllNotExpired()
-    {
+    public function testClearCacheAllNotExpired() {
         file_put_contents($this->smarty->getCacheDir() . 'dummy.php', 'test');
         touch($this->smarty->getCacheDir() . 'dummy.php', time()-1000);
         $this->assertEquals(0, $this->smarty->clearAllCache(2000));
     }
-    public function testSmarty2ClearCacheAllNotExpired()
-    {
+    public function testSmarty2ClearCacheAllNotExpired() {
         file_put_contents($this->smartyBC->getCacheDir() . 'dummy.php', 'test');
         touch($this->smartyBC->getCacheDir() . 'dummy.php', time()-1000);
         $this->smartyBC->clear_all_cache(2000);
@@ -51,14 +46,12 @@ class ClearCacheTest extends PHPUnit_Framework_TestCase
     /**
     * test cache->clear_all method expired
     */
-    public function testClearCacheAllExpired()
-    {
+    public function testClearCacheAllExpired() {
         file_put_contents($this->smarty->getCacheDir() . 'dummy.php', 'test');
         touch($this->smarty->getCacheDir() . 'dummy.php', time()-1000);
         $this->assertEquals(1, $this->smarty->clearAllCache(500));
     }
-    public function testSmarty2ClearCacheAllExpired()
-    {
+    public function testSmarty2ClearCacheAllExpired() {
         file_put_contents($this->smartyBC->getCacheDir() . 'dummy.php', 'test');
         touch($this->smartyBC->getCacheDir() . 'dummy.php', time()-1000);
         $this->smartyBC->clear_all_cache(500);

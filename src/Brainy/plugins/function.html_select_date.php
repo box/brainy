@@ -51,8 +51,7 @@ require_once(SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php');
  * @param Smarty_Internal_Template $template template object
  * @return string
  */
-function smarty_function_html_select_date($params, $template)
-{
+function smarty_function_html_select_date($params, $template) {
     // generate timestamps used for month names only
     static $_month_timestamps = null;
     static $_current_year = null;

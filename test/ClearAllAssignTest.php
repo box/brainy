@@ -16,8 +16,7 @@ class ClearAllAssignTest extends PHPUnit_Framework_TestCase
     protected $_dataBC = null;
     protected $_tplBC = null;
 
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
@@ -35,24 +34,21 @@ class ClearAllAssignTest extends PHPUnit_Framework_TestCase
         $this->_tplBC->assign('blar','blar');
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test all variables accessable
     */
-    public function testAllVariablesAccessable()
-    {
+    public function testAllVariablesAccessable() {
         $this->assertEquals('foobarblar', $this->smarty->fetch($this->_tpl));
     }
 
     /**
     * test clear all assign in template
     */
-    public function testClearAllAssignInTemplate()
-    {
+    public function testClearAllAssignInTemplate() {
          $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->_tpl->clearAllAssign();
         $this->assertEquals('foobar', $this->smarty->fetch($this->_tpl));
@@ -60,8 +56,7 @@ class ClearAllAssignTest extends PHPUnit_Framework_TestCase
     /**
     * test clear all assign in data
     */
-    public function testClearAllAssignInData()
-    {
+    public function testClearAllAssignInData() {
          $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->_data->clearAllAssign();
         $this->assertEquals('fooblar', $this->smarty->fetch($this->_tpl));
@@ -69,14 +64,12 @@ class ClearAllAssignTest extends PHPUnit_Framework_TestCase
     /**
     * test clear all assign in Smarty object
     */
-    public function testClearAllAssignInSmarty()
-    {
+    public function testClearAllAssignInSmarty() {
          $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->smarty->clearAllAssign();
         $this->assertEquals('barblar', $this->smarty->fetch($this->_tpl));
     }
-    public function testSmarty2ClearAllAssignInSmarty()
-    {
+    public function testSmarty2ClearAllAssignInSmarty() {
          $this->smartyBC->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->smartyBC->clear_all_assign();
         $this->assertEquals('barblar', $this->smartyBC->fetch($this->_tplBC));

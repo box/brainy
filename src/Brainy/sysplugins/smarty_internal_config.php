@@ -75,8 +75,7 @@ class Smarty_Internal_Config
      * @param Smarty $smarty          Smarty instance
      * @param object $data            object for config vars storage
      */
-    public function __construct($config_resource, $smarty, $data = null)
-    {
+    public function __construct($config_resource, $smarty, $data = null) {
         $this->data = $data;
         $this->smarty = $smarty;
         $this->config_resource = $config_resource;
@@ -87,8 +86,7 @@ class Smarty_Internal_Config
      *
      * @return string the compiled filepath
      */
-    public function getCompiledFilepath()
-    {
+    public function getCompiledFilepath() {
         return $this->compiled_filepath === null ?
                 ($this->compiled_filepath = $this->buildCompiledFilepath()) :
                 $this->compiled_filepath;
@@ -99,8 +97,7 @@ class Smarty_Internal_Config
      *
      * @return string
      */
-    public function buildCompiledFilepath()
-    {
+    public function buildCompiledFilepath() {
         $_compile_id = isset($this->smarty->compile_id) ? preg_replace('![^\w\|]+!', '_', $this->smarty->compile_id) : null;
         $_flag = (int) $this->smarty->config_read_hidden + (int) $this->smarty->config_booleanize * 2
                 + (int) $this->smarty->config_overwrite * 4;
@@ -126,8 +123,7 @@ class Smarty_Internal_Config
      *
      * @return integer the file timestamp
      */
-    public function getCompiledTimestamp()
-    {
+    public function getCompiledTimestamp() {
         return $this->compiled_timestamp === null
             ? ($this->compiled_timestamp = (file_exists($this->getCompiledFilepath())) ? filemtime($this->getCompiledFilepath()) : false)
             : $this->compiled_timestamp;
@@ -140,8 +136,7 @@ class Smarty_Internal_Config
      *
      * @return boolean true if the file must be compiled
      */
-    public function mustCompile()
-    {
+    public function mustCompile() {
         return $this->mustCompile === null ?
             $this->mustCompile = ($this->smarty->force_compile || $this->getCompiledTimestamp () === false || $this->smarty->compile_check && $this->getCompiledTimestamp () < $this->source->timestamp):
             $this->mustCompile;
@@ -154,8 +149,7 @@ class Smarty_Internal_Config
      *
      * @return string the compiled config file
      */
-    public function getCompiledConfig()
-    {
+    public function getCompiledConfig() {
         if ($this->compiled_config === null) {
             // see if template needs compiling.
             if ($this->mustCompile()) {
@@ -173,8 +167,7 @@ class Smarty_Internal_Config
      *
      * @throws Exception
      */
-    public function compileConfigSource()
-    {
+    public function compileConfigSource() {
         // compile template
         if (!is_object($this->compiler_object)) {
             // load compiler
@@ -207,8 +200,7 @@ class Smarty_Internal_Config
      * @param mixed  $sections array of section names, single section or null
      * @param object $scope    global,parent or local
      */
-    public function loadConfigVars($sections = null, $scope = 'local')
-    {
+    public function loadConfigVars($sections = null, $scope = 'local') {
         if ($this->data instanceof Smarty_Internal_Template) {
             $this->data->properties['file_dependency'][sha1($this->source->filepath)] = array($this->source->filepath, $this->source->timestamp, 'file');
         }
@@ -263,8 +255,7 @@ class Smarty_Internal_Config
      * @param  mixed           $value         value
      * @throws SmartyException if $property_name is not valid
      */
-    public function __set($property_name, $value)
-    {
+    public function __set($property_name, $value) {
         switch ($property_name) {
             case 'source':
             case 'compiled':
@@ -282,8 +273,7 @@ class Smarty_Internal_Config
      * @param  string          $property_name property name
      * @throws SmartyException if $property_name is not valid
      */
-    public function __get($property_name)
-    {
+    public function __get($property_name) {
         switch ($property_name) {
             case 'source':
                 if (empty($this->config_resource)) {

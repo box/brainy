@@ -15,8 +15,7 @@ class CustomResourceAmbiguousTest extends PHPUnit_Framework_TestCase
 {
     public $_resource = null;
 
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
 
@@ -28,13 +27,11 @@ class CustomResourceAmbiguousTest extends PHPUnit_Framework_TestCase
         $this->smarty->_resource_handlers = array();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    protected function relative($path)
-    {
+    protected function relative($path) {
         $path = str_replace( dirname(__FILE__), '.', $path );
         if (DS == "\\") {
             $path = str_replace( "\\", "/", $path );
@@ -43,8 +40,7 @@ class CustomResourceAmbiguousTest extends PHPUnit_Framework_TestCase
         return $path;
     }
 
-    public function testNone()
-    {
+    public function testNone() {
         $resource_handler = new Smarty_Resource_Ambiguous(dirname(__FILE__) . '/templates/ambiguous/');
         $this->smarty->registerResource('ambiguous', $resource_handler);
         $this->smarty->default_resource_type = 'ambiguous';
@@ -54,8 +50,7 @@ class CustomResourceAmbiguousTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($tpl->source->exists);
     }
 
-    public function testCase1()
-    {
+    public function testCase1() {
         $resource_handler = new Smarty_Resource_Ambiguous(dirname(__FILE__) . '/templates/ambiguous/');
         $this->smarty->registerResource('ambiguous', $resource_handler);
         $this->smarty->default_resource_type = 'ambiguous';
@@ -68,8 +63,7 @@ class CustomResourceAmbiguousTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('case1', $tpl->source->content);
     }
 
-    public function testCase2()
-    {
+    public function testCase2() {
         $resource_handler = new Smarty_Resource_Ambiguous(dirname(__FILE__) . '/templates/ambiguous/');
         $this->smarty->registerResource('ambiguous', $resource_handler);
         $this->smarty->default_resource_type = 'ambiguous';
@@ -82,8 +76,7 @@ class CustomResourceAmbiguousTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('case2', $tpl->source->content);
     }
 
-    public function testCaseSwitching()
-    {
+    public function testCaseSwitching() {
         $resource_handler = new Smarty_Resource_Ambiguous(dirname(__FILE__) . '/templates/ambiguous/');
         $this->smarty->registerResource('ambiguous', $resource_handler);
         $this->smarty->default_resource_type = 'ambiguous';
@@ -103,8 +96,7 @@ class CustomResourceAmbiguousTest extends PHPUnit_Framework_TestCase
     /**
     * final cleanup
     */
-    public function testFinalCleanup()
-    {
+    public function testFinalCleanup() {
         $this->smarty->clearCompiledTemplate();
         $this->smarty->clearAllCache();
         $this->smarty->allow_ambiguous_resources = false;

@@ -11,109 +11,90 @@
 */
 class CompileForTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test {for $x=0;$x<10;$x++} tag
     */
-    public function testFor1()
-    {
+    public function testFor1() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=0;$x<10;$x++}{$x}{/for}');
         $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
     }
-    public function testFor2()
-    {
+    public function testFor2() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=0; $x<10; $x++}{$x}{forelse}else{/for}');
         $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
     }
-    public function testFor3()
-    {
+    public function testFor3() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=10;$x<10;$x++}{$x}{forelse}else{/for}');
         $this->assertEquals("else", $this->smarty->fetch($tpl));
     }
-    public function testFor4()
-    {
+    public function testFor4() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=9;$x>=0;$x--}{$x}{forelse}else{/for}');
         $this->assertEquals("9876543210", $this->smarty->fetch($tpl));
     }
-    public function testFor5()
-    {
+    public function testFor5() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=-1;$x>=0;$x--}{$x}{forelse}else{/for}');
         $this->assertEquals("else", $this->smarty->fetch($tpl));
     }
-    public function testFor6()
-    {
+    public function testFor6() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=0,$y=10;$x<$y;$x++}{$x}{forelse}else{/for}');
         $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
     }
-    public function testFor7()
-    {
+    public function testFor7() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=0;$x<10;$x=$x+2}{$x}{/for}');
         $this->assertEquals("02468", $this->smarty->fetch($tpl));
     }
-    public function testFor8()
-    {
+    public function testFor8() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=0 to 8}{$x}{/for}');
         $this->assertEquals("012345678", $this->smarty->fetch($tpl));
     }
-    public function testFor9()
-    {
+    public function testFor9() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=0 to 8 step=2}{$x}{/for}');
         $this->assertEquals("02468", $this->smarty->fetch($tpl));
     }
-    public function testFor10()
-    {
+    public function testFor10() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=0 to 8 step=2}{if $x@first}{$x} {$x@total}{/if}{/for}');
         $this->assertEquals("0 5", $this->smarty->fetch($tpl));
     }
-    public function testFor11()
-    {
+    public function testFor11() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=0 to 8 step=2}{if $x@last}{$x} {$x@iteration}{/if}{/for}');
         $this->assertEquals("8 5", $this->smarty->fetch($tpl));
     }
-    public function testFor12()
-    {
+    public function testFor12() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=8 to 0 step=-2}{$x}{/for}');
         $this->assertEquals("86420", $this->smarty->fetch($tpl));
     }
-    public function testFor13()
-    {
+    public function testFor13() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=8 to 0 step=2}{$x}{forelse}step error{/for}');
         $this->assertEquals("step error", $this->smarty->fetch($tpl));
     }
-    public function testFor14()
-    {
+    public function testFor14() {
         $tpl = $this->smarty->createTemplate('eval:{for $x=8 to 0 step -1 max=3}{$x}{/for}');
         $this->assertEquals("876", $this->smarty->fetch($tpl));
     }
     /*
     *  test for
     */
-    public function testForNocacheVar1()
-    {
+    public function testForNocacheVar1() {
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 5}{$x} {/for}');
         $tpl->assign('foo',1,true);
         $this->assertEquals("1 2 3 4 5 ", $this->smarty->fetch($tpl));
     }
-    public function testForNocacheVar2()
-    {
+    public function testForNocacheVar2() {
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 5}{$x} {/for}');
         $tpl->assign('foo',4,true);
         $this->assertEquals("4 5 ", $this->smarty->fetch($tpl));
     }
-    public function testForCache1()
-    {
+    public function testForCache1() {
         $this->smarty->caching = true;
         $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 2}{$x} {/for}');
         $tpl->assign('foo',1);

@@ -11,22 +11,19 @@
 */
 class GetterSetterTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test setter on Smarty object
     */
-    public function testSmartySetter()
-    {
+    public function testSmartySetter() {
         $this->smarty->setLeftDelimiter('<{');
         $this->smarty->setRightDelimiter('}>');
         $this->assertEquals('<{', $this->smarty->left_delimiter);
@@ -35,8 +32,7 @@ class GetterSetterTest extends PHPUnit_Framework_TestCase
     /**
     * test getter on Smarty object
     */
-    public function testSmartyGetter()
-    {
+    public function testSmartyGetter() {
         $this->smarty->setLeftDelimiter('<{');
         $this->smarty->setRightDelimiter('}>');
         $this->assertEquals('<{', $this->smarty->getLeftDelimiter());
@@ -45,8 +41,7 @@ class GetterSetterTest extends PHPUnit_Framework_TestCase
     /**
     * test setter on Template object
     */
-    public function testTemplateSetter()
-    {
+    public function testTemplateSetter() {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $tpl->setLeftDelimiter('<{');
         $tpl->setRightDelimiter('}>');
@@ -58,8 +53,7 @@ class GetterSetterTest extends PHPUnit_Framework_TestCase
     /**
     * test getter on Template object
     */
-    public function testTemplateGetter()
-    {
+    public function testTemplateGetter() {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $tpl->setLeftDelimiter('<{');
         $tpl->setRightDelimiter('}>');

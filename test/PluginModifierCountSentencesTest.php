@@ -11,19 +11,16 @@
 */
 class PluginModifierCountSentencesTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testDefault()
-    {
+    public function testDefault() {
         $tpl = $this->smarty->createTemplate('eval:{"hello world."|count_sentences}');
         $this->assertEquals("1", $this->smarty->fetch($tpl));
         $tpl = $this->smarty->createTemplate('eval:{"hello world. I\'m another? Sentence!"|count_sentences}');
@@ -32,8 +29,7 @@ class PluginModifierCountSentencesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("0", $this->smarty->fetch($tpl));
     }
 
-    public function testDefaultWithoutMbstring()
-    {
+    public function testDefaultWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $tpl = $this->smarty->createTemplate('eval:{"hello world."|count_sentences}');
         $this->assertEquals("1", $this->smarty->fetch($tpl));
@@ -44,8 +40,7 @@ class PluginModifierCountSentencesTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testUmlauts()
-    {
+    public function testUmlauts() {
         $tpl = $this->smarty->createTemplate('eval:{"hello worldä."|count_sentences}');
         $this->assertEquals("1", $this->smarty->fetch($tpl));
         $tpl = $this->smarty->createTemplate('eval:{"hello worldü. ä\'m another? Sentence!"|count_sentences}');

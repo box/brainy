@@ -11,22 +11,19 @@
 */
 class DelimiterTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test <{ }> delimiter
     */
-    public function testDelimiter1()
-    {
+    public function testDelimiter1() {
         $this->smarty->left_delimiter = '<{';
         $this->smarty->right_delimiter = '}>';
         $tpl = $this->smarty->createTemplate('eval:<{* comment *}><{if true}><{"hello world"}><{/if}>');
@@ -35,8 +32,7 @@ class DelimiterTest extends PHPUnit_Framework_TestCase
     /**
     * test <-{ }-> delimiter
     */
-    public function testDelimiter2()
-    {
+    public function testDelimiter2() {
         $this->smarty->left_delimiter = '<-{';
         $this->smarty->right_delimiter = '}->';
         $tpl = $this->smarty->createTemplate('eval:<-{* comment *}-><-{if true}-><-{"hello world"}-><-{/if}->');
@@ -45,8 +41,7 @@ class DelimiterTest extends PHPUnit_Framework_TestCase
     /**
     * test <--{ }--> delimiter
     */
-    public function testDelimiter3()
-    {
+    public function testDelimiter3() {
         $this->smarty->left_delimiter = '<--{';
         $this->smarty->right_delimiter = '}-->';
         $tpl = $this->smarty->createTemplate('eval:<--{* comment *}--><--{if true}--><--{"hello world"}--><--{/if}-->');
@@ -55,8 +50,7 @@ class DelimiterTest extends PHPUnit_Framework_TestCase
     /**
     * test {{ }} delimiter
     */
-    public function testDelimiter4()
-    {
+    public function testDelimiter4() {
         $this->smarty->left_delimiter = '{{';
         $this->smarty->right_delimiter = '}}';
         $tpl = $this->smarty->createTemplate('eval:{{* comment *}}{{if true}}{{"hello world"}}{{/if}}');
@@ -65,8 +59,7 @@ class DelimiterTest extends PHPUnit_Framework_TestCase
     /**
     * test {= =} delimiter for conficts with option flags
     */
-    public function testDelimiter5()
-    {
+    public function testDelimiter5() {
         $this->smarty->left_delimiter = '{=';
         $this->smarty->right_delimiter = '=}';
         $tpl = $this->smarty->createTemplate('eval:{=assign var=foo value="hello world"=}{=$foo=}');

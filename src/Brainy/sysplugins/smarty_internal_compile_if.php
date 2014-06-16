@@ -25,8 +25,7 @@ class Smarty_Internal_Compile_If extends Smarty_Internal_CompileBase
     * @param array  $parameter  array with compilation parameter
     * @return string compiled code
     */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         $this->openTag($compiler, 'if', array(1));
@@ -68,8 +67,7 @@ class Smarty_Internal_Compile_Else extends Smarty_Internal_CompileBase
     * @param array  $parameter  array with compilation parameter
     * @return string compiled code
     */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         list($nesting) = $this->closeTag($compiler, array('if', 'elseif'));
         $this->openTag($compiler, 'else', array($nesting));
 
@@ -94,8 +92,7 @@ class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase
     * @param array  $parameter  array with compilation parameter
     * @return string compiled code
     */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
@@ -172,8 +169,7 @@ class Smarty_Internal_Compile_Ifclose extends Smarty_Internal_CompileBase
     * @param array  $parameter  array with compilation parameter
     * @return string compiled code
     */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         list($nesting) = $this->closeTag($compiler, array('if', 'else', 'elseif'));
         $tmp = '';
         for ($i = 0; $i < $nesting; $i++) {

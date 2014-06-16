@@ -11,22 +11,19 @@
 */
 class CompilerPluginTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test compiler plugin
     */
-    public function testCompilerPlugin()
-    {
+    public function testCompilerPlugin() {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->assertEquals('test output', $this->smarty->fetch('eval:{test data="test output"}{/test}'));
     }

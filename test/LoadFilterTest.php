@@ -11,22 +11,19 @@
 */
 class LoadFilterTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test loadFilter method
     */
-    public function testLoadFilter()
-    {
+    public function testLoadFilter() {
         $this->smarty->loadFilter('output', 'trimwhitespace');
         $this->assertTrue(is_callable($this->smarty->registered_filters['output']['smarty_outputfilter_trimwhitespace']));
     }

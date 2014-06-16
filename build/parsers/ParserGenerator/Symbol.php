@@ -205,8 +205,7 @@ class PHP_ParserGenerator_Symbol
      * @param string
      * @return PHP_ParserGenerator_Symbol
      */
-    public static function Symbol_new($x)
-    {
+    public static function Symbol_new($x) {
         if (isset(self::$symbol_table[$x])) {
             return self::$symbol_table[$x];
         }
@@ -230,18 +229,15 @@ class PHP_ParserGenerator_Symbol
      * Return the number of unique symbols
      * @return int
      */
-    public static function Symbol_count()
-    {
+    public static function Symbol_count() {
         return count(self::$symbol_table);
     }
 
-    public static function Symbol_arrayof()
-    {
+    public static function Symbol_arrayof() {
         return array_values(self::$symbol_table);
     }
 
-    public static function Symbol_find($x)
-    {
+    public static function Symbol_find($x) {
         if (isset(self::$symbol_table[$x])) {
             return self::$symbol_table[$x];
         }
@@ -262,8 +258,7 @@ class PHP_ParserGenerator_Symbol
      * @param PHP_ParserGenerator_Symbol
      * @param PHP_ParserGenerator_Symbol
      */
-    public static function sortSymbols($a, $b)
-    {
+    public static function sortSymbols($a, $b) {
         $i1 = $a->index + 10000000*(ord($a->name[0]) > ord('Z'));
         $i2 = $b->index + 10000000*(ord($b->name[0]) > ord('Z'));
 
@@ -273,8 +268,7 @@ class PHP_ParserGenerator_Symbol
     /**
      * Return true if two symbols are the same.
      */
-    public static function same_symbol(PHP_ParserGenerator_Symbol $a, PHP_ParserGenerator_Symbol $b)
-    {
+    public static function same_symbol(PHP_ParserGenerator_Symbol $a, PHP_ParserGenerator_Symbol $b) {
         if ($a === $b) return 1;
         if ($a->type != self::MULTITERMINAL) return 0;
         if ($b->type != self::MULTITERMINAL) return 0;

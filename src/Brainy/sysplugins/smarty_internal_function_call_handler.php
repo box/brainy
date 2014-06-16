@@ -23,8 +23,7 @@ class Smarty_Internal_Function_Call_Handler
      * @param Smarty_Internal_Template $_template template object
      * @param array                    $_params   Smarty variables passed as call parameter
      */
-    public static function call($_name, Smarty_Internal_Template $_template, $_params)
-    {
+    public static function call($_name, Smarty_Internal_Template $_template, $_params) {
         $_function = "smarty_template_function_{$_name}";
         if (!is_callable($_function)) {
             $_code = "function {$_function}(\$_smarty_tpl,\$params) {

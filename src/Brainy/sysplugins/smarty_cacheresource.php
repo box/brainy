@@ -70,8 +70,7 @@ abstract class Smarty_CacheResource
     * @param Smarty_Internal_Template $_template template object
     * @param string $content content of cache
     */
-    public function getCachedContent(Smarty_Internal_Template $_template)
-    {
+    public function getCachedContent(Smarty_Internal_Template $_template) {
         if ($_template->cached->handler->process($_template)) {
             ob_start();
             $_template->properties['unifunc']($_template);
@@ -103,8 +102,7 @@ abstract class Smarty_CacheResource
     */
     abstract public function clear(Smarty $smarty, $resource_name, $cache_id, $compile_id, $exp_time);
 
-    public function locked(Smarty $smarty, Smarty_Template_Cached $cached)
-    {
+    public function locked(Smarty $smarty, Smarty_Template_Cached $cached) {
         // theoretically locking_timeout should be checked against time_limit (max_execution_time)
         $start = microtime(true);
         $hadLock = null;
@@ -120,20 +118,17 @@ abstract class Smarty_CacheResource
         return $hadLock;
     }
 
-    public function hasLock(Smarty $smarty, Smarty_Template_Cached $cached)
-    {
+    public function hasLock(Smarty $smarty, Smarty_Template_Cached $cached) {
         // check if lock exists
         return false;
     }
 
-    public function acquireLock(Smarty $smarty, Smarty_Template_Cached $cached)
-    {
+    public function acquireLock(Smarty $smarty, Smarty_Template_Cached $cached) {
         // create lock
         return true;
     }
 
-    public function releaseLock(Smarty $smarty, Smarty_Template_Cached $cached)
-    {
+    public function releaseLock(Smarty $smarty, Smarty_Template_Cached $cached) {
         // release lock
         return true;
     }
@@ -145,8 +140,7 @@ abstract class Smarty_CacheResource
     * @param string $type name of the cache resource
     * @return Smarty_CacheResource Cache Resource Handler
     */
-    public static function load(Smarty $smarty, $type = null)
-    {
+    public static function load(Smarty $smarty, $type = null) {
         if (!isset($type)) {
             $type = $smarty->caching_type;
         }
@@ -188,8 +182,7 @@ abstract class Smarty_CacheResource
     *
     * @param Smarty $smarty Smarty object
     */
-    public static function invalidLoadedCache(Smarty $smarty)
-    {
+    public static function invalidLoadedCache(Smarty $smarty) {
         foreach ($smarty->template_objects as $tpl) {
             if (isset($tpl->cached)) {
                 $tpl->cached->valid = false;
@@ -287,8 +280,7 @@ class Smarty_Template_Cached
     *
     * @param Smarty_Internal_Template $_template template object
     */
-    public function __construct(Smarty_Internal_Template $_template)
-    {
+    public function __construct(Smarty_Internal_Template $_template) {
         $this->compile_id = $_template->compile_id;
         $this->cache_id = $_template->cache_id;
         $this->source = $_template->source;
@@ -368,8 +360,7 @@ class Smarty_Template_Cached
     * @param string $content content to cache
     * @return boolean success
     */
-    public function write(Smarty_Internal_Template $_template, $content)
-    {
+    public function write(Smarty_Internal_Template $_template, $content) {
         if (!$_template->source->recompiled) {
             if ($this->handler->writeCachedContent($_template, $content)) {
                 $this->content = null;

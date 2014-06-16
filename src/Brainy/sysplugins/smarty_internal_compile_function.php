@@ -47,8 +47,7 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase
      * @param  array   $parameter array with compilation parameter
      * @return boolean true
      */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
@@ -101,8 +100,7 @@ class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase
      * @param  array   $parameter array with compilation parameter
      * @return boolean true
      */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         $_attr = $this->getAttributes($compiler, $args);
         $saved_data = $this->closeTag($compiler, array('function'));
         $_name = trim($saved_data[0]['name'], "'\"");

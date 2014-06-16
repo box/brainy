@@ -32,8 +32,7 @@
  * @return string content re-formatted
  * @author Monte Ohrt <monte at ohrt dot com>
  */
-function smarty_block_textformat($params, $content, $template, &$repeat)
-{
+function smarty_block_textformat($params, $content, $template, &$repeat) {
     if (is_null($content)) {
         return;
     }

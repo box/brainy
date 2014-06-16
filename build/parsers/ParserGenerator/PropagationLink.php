@@ -80,8 +80,7 @@ class PHP_ParserGenerator_PropagationLink
      * @param PHP_ParserGenerator_PropagationLink|null
      * @param PHP_ParserGenerator_Config
      */
-    public static function Plink_add(&$plpp, PHP_ParserGenerator_Config $cfp)
-    {
+    public static function Plink_add(&$plpp, PHP_ParserGenerator_Config $cfp) {
         $new = new PHP_ParserGenerator_PropagationLink;
         $new->next = $plpp;
         $plpp = $new;
@@ -92,8 +91,7 @@ class PHP_ParserGenerator_PropagationLink
      * Transfer every propagation link on the list "from" to the list "to"
      */
     public static function Plink_copy(PHP_ParserGenerator_PropagationLink &$to,
-                               PHP_ParserGenerator_PropagationLink $from)
-    {
+                               PHP_ParserGenerator_PropagationLink $from) {
         while ($from) {
             $nextpl = $from->next;
             $from->next = $to;
@@ -106,8 +104,7 @@ class PHP_ParserGenerator_PropagationLink
      * Delete every propagation link on the list
      * @param PHP_ParserGenerator_PropagationLink|0
      */
-    public static function Plink_delete($plp)
-    {
+    public static function Plink_delete($plp) {
         while ($plp) {
             $nextpl = $plp->next;
             $plp->next = 0;

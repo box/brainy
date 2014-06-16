@@ -36,8 +36,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      *
      * @param object $template
      */
-    public static function ignore($template)
-    {
+    public static function ignore($template) {
         // calculate Uid if not already done
         if ($template->source->uid == '') {
             $template->source->filepath;
@@ -50,8 +49,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      *
      * @param object $template
      */
-    public static function start_compile($template)
-    {
+    public static function start_compile($template) {
         static $_is_stringy = array('string' => true, 'eval' => true);
         if (!empty($template->compiler->trace_uid)) {
             $key = $template->compiler->trace_uid;
@@ -79,8 +77,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      *
      * @param object $template
      */
-    public static function end_compile($template)
-    {
+    public static function end_compile($template) {
         if (!empty($template->compiler->trace_uid)) {
             $key = $template->compiler->trace_uid;
         } else {
@@ -98,8 +95,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      *
      * @param object $template
      */
-    public static function start_render($template)
-    {
+    public static function start_render($template) {
         $key = self::get_key($template);
         self::$template_data[$key]['start_time'] = microtime(true);
     }
@@ -109,8 +105,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      *
      * @param object $template
      */
-    public static function end_render($template)
-    {
+    public static function end_render($template) {
         $key = self::get_key($template);
         self::$template_data[$key]['render_time'] += microtime(true) - self::$template_data[$key]['start_time'];
     }
@@ -120,8 +115,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      *
      * @param object $template cached template
      */
-    public static function start_cache($template)
-    {
+    public static function start_cache($template) {
         $key = self::get_key($template);
         self::$template_data[$key]['start_time'] = microtime(true);
     }
@@ -131,8 +125,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      *
      * @param object $template cached template
      */
-    public static function end_cache($template)
-    {
+    public static function end_cache($template) {
         $key = self::get_key($template);
         self::$template_data[$key]['cache_time'] += microtime(true) - self::$template_data[$key]['start_time'];
     }
@@ -142,8 +135,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      *
      * @param Smarty_Internal_Template|Smarty $obj object to debug
      */
-    public static function display_debug($obj)
-    {
+    public static function display_debug($obj) {
         // prepare information of assigned variables
         $ptr = self::get_debug_vars($obj);
         if ($obj instanceof Smarty) {
@@ -189,8 +181,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      * @param  Smarty_Internal_Template|Smarty_Data $obj object to debug
      * @return StdClass
      */
-    public static function get_debug_vars($obj)
-    {
+    public static function get_debug_vars($obj) {
         $config_vars = $obj->config_vars;
         $tpl_vars = array();
         foreach ($obj->tpl_vars as $key => $var) {
@@ -227,8 +218,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
      * @param  object $template template object
      * @return string key into $template_data
      */
-    private static function get_key($template)
-    {
+    private static function get_key($template) {
         static $_is_stringy = array('string' => true, 'eval' => true);
         // calculate Uid if not already done
         if ($template->source->uid == '') {

@@ -47,8 +47,7 @@
  * @param Smarty_Internal_Template $template template object
  * @return string
  */
-function smarty_function_html_table($params, $template)
-{
+function smarty_function_html_table($params, $template) {
     $options = array(
         'table_attr' => 'border="1"',
         'tr_attr' => '',
@@ -123,7 +122,7 @@ function smarty_function_html_table($params, $template)
         }
     }
 
-    $output = "<table $options['table_attr']>\n";
+    $output = "<table {$options['table_attr']}>\n";
 
     if (!empty($options['caption'])) {
         $output .= '<caption>' . $options['caption'] . "</caption>\n";
@@ -167,8 +166,7 @@ function smarty_function_html_table($params, $template)
     return $output;
 }
 
-function smarty_function_html_table_cycle($name, $var, $no)
-{
+function smarty_function_html_table_cycle($name, $var, $no) {
     if (!is_array($var)) {
         $ret = $var;
     } else {

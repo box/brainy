@@ -11,22 +11,19 @@
 */
 class SingleQuotedStringTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test single quotes out of context
     */
-    public function testSingleQuotesOutsideString()
-    {
+    public function testSingleQuotesOutsideString() {
         $tpl = $this->smarty->createTemplate('eval:This isn\'t part of a string');
         $this->assertEquals('This isn\'t part of a string', $this->smarty->fetch($tpl));
     }
@@ -34,48 +31,42 @@ class SingleQuotedStringTest extends PHPUnit_Framework_TestCase
     /**
     * test simple single quoted string
     */
-    public function testSimpleSingleQuotedString()
-    {
+    public function testSimpleSingleQuotedString() {
         $tpl = $this->smarty->createTemplate('eval:{$foo=\'Hello World\'}{$foo}');
         $this->assertEquals('Hello World', $this->smarty->fetch($tpl));
     }
     /**
     * test that tags not interpreted in single quoted strings
     */
-    public function testTagsInSingleQuotedString()
-    {
+    public function testTagsInSingleQuotedString() {
         $tpl = $this->smarty->createTemplate('eval:{$foo=\'Hello {1+2} World\'}{$foo}');
         $this->assertEquals('Hello {1+2} World', $this->smarty->fetch($tpl));
     }
     /**
     * test that vars not interpreted in single quoted strings
     */
-    public function testVarsInSingleQuotedString()
-    {
+    public function testVarsInSingleQuotedString() {
         $tpl = $this->smarty->createTemplate('eval:{$foo=\'Hello $bar World\'}{$foo}');
         $this->assertEquals('Hello $bar World', $this->smarty->fetch($tpl));
     }
     /**
     * test double quotes in single quoted strings
     */
-    public function testDoubleQuotesInSingleQuotedString()
-    {
+    public function testDoubleQuotesInSingleQuotedString() {
         $tpl = $this->smarty->createTemplate('eval:{$foo=\'Hello "World"\'}{$foo}');
         $this->assertEquals('Hello "World"', $this->smarty->fetch($tpl));
     }
     /**
     * test escaped single quotes in single quoted strings
     */
-    public function testEscapedSingleQuotesInSingleQuotedString()
-    {
+    public function testEscapedSingleQuotesInSingleQuotedString() {
         $tpl = $this->smarty->createTemplate('eval:{$foo=\'Hello \\\'World\'}{$foo}');
         $this->assertEquals("Hello 'World", $this->smarty->fetch($tpl));
     }
     /**
     * test empty single quoted strings
     */
-    public function testEmptySingleQuotedString()
-    {
+    public function testEmptySingleQuotedString() {
         $tpl = $this->smarty->createTemplate('eval:{$foo=\'\'}{$foo}');
         $this->assertEquals("", $this->smarty->fetch($tpl));
     }

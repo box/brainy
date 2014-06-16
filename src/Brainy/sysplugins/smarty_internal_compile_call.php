@@ -47,8 +47,7 @@ class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase
      * @param  array  $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler)
-    {
+    public function compile($args, $compiler) {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         // save possible attributes

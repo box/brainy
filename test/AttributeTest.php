@@ -11,22 +11,19 @@
 */
 class AttributeTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test required attribute
     */
-    public function testRequiredAttributeVar()
-    {
+    public function testRequiredAttributeVar() {
         try {
             $this->smarty->fetch('string:{assign value=1}');
         } catch (Exception $e) {
@@ -39,8 +36,7 @@ class AttributeTest extends PHPUnit_Framework_TestCase
     /**
     * test unexspected attribute
     */
-    public function testUnexpectedAttribute()
-    {
+    public function testUnexpectedAttribute() {
         try {
             $this->smarty->fetch('string:{assign var=foo value=1 bar=2}');
         } catch (Exception $e) {
@@ -53,8 +49,7 @@ class AttributeTest extends PHPUnit_Framework_TestCase
     /**
     * test illegal option value
     */
-    public function testIllegalOptionValue()
-    {
+    public function testIllegalOptionValue() {
         try {
             $this->smarty->fetch('string:{include "test" caching=foo}');
         } catch (Exception $e) {
@@ -67,8 +62,7 @@ class AttributeTest extends PHPUnit_Framework_TestCase
     /**
     * test too many shorthands
     */
-    public function testTooManyShorthands()
-    {
+    public function testTooManyShorthands() {
         try {
             $this->smarty->fetch('string:{assign foo 1 2}');
         } catch (Exception $e) {

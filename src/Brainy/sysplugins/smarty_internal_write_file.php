@@ -23,8 +23,7 @@ class Smarty_Internal_Write_File
      * @param  Smarty  $smarty    smarty instance
      * @return boolean true
      */
-    public static function writeFile($_filepath, $_contents, Smarty $smarty)
-    {
+    public static function writeFile($_filepath, $_contents, Smarty $smarty) {
         $_error_reporting = error_reporting();
         error_reporting($_error_reporting & ~E_NOTICE & ~E_WARNING);
         if ($smarty->_file_perms !== null) {

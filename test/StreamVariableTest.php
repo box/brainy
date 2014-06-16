@@ -11,8 +11,7 @@
 */
 class StreamVariableTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         stream_wrapper_register("var", "VariableStream")
@@ -22,33 +21,28 @@ class StreamVariableTest extends PHPUnit_Framework_TestCase
         fclose($fp);
     }
 
-    public function tearDown()
-    {
+    public function tearDown() {
         stream_wrapper_unregister("var");
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test stream variable
     */
-    public function testStreamVariable1()
-    {
+    public function testStreamVariable1() {
         $tpl = $this->smarty->createTemplate('eval:{$var:foo}', null, null, $this->smarty);
         $this->assertEquals('hello world', $this->smarty->fetch($tpl));
     }
 /*
-    public function testStreamVariable2()
-    {
+    public function testStreamVariable2() {
         $tpl = $this->smarty->createTemplate('eval:{var:\'foo\'}', null, null, $this->smarty);
         $this->assertEquals('hello world', $this->smarty->fetch($tpl));
     }
 
-    public function testStreamVariable3()
-    {
+    public function testStreamVariable3() {
         $tpl = $this->smarty->createTemplate('eval:{var:"foo"}', null, null, $this->smarty);
         $this->assertEquals('hello world', $this->smarty->fetch($tpl));
     }
@@ -66,24 +60,21 @@ class VariableStream
 {
     private $position;
     private $varname;
-    public function stream_open($path, $mode, $options, &$opened_path)
-    {
+    public function stream_open($path, $mode, $options, &$opened_path) {
         $url = parse_url($path);
         $this->varname = $url["host"];
         $this->position = 0;
 
         return true;
     }
-    public function stream_read($count)
-    {
+    public function stream_read($count) {
         $p = &$this->position;
         $ret = substr($GLOBALS[$this->varname], $p, $count);
         $p += strlen($ret);
 
         return $ret;
     }
-    public function stream_write($data)
-    {
+    public function stream_write($data) {
         $v = &$GLOBALS[$this->varname];
         $l = strlen($data);
         $p = &$this->position;
@@ -91,16 +82,13 @@ class VariableStream
 
         return $l;
     }
-    public function stream_tell()
-    {
+    public function stream_tell() {
         return $this->position;
     }
-    public function stream_eof()
-    {
+    public function stream_eof() {
         return $this->position >= strlen($GLOBALS[$this->varname]);
     }
-    public function stream_seek($offset, $whence)
-    {
+    public function stream_seek($offset, $whence) {
         $l = strlen($GLOBALS[$this->varname]);
         $p = &$this->position;
         switch ($whence) {

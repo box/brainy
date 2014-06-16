@@ -48,8 +48,7 @@
  * @param Smarty_Internal_Template $template template object
  * @return string
  */
-function smarty_function_mailto($params, $template)
-{
+function smarty_function_mailto($params, $template) {
     static $_allowed_encoding = array('javascript' => true, 'javascript_charcode' => true, 'hex' => true, 'none' => true);
     $extra = '';
 

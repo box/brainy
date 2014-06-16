@@ -11,23 +11,20 @@
 */
 class CompileIncludeTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test standard output
     */
-    public function testIncludeStandard()
-    {
+    public function testIncludeStandard() {
         $tpl = $this->smarty->createTemplate('eval:{include file="helloworld.tpl"}');
         $content = $this->smarty->fetch($tpl);
         $this->assertEquals("hello world", $content);
@@ -35,32 +32,28 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     /**
     * Test that assign attribute does not create standard output
     */
-    public function testIncludeAssign1()
-    {
+    public function testIncludeAssign1() {
         $tpl = $this->smarty->createTemplate('eval:{include file="helloworld.tpl" assign=foo}');
         $this->assertEquals("", $this->smarty->fetch($tpl));
     }
     /**
     * Test that assign attribute does load variable
     */
-    public function testIncludeAssign2()
-    {
+    public function testIncludeAssign2() {
         $tpl = $this->smarty->createTemplate('eval:{assign var=foo value=bar}{include file="helloworld.tpl" assign=foo}{$foo}');
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
     /**
     * Test passing local vars
     */
-    public function testIncludePassVars()
-    {
+    public function testIncludePassVars() {
         $tpl = $this->smarty->createTemplate("eval:{include file='eval:{\$myvar1}{\$myvar2}' myvar1=1 myvar2=2}");
         $this->assertEquals("12", $this->smarty->fetch($tpl));
     }
     /**
     * Test local scope
     */
-    public function testIncludeLocalScope()
-    {
+    public function testIncludeLocalScope() {
         $this->smarty->assign('foo',1);
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\'} after include {$foo}', null, null, $this->smarty);
         $content = $this->smarty->fetch($tpl);
@@ -71,8 +64,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     /**
     * Test  parent scope
     */
-    public function testIncludeParentScope()
-    {
+    public function testIncludeParentScope() {
         $this->smarty->assign('foo',1);
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\' scope = parent} after include {$foo}', null, null, $this->smarty);
         $content = $this->smarty->fetch($tpl);
@@ -85,8 +77,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     /**
     * Test  root scope
     */
-    public function testIncludeRootScope()
-    {
+    public function testIncludeRootScope() {
          $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->smarty->assign('foo',1);
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\' scope = root} after include {$foo}');
@@ -100,8 +91,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     /**
     * Test  root scope
     */
-    public function testIncludeRootScope2()
-    {
+    public function testIncludeRootScope2() {
         $this->smarty->assign('foo',1);
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\' scope = root} after include {$foo}', null, null, $this->smarty);
         $content = $this->smarty->fetch($tpl);
@@ -114,15 +104,13 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     /**
     * Test  recursive includes
     */
-    public function testRecursiveIncludes1()
-    {
+    public function testRecursiveIncludes1() {
         $this->smarty->assign('foo',1);
         $this->smarty->assign('bar','bar');
         $content = $this->smarty->fetch('test_recursive_includes.tpl');
         $this->assertContains("before 1 bar<br>\nbefore 2 bar<br>\nbefore 3 bar<br>\n\nafter 3 bar<br>\n\nafter 2 bar<br>\n\nafter 1 bar<br>", $content);
     }
-    public function testRecursiveIncludes2()
-    {
+    public function testRecursiveIncludes2() {
         $this->smarty->assign('foo',1);
         $this->smarty->assign('bar','bar');
         $content = $this->smarty->fetch('test_recursive_includes2.tpl');

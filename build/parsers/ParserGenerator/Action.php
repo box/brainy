@@ -116,8 +116,7 @@ class PHP_ParserGenerator_Action
      * This is used by {@link Action_sort()} to compare actions
      */
     public static function actioncmp(PHP_ParserGenerator_Action $ap1,
-                              PHP_ParserGenerator_Action $ap2)
-    {
+                              PHP_ParserGenerator_Action $ap2) {
         $rc = $ap1->sp->index - $ap2->sp->index;
         if ($rc === 0) {
             $rc = $ap1->type - $ap2->type;
@@ -154,8 +153,7 @@ class PHP_ParserGenerator_Action
         return $rc;
     }
 
-    public function display($processed = false)
-    {
+    public function display($processed = false) {
         $map = array(
             self::ACCEPT => 'ACCEPT',
             self::CONFLICT => 'CONFLICT',
@@ -181,8 +179,7 @@ class PHP_ParserGenerator_Action
      * @param PHP_ParserGenerator_Symbol
      * @param PHP_ParserGenerator_State|PHP_ParserGenerator_Rule
      */
-    public static function Action_add(&$app, $type, PHP_ParserGenerator_Symbol $sp, $arg)
-    {
+    public static function Action_add(&$app, $type, PHP_ParserGenerator_Symbol $sp, $arg) {
         $new = new PHP_ParserGenerator_Action;
         $new->next = $app;
         $app = $new;
@@ -197,8 +194,7 @@ class PHP_ParserGenerator_Action
      * Sort parser actions
      * @see PHP_ParserGenerator_Data::FindActions()
      */
-    public static function Action_sort(PHP_ParserGenerator_Action $ap)
-    {
+    public static function Action_sort(PHP_ParserGenerator_Action $ap) {
         $ap = PHP_ParserGenerator::msort($ap, 'next', array('PHP_ParserGenerator_Action', 'actioncmp'));
 
         return $ap;
@@ -209,8 +205,7 @@ class PHP_ParserGenerator_Action
      * nothing was actually printed.
      * @see PHP_ParserGenerator_Data::ReportOutput()
      */
-    public function PrintAction($fp, $indent)
-    {
+    public function PrintAction($fp, $indent) {
         if (!$fp) {
             $fp = STDOUT;
         }

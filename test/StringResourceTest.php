@@ -11,21 +11,18 @@
 */
 class StringResourceTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smarty->clearAllCache();
         $this->smarty->clearCompiledTemplate();
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    protected function relative($path)
-    {
+    protected function relative($path) {
         $path = str_replace( dirname(__FILE__), '.', $path );
         if (DS == "\\") {
             $path = str_replace( "\\", "/", $path );
@@ -37,120 +34,104 @@ class StringResourceTest extends PHPUnit_Framework_TestCase
     /**
     * test template string exits
     */
-    public function testTemplateStringExists1()
-    {
+    public function testTemplateStringExists1() {
         $tpl = $this->smarty->createTemplate('string:{$foo}');
         $this->assertTrue($tpl->source->exists);
     }
-    public function testTemplateStringExists2()
-    {
+    public function testTemplateStringExists2() {
         $this->assertTrue($this->smarty->templateExists('string:{$foo}'));
     }
     /**
     * test getTemplateFilepath
     */
-    public function testGetTemplateFilepath()
-    {
+    public function testGetTemplateFilepath() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertEquals('2aae6c35c94fcfb415dbe95f408b9ce91ee846ed', $tpl->source->filepath);
     }
     /**
     * test getTemplateTimestamp
     */
-    public function testGetTemplateTimestamp()
-    {
+    public function testGetTemplateTimestamp() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertEquals(0,$tpl->source->timestamp);
     }
     /**
     * test getTemplateSource
     */
-    public function testGetTemplateSource()
-    {
+    public function testGetTemplateSource() {
         $tpl = $this->smarty->createTemplate('string:hello world{$foo}');
         $this->assertEquals('hello world{$foo}', $tpl->source->content);
     }
     /**
     * test usesCompiler
     */
-    public function testUsesCompiler()
-    {
+    public function testUsesCompiler() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertFalse($tpl->source->uncompiled);
     }
     /**
     * test isEvaluated
     */
-    public function testIsEvaluated()
-    {
+    public function testIsEvaluated() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertFalse($tpl->source->recompiled);
     }
     /**
     * test mustCompile
     */
-    public function testMustCompile()
-    {
+    public function testMustCompile() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertTrue($tpl->mustCompile());
     }
     /**
     * test getCompiledFilepath
     */
-    public function testGetCompiledFilepath()
-    {
+    public function testGetCompiledFilepath() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertEquals('./compiled/2aae6c35c94fcfb415dbe95f408b9ce91ee846ed.string.php', $this->relative($tpl->compiled->filepath));
     }
     /**
     * test getCompiledTimestamp
     */
-    public function testGetCompiledTimestamp()
-    {
+    public function testGetCompiledTimestamp() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertFalse($tpl->compiled->timestamp);
     }
     /**
     * test getCachedTimestamp
     */
-    public function testGetCachedTimestamp()
-    {
+    public function testGetCachedTimestamp() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertFalse($tpl->cached->timestamp);
     }
     /**
     * test writeCachedContent
     */
-    public function testWriteCachedContent()
-    {
+    public function testWriteCachedContent() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertFalse($tpl->writeCachedContent('dummy'));
     }
     /**
     * test isCached
     */
-    public function testIsCached()
-    {
+    public function testIsCached() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertFalse($tpl->isCached());
     }
     /**
     * test getRenderedTemplate
     */
-    public function testGetRenderedTemplate()
-    {
+    public function testGetRenderedTemplate() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertEquals('hello world', $tpl->fetch());
     }
 
-    public function testUrlencodeTemplate()
-    {
+    public function testUrlencodeTemplate() {
         $tpl = $this->smarty->createTemplate('string:urlencode:%7B%22foobar%22%7Cescape%7D');
         $this->assertEquals('foobar', $tpl->fetch());
     }
 
-    public function testBase64Template()
-    {
+    public function testBase64Template() {
         $tpl = $this->smarty->createTemplate('string:base64:eyJmb29iYXIifGVzY2FwZX0=');
         $this->assertEquals('foobar', $tpl->fetch());
     }

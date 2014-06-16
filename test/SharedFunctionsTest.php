@@ -11,22 +11,19 @@
 */
 class SharedFunctionsTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test smarty_function_escape_special_chars()
     */
-    public function testEscapeSpecialChars()
-    {
+    public function testEscapeSpecialChars() {
         require_once SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php';
 
         $this->assertEquals('hello&lt;world &copy;', smarty_function_escape_special_chars('hello<world &copy;'));

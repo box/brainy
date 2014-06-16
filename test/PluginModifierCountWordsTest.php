@@ -11,26 +11,22 @@
 */
 class PluginModifierCountWordsTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testDefault()
-    {
+    public function testDefault() {
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Dealers Will Hear Car Talk at Noon."|count_words}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testDefaultWithoutMbstring()
-    {
+    public function testDefaultWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Dealers Will Hear Car Talk at Noon."|count_words}');
@@ -38,15 +34,13 @@ class PluginModifierCountWordsTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testDashes()
-    {
+    public function testDashes() {
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Smalltime-Dealers Will Hear Car Talk at Noon."|count_words}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testDashesWithoutMbstring()
-    {
+    public function testDashesWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Smalltime-Dealers Will Hear Car Talk at Noon."|count_words}');
@@ -54,15 +48,13 @@ class PluginModifierCountWordsTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testUmlauts()
-    {
+    public function testUmlauts() {
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Dealers Will Hear Cär Talk at Nöön."|count_words}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testUmlautsWithoutMbstring()
-    {
+    public function testUmlautsWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Dealers Will Hear Cär Talk at Nöön."|count_words}');

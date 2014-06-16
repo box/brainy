@@ -34,8 +34,7 @@ class Smarty_Internal_Compile_Private_Registered_Function extends Smarty_Interna
      * @param  string $tag       name of function
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter, $tag)
-    {
+    public function compile($args, $compiler, $parameter, $tag) {
         // This tag does create output
         $compiler->has_output = true;
         // check and get attributes

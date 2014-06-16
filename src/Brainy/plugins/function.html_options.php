@@ -33,8 +33,7 @@
  * @return string
  * @uses smarty_function_escape_special_chars()
  */
-function smarty_function_html_options($params, $template)
-{
+function smarty_function_html_options($params, $template) {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
     $options = array(
@@ -149,8 +148,7 @@ function smarty_function_html_options($params, $template)
     return $_html_result;
 }
 
-function smarty_function_html_options_optoutput($key, $value, $selected, $id, $class, &$idx)
-{
+function smarty_function_html_options_optoutput($key, $value, $selected, $id, $class, &$idx) {
     if (!is_array($value)) {
         $_key = smarty_function_escape_special_chars($key);
         $_html_result = '<option value="' . $_key . '"';
@@ -185,8 +183,7 @@ function smarty_function_html_options_optoutput($key, $value, $selected, $id, $c
     return $_html_result;
 }
 
-function smarty_function_html_options_optgroup($key, $values, $selected, $id, $class, &$idx)
-{
+function smarty_function_html_options_optgroup($key, $values, $selected, $id, $class, &$idx) {
     $optgroup_html = '<optgroup label="' . smarty_function_escape_special_chars($key) . '">' . "\n";
     foreach ($values as $key => $value) {
         $optgroup_html .= smarty_function_html_options_optoutput($key, $value, $selected, $id, $class, $idx);

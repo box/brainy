@@ -17,8 +17,7 @@ if (!function_exists('smarty_mb_str_replace')) {
      * @return string replaced string
      * @author Rodney Rehm
      */
-    function smarty_mb_str_replace($search, $replace, $subject, &$count=0)
-    {
+    function smarty_mb_str_replace($search, $replace, $subject, &$count=0) {
         if (!is_array($search) && is_array($replace)) {
             return false;
         }

@@ -43,8 +43,7 @@
  * @return string|null
  */
 
-function smarty_function_cycle($params, $template)
-{
+function smarty_function_cycle($params, $template) {
     static $cycle_vars;
 
     $name = (empty($params['name'])) ? 'default' : $params['name'];

@@ -185,8 +185,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param  Smarty_Internal_Template $template template object to compile
      * @return bool             true if compiling succeeded, false if it failed
      */
-    public function compileTemplate(Smarty_Internal_Template $template)
-    {
+    public function compileTemplate(Smarty_Internal_Template $template) {
         // save template object in compiler class
         $this->template = $template;
         $save_source = $this->template->source;
@@ -280,8 +279,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param  array  $parameter array with compilation parameter
      * @return string compiled   code
      */
-    public function compileTag($tag, $args, $parameter = array())
-    {
+    public function compileTag($tag, $args, $parameter = array()) {
         // $args contains the attributes parsed and compiled by the lexer/parser
         // assume that tag does compile into code, but creates no HTML output
         $this->has_code = true;
@@ -500,8 +498,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param  mixed $param3 optional parameter
      * @return string compiled code
      */
-    public function callTagCompiler($tag, $args, $param1 = null, $param2 = null, $param3 = null)
-    {
+    public function callTagCompiler($tag, $args, $param1 = null, $param2 = null, $param3 = null) {
         // re-use object if already exists
         if (isset(self::$_tag_objects[$tag])) {
             // compile this tag
@@ -531,8 +528,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param  string $plugin_type type of plugin
      * @return string call name of function
      */
-    public function getPlugin($plugin_name, $plugin_type)
-    {
+    public function getPlugin($plugin_name, $plugin_type) {
         $function = null;
         if (isset($this->template->required_plugins['compiled'][$plugin_name][$plugin_type])) {
             $function = $this->template->required_plugins['compiled'][$plugin_name][$plugin_type]['function'];
@@ -575,8 +571,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param  string $plugin_type type of plugin
      * @return boolean true if found
      */
-    public function getPluginFromDefaultHandler($tag, $plugin_type)
-    {
+    public function getPluginFromDefaultHandler($tag, $plugin_type) {
         $callback = null;
         $script = null;
         $cacheable = true;
@@ -619,8 +614,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param  boolean $is_code true if content is compiled code
      * @return string  content
      */
-    public function processNocacheCode($content, $is_code)
-    {
+    public function processNocacheCode($content, $is_code) {
         $_output = $content;
         $this->modifier_plugins = array();
         $this->suppressNocacheProcessing = false;
@@ -637,8 +631,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param string $debug false debug end_compile shall not be called
      * @param int $line line offset to source
      */
-    public function pushTrace($file, $uid, $line, $debug = true)
-    {
+    public function pushTrace($file, $uid, $line, $debug = true) {
         if ($this->smarty->debugging && $debug) {
             Smarty_Internal_Debug::end_compile($this->template);
         }
@@ -655,8 +648,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      *  restore file and line offset
      *
      */
-    public function popTrace()
-    {
+    public function popTrace() {
         if ($this->smarty->debugging) {
             Smarty_Internal_Debug::end_compile($this->template);
         }
@@ -682,8 +674,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param  string $line line-number
      * @throws SmartyCompilerException when an unexpected token is found
      */
-    public function trigger_template_error($args = null, $line = null)
-    {
+    public function trigger_template_error($args = null, $line = null) {
         // get template source line which has error
         if (!isset($line)) {
             $line = $this->lex->line;

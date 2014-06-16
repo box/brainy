@@ -125,8 +125,7 @@ class PHP_ParserGenerator_ActionTable
      * @param int
      * @param int
      */
-    public function acttab_action($lookahead, $action)
-    {
+    public function acttab_action($lookahead, $action) {
         if ($this->nLookahead === 0) {
             $this->aLookahead = array();
             $this->mxLookahead = $lookahead;
@@ -158,8 +157,7 @@ class PHP_ParserGenerator_ActionTable
      * in generation of $yy_ofst tables (reduce and shift)
      * @throws Exception
      */
-    public function acttab_insert()
-    {
+    public function acttab_insert() {
         if ($this->nLookahead <= 0) {
             throw new Exception('nLookahead is not set up?');
         }

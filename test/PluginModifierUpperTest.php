@@ -11,26 +11,22 @@
 */
 class PluginModifierUpperTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
-    public function testDefault()
-    {
+    public function testDefault() {
         $result = "IF STRIKE ISN'T SETTLED QUICKLY IT MAY LAST A WHILE.";
         $tpl = $this->smarty->createTemplate('eval:{"If Strike isn\'t Settled Quickly it may Last a While."|upper}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testDefaultWithoutMbstring()
-    {
+    public function testDefaultWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "IF STRIKE ISN'T SETTLED QUICKLY IT MAY LAST A WHILE.";
         $tpl = $this->smarty->createTemplate('eval:{"If Strike isn\'t Settled Quickly it may Last a While."|upper}');
@@ -38,15 +34,13 @@ class PluginModifierUpperTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = true;
     }
 
-    public function testUmlauts()
-    {
+    public function testUmlauts() {
         $result = "IF STRIKE ISN'T SÄTTLED ÜQUICKLY IT MAY LAST A WHILE.";
         $tpl = $this->smarty->createTemplate('eval:{"If Strike isn\'t Sättled ÜQuickly it may Last a While."|upper}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testUmlautsWithoutMbstring()
-    {
+    public function testUmlautsWithoutMbstring() {
         Smarty::$_MBSTRING = false;
         $result = "IF STRIKE ISN'T SÄTTLED ÜQUICKLY IT MAY LAST A WHILE.";
         $tpl = $this->smarty->createTemplate('eval:{"If Strike isn\'t Sättled ÜQuickly it may Last a While."|upper}');

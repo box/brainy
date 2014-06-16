@@ -72,8 +72,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
      * @param object $compiler compiler object
      * @return boolean true
      */
-    public function compile($args, $compiler)
-    {
+    public function compile($args, $compiler) {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         $_name = trim($_attr['name'], "\"'");
@@ -121,8 +120,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
      * @param string $_name     optional name of child block
      * @return string   compiled code of child block
      */
-    static function compileChildBlock($compiler, $_name = null)
-    {
+    static function compileChildBlock($compiler, $_name = null) {
         if ($compiler->inheritance_child) {
             $name1 = Smarty_Internal_Compile_Block::$nested_block_names[0];
             if (isset($compiler->template->block_data[$name1])) {
@@ -200,8 +198,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
      * @param string $_name     optional name of child block
      * @return string   compiled code of schild block
      */
-    static function compileParentBlock($compiler, $_name = null)
-    {
+    static function compileParentBlock($compiler, $_name = null) {
         // if called by {$smarty.block.parent} we must search the name of enclosing {block}
         if ($_name == null) {
             $stack_count = count($compiler->_tag_stack);
@@ -230,8 +227,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
      * @param string $source    source text
      * @return ''
      */
-    static function blockSource($compiler, $source)
-    {
+    static function blockSource($compiler, $source) {
         Smarty_Internal_Compile_Block::$block_data[Smarty_Internal_Compile_Block::$nested_block_names[0]]['source'] .= $source;
     }
 
@@ -253,8 +249,7 @@ class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase
      * @param object $compiler compiler object
      * @return string compiled code
      */
-    public function compile($args, $compiler)
-    {
+    public function compile($args, $compiler) {
         $compiler->has_code = true;
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
@@ -355,8 +350,7 @@ class Smarty_Internal_Compile_Private_Child_Block extends Smarty_Internal_Compil
      * @param object $compiler compiler object
      * @return boolean true
      */
-    public function compile($args, $compiler)
-    {
+    public function compile($args, $compiler) {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
@@ -400,8 +394,7 @@ class Smarty_Internal_Compile_Private_Child_Blockclose extends Smarty_Internal_C
      * @param object $compiler compiler object
      * @return boolean true
      */
-    public function compile($args, $compiler)
-    {
+    public function compile($args, $compiler) {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 

@@ -11,22 +11,19 @@
 */
 class CompileWhileTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test {while 'condition'} tag
     */
-    public function testWhileCondition()
-    {
+    public function testWhileCondition() {
         $tpl = $this->smarty->createTemplate('eval:{$x=0}{while $x<10}{$x}{$x=$x+1}{/while}');
         $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
     }
@@ -34,8 +31,7 @@ class CompileWhileTest extends PHPUnit_Framework_TestCase
     /**
     * test {while 'statement'} tag
     */
-    public function testWhileStatement()
-    {
+    public function testWhileStatement() {
         $tpl = $this->smarty->createTemplate('eval:{$y=5}{while $y=$y-1}{$y}{/while}');
         $this->assertEquals("4321", $this->smarty->fetch($tpl));
     }

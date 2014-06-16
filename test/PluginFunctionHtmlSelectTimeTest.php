@@ -11,16 +11,14 @@
 */
 class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
 
         $this->now = mktime( 16, 15, 11, 2, 20, 2011 );
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
@@ -672,8 +670,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
 <option value="pm" selected="selected">PM</option>',
     );
 
-    public function testDefault()
-    {
+    public function testDefault() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n. $this->hours['default'] .$n.'</select>'
             .$n.'<select name="Time_Minute">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -682,8 +679,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testPrefix()
-    {
+    public function testPrefix() {
         $n = "\n";
         $result = '<select name="foobar_Hour">'.$n. $this->hours['default'] .$n.'</select>'
             .$n.'<select name="foobar_Minute">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -692,8 +688,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testFieldArray()
-    {
+    public function testFieldArray() {
         $n = "\n";
         $result = '<select name="namorized[Time_Hour]">'.$n. $this->hours['default'] .$n.'</select>'
             .$n.'<select name="namorized[Time_Minute]">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -708,8 +703,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testExtra()
-    {
+    public function testExtra() {
         $n = "\n";
         $result = '<select name="Time_Hour" data-foo="xy">'.$n. $this->hours['default'] .$n.'</select>'
             .$n.'<select name="Time_Minute" data-foo="xy">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -730,8 +724,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testFieldSeparator()
-    {
+    public function testFieldSeparator() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n. $this->hours['default'] .$n.'</select>'
             .' - <select name="Time_Minute">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -740,8 +733,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testEmpty()
-    {
+    public function testEmpty() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n.'<option value=""></option>'.$n. $this->hours['default'] .$n.'</select>'
             .$n.'<select name="Time_Minute">'.$n.'<option value=""></option>'.$n. $this->minutes['default'] .$n.'</select>'
@@ -768,8 +760,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testEmptyUnset()
-    {
+    public function testEmptyUnset() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n.'<option value=""></option>'.$n. $this->hours['none'] .$n.'</select>'
             .$n.'<select name="Time_Minute">'.$n.'<option value=""></option>'.$n. $this->minutes['none'] .$n.'</select>'
@@ -796,8 +787,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testId()
-    {
+    public function testId() {
         $n = "\n";
         $result = '<select name="Time_Hour" id="Time_Hour">'.$n. $this->hours['default'] .$n.'</select>'
             .$n.'<select name="Time_Minute" id="Time_Minute">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -818,8 +808,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testDisplay()
-    {
+    public function testDisplay() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n. $this->hours['default'] .$n.'</select>';
         $tpl = $this->smarty->createTemplate('eval:{html_select_time time='. $this->now .' display_minutes=false display_seconds=false}');
@@ -834,8 +823,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testMeridian()
-    {
+    public function testMeridian() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n. $this->hours['12h'] .$n.'</select>'
             .$n.'<select name="Time_Minute">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -936,8 +924,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testMinuteInterval()
-    {
+    public function testMinuteInterval() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n. $this->hours['default'] .$n.'</select>'
             .$n.'<select name="Time_Minute">'.$n. $this->minutes['30'] .$n.'</select>'
@@ -964,8 +951,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testSecondInterval()
-    {
+    public function testSecondInterval() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n. $this->hours['default'] .$n.'</select>'
             .$n.'<select name="Time_Minute">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -992,8 +978,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testFormat()
-    {
+    public function testFormat() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n. $this->hours['format_%03d'] .$n.'</select>'
             .$n.'<select name="Time_Minute">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -1014,8 +999,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testValueFormat()
-    {
+    public function testValueFormat() {
         $n = "\n";
         $result = '<select name="Time_Hour">'.$n. $this->hours['format_value_%03d'] .$n.'</select>'
             .$n.'<select name="Time_Minute">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -1036,8 +1020,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testTimeArray()
-    {
+    public function testTimeArray() {
         $n = "\n";
         $result = '<select name="namorized[foobar_Hour]">'.$n. $this->hours['default'] .$n.'</select>'
             .$n.'<select name="namorized[foobar_Minute]">'.$n. $this->minutes['default'] .$n.'</select>'
@@ -1060,8 +1043,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testTimeArrayMerdidian()
-    {
+    public function testTimeArrayMerdidian() {
         $n = "\n";
         $result = '<select name="namorized[foobar_Hour]">'.$n. $this->hours['12h'] .$n.'</select>'
             .$n.'<select name="namorized[foobar_Minute]">'.$n. $this->minutes['default'] .$n.'</select>'

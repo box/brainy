@@ -18,8 +18,7 @@
  * @param array $params parameters
  * @return string with compiled code
  */
-function smarty_modifiercompiler_wordwrap($params, $compiler)
-{
+function smarty_modifiercompiler_wordwrap($params, $compiler) {
     if (!isset($params[1])) {
         $params[1] = 80;
     }

@@ -11,22 +11,19 @@
 */
 class CompileErrorTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
+    public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    static function isRunnable()
-    {
+    static function isRunnable() {
         return true;
     }
 
     /**
     * test none existing template file error
     */
-    public function testNoneExistingTemplateError()
-    {
+    public function testNoneExistingTemplateError() {
         try {
             $this->smarty->fetch('eval:{include file=\'no.tpl\'}');
         } catch (Exception $e) {
@@ -39,8 +36,7 @@ class CompileErrorTest extends PHPUnit_Framework_TestCase
     /**
     * test unkown tag error
     */
-    public function testUnknownTagError()
-    {
+    public function testUnknownTagError() {
         try {
             $this->smarty->fetch('eval:{unknown}');
         } catch (Exception $e) {
@@ -53,8 +49,7 @@ class CompileErrorTest extends PHPUnit_Framework_TestCase
     /**
     * test unclosed tag error
     */
-    public function testUnclosedTagError()
-    {
+    public function testUnclosedTagError() {
         try {
             $this->smarty->fetch('eval:{if true}');
         } catch (Exception $e) {
@@ -67,8 +62,7 @@ class CompileErrorTest extends PHPUnit_Framework_TestCase
     /**
     * test syntax error
     */
-    public function testSyntaxError()
-    {
+    public function testSyntaxError() {
         try {
             $this->smarty->fetch('eval:{assign var=}');
         } catch (Exception $e) {
@@ -82,8 +76,7 @@ class CompileErrorTest extends PHPUnit_Framework_TestCase
     /**
     * test empty templates
     */
-    public function testEmptyTemplate()
-    {
+    public function testEmptyTemplate() {
         $tpl = $this->smarty->createTemplate('eval:');
         $this->assertEquals('', $this->smarty->fetch($tpl));
     }
