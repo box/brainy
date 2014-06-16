@@ -1,5 +1,15 @@
 <?php
 /**
+ * Brainy Internal Plugin Templateparser
+ *
+ * This is the template parser.
+ * It is generated from the smarty_internal_templateparser.y file
+ * @package Brainy
+ * @subpackage Compiler
+ * @author Uwe Tews
+ * @author Matt Basta
+ */
+/**
 * Smarty Internal Plugin Templateparser
 *
 * This is the template parser.

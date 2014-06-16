@@ -12,13 +12,14 @@ smarty_internal_configfileparser.php: smarty_internal_configfileparser.y
 
 
 templateparser: smarty_internal_templatelexer.php smarty_internal_templateparser.php
+	cp smarty_internal_templatelexer.php ../../src/Brainy/sysplugins/smarty_internal_templatelexer.php
+	cp smarty_internal_templateparser.php ../../src/Brainy/sysplugins/smarty_internal_templateparser.php
 
 smarty_internal_templatelexer.php: smarty_internal_templatelexer.plex
 	php Create_Template_Parser.php
 
 smarty_internal_templateparser.php: smarty_internal_templateparser.y
 	php Create_Template_Parser.php
-
 
 clean:
 	rm smarty_internal_*er.out
