@@ -42,7 +42,6 @@ abstract class Smarty_Resource
         'extends' => true,
         'stream' => true,
         'eval' => true,
-        'php' => true
     );
 
     /**

@@ -1,0 +1,15 @@
+<phpunit
+    convertErrorsToExceptions="false"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    colors="true"
+    verbose="true"
+    bootstrap="test/bootstrap.php">
+
+    <testsuites>
+        <testsuite name="Aws">
+            <directory>test/</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>

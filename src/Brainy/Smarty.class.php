@@ -29,8 +29,6 @@
  * @package Brainy
  */
 
-namespace
-
 
 /**
  * define shorthand directory separator constant
@@ -650,7 +648,7 @@ class Smarty extends Smarty_Internal_TemplateBase
         $this->start_time = microtime(true);
         // set default dirs
         $this->setTemplateDir('.' . DS . 'templates' . DS)
-            ->setCompileDir('.' . DS . 'templates_c' . DS)
+            ->setCompileDir('.' . DS . 'compiled' . DS)
             ->setPluginsDir(SMARTY_PLUGINS_DIR)
             ->setCacheDir('.' . DS . 'cache' . DS)
             ->setConfigDir('.' . DS . 'configs' . DS);
