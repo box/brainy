@@ -33,13 +33,6 @@
         $this->compiler->has_variable_string = false;
         $this->compiler->prefix_code = array();
         $this->block_nesting_level = 0;
-        if ($this->security = isset($this->smarty->security_policy)) {
-            $this->php_handling = $this->smarty->security_policy->php_handling;
-        } else {
-            $this->php_handling = $this->smarty->php_handling;
-        }
-        $this->is_xml = false;
-        $this->asp_tags = (ini_get('asp_tags') != '0');
         $this->current_buffer = $this->root_buffer = new _smarty_template_buffer($this);
     }
 

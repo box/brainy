@@ -1,8 +1,7 @@
 <?php
 /**
- * Project:     Smarty: the PHP compiling template engine
+ * Project:     Brainy
  * File:        Smarty.class.php
- * SVN:         $Id: Smarty.class.php 4836 2014-04-19 11:42:11Z Uwe.Tews@googlemail.com $
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,15 +17,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * For questions, help, comments, discussion, etc., please join the
- * Smarty mailing list. Send a blank e-mail to
- * smarty-discussion-subscribe@googlegroups.com
+ * More information is available on the Brainy GitHub page.
  *
  * @link http://www.smarty.net/
  * @copyright 2008 New Digital Group, Inc.
+ * @copyright 2014 Box, Inc.
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Uwe Tews
  * @author Rodney Rehm
+ * @author Matt Basta
  * @package Smarty
  * @version 3.1-DEV
  */
@@ -343,6 +342,14 @@ class Smarty extends Smarty_Internal_TemplateBase
      * @var string
      */
     public $compile_id = null;
+    /**
+     * Indicates whether to perform only safe variable and member lookups.
+     * If set to true, lookups referring to missing variables or members will
+     * return a falsey value.
+     *
+     * @var bool
+     */
+    public $safe_lookups = false;
     /**
      * template left-delimiter
      * @var string

@@ -50,7 +50,6 @@ class SmartyTests
         $smarty->security_policy = null;
         $smarty->left_delimiter = '{';
         $smarty->right_delimiter = '}';
-        $smarty->php_handling = Smarty::PHP_PASSTHRU;
         $smarty->enableSecurity();
         $smarty->error_reporting = null;
         $smarty->error_unassigned = true;
