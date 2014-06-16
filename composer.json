@@ -23,13 +23,13 @@
         }
     ],
     "require": {
-        "php": ">=5.4"
+        "php": ">=5.3"
     },
     "autoload": {
         "classmap": [
-            "distribution/libs/Smarty.class.php",
-            "distribution/libs/SmartyBC.class.php",
-            "distribution/libs/sysplugins/smarty_security.php"
+            "src/Brainy/Smarty.class.php",
+            "src/Brainy/SmartyBC.class.php",
+            "src/Brainy/sysplugins/smarty_security.php"
         ]
     }
 }

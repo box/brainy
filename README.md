@@ -16,9 +16,13 @@ templating language. It is a fork from the Smarty 3 trunk.
 ## Minimum Requirements
 
 - PHP 5.3 or higher
+- HHVM 3.1.x or higher
 
 Unlike Smarty 3, PHP 5.2.x is not a supported platform. Use Brainy with old
 versions of PHP at your own risk.
+
+Note that HHVM support is currently experimental, though most common behaviors
+work as expected.
 
 
 ## Differences from Smarty

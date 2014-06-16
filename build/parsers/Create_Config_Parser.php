@@ -21,5 +21,5 @@ $contents = '<?php
 * @author Uwe Tews
 * @author Matt Basta
 */
-'.substr($contents,6);
+' . substr($contents, 6);
 file_put_contents('smarty_internal_configfileparser.php', $contents);

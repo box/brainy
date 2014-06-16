@@ -3,8 +3,13 @@ all: parsers test
 parsers:
 	cd build/parsers; make all
 
-test:
-	cd development; make unit-test
+test: clean
+	rm -rf PHPunit/templates_c/*.php
+	cd PHPunit; ./_phpunit-tests.sh
 
-test-hhvm:
-	cd development; make unit-test-hhvm
+test-hhvm: clean
+	rm -rf PHPunit/templates_c/*.php
+	cd PHPunit; ./_phpunit-tests-hhvm.sh
+
+clean:
+	rm -rf test/templates_c/*.php
