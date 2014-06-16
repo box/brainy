@@ -1,5 +1,7 @@
-all:
-	cd development; make
+all: parsers test
+
+parsers:
+	cd build/parsers; make all
 
 test:
 	cd development; make unit-test
