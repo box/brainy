@@ -75,3 +75,67 @@ empty string. In Smarty 3, the behavior is to throw an undefined index error.
   to compile asynchronously.
 - **Phase 3**: Allow templates to be compiled to [Hack](http://hacklang.org/)
   and add full async support.
+
+
+### Planned Releases
+
+#### 1.0.1
+
+- No failing tests under HHVM
+- Proper PHPDoc for API
+
+#### 1.0.2
+
+- All formatting issues resolved; linting rules expanded
+- All variable variables removed
+
+#### 1.0.3
+
+- Performance optimizations
+
+#### 1.1.0
+
+- `eval()` no longer used at all
+- At least 80% code coverage
+
+#### 1.1.1
+
+- Performance optimizations
+
+#### 1.2.0
+
+- At least 90% code coverage
+- 100% code coverage for included plugins
+- Full [augmented types](https://github.com/box/augmented_types) coverage
+
+
+### Requested Contributions
+
+If you're interested in helping out, the following tasks are available:
+
+- Convert all non-public methods to use camel case.
+- Add proper type annotations to all functions.
+- Remove magic and bad practices.
+  - Variable variables
+  - `__call`, `__get`, etc.
+  - Eliminate dead code
+  - `@` error suppression
+  - etc.
+- Remove workarounds for unsupported versions of PHP.
+
+At the time of writing, the project has approximately 68% line coverage.
+
+
+## Support
+
+Need to contact us directly? Email oss@box.com and be sure to include the name
+of this project in the subject.
+
+
+## Copyright and License
+
+Copyright 2014 Box, Inc. All rights reserved.
+Copyright 2002 – 2014 New Digital Group, Inc.
+
+This library is licensed under the GNU Lesser Public License. A copy of the
+license should have [been provided](COPYING.md).

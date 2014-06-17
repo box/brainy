@@ -7,7 +7,7 @@ test: clean
 	phpunit
 
 test-hhvm: clean
-	cat `which phpunit` | grep '/usr/bin/env php' | sed 's/ php / hhvm --php /' | sed 's/\\$\*//' | /usr/bin/env sh
+	./phpunit-hhvm
 
 lint:
 	# find src -name "*.php" -exec php -l {} \; | grep "^(?!No syntax errors)"

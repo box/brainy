@@ -23,14 +23,22 @@ class PluginModifierUnescapeTest extends PHPUnit_Framework_TestCase
     public function testHtml() {
         $encoded = "a&#228;&#1047;&#1076;&#1088;&#1072;&gt;&lt;&amp;amp;&auml;&#228;&#1074;&#1089;&#1089;&#1090;&#1074;&#1091;&#1081;&#1090;&#1077;";
         $result = "a&#228;&#1047;&#1076;&#1088;&#1072;><&amp;&auml;&#228;&#1074;&#1089;&#1089;&#1090;&#1074;&#1091;&#1081;&#1090;&#1077;";
+        if (htmlspecialchars_decode($encoded, ENT_QUOTES) != $result) {
+            $this->markTestSkipped('https://github.com/facebook/hhvm/issues/2966');
+            return;
+        }
         $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|unescape:"html"}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
     public function testHtmlWithoutMbstring() {
-        Smarty::$_MBSTRING = false;
         $encoded = "a&#228;&#1047;&#1076;&#1088;&#1072;&gt;&lt;&amp;amp;&auml;&#228;&#1074;&#1089;&#1089;&#1090;&#1074;&#1091;&#1081;&#1090;&#1077;";
         $result = "a&#228;&#1047;&#1076;&#1088;&#1072;><&amp;&auml;&#228;&#1074;&#1089;&#1089;&#1090;&#1074;&#1091;&#1081;&#1090;&#1077;";
+        if (htmlspecialchars_decode($encoded, ENT_QUOTES) != $result) {
+            $this->markTestSkipped('https://github.com/facebook/hhvm/issues/2966');
+            return;
+        }
+        Smarty::$_MBSTRING = false;
         $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|unescape:"html"}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
         Smarty::$_MBSTRING = true;

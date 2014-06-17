@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+phpunitpath=`which phpunit`
+command=`cat $phpunitpath | grep '/usr/bin/env php' | sed 's/ php / hhvm --php /' | sed 's/\\$\*//'`
+echo "$command$*" | /usr/bin/env sh
