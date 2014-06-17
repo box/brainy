@@ -25,6 +25,7 @@
     <exclude name="Generic.Formatting.MultipleStatementAlignment" />
     <exclude name="Generic.ControlStructures.InlineControlStructure" />
     <exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman" />
+    <exclude name="Generic.Formatting.NoSpaceAfterCast" />
  </rule>
  <!-- <rule ref="Squiz" /> -->
  <!-- <rule ref="Zend" /> -->

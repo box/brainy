@@ -187,7 +187,7 @@ class PHP_ParserGenerator
         $sv = $end = $cp = '';
         $j = 0; // int
         $errcnt = 0;
-        $cp = strstr($argv[$i],'=');
+        $cp = strstr($argv[$i], '=');
         if (!$cp) {
             throw new Exception('INTERNAL ERROR: handleswitch passed bad argument, no "=" in arg');
         }
@@ -255,7 +255,7 @@ class PHP_ParserGenerator
                 for ($i = 1; $i < count($argv); $i++) {
                     if ($argv[$i][0] == '+' || $argv[$i][0] == '-') {
                         $errcnt += $this->handleflags($i, $argv);
-                    } elseif (strstr($argv[$i],'=')) {
+                    } elseif (strstr($argv[$i], '=')) {
                         $errcnt += $this->handleswitch($i, $argv);
                     }
                 }

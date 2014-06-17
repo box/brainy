@@ -41,8 +41,6 @@ class Smarty_Internal_Write_File
         if (!file_put_contents($_tmp_file, $_contents)) {
             error_reporting($_error_reporting);
             throw new SmartyException("unable to write file {$_tmp_file}");
-
-            return false;
         }
 
         /*
@@ -52,27 +50,29 @@ class Smarty_Internal_Write_File
          * currently reading that file to fail, but linux' rename()
          * seems to be smart enough to handle that for us.
          */
-        if (Smarty::$_IS_WINDOWS) {
-            // remove original file
-            @unlink($_filepath);
-            // rename tmp file
-            $success = @rename($_tmp_file, $_filepath);
-        } else {
-            // rename tmp file
-            $success = @rename($_tmp_file, $_filepath);
-            if (!$success) {
+        try {
+            if (Smarty::$_IS_WINDOWS) {
                 // remove original file
-                @unlink($_filepath);
+                unlink($_filepath);
                 // rename tmp file
-                $success = @rename($_tmp_file, $_filepath);
+                $success = rename($_tmp_file, $_filepath);
+            } else {
+                // rename tmp file
+                $success = rename($_tmp_file, $_filepath);
+                if (!$success) {
+                    // remove original file
+                    unlink($_filepath);
+                    // rename tmp file
+                    $success = rename($_tmp_file, $_filepath);
+                }
             }
+        } catch(Exception $e) {
+            $success = false;
         }
 
         if (!$success) {
             error_reporting($_error_reporting);
             throw new SmartyException("unable to write file {$_filepath}");
-
-            return false;
         }
 
         if ($smarty->_file_perms !== null) {

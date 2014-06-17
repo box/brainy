@@ -70,18 +70,18 @@ class Smarty_Internal_Utility
             $_compile = new RecursiveIteratorIterator($_compileDirs);
             foreach ($_compile as $_fileinfo) {
                 $_file = $_fileinfo->getFilename();
-                if (substr(basename($_fileinfo->getPathname()),0, 1) == '.' || strpos($_file, '.svn') !== false) continue;
+                if (substr(basename($_fileinfo->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false) continue;
                 if (!substr_compare($_file, $extension, - strlen($extension)) == 0) continue;
                 if ($_fileinfo->getPath() == substr($_dir, 0, -1)) {
-                   $_template_file = $_file;
+                    $_template_file = $_file;
                 } else {
-                   $_template_file = substr($_fileinfo->getPath(), strlen($_dir)) . DS . $_file;
+                    $_template_file = substr($_fileinfo->getPath(), strlen($_dir)) . DS . $_file;
                 }
                 echo '<br>', $_dir, '---', $_template_file;
                 flush();
                 $_start_time = microtime(true);
                 try {
-                    $_tpl = $smarty->createTemplate($_template_file,null,null,null, false);
+                    $_tpl = $smarty->createTemplate($_template_file, null, null, null, false);
                     if ($_tpl->mustCompile()) {
                         $_tpl->compileTemplateSource();
                         $_count++;
@@ -133,7 +133,7 @@ class Smarty_Internal_Utility
             $_compile = new RecursiveIteratorIterator($_compileDirs);
             foreach ($_compile as $_fileinfo) {
                 $_file = $_fileinfo->getFilename();
-                if (substr(basename($_fileinfo->getPathname()),0, 1) == '.' || strpos($_file, '.svn') !== false) continue;
+                if (substr(basename($_fileinfo->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false) continue;
                 if (!substr_compare($_file, $extension, - strlen($extension)) == 0) continue;
                 if ($_fileinfo->getPath() == substr($_dir, 0, -1)) {
                     $_config_file = $_file;
@@ -206,7 +206,7 @@ class Smarty_Internal_Utility
                 return 0;
             }
 
-            $_resource_part_2 = str_replace('.php','.cache.php',$_resource_part_1);
+            $_resource_part_2 = str_replace('.php', '.cache.php', $_resource_part_1);
             $_resource_part_2_length = strlen($_resource_part_2);
         }
         $_dir = $_compile_dir;
@@ -214,14 +214,14 @@ class Smarty_Internal_Utility
             $_dir .= $_compile_id . $_dir_sep;
         }
         if (isset($_compile_id)) {
-            $_compile_id_part = str_replace('\\','/',$_compile_dir . $_compile_id . $_dir_sep);
+            $_compile_id_part = str_replace('\\', '/', $_compile_dir . $_compile_id . $_dir_sep);
             $_compile_id_part_length = strlen($_compile_id_part);
         }
         $_count = 0;
         try {
             $_compileDirs = new RecursiveDirectoryIterator($_dir);
-        // NOTE: UnexpectedValueException thrown for PHP >= 5.3
         } catch (Exception $e) {
+            // NOTE: UnexpectedValueException thrown for PHP >= 5.3
             return 0;
         }
         $_compile = new RecursiveIteratorIterator($_compileDirs, RecursiveIteratorIterator::CHILD_FIRST);
@@ -229,7 +229,7 @@ class Smarty_Internal_Utility
             if (substr(basename($_file->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false)
                 continue;
 
-            $_filepath = str_replace('\\','/',(string) $_file);
+            $_filepath = str_replace('\\', '/', (string) $_file);
 
             if ($_file->isDir()) {
                 if (!$_compile->isDot()) {
