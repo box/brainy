@@ -70,11 +70,11 @@ function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = fals
  * @author Kyle Renfrow
  */
 function smarty_mod_cap_mbconvert_cb($matches){
-  return stripslashes($matches[1]).mb_convert_case(stripslashes($matches[2]),MB_CASE_UPPER, Smarty::$_CHARSET);
+  return stripslashes($matches[1]).mb_convert_case(stripslashes($matches[2]), MB_CASE_UPPER, Smarty::$_CHARSET);
 }
 
 function smarty_mod_cap_mbconvert2_cb($matches){
-  return stripslashes($matches[1]).mb_convert_case(stripslashes($matches[3]),MB_CASE_UPPER, Smarty::$_CHARSET);
+  return stripslashes($matches[1]).mb_convert_case(stripslashes($matches[3]), MB_CASE_UPPER, Smarty::$_CHARSET);
 }
 
 function smarty_mod_cap_ucfirst_cb($matches){

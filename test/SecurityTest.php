@@ -36,7 +36,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     * test trusted PHP function
     */
     public function testTrustedPHPFunction() {
-        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{count($foo)}'));
+        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{count($foo)}'));
     }
 
     /**
@@ -45,7 +45,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     public function testNotTrustedPHPFunction() {
         $this->smarty->security_policy->php_functions = array('null');
         try {
-            $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{count($foo)}');
+            $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{count($foo)}');
         } catch (Exception $e) {
             $this->assertContains(htmlentities("PHP function 'count' not allowed by security setting"), $e->getMessage());
 
@@ -60,14 +60,14 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     public function testDisabledTrustedPHPFunction() {
         $this->smarty->security_policy->php_functions = array('null');
         $this->smarty->disableSecurity();
-        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{count($foo)}'));
+        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{count($foo)}'));
     }
 
     /**
     * test trusted modifier
     */
     public function testTrustedModifier() {
-        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{$foo|@count}'));
+        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|@count}'));
     }
 
     /**
@@ -76,7 +76,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     public function testNotTrustedModifier() {
         $this->smarty->security_policy->php_modifiers = array('null');
         try {
-            $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{$foo|@count}');
+            $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|@count}');
         } catch (Exception $e) {
             $this->assertContains(htmlentities("modifier 'count' not allowed by security setting"), $e->getMessage());
 
@@ -91,7 +91,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     public function testDisabledTrustedModifier() {
         $this->smarty->security_policy->php_modifiers = array('null');
         $this->smarty->disableSecurity();
-        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4,5]}{$foo|@count}'));
+        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|@count}'));
     }
 
     /**
@@ -108,7 +108,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     public function testNotAllowedTags2() {
         $this->smarty->security_policy->allowed_tags = array('counter');
         try {
-            $this->smarty->fetch('eval:{counter}{cycle values="1,2"}');
+            $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
         } catch (Exception $e) {
             $this->assertContains(htmlentities("tag 'cycle' not allowed by security setting"), $e->getMessage());
 
@@ -123,7 +123,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     public function testDisabledTags() {
         $this->smarty->security_policy->disabled_tags = array('cycle');
         try {
-            $this->smarty->fetch('eval:{counter}{cycle values="1,2"}');
+            $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
         } catch (Exception $e) {
             $this->assertContains(htmlentities("tag 'cycle' disabled by security setting"), $e->getMessage());
 

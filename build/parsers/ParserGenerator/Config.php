@@ -199,9 +199,9 @@ class PHP_ParserGenerator_Config
             $cfp->ConfigPrint($fp);
             fwrite($fp, "\n");
             if (0) {
-                //SetPrint(fp,cfp->fws,$this);
+                //SetPrint(fp, cfp->fws,$this);
                 //PlinkPrint(fp,cfp->fplp,"To  ");
-                //PlinkPrint(fp,cfp->bplp,"From");
+                //PlinkPrint(fp, cfp->bplp,"From");
             }
             $cfp = $cfp->next;
         }

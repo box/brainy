@@ -54,7 +54,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     * Test local scope
     */
     public function testIncludeLocalScope() {
-        $this->smarty->assign('foo',1);
+        $this->smarty->assign('foo', 1);
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\'} after include {$foo}', null, null, $this->smarty);
         $content = $this->smarty->fetch($tpl);
         $this->assertContains('befor include 1', $content);
@@ -65,7 +65,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     * Test  parent scope
     */
     public function testIncludeParentScope() {
-        $this->smarty->assign('foo',1);
+        $this->smarty->assign('foo', 1);
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\' scope = parent} after include {$foo}', null, null, $this->smarty);
         $content = $this->smarty->fetch($tpl);
         $content2 = $this->smarty->fetch('eval: root value {$foo}' );
@@ -79,7 +79,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     */
     public function testIncludeRootScope() {
          $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
-        $this->smarty->assign('foo',1);
+        $this->smarty->assign('foo', 1);
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\' scope = root} after include {$foo}');
         $content = $this->smarty->fetch($tpl);
         $content2 = $this->smarty->fetch('eval: smarty value {$foo}' );
@@ -92,7 +92,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     * Test  root scope
     */
     public function testIncludeRootScope2() {
-        $this->smarty->assign('foo',1);
+        $this->smarty->assign('foo', 1);
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\' scope = root} after include {$foo}', null, null, $this->smarty);
         $content = $this->smarty->fetch($tpl);
         $content2 = $this->smarty->fetch('eval: smarty value {$foo}' );
@@ -105,13 +105,13 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
     * Test  recursive includes
     */
     public function testRecursiveIncludes1() {
-        $this->smarty->assign('foo',1);
+        $this->smarty->assign('foo', 1);
         $this->smarty->assign('bar','bar');
         $content = $this->smarty->fetch('test_recursive_includes.tpl');
         $this->assertContains("before 1 bar<br>\nbefore 2 bar<br>\nbefore 3 bar<br>\n\nafter 3 bar<br>\n\nafter 2 bar<br>\n\nafter 1 bar<br>", $content);
     }
     public function testRecursiveIncludes2() {
-        $this->smarty->assign('foo',1);
+        $this->smarty->assign('foo', 1);
         $this->smarty->assign('bar','bar');
         $content = $this->smarty->fetch('test_recursive_includes2.tpl');
         $this->assertContains("before 1 bar<br>\nbefore 3 bar<br>\nbefore 5 bar<br>\n\nafter 5 bar<br>\n\nafter 3 bar<br>\n\nafter 1 bar<br>", $content);

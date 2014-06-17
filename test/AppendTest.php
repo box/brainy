@@ -39,7 +39,7 @@ class AppendTest extends PHPUnit_Framework_TestCase
     * test append merge
     */
     public function testAppendMerge() {
-            $this->smarty->assign('foo',array('a'=>'a','b'=>'b','c'=>'c'));
+            $this->smarty->assign('foo', array('a'=>'a','b'=>'b','c'=>'c'));
             $this->smarty->append('foo',array('b'=>'d'),true);
         $this->assertEquals('a d c', $this->smarty->fetch('eval:{$foo["a"]} {$foo["b"]} {$foo["c"]}'));
     }
@@ -47,7 +47,7 @@ class AppendTest extends PHPUnit_Framework_TestCase
     * test append array merge
     */
     public function testAppendArrayMerge() {
-            $this->smarty->assign('foo',array('b'=>'d'));
+            $this->smarty->assign('foo', array('b'=>'d'));
             $this->smarty->append('foo',array('a'=>'a','b'=>'b','c'=>'c'),true);
         $this->assertEquals('a b c', $this->smarty->fetch('eval:{$foo["a"]} {$foo["b"]} {$foo["c"]}'));
     }
@@ -63,7 +63,7 @@ class AppendTest extends PHPUnit_Framework_TestCase
     * test array append array merge
     */
     public function testArrayAppendArrayMerge() {
-            $this->smarty->assign('foo',array('b'=>'d'));
+            $this->smarty->assign('foo', array('b'=>'d'));
             $this->smarty->append(array('bar'=>'bar','foo'=>array('a'=>'a','b'=>'b','c'=>'c')),null,true);
         $this->assertEquals('a b c bar', $this->smarty->fetch('eval:{$foo["a"]} {$foo["b"]} {$foo["c"]} {$bar[0]}'));
     }

@@ -24,6 +24,7 @@
     <exclude name="Generic.Files.EndFileNoNewline" />
     <exclude name="Generic.Formatting.MultipleStatementAlignment" />
     <exclude name="Generic.ControlStructures.InlineControlStructure" />
+    <exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman" />
  </rule>
  <!-- <rule ref="Squiz" /> -->
  <!-- <rule ref="Zend" /> -->

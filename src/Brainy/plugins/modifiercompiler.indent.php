@@ -26,5 +26,5 @@ function smarty_modifiercompiler_indent($params, $compiler) {
         $params[2] = "' '";
     }
 
-    return 'preg_replace(\'!^!m\',str_repeat(' . $params[2] . ',' . $params[1] . '),' . $params[0] . ')';
+    return 'preg_replace(\'!^!m\', str_repeat(' . $params[2] . ',' . $params[1] . '),' . $params[0] . ')';
 }

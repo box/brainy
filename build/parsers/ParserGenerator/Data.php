@@ -380,13 +380,13 @@ class PHP_ParserGenerator_Data
                 for ($i = 0; $i < $rp->nrhs; $i++) {
                     $s2 = $rp->rhs[$i];
                     if ($s2->type == PHP_ParserGenerator_Symbol::TERMINAL) {
-                        //progress += SetAdd(s1->firstset,s2->index);
+                        //progress += SetAdd(s1->firstset, s2->index);
                         $progress += isset($s1->firstset[$s2->index]) ? 0 : 1;
                         $s1->firstset[$s2->index] = 1;
                         break;
                     } elseif ($s2->type == PHP_ParserGenerator_Symbol::MULTITERMINAL) {
                         for ($j = 0; $j < $s2->nsubsym; $j++) {
-                            //progress += SetAdd(s1->firstset,s2->subsym[j]->index);
+                            //progress += SetAdd(s1->firstset, s2->subsym[j]->index);
                             $progress += isset($s1->firstset[$s2->subsym[$j]->index]) ? 0 : 1;
                             $s1->firstset[$s2->subsym[$j]->index] = 1;
                         }
@@ -396,7 +396,7 @@ class PHP_ParserGenerator_Data
                             break;
                         }
                     } else {
-                        //progress += SetUnion(s1->firstset,s2->firstset);
+                        //progress += SetUnion(s1->firstset, s2->firstset);
                         $test = array_diff_key($s2->firstset, $s1->firstset);
                         if (count($test)) {
                             $progress++;
@@ -927,9 +927,9 @@ class PHP_ParserGenerator_Data
                 $cfp->ConfigPrint($fp);
                 fwrite($fp, "\n");
                 if (0) {
-                    //SetPrint(fp,cfp->fws,$this);
+                    //SetPrint(fp, cfp->fws,$this);
                     //PlinkPrint(fp,cfp->fplp,"To  ");
-                    //PlinkPrint(fp,cfp->bplp,"From");
+                    //PlinkPrint(fp, cfp->bplp,"From");
                 }
                 if ($this->basisflag) {
                     $cfp = $cfp->bp;

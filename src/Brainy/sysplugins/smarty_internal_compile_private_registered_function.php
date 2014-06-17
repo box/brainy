@@ -51,7 +51,7 @@ class Smarty_Internal_Compile_Private_Registered_Function extends Smarty_Interna
                 $_paramsArray[] = "$_key=>$_value";
             } elseif ($compiler->template->caching && in_array($_key,$tag_info[2])) {
                 $_value = str_replace("'","^#^",$_value);
-                $_paramsArray[] = "'$_key'=>^#^.var_export($_value,true).^#^";
+                $_paramsArray[] = "'$_key'=>^#^.var_export($_value, true).^#^";
             } else {
                 $_paramsArray[] = "'$_key'=>$_value";
             }

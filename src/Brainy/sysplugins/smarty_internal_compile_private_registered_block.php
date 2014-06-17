@@ -51,7 +51,7 @@ class Smarty_Internal_Compile_Private_Registered_Block extends Smarty_Internal_C
                     $_paramsArray[] = "$_key=>$_value";
                 } elseif ($compiler->template->caching && in_array($_key,$tag_info[2])) {
                     $_value = str_replace("'","^#^",$_value);
-                    $_paramsArray[] = "'$_key'=>^#^.var_export($_value,true).^#^";
+                    $_paramsArray[] = "'$_key'=>^#^.var_export($_value, true).^#^";
                 } else {
                     $_paramsArray[] = "'$_key'=>$_value";
                 }
@@ -84,7 +84,7 @@ class Smarty_Internal_Compile_Private_Registered_Block extends Smarty_Internal_C
                 $mod_pre = $mod_post ='';
             } else {
                 $mod_pre = ' ob_start(); ';
-                $mod_post = 'echo '.$compiler->compileTag('private_modifier',array(),array('modifierlist'=>$parameter['modifier_list'],'value'=>'ob_get_clean()')).';';
+                $mod_post = 'echo '.$compiler->compileTag('private_modifier',array(), array('modifierlist'=>$parameter['modifier_list'],'value'=>'ob_get_clean()')).';';
             }
             if (!is_array($function)) {
                 return "\$_block_content = ob_get_clean(); \$_block_repeat=false;".$mod_pre." echo {$function}({$_params}, \$_block_content, \$_smarty_tpl, \$_block_repeat);".$mod_post." } array_pop(\$_smarty_tpl->smarty->_tag_stack);\n";

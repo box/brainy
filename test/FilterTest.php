@@ -79,7 +79,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
      * test registered pre filter class
      */
     public function testRegisteredPreFilterClass() {
-        $this->smarty->registerFilter(Smarty::FILTER_PRE,array('myprefilterclass', 'myprefilter'));
+        $this->smarty->registerFilter(Smarty::FILTER_PRE, array('myprefilterclass', 'myprefilter'));
         $tpl = $this->smarty->createTemplate('eval:{" hello world"}');
         $tpl->assign('foo', 'bar');
         $this->assertEquals("bar hello world", $this->smarty->fetch($tpl));
@@ -111,7 +111,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
     public function testRegisteredVariableFilter2() {
         $var = new VarFilter();
 
-        $this->smarty->registerFilter(Smarty::FILTER_VARIABLE,array($var, 'variablefilter'));
+        $this->smarty->registerFilter(Smarty::FILTER_VARIABLE, array($var, 'variablefilter'));
         $tpl = $this->smarty->createTemplate('string:{$foo}');
         $tpl->assign('foo', 'bar');
         $this->assertEquals('var{$foo}bar', $this->smarty->fetch($tpl));

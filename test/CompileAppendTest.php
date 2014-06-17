@@ -27,7 +27,7 @@ class CompileAppendTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("12", $this->smarty->fetch('eval:{$foo=1}{append var=foo value=2}{foreach $foo as $bar}{$bar}{/foreach}'));
     }
     public function testAppend2() {
-        $this->smarty->assign('foo',1);
+        $this->smarty->assign('foo', 1);
         $this->assertEquals("12", $this->smarty->fetch('eval:{append var=foo value=2}{foreach $foo as $bar}{$bar}{/foreach}'));
     }
 }

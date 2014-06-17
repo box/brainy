@@ -50,7 +50,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
 
         $tpl = $this->smarty->createTemplate('eval:{html_checkboxes name="id" values=$cust_ids output=$cust_names selected=$customer_id separator="<br />"}');
         $tpl->assign('customer_id', 1001);
-        $tpl->assign('cust_ids', array(1000,1001,1002,1003));
+        $tpl->assign('cust_ids', array(1000,1001,1002, 1003));
         $tpl->assign('cust_names', array(
             'Joe Schmoe',
             'Jack Smith',
@@ -70,7 +70,7 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
 
         $tpl = $this->smarty->createTemplate('eval:{html_checkboxes name="id" values=$cust_ids output=$cust_names selected=$customer_id separator="<br />"}');
         $tpl->assign('customer_id', 1001);
-        $tpl->assign('cust_ids', array(1000,1001,1002,1003));
+        $tpl->assign('cust_ids', array(1000,1001,1002, 1003));
         $tpl->assign('cust_names', new ArrayIterator(array(
             'Joe Schmoe',
             'Jack Smith',

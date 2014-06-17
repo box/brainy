@@ -54,7 +54,7 @@ class CompileAssignTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("3", $this->smarty->fetch($tpl));
     }
     public function testAssignOld8() {
-        $tpl = $this->smarty->createTemplate('eval:{assign var=foo value=[9,8,7,6]}{foreach $foo as $x}{$x}{/foreach}');
+        $tpl = $this->smarty->createTemplate('eval:{assign var=foo value=[9,8,7, 6]}{foreach $foo as $x}{$x}{/foreach}');
         $this->assertEquals("9876", $this->smarty->fetch($tpl));
     }
     public function testAssignOld9() {
@@ -98,7 +98,7 @@ class CompileAssignTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("3", $this->smarty->fetch($tpl));
     }
     public function testAssignNew6() {
-        $tpl = $this->smarty->createTemplate("eval:{\$foo=[9,8,7,6]}{foreach \$foo as \$x}{\$x}{/foreach}");
+        $tpl = $this->smarty->createTemplate("eval:{\$foo=[9,8,7, 6]}{foreach \$foo as \$x}{\$x}{/foreach}");
         $this->assertEquals("9876", $this->smarty->fetch($tpl));
     }
     public function testAssignNew7() {
@@ -110,14 +110,14 @@ class CompileAssignTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("0112", $this->smarty->fetch($tpl));
     }
     public function testAssignArrayAppend2() {
-        $this->smarty->assign('foo',1);
+        $this->smarty->assign('foo', 1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo[]=2}{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}", null, null, $this->smarty);
         $this->assertEquals("0112", $this->smarty->fetch($tpl));
         $tpl2 = $this->smarty->createTemplate("eval:{\$foo}", null, null, $this->smarty);
         $this->assertEquals("1", $this->smarty->fetch($tpl2));
     }
     public function testAssignArrayAppend3() {
-        $this->smarty->assign('foo',1);
+        $this->smarty->assign('foo', 1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo[]=2 scope=root}{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}", null, null, $this->smarty);
         $this->assertEquals("0112", $this->smarty->fetch($tpl));
         $tpl2 = $this->smarty->createTemplate("eval:{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}", null, null, $this->smarty);

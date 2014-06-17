@@ -51,7 +51,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" values=$cust_ids output=$cust_names selected=$customer_id}');
         $tpl->assign('customer_id', 92);
-        $tpl->assign('cust_ids', array(56,92,13));
+        $tpl->assign('cust_ids', array(56,92, 13));
         $tpl->assign('cust_names', array(
             'Joe Schmoe',
             'Jane Johnson',
