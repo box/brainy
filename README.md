@@ -135,6 +135,7 @@ of this project in the subject.
 ## Copyright and License
 
 Copyright 2014 Box, Inc. All rights reserved.
+
 Copyright 2002 – 2014 New Digital Group, Inc.
 
 This library is licensed under the GNU Lesser Public License. A copy of the
