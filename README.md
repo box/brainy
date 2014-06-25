@@ -49,6 +49,7 @@ applications, there are some differences that may make it difficult to switch.
     issues.
   - `{debug}` is removed as it can reveal sensitive information.
   - URL-based debugging
+  - Debugging template
 - Whitespace surrounding tags is not always treated the same as in Smarty.
 - PHP template resources are removed: `$smarty->fetch('php:my_php_file.php')`
 

@@ -399,38 +399,6 @@ class Smarty extends Smarty_Internal_TemplateBase
      * @var boolean
      */
     public $direct_access_security = true;
-    /**#@-*/
-    /**
-     * debug mode
-     *
-     * Setting this to true enables the debug-console.
-     *
-     * @var boolean
-     */
-    public $debugging = false;
-    /**
-     * This determines if debugging is enable-able from the browser.
-     * <ul>
-     *  <li>NONE => no debugging control allowed</li>
-     *  <li>URL => enable debugging when SMARTY_DEBUG is found in the URL.</li>
-     * </ul>
-     * @var string
-     */
-    public $debugging_ctrl = 'NONE';
-    /**
-     * Name of debugging URL-param.
-     *
-     * Only used when $debugging_ctrl is set to 'URL'.
-     * The name of the URL-parameter that activates debugging.
-     *
-     * @var type
-     */
-    public $smarty_debug_id = 'SMARTY_DEBUG';
-    /**
-     * Path of debug template.
-     * @var string
-     */
-    public $debug_tpl = null;
     /**
      * When set, smarty uses this value as error_reporting-level.
      * @var int
@@ -652,7 +620,6 @@ class Smarty extends Smarty_Internal_TemplateBase
             ->setCacheDir('.' . DS . 'cache' . DS)
             ->setConfigDir('.' . DS . 'configs' . DS);
 
-        $this->debug_tpl = 'file:' . dirname(__FILE__) . '/debug.tpl';
         if (isset($_SERVER['SCRIPT_NAME'])) {
             $this->assignGlobal('SCRIPT_NAME', $_SERVER['SCRIPT_NAME']);
         }
@@ -1170,31 +1137,6 @@ class Smarty extends Smarty_Internal_TemplateBase
         }
 
         return $this->autoload_filters;
-    }
-
-    /**
-     * return name of debugging template
-     *
-     * @return string
-     */
-    public function getDebugTemplate() {
-        return $this->debug_tpl;
-    }
-
-    /**
-     * set the debug template
-     *
-     * @param  string          $tpl_name
-     * @return Smarty          current Smarty instance for chaining
-     * @throws SmartyException if file is not readable
-     */
-    public function setDebugTemplate($tpl_name) {
-        if (!is_readable($tpl_name)) {
-            throw new SmartyException("Unknown file '{$tpl_name}'");
-        }
-        $this->debug_tpl = $tpl_name;
-
-        return $this;
     }
 
     /**

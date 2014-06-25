@@ -206,9 +206,6 @@ abstract class Smarty_Internal_TemplateCompilerBase
         // the $this->sources array can get additional elements while compiling by the {extends} tag
         while ($this->template->source = array_shift($this->sources)) {
             $this->smarty->_current_file = $this->template->source->filepath;
-            if ($this->smarty->debugging) {
-                Smarty_Internal_Debug::start_compile($this->template);
-            }
             $no_sources = count($this->sources);
             if ($loop || $no_sources) {
                 $this->template->properties['file_dependency'][$this->template->source->uid] = array($this->template->source->filepath, $this->template->source->timestamp, $this->template->source->type);
@@ -234,9 +231,6 @@ abstract class Smarty_Internal_TemplateCompilerBase
                     $_compiled_code = $this->doCompile($_content);
                 }
             } while ($this->abort_and_recompile);
-            if ($this->smarty->debugging) {
-                Smarty_Internal_Debug::end_compile($this->template);
-            }
         }
 
         // restore source
@@ -632,16 +626,10 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param int $line line offset to source
      */
     public function pushTrace($file, $uid, $line, $debug = true) {
-        if ($this->smarty->debugging && $debug) {
-            Smarty_Internal_Debug::end_compile($this->template);
-        }
         array_push($this->trace_stack, array($this->smarty->_current_file, $this->trace_filepath, $this->trace_uid, $this->trace_line_offset));
         $this->trace_filepath = $this->smarty->_current_file = $file;
         $this->trace_uid = $uid;
-        $this->trace_line_offset = $line ;
-        if ($this->smarty->debugging) {
-            Smarty_Internal_Debug::start_compile($this->template);
-        }
+        $this->trace_line_offset = $line;
     }
 
     /**
@@ -649,17 +637,11 @@ abstract class Smarty_Internal_TemplateCompilerBase
      *
      */
     public function popTrace() {
-        if ($this->smarty->debugging) {
-            Smarty_Internal_Debug::end_compile($this->template);
-        }
         $r = array_pop($this->trace_stack);
         $this->smarty->_current_file = $r[0];
         $this->trace_filepath = $r[1];
         $this->trace_uid = $r[2];
         $this->trace_line_offset = $r[3];
-        if ($this->smarty->debugging) {
-            Smarty_Internal_Debug::start_compile($this->template);
-        }
     }
 
     /**

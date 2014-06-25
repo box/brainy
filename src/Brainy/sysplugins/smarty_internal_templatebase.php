@@ -106,9 +106,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 $_smarty_tpl = $_template;
                 if ($_template->source->recompiled) {
                     $code = $_template->compiler->compileTemplate($_template);
-                    if ($this->smarty->debugging) {
-                        Smarty_Internal_Debug::start_render($_template);
-                    }
                     try {
                         // if (strpos($code, 'myhello') !== false)
                         //     echo 'code: ', $code;
@@ -130,9 +127,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                         unset($code);
                         $_template->compiled->loaded = true;
                         $_template->compiled->isCompiled = true;
-                    }
-                    if ($this->smarty->debugging) {
-                        Smarty_Internal_Debug::start_render($_template);
                     }
                     if (!$_template->compiled->loaded) {
                         include($_template->compiled->filepath);
@@ -171,9 +165,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 }
             } else {
                 if ($_template->source->uncompiled) {
-                    if ($this->smarty->debugging) {
-                        Smarty_Internal_Debug::start_render($_template);
-                    }
                     try {
                         ob_start();
                         $_template->source->renderUncompiled($_template);
@@ -201,13 +192,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                     }
                 }
             }
-            if ($this->smarty->debugging) {
-                Smarty_Internal_Debug::end_render($_template);
-            }
         } else {
-            if ($this->smarty->debugging) {
-                Smarty_Internal_Debug::start_cache($_template);
-            }
             try {
                 ob_start();
                 array_unshift($_template->_capture_stack, array());
@@ -225,9 +210,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 ob_get_clean();
                 throw $e;
             }
-            if ($this->smarty->debugging) {
-                Smarty_Internal_Debug::end_cache($_template);
-            }
         }
         if ((!$this->caching || $_template->source->recompiled) && !$no_output_filter && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
             $_output = Smarty_Internal_Filter_Handler::runFilter('output', $_output, $_template);
@@ -238,10 +220,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
         // display or fetch
         if ($display) {
             echo $_output;
-            // debug output
-            if ($this->smarty->debugging) {
-                Smarty_Internal_Debug::display_debug($_template);
-            }
             if ($merge_tpl_vars) {
                 // restore local variables
                 $_template->tpl_vars = $save_tpl_vars;

@@ -660,7 +660,6 @@ class Smarty_Internal_Utility
                 "smarty_internal_configfilelexer.php" => true,
                 "smarty_internal_configfileparser.php" => true,
                 "smarty_internal_data.php" => true,
-                "smarty_internal_debug.php" => true,
                 "smarty_internal_filter_handler.php" => true,
                 "smarty_internal_function_call_handler.php" => true,
                 "smarty_internal_get_include_path.php" => true,

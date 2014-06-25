@@ -323,16 +323,10 @@ class Smarty_Template_Cached
             if ($this->valid) {
                 if (!$_template->smarty->cache_locking || $this->handler->locked($_template->smarty, $this) === null) {
                     // load cache file for the following checks
-                    if ($smarty->debugging) {
-                        Smarty_Internal_Debug::start_cache($_template);
-                    }
                     if ($handler->process($_template, $this) === false) {
                         $this->valid = false;
                     } else {
                         $this->processed = true;
-                    }
-                    if ($smarty->debugging) {
-                        Smarty_Internal_Debug::end_cache($_template);
                     }
                 } else {
                     continue;
