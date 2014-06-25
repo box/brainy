@@ -44,6 +44,7 @@ applications, there are some differences that may make it difficult to switch.
 - Caching backends are removed (MySQL, Memcached).
 - `nocache` is always set to `true` and cannot be disabled.
 - Some other features are removed:
+  - `{insert}` (a deprecated Smarty feature) is removed.
   - `{fetch}` is removed as it can result in unforseen performance and security
     issues.
   - `{debug}` is removed as it can reveal sensitive information.
