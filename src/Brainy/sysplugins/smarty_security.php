@@ -22,32 +22,12 @@
 class Smarty_Security
 {
     /**
-     * This determines how Smarty handles "<?php ... ?>" tags in templates.
-     * possible values:
-     * <ul>
-     *   <li>Smarty::PHP_PASSTHRU -> echo PHP tags as they are</li>
-     *   <li>Smarty::PHP_QUOTE    -> escape tags as entities</li>
-     *   <li>Smarty::PHP_REMOVE   -> remove php tags</li>
-     *   <li>Smarty::PHP_ALLOW    -> execute php tags</li>
-     * </ul>
-     *
-     * @var integer
-     */
-    public $php_handling = Smarty::PHP_PASSTHRU;
-    /**
      * This is the list of template directories that are considered secure.
      * $template_dir is in this list implicitly.
      *
      * @var array
      */
     public $secure_dir = array();
-    /**
-     * This is an array of directories where trusted php scripts reside.
-     * {@link $security} is disabled during their inclusion/execution.
-     *
-     * @var array
-     */
-    public $trusted_dir = array();
     /**
      * List of regular expressions (PCRE) that include trusted URIs
      *
@@ -159,11 +139,6 @@ class Smarty_Security
      * @var array
      */
     protected $_php_resource_dir = null;
-    /**
-     * Cache for $trusted_dir lookups
-     * @var array
-     */
-    protected $_trusted_dir = null;
 
     /**
      * @param Smarty $smarty
@@ -401,53 +376,6 @@ class Smarty_Security
         }
 
         throw new SmartyException("URI '{$uri}' not allowed by security setting");
-    }
-
-    /**
-     * Check if directory of file resource is trusted.
-     *
-     * @param  string          $filepath
-     * @return boolean         true if directory is trusted
-     * @throws SmartyException if PHP directory is not trusted
-     */
-    public function isTrustedPHPDir($filepath) {
-        if (empty($this->trusted_dir)) {
-            throw new SmartyException("directory '{$filepath}' not allowed by security setting (no trusted_dir specified)");
-        }
-
-        // check if index is outdated
-        if (!$this->_trusted_dir || $this->_trusted_dir !== $this->trusted_dir) {
-            $this->_php_resource_dir = array();
-
-            $this->_trusted_dir = $this->trusted_dir;
-            foreach ((array) $this->trusted_dir as $directory) {
-                $directory = realpath($directory);
-                $this->_php_resource_dir[$directory] = true;
-            }
-        }
-
-        $_filepath = realpath($filepath);
-        $directory = dirname($_filepath);
-        $_directory = array();
-        while (true) {
-            // remember the directory to add it to _resource_dir in case we're successful
-            $_directory[] = $directory;
-            // test if the directory is trusted
-            if (isset($this->_php_resource_dir[$directory])) {
-                // merge sub directories of current $directory into _resource_dir to speed up subsequent lookups
-                $this->_php_resource_dir = array_merge($this->_php_resource_dir, $_directory);
-
-                return true;
-            }
-            // abort if we've reached root
-            if (($pos = strrpos($directory, DS)) === false || !isset($directory[2])) {
-                break;
-            }
-            // bubble up one level
-            $directory = substr($directory, 0, $pos);
-        }
-
-        throw new SmartyException("directory '{$_filepath}' not allowed by security setting");
     }
 
 }

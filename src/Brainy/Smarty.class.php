@@ -378,18 +378,6 @@ class Smarty extends Smarty_Internal_TemplateBase
      */
     public $security_policy = null;
     /**
-     * controls handling of PHP-blocks
-     *
-     * @var integer
-     */
-    public $php_handling = self::PHP_PASSTHRU;
-    /**
-     * controls if the php template file resource is allowed
-     *
-     * @var bool
-     */
-    public $allow_php_templates = false;
-    /**
      * Should compiled-templates be prevented from being called directly?
      *
      * {@internal
@@ -489,11 +477,6 @@ class Smarty extends Smarty_Internal_TemplateBase
      * @var array
      */
     public $template_objects = array();
-    /**
-     * check If-Modified-Since headers
-     * @var boolean
-     */
-    public $cache_modified_check = false;
     /**
      * registered plugins
      * @var array

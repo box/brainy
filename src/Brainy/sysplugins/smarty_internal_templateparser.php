@@ -117,11 +117,7 @@ class Smarty_Internal_Templateparser#line 80 "smarty_internal_templateparser.php
         $this->compiler->has_variable_string = false;
         $this->compiler->prefix_code = array();
         $this->block_nesting_level = 0;
-        if ($this->security = isset($this->smarty->security_policy)) {
-            $this->php_handling = $this->smarty->security_policy->php_handling;
-        } else {
-            $this->php_handling = $this->smarty->php_handling;
-        }
+        $this->security = isset($this->smarty->security_policy);
         $this->is_xml = false;
         $this->asp_tags = (ini_get('asp_tags') != '0');
         $this->current_buffer = $this->root_buffer = new _smarty_template_buffer($this);
@@ -1201,34 +1197,34 @@ static public $yy_action = array(
     public $yystack = array();  /* The parser's stack */
 
     public $yyTokenName = array(
-  '$',             'VERT',          'COLON',         'RDEL',        
-  'COMMENT',       'TEXT',          'STRIPON',       'STRIPOFF',    
-  'BLOCKSOURCE',   'LITERALSTART',  'LITERALEND',    'LITERAL',     
-  'LDEL',          'DOLLAR',        'ID',            'EQUAL',       
-  'PTR',           'LDELIF',        'LDELFOR',       'SEMICOLON',   
-  'INCDEC',        'TO',            'STEP',          'LDELFOREACH', 
+  '$',             'VERT',          'COLON',         'RDEL',
+  'COMMENT',       'TEXT',          'STRIPON',       'STRIPOFF',
+  'BLOCKSOURCE',   'LITERALSTART',  'LITERALEND',    'LITERAL',
+  'LDEL',          'DOLLAR',        'ID',            'EQUAL',
+  'PTR',           'LDELIF',        'LDELFOR',       'SEMICOLON',
+  'INCDEC',        'TO',            'STEP',          'LDELFOREACH',
   'SPACE',         'AS',            'APTR',          'LDELSETFILTER',
-  'SMARTYBLOCKCHILDPARENT',  'LDELSLASH',     'ATTR',          'INTEGER',     
-  'COMMA',         'OPENP',         'CLOSEP',        'MATH',        
-  'UNIMATH',       'ANDSYM',        'ISIN',          'ISDIVBY',     
-  'ISNOTDIVBY',    'ISEVEN',        'ISNOTEVEN',     'ISEVENBY',    
-  'ISNOTEVENBY',   'ISODD',         'ISNOTODD',      'ISODDBY',     
-  'ISNOTODDBY',    'INSTANCEOF',    'QMARK',         'NOT',         
+  'SMARTYBLOCKCHILDPARENT',  'LDELSLASH',     'ATTR',          'INTEGER',
+  'COMMA',         'OPENP',         'CLOSEP',        'MATH',
+  'UNIMATH',       'ANDSYM',        'ISIN',          'ISDIVBY',
+  'ISNOTDIVBY',    'ISEVEN',        'ISNOTEVEN',     'ISEVENBY',
+  'ISNOTEVENBY',   'ISODD',         'ISNOTODD',      'ISODDBY',
+  'ISNOTODDBY',    'INSTANCEOF',    'QMARK',         'NOT',
   'TYPECAST',      'HEX',           'DOT',           'SINGLEQUOTESTRING',
-  'DOUBLECOLON',   'AT',            'HATCH',         'OPENB',       
-  'CLOSEB',        'EQUALS',        'NOTEQUALS',     'GREATERTHAN', 
-  'LESSTHAN',      'GREATEREQUAL',  'LESSEQUAL',     'IDENTITY',    
-  'NONEIDENTITY',  'MOD',           'LAND',          'LOR',         
-  'LXOR',          'QUOTE',         'DOLLARID',      'error',       
-  'start',         'template',      'template_element',  'smartytag',   
-  'literal',       'literal_elements',  'literal_element',  'value',       
-  'modifierlist',  'attributes',    'expr',          'varindexed',  
-  'statement',     'statements',    'optspace',      'varvar',      
-  'foraction',     'modparameters',  'attribute',     'ternary',     
-  'array',         'ifcond',        'lop',           'variable',    
-  'function',      'doublequoted_with_quotes',  'static_class_access',  'object',      
-  'arrayindex',    'indexdef',      'varvarele',     'objectchain', 
-  'objectelement',  'method',        'params',        'modifier',    
+  'DOUBLECOLON',   'AT',            'HATCH',         'OPENB',
+  'CLOSEB',        'EQUALS',        'NOTEQUALS',     'GREATERTHAN',
+  'LESSTHAN',      'GREATEREQUAL',  'LESSEQUAL',     'IDENTITY',
+  'NONEIDENTITY',  'MOD',           'LAND',          'LOR',
+  'LXOR',          'QUOTE',         'DOLLARID',      'error',
+  'start',         'template',      'template_element',  'smartytag',
+  'literal',       'literal_elements',  'literal_element',  'value',
+  'modifierlist',  'attributes',    'expr',          'varindexed',
+  'statement',     'statements',    'optspace',      'varvar',
+  'foraction',     'modparameters',  'attribute',     'ternary',
+  'array',         'ifcond',        'lop',           'variable',
+  'function',      'doublequoted_with_quotes',  'static_class_access',  'object',
+  'arrayindex',    'indexdef',      'varvarele',     'objectchain',
+  'objectelement',  'method',        'params',        'modifier',
   'modparameter',  'arrayelements',  'arrayelement',  'doublequoted',
   'doublequotedcontent',
     );
