@@ -15,3 +15,14 @@ lint:
 
 clean:
 	rm -rf test/cache/*.php test/compiled/*.php
+
+docs-branch:
+	git branch -D gh-pages
+	git checkout -b gh-pages
+	git rm -rf build src test
+	mv docs/* .
+	git add .
+	git commit -a -u -m "Docs update"
+	git checkout master
+	git clean -f -d
+	echo "Run git push -f origin gh-pages"
