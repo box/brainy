@@ -4,6 +4,8 @@ parsers:
 	cd build/parsers; make all
 
 test: clean
+	mkdir -p test/cache
+	mkdir -p test/compiled
 	phpunit
 
 test-hhvm: clean
