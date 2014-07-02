@@ -2,7 +2,7 @@
 /**
  * Smarty Internal Plugin Smarty Template  Base
  *
- * This file contains the basic shared methodes for template handling
+ * This file contains the basic shared methods for template handling
  *
  * @package Brainy
  * @subpackage Template
@@ -10,7 +10,7 @@
  */
 
 /**
- * Class with shared template methodes
+ * Class with shared template methods
  *
  * @package Brainy
  * @subpackage Template
@@ -275,6 +275,8 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @param  mixed         $cache_id   cache id to be used with this template
      * @param  mixed         $compile_id compile id to be used with this template
      * @return boolean       The template's cache status
+     * @deprecated This method is a source of confusion, as it is based on the in-memory template.
+     * @deprecated Caching in Brainy should be transparent. There should be no logic around it.
      */
     public function isCached($template = null, $cache_id = null, $compile_id = null) {
         if ($template === null && $this instanceof $this->template_class) {
@@ -308,7 +310,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @param  callable                     $callback   PHP callback to register
      * @param  boolean                      $cacheable  if true (default) this fuction is cachable
      * @param  array|null                   $cache_attr caching attributes if any
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      * @throws SmartyException              when the plugin tag is invalid
      */
     public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null) {
@@ -328,7 +330,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      *
      * @param  string                       $type of plugin
      * @param  string                       $tag  name of plugin
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      */
     public function unregisterPlugin($type, $tag) {
         if (isset($this->smarty->registered_plugins[$type][$tag])) {
@@ -343,7 +345,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      *
      * @param  string                       $type     name of resource type
      * @param  Smarty_Resource|Smarty_Resource[] $callback Instance of Smarty_Resource, or array of callbacks to handle resource (deprecated)
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      */
     public function registerResource($type, $callback) {
         $this->smarty->registered_resources[$type] = $callback instanceof Smarty_Resource ? $callback : array($callback, false);
@@ -355,7 +357,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * Unregisters a resource
      *
      * @param  string                       $type name of resource type
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      */
     public function unregisterResource($type) {
         if (isset($this->smarty->registered_resources[$type])) {
@@ -370,7 +372,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      *
      * @param  string                       $type     Name of cache resource type
      * @param  Smarty_CacheResource         $callback instance of Smarty_CacheResource to handle output caching
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      */
     public function registerCacheResource($type, Smarty_CacheResource $callback) {
         $this->smarty->registered_cache_resources[$type] = $callback;
@@ -382,7 +384,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * Unregisters a cache resource
      *
      * @param  string                       $type name of cache resource type
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      */
     public function unregisterCacheResource($type) {
         if (isset($this->smarty->registered_cache_resources[$type])) {
@@ -401,11 +403,11 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @param  boolean                      $smarty_args   smarty argument format, else traditional
      * @param  array                        $block_methods list of block-methods
      * @param  array                        $block_functs  list of methods that are block format
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      * @throws SmartyException              if any of the methods in $allowed or $block_methods are invalid
      */
     public function registerObject($object_name, $object_impl, $allowed = array(), $smarty_args = true, $block_methods = array()) {
-        // test if allowed methodes callable
+        // test if allowed methods callable
         if (!empty($allowed)) {
             foreach ((array) $allowed as $method) {
                 if (!is_callable(array($object_impl, $method)) && !property_exists($object_impl, $method)) {
@@ -413,7 +415,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 }
             }
         }
-        // test if block methodes callable
+        // test if block methods callable
         if (!empty($block_methods)) {
             foreach ((array) $block_methods as $method) {
                 if (!is_callable(array($object_impl, $method))) {
@@ -450,7 +452,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * unregister an object
      *
      * @param  string                       $name object name
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      */
     public function unregisterObject($name) {
         if (isset($this->smarty->registered_objects[$name])) {
@@ -465,7 +467,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      *
      * @param  string                       $class      name of template class
      * @param  string                       $class_impl the referenced PHP class to register
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      * @throws SmartyException              if $class_impl does not refer to an existing class
      */
     public function registerClass($class_name, $class_impl) {
@@ -485,7 +487,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * A default plugin handler gets called on undefined tags.
      *
      * @param  callable                     $callback class/method name
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      * @throws SmartyException              if $callback is not callable
      */
     public function registerDefaultPluginHandler($callback) {
@@ -502,7 +504,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * Registers a default template handler
      *
      * @param  callable                     $callback class/method name
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      * @throws SmartyException              if $callback is not callable
      */
     public function registerDefaultTemplateHandler($callback) {
@@ -519,7 +521,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * Registers a default template handler
      *
      * @param  callable                     $callback class/method name
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      * @throws SmartyException              if $callback is not callable
      */
     public function registerDefaultConfigHandler($callback) {
@@ -537,7 +539,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      *
      * @param  string                       $type     filter type
      * @param  callback                     $callback
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      * @uses Smarty::FILTER_POST
      * @uses Smarty::FILTER_PRE
      * @uses Smarty::FILTER_OUTPUT
@@ -554,7 +556,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      *
      * @param  string                       $type     filter type
      * @param  callback                     $callback
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      */
     public function unregisterFilter($type, $callback) {
         $name = $this->_get_filter_name($callback);
@@ -611,7 +613,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      *
      * @param  string                       $type filter type
      * @param  string                       $name filter name
-     * @return Smarty_Internal_Templatebase Self-reference to facilitate chaining
+     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
      */
     public function unloadFilter($type, $name) {
         $_filter_name = "smarty_{$type}filter_{$name}";

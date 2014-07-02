@@ -28,6 +28,7 @@
  * @author Uwe Tews
  * @author Rodney Rehm
  * @package Brainy
+ * @deprecated Use the Smarty class instead.
  */
 /**
  * @ignore
@@ -307,6 +308,8 @@ class SmartyBC extends Smarty
      * @param  string  $cache_id
      * @param  string  $compile_id
      * @return boolean
+     * @deprecated
+     * @see Smarty_Internal_TemplateBase::isCached() Information on why this is deprecated
      */
     public function is_cached($tpl_file, $cache_id = null, $compile_id = null) {
         return $this->isCached($tpl_file, $cache_id, $compile_id);

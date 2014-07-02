@@ -2,7 +2,7 @@
 /**
  * Smarty Internal Plugin Data
  *
- * This file contains the basic classes and methodes for template and variable creation
+ * This file contains the basic classes and methods for template and variable creation
  *
  * @package Brainy
  * @subpackage Template
@@ -10,7 +10,7 @@
  */
 
 /**
- * Base class with template and variable methodes
+ * Base class with template and variable methods
  *
  * @package Brainy
  * @subpackage Template

@@ -12,6 +12,7 @@
  *
  * @package Brainy
  * @subpackage PluginsInternal
+ * @internal
  */
 class Smarty_Internal_Get_Include_Path
 {

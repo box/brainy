@@ -1,5 +1,12 @@
 <?php
 /**
+ * Security API for Smarty
+ *
+ * @package Brainy
+ * @subpackage Security
+ */
+
+/**
  * An instance of a security policy
  *
  * @package Brainy

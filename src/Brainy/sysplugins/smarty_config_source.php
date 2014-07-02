@@ -14,10 +14,7 @@
  * @package Brainy
  * @subpackage TemplateResources
  * @author Rodney Rehm
- *
- * @property string $content
- * @property int    $timestamp
- * @property bool   $exists
+ * @internal
  */
 class Smarty_Config_Source extends Smarty_Template_Source
 {
