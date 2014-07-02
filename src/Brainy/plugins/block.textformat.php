@@ -2,7 +2,7 @@
 /**
  * Smarty plugin to format text blocks
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsBlock
  */
 

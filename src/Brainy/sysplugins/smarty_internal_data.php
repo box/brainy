@@ -4,7 +4,7 @@
  *
  * This file contains the basic classes and methodes for template and variable creation
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Template
  * @author Uwe Tews
  */
@@ -12,54 +12,60 @@
 /**
  * Base class with template and variable methodes
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Template
  */
 class Smarty_Internal_Data
 {
     /**
-     * name of class used for templates
+     * Name of class used for templates
      *
      * @var string
+     * @internal
      */
     public $template_class = 'Smarty_Internal_Template';
     /**
      * template variables
      *
      * @var array
+     * @internal
      */
     public $tpl_vars = array();
     /**
-     * parent template (if any)
+     * Parent template (if any)
      *
      * @var Smarty_Internal_Template
+     * @internal
      */
     public $parent = null;
     /**
      * configuration settings
      *
      * @var array
+     * @internal
      */
     public $config_vars = array();
 
     /**
-     * assigns a Smarty variable
+     * Assigns $var to the variable in $varname. If an associative array is
+     * passed as the only parameter, it is a mapping of variables to assign to
+     * the values to assign to them.
      *
-     * @param  array|string         $tpl_var the template variable name(s)
+     * @param  array|string         $var the template variable name(s)
      * @param  mixed                $value   the value to assign
-     * @param  boolean              $scope   the scope the variable will have  (local,parent or root)
+     * @param  boolean              $scope   the scope the variable will have  (local, parent or root)
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function assign($tpl_var, $value = null) {
-        if (is_array($tpl_var)) {
-            foreach ($tpl_var as $_key => $_val) {
+    public function assign($var, $value = null) {
+        if (is_array($var)) {
+            foreach ($var as $_key => $_val) {
                 if ($_key != '') {
                     $this->tpl_vars[$_key] = new Smarty_variable($_val);
                 }
             }
         } else {
-            if ($tpl_var != '') {
-                $this->tpl_vars[$tpl_var] = new Smarty_variable($value);
+            if ($var != '') {
+                $this->tpl_vars[$var] = new Smarty_variable($value);
             }
         }
 
@@ -67,11 +73,12 @@ class Smarty_Internal_Data
     }
 
     /**
-     * assigns a global Smarty variable
+     * Assigns a global Smarty variable to the global scope.
      *
      * @param  string               $varname the global variable name
      * @param  mixed                $value   the value to assign
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
+     * @todo This may not work with multiple Brainy instances.
      */
     public function assignGlobal($varname, $value = null) {
         if ($varname != '') {
@@ -86,11 +93,13 @@ class Smarty_Internal_Data
         return $this;
     }
     /**
-     * assigns values to template variables by reference
+     * Assigns values to template variables by reference
      *
      * @param string $tpl_var the template variable name
-     * @param mixed $ &$value the referenced value to assign
+     * @param mixed &$value the referenced value to assign
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
+     * @deprecated Limited usefulness in PHP5
+     * @deprecated In cases where appendByRef is useful, its use discourages proper separation of presentation from application logic.
      */
     public function assignByRef($tpl_var, &$value) {
         if ($tpl_var != '') {
@@ -102,7 +111,17 @@ class Smarty_Internal_Data
     }
 
     /**
-     * appends values to template variables
+     * Append an element to an assigned array
+     *
+     * If you append to a string value, it is converted to an array value and
+     * then appended to. You can explicitly pass name/value pairs, or
+     * associative arrays containing the name/value pairs. If you pass the
+     * optional third parameter of true, the value will be merged with the
+     * current array instead of appended.
+     *
+     * The $merge parameter does not use the PHP array_merge function. Merging
+     * two numerically indexed arrays may cause values to overwrite each other
+     * or result in non-sequential keys.
      *
      * @param  array|string         $tpl_var the template variable name(s)
      * @param  mixed                $value   the value to append
@@ -161,12 +180,14 @@ class Smarty_Internal_Data
     }
 
     /**
-     * appends values to template variables by reference
+     * Appends values to template variables by reference
      *
      * @param  string               $tpl_var the template variable name
      * @param  mixed                &$value  the referenced value to append
      * @param  boolean              $merge   flag if array elements shall be merged
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
+     * @deprecated Limited usefulness in PHP5
+     * @deprecated In cases where assignByRef is useful, its use discourages proper separation of presentation from application logic.
      */
     public function appendByRef($tpl_var, &$value, $merge = false) {
         if ($tpl_var != '' && isset($value)) {
@@ -189,12 +210,12 @@ class Smarty_Internal_Data
     }
 
     /**
-     * Returns a single or all template variables
+     * Returns a single or all assigned template variables
      *
-     * @param  string  $varname        variable name or null
-     * @param  string  $_ptr           optional pointer to data object
-     * @param  boolean $search_parents include parent templates?
-     * @return string  variable value or or array of variables
+     * @param  string $varname Name of variable to process, or null to return all
+     * @param  Smarty_Internal_Data $_ptr Optional reference to data object
+     * @param  boolean $search_parents Whether to include results from parent scopes
+     * @return string|array variable value or or array of variables
      */
     public function getTemplateVars($varname = null, $_ptr = null, $search_parents = true) {
         if (isset($varname)) {
@@ -234,9 +255,9 @@ class Smarty_Internal_Data
     }
 
     /**
-     * clear the given assigned template variable.
+     * Clear the given assigned template variable.
      *
-     * @param  string|array         $tpl_var the template variable(s) to clear
+     * @param  string|string[]         $tpl_var The template variable(s) to clear
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function clearAssign($tpl_var) {
@@ -252,7 +273,7 @@ class Smarty_Internal_Data
     }
 
     /**
-     * clear all the assigned template variables.
+     * Clear all the assigned template variables.
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function clearAllAssign() {
@@ -262,10 +283,12 @@ class Smarty_Internal_Data
     }
 
     /**
-     * load a config file, optionally load just selected sections
+     * Load config file data and assign it to the template.
      *
-     * @param  string               $config_file filename
-     * @param  mixed                $sections    array of section names, single section or null
+     * This works identically to the {config_load} function
+     *
+     * @param  string $config_file Path to the config file
+     * @param  string|string[]|null $sections Section name or array of section names
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function configLoad($config_file, $sections = null) {
@@ -277,12 +300,13 @@ class Smarty_Internal_Data
     }
 
     /**
-     * gets the object of a Smarty variable
+     * Return the contents of an assigned variable.
      *
      * @param  string  $variable       the name of the Smarty variable
-     * @param  object  $_ptr           optional pointer to data object
-     * @param  boolean $search_parents search also in parent data
-     * @return object  the object of the variable
+     * @param  Smarty_Internal_Data|null $_ptr Optional reference to the data object
+     * @param  boolean $search_parents Whether to search in the parent scope
+     * @param  boolean $error_enable Whether to raise an error when the variable is not found.
+     * @return mixed The contents of the variable.
      */
     public function getVariable($variable, $_ptr = null, $search_parents = true, $error_enable = true) {
         if ($_ptr === null) {
@@ -363,7 +387,8 @@ class Smarty_Internal_Data
     /**
      * Returns a single or all config variables
      *
-     * @param  string $varname variable name or null
+     * @param  string|null $varname Variable name or null (to retrieve all)
+     * @param  boolean $search_parents Whether to search parent scopes
      * @return string variable value or or array of variables
      */
     public function getConfigVars($varname = null, $search_parents = true) {
@@ -392,9 +417,9 @@ class Smarty_Internal_Data
     }
 
     /**
-     * Deassigns a single or all config variables
+     * Clears all loaded config variables.
      *
-     * @param  string               $varname variable name or null
+     * @param string|null $varname variable name or null
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function clearConfig($varname = null) {
@@ -414,20 +439,20 @@ class Smarty_Internal_Data
  *
  * The Smarty data object will hold Smarty variables in the current scope
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Template
  */
-class Smarty_Data extends Smarty_Internal_Data
-{
+class Smarty_Data extends Smarty_Internal_Data {
     /**
      * Smarty object
      *
      * @var Smarty
+     * @internal
      */
     public $smarty = null;
 
     /**
-     * create Smarty data object
+     * Create Smarty data object
      *
      * @param Smarty|array $_parent parent template
      * @param Smarty       $smarty  global smarty instance
@@ -454,11 +479,10 @@ class Smarty_Data extends Smarty_Internal_Data
  *
  * This class defines the Smarty variable object
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Template
  */
-class Smarty_Variable
-{
+class Smarty_Variable {
     /**
      * template variable
      *
@@ -499,7 +523,7 @@ class Smarty_Variable
  *
  * This class defines an object for undefined variable handling
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Template
  */
 class Undefined_Smarty_Variable

@@ -2,7 +2,7 @@
 /**
  * Smarty Resource Plugin
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  * @author Rodney Rehm
  */
@@ -12,7 +12,7 @@
  *
  * Wrapper Implementation for custom resource plugins
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  */
 abstract class Smarty_Resource_Custom extends Smarty_Resource

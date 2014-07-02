@@ -2,7 +2,7 @@
 /**
  * Smarty write file plugin
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsInternal
  * @author Monte Ohrt
  */
@@ -10,8 +10,9 @@
 /**
  * Smarty Internal Write File Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsInternal
+ * @internal
  */
 class Smarty_Internal_Write_File
 {

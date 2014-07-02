@@ -4,7 +4,7 @@
 *
 * Implements the streams as resource for Smarty template
 *
-* @package Smarty
+* @package Brainy
 * @subpackage TemplateResources
 * @author Uwe Tews
 * @author Rodney Rehm
@@ -16,7 +16,7 @@
 * Implements the streams as resource for Smarty template
 *
 * @link http://php.net/streams
-* @package Smarty
+* @package Brainy
 * @subpackage TemplateResources
 */
 class Smarty_Internal_Resource_Stream extends Smarty_Resource_Recompiled

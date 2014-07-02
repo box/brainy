@@ -2,7 +2,7 @@
 /**
  * Smarty Internal Plugin Function Call Handler
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsInternal
  * @author Uwe Tews
  */
@@ -10,8 +10,9 @@
 /**
  * This class does call function defined with the {function} tag
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsInternal
+ * @internal
  */
 class Smarty_Internal_Function_Call_Handler
 {

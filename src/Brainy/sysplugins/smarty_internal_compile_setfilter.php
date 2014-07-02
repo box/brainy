@@ -4,7 +4,7 @@
  *
  * Compiles code for setfilter tag
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -12,7 +12,7 @@
 /**
  * Smarty Internal Plugin Compile Setfilter Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Setfilter extends Smarty_Internal_CompileBase
@@ -39,7 +39,7 @@ class Smarty_Internal_Compile_Setfilter extends Smarty_Internal_CompileBase
 /**
  * Smarty Internal Plugin Compile Setfilterclose Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Setfilterclose extends Smarty_Internal_CompileBase

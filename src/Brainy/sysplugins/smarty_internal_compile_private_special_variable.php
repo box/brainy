@@ -4,7 +4,7 @@
  *
  * Compiles the special $smarty variables
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -12,7 +12,7 @@
 /**
  * Smarty Internal Plugin Compile special Smarty Variable Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_CompileBase

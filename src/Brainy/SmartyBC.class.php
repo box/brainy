@@ -27,7 +27,7 @@
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Uwe Tews
  * @author Rodney Rehm
- * @package Smarty
+ * @package Brainy
  */
 /**
  * @ignore
@@ -37,7 +37,7 @@ require_once(dirname(__FILE__) . '/Smarty.class.php');
 /**
  * Smarty Backward Compatibility Wrapper Class
  *
- * @package Smarty
+ * @package Brainy
  */
 class SmartyBC extends Smarty
 {

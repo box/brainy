@@ -5,7 +5,7 @@
  *
  * Compiles the {block}{/block} tags
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -13,7 +13,7 @@
 /**
  * Smarty Internal Plugin Compile Block Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
@@ -235,7 +235,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
 /**
  * Smarty Internal Plugin Compile BlockClose Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase
@@ -326,7 +326,7 @@ class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase
 /**
  * Smarty Internal Plugin Compile Child Block Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Private_Child_Block extends Smarty_Internal_CompileBase
@@ -378,7 +378,7 @@ class Smarty_Internal_Compile_Private_Child_Block extends Smarty_Internal_Compil
 /**
  * Smarty Internal Plugin Compile Child Block Close Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Private_Child_Blockclose extends Smarty_Internal_CompileBase

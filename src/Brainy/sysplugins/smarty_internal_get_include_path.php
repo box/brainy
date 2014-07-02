@@ -2,7 +2,7 @@
 /**
  * Smarty read include path plugin
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsInternal
  * @author Monte Ohrt
  */
@@ -10,7 +10,7 @@
 /**
  * Smarty Internal Read Include Path Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsInternal
  */
 class Smarty_Internal_Get_Include_Path

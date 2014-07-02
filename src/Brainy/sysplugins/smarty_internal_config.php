@@ -2,7 +2,7 @@
 /**
  * Smarty Internal Plugin Config
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Config
  * @author Uwe Tews
  */
@@ -12,7 +12,7 @@
  *
  * Main class for config variables
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Config
  *
  * @property Smarty_Config_Source   $source

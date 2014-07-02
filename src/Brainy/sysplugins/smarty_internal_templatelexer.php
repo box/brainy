@@ -3,7 +3,7 @@
      * Smarty Internal Plugin Templatelexer
      *
      * This is the lexer to break the template source into tokens
-     * @package Smarty
+     * @package Brainy
      * @subpackage Compiler
      * @author Uwe Tews
      */
@@ -96,7 +96,7 @@
              $this->yyTracePrompt = '<br>';
          }
 
-     
+
     private $_yy_state = 1;
     private $_yy_stack = array();
 
@@ -138,7 +138,7 @@
     }
 
 
-     
+
     public function yylex1()
     {
         $tokenMap = array (
@@ -338,7 +338,7 @@
        $this->token = Smarty_Internal_Templateparser::TP_TEXT;
          }
 
-     
+
     public function yylex2()
     {
         $tokenMap = array (
@@ -828,7 +828,7 @@
          }
 
 
-     
+
     public function yylex3()
     {
         $tokenMap = array (
@@ -931,7 +931,7 @@
        $this->token = Smarty_Internal_Templateparser::TP_LITERAL;
          }
 
-     
+
     public function yylex4()
     {
         $tokenMap = array (
@@ -1091,7 +1091,7 @@
        $this->token = Smarty_Internal_Templateparser::TP_TEXT;
          }
 
-     
+
     public function yylex5()
     {
         $tokenMap = array (
@@ -1201,7 +1201,7 @@
        return false;
          }
 
-     
+
     public function yylex6()
     {
         $tokenMap = array (

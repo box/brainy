@@ -2,7 +2,7 @@
 /**
  * Smarty Internal Plugin
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  */
 
@@ -11,7 +11,7 @@
  *
  * Meta Data Container for Config Files
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  * @author Rodney Rehm
  *

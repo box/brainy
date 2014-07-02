@@ -4,7 +4,7 @@
  *
  * This file contains the Smarty template engine
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Template
  * @author Uwe Tews
  */
@@ -12,7 +12,7 @@
 /**
  * Main class with template data structures and methods
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Template
  *
  * @property Smarty_Template_Source   $source

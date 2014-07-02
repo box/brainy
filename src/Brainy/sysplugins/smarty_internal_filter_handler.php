@@ -4,7 +4,7 @@
  *
  * Smarty filter handler class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsInternal
  * @author Uwe Tews
  */
@@ -12,8 +12,9 @@
 /**
  * Class for filter processing
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsInternal
+ * @internal
  */
 class Smarty_Internal_Filter_Handler
 {

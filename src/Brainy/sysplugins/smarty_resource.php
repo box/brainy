@@ -2,7 +2,7 @@
 /**
  * Smarty Resource Plugin
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  * @author Rodney Rehm
  */
@@ -12,7 +12,7 @@
  *
  * Base implementation for resource plugins
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  */
 abstract class Smarty_Resource
@@ -590,7 +590,7 @@ abstract class Smarty_Resource
  *
  * Meta Data Container for Template Files
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  * @author Rodney Rehm
  *
@@ -797,7 +797,7 @@ class Smarty_Template_Source
  *
  * Meta Data Container for Template Files
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  * @author Rodney Rehm
  *

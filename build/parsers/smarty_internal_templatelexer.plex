@@ -3,7 +3,7 @@
      * Smarty Internal Plugin Templatelexer
      *
      * This is the lexer to break the template source into tokens
-     * @package Smarty
+     * @package Brainy
      * @subpackage Compiler
      * @author Uwe Tews
      */

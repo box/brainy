@@ -3,7 +3,7 @@
  * Smarty Internal Plugin Compile Rdelim
  *
  * Compiles the {rdelim} tag
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -11,7 +11,7 @@
 /**
  * Smarty Internal Plugin Compile Rdelim Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Rdelim extends Smarty_Internal_CompileBase

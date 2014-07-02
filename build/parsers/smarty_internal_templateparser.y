@@ -5,7 +5,7 @@
 * This is the template parser
 *
 *
-* @package Smarty
+* @package Brainy
 * @subpackage Compiler
 * @author Uwe Tews
 */
@@ -25,6 +25,8 @@
     private $internalError = false;
     private $strip = false;
 
+    private $safe_lookups = 0;
+
     function __construct($lex, $compiler) {
         $this->lex = $lex;
         $this->compiler = $compiler;
@@ -34,10 +36,16 @@
         $this->compiler->prefix_code = array();
         $this->block_nesting_level = 0;
         $this->current_buffer = $this->root_buffer = new _smarty_template_buffer($this);
+
+        $this->safe_lookups = $this->compiler->safe_lookups;
     }
 
     public function compileVariable($variable) {
-        return 'smarty_array_lookup($_smarty_tpl->tpl_vars, '. $variable .')->value';
+        return 'smarty_safe_array_lookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')->value';
+    }
+
+    public function compileSafeLookupWithBase($base, $variable) {
+        return 'smarty_safe_array_lookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')->value';
     }
 }
 

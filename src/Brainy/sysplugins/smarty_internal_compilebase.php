@@ -2,7 +2,7 @@
 /**
  * Smarty Internal Plugin CompileBase
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -10,7 +10,7 @@
 /**
  * This class does extend all internal compile plugins
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 abstract class Smarty_Internal_CompileBase

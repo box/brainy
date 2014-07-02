@@ -2,9 +2,9 @@
 * Smarty Internal Plugin Configfileparser
 *
 * This is the config file parser
-* 
-* 
-* @package Smarty
+*
+*
+* @package Brainy
 * @subpackage Config
 * @author Uwe Tews
 */
@@ -20,9 +20,9 @@
 
     function __construct($lex, $compiler) {
         // set instance object
-        self::instance($this); 
+        self::instance($this);
         $this->lex = $lex;
-        $this->smarty = $compiler->smarty; 
+        $this->smarty = $compiler->smarty;
         $this->compiler = $compiler;
     }
     public static function &instance($new_instance = null)
@@ -101,7 +101,7 @@
             $this->set_var($var, $this->compiler->config_data['sections'][$section_name]);
         }
     }
-} 
+}
 
 
 %token_prefix TPC_

@@ -4,7 +4,7 @@
  *
  * Compiles the {function} {/function} tags
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -12,7 +12,7 @@
 /**
  * Smarty Internal Plugin Compile Function Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase
@@ -87,7 +87,7 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase
 /**
  * Smarty Internal Plugin Compile Functionclose Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase

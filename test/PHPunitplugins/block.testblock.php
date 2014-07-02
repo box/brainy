@@ -2,7 +2,7 @@
 /**
 * Smarty plugin for testing block plugins
 *
-* @package Smarty
+* @package Brainy
 * @subpackage PHPunitPlugin
 */
 

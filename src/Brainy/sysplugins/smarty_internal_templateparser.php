@@ -14,7 +14,7 @@
 *
 * This is the template parser.
 * It is generated from the internal.templateparser.y file
-* @package Smarty
+* @package Brainy
 * @subpackage Compiler
 * @author Uwe Tews
 */

@@ -4,7 +4,7 @@
 *
 * Compiles the {if} {else} {elseif} {/if} tags
 *
-* @package Smarty
+* @package Brainy
 * @subpackage Compiler
 * @author Uwe Tews
 */
@@ -12,7 +12,7 @@
 /**
 * Smarty Internal Plugin Compile If Class
 *
-* @package Smarty
+* @package Brainy
 * @subpackage Compiler
 */
 class Smarty_Internal_Compile_If extends Smarty_Internal_CompileBase
@@ -54,7 +54,7 @@ class Smarty_Internal_Compile_If extends Smarty_Internal_CompileBase
 /**
 * Smarty Internal Plugin Compile Else Class
 *
-* @package Smarty
+* @package Brainy
 * @subpackage Compiler
 */
 class Smarty_Internal_Compile_Else extends Smarty_Internal_CompileBase
@@ -79,7 +79,7 @@ class Smarty_Internal_Compile_Else extends Smarty_Internal_CompileBase
 /**
 * Smarty Internal Plugin Compile ElseIf Class
 *
-* @package Smarty
+* @package Brainy
 * @subpackage Compiler
 */
 class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase
@@ -156,7 +156,7 @@ class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase
 /**
 * Smarty Internal Plugin Compile Ifclose Class
 *
-* @package Smarty
+* @package Brainy
 * @subpackage Compiler
 */
 class Smarty_Internal_Compile_Ifclose extends Smarty_Internal_CompileBase

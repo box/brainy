@@ -26,7 +26,7 @@
  * @copyright 2008 New Digital Group, Inc.
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Uwe Tews
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsInternal
  * @version 3-SVN$Rev: 3286 $
  */
@@ -34,7 +34,7 @@
 /**
  * Utility class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Security
  */
 class Smarty_Internal_Utility
@@ -270,6 +270,7 @@ class Smarty_Internal_Utility
      *
      * @param  Smarty_Internal_Template $templae template object
      * @return array                    of tag/attributes
+     * @deprecated This method has never been fully supported.
      */
     public static function getTags(Smarty_Internal_Template $template) {
         $template->smarty->get_used_tags = true;

@@ -1,0 +1,170 @@
+<?php
+/**
+ * Smarty plugin
+ *
+ * @package Brainy
+ * @subpackage PluginsFunction
+ */
+
+/**
+ * Smarty {html_image} function plugin
+ *
+ * Type:     function<br>
+ * Name:     html_image<br>
+ * Date:     Feb 24, 2003<br>
+ * Purpose:  format HTML tags for the image<br>
+ * Examples: {html_image file="/images/masthead.gif"}<br>
+ * Output:   <img src="/images/masthead.gif" width=400 height=23><br>
+ * Params:
+ * <pre>
+ * - file        - (required) - file (and path) of image
+ * - height      - (optional) - image height (default actual height)
+ * - width       - (optional) - image width (default actual width)
+ * - basedir     - (optional) - base directory for absolute paths, default is environment variable DOCUMENT_ROOT
+ * - path_prefix - prefix for path output (optional, default empty)
+ * </pre>
+ *
+ * @link http://www.smarty.net/manual/en/language.function.html.image.php {html_image}
+ *      (Smarty online manual)
+ * @author Monte Ohrt <monte at ohrt dot com>
+ * @author credits to Duda <duda@big.hu>
+ * @version 1.0
+ * @param array                    $params   parameters
+ * @param Smarty_Internal_Template $template template object
+ * @return string
+ * @uses smarty_function_escape_special_chars()
+ */
+function smarty_function_html_image($params, $template) {
+    require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
+
+    $options = array(
+        'alt' => '',
+        'file' => '',
+        'height' => '',
+        'width' => '',
+        'extra' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'path_prefix' => '',
+        'basedir' => isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '',
+    );
+
+    foreach ($params as $_key => $_val) {
+        switch ($_key) {
+            case 'file':
+            case 'height':
+            case 'width':
+            case 'dpi':
+            case 'path_prefix':
+            case 'basedir':
+                $options[$_key] = $_val;
+                break;
+
+            case 'alt':
+                if (!is_array($_val)) {
+                    $options[$_key] = smarty_function_escape_special_chars($_val);
+                } else {
+                    throw new SmartyException ("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
+                }
+                break;
+
+            case 'link':
+            case 'href':
+                $options['prefix'] = '<a href="' . $_val . '">';
+                $options['suffix'] = '</a>';
+                break;
+
+            default:
+                if (!is_array($_val)) {
+                    $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
+                } else {
+                    throw new SmartyException ("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
+                }
+                break;
+        }
+    }
+
+    if (empty($options['file'])) {
+        trigger_error("html_image: missing 'file' parameter", E_USER_NOTICE);
+
+        return;
+    }
+
+    if ($options['file'][0] == '/') {
+        $_image_path = $options['basedir'] . $options['file'];
+    } else {
+        $_image_path = $options['file'];
+    }
+
+    // strip file protocol
+    if (stripos($params['file'], 'file://') === 0) {
+        $params['file'] = substr($params['file'], 7);
+    }
+
+    $options['protocol'] = strpos($params['file'], '://');
+    if ($options['protocol'] !== false) {
+        $options['protocol'] = strtolower(substr($params['file'], 0, $options['protocol']));
+    }
+
+    if (isset($template->smarty->security_policy)) {
+        if ($options['protocol']) {
+            // remote resource (or php stream, …)
+            if (!$template->smarty->security_policy->isTrustedUri($params['file'])) {
+                return;
+            }
+        } else {
+            // local file
+            if (!$template->smarty->security_policy->isTrustedResourceDir($params['file'])) {
+                return;
+            }
+        }
+    }
+
+    if (!isset($params['width']) || !isset($params['height'])) {
+        // FIXME: (rodneyrehm) getimagesize() loads the complete file off a remote resource, use custom [jpg,png, gif]header reader!
+        if (!$_image_data = @getimagesize($_image_path)) {
+            if (!file_exists($_image_path)) {
+                trigger_error("html_image: unable to find '$_image_path'", E_USER_NOTICE);
+
+                return;
+            } elseif (!is_readable($_image_path)) {
+                trigger_error("html_image: unable to read '$_image_path'", E_USER_NOTICE);
+
+                return;
+            } else {
+                trigger_error("html_image: '$_image_path' is not a valid image file", E_USER_NOTICE);
+
+                return;
+            }
+        }
+
+        if (!isset($params['width'])) {
+            $options['width'] = $_image_data[0];
+        }
+        if (!isset($params['height'])) {
+            $options['height'] = $_image_data[1];
+        }
+    }
+
+    if (isset($params['dpi'])) {
+        if (strstr($_SERVER['HTTP_USER_AGENT'], 'Mac')) {
+            // FIXME: (rodneyrehm) wrong dpi assumption
+            // don't know who thought this up… even if it was true in 1998, it's definitely wrong in 2011.
+            $dpi_default = 72;
+        } else {
+            $dpi_default = 96;
+        }
+        $_resize = $dpi_default / $params['dpi'];
+        $options['width'] = round($options['width'] * $_resize);
+        $options['height'] = round($options['height'] * $_resize);
+    }
+
+    return $options['prefix'] .
+        '<img src="' . $options['path_prefix'] . $options['file'] .
+        '" alt="' . $options['alt'] .
+        '" width="' . $options['width'] .
+        '" height="' . $options['height'] .
+        '"' . $options['extra'] . ' />' .
+        $options['suffix'];
+}
+

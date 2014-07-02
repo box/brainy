@@ -2,7 +2,7 @@
 /**
  * Smarty shared plugin
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage PluginsShared
  */
 

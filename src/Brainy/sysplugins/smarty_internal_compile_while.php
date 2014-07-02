@@ -4,7 +4,7 @@
  *
  * Compiles the {while} tag
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -12,7 +12,7 @@
 /**
  * Smarty Internal Plugin Compile While Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_While extends Smarty_Internal_CompileBase
@@ -54,7 +54,7 @@ class Smarty_Internal_Compile_While extends Smarty_Internal_CompileBase
 /**
  * Smarty Internal Plugin Compile Whileclose Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Whileclose extends Smarty_Internal_CompileBase

@@ -4,7 +4,7 @@
  *
  * Compiles the {section} {sectionelse} {/section} tags
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -12,7 +12,7 @@
 /**
  * Smarty Internal Plugin Compile Section Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Section extends Smarty_Internal_CompileBase
@@ -135,7 +135,7 @@ class Smarty_Internal_Compile_Section extends Smarty_Internal_CompileBase
 /**
  * Smarty Internal Plugin Compile Sectionelse Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Sectionelse extends Smarty_Internal_CompileBase
@@ -162,7 +162,7 @@ class Smarty_Internal_Compile_Sectionelse extends Smarty_Internal_CompileBase
 /**
  * Smarty Internal Plugin Compile Sectionclose Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Sectionclose extends Smarty_Internal_CompileBase

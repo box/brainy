@@ -4,7 +4,7 @@
  *
  * Compiles code for the execution of a registered function
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -12,7 +12,7 @@
 /**
  * Smarty Internal Plugin Compile Registered Function Class
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_Compile_Private_Registered_Function extends Smarty_Internal_CompileBase

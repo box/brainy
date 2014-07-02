@@ -4,7 +4,7 @@
  *
  * This file contains the basic classes and methodes for compiling Smarty templates with lexer/parser
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  */
@@ -17,7 +17,7 @@ include 'smarty_internal_parsetree.php';
 /**
  * Class SmartyTemplateCompiler
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Compiler
  */
 class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCompilerBase

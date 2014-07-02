@@ -2,7 +2,7 @@
 /**
  * Smarty Internal Plugin Resource String
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  * @author Uwe Tews
  * @author Rodney Rehm
@@ -15,7 +15,7 @@
  *
  * {@internal unlike eval-resources the compiled state of string-resources is saved for subsequent access}}
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage TemplateResources
  */
 class Smarty_Internal_Resource_String extends Smarty_Resource

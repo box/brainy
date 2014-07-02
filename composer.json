@@ -25,6 +25,9 @@
     "require": {
         "php": ">=5.3"
     },
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "2.*"
+    },
     "autoload": {
         "classmap": [
             "src/Brainy/Smarty.class.php",

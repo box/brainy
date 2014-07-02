@@ -4,7 +4,7 @@
 *
 * This is the config file parser.
 * It is generated from the internal.configfileparser.y file
-* @package Smarty
+* @package Brainy
 * @subpackage Compiler
 * @author Uwe Tews
 */
@@ -96,9 +96,9 @@ class Smarty_Internal_Configfileparser#line 80 "smarty_internal_configfileparser
 
     function __construct($lex, $compiler) {
         // set instance object
-        self::instance($this); 
+        self::instance($this);
         $this->lex = $lex;
-        $this->smarty = $compiler->smarty; 
+        $this->smarty = $compiler->smarty;
         $this->compiler = $compiler;
     }
     public static function &instance($new_instance = null)
@@ -303,13 +303,13 @@ static public $yy_action = array(
     public $yystack = array();  /* The parser's stack */
 
     public $yyTokenName = array(
-  '$',             'OPENB',         'SECTION',       'CLOSEB',      
-  'DOT',           'ID',            'EQUAL',         'FLOAT',       
+  '$',             'OPENB',         'SECTION',       'CLOSEB',
+  'DOT',           'ID',            'EQUAL',         'FLOAT',
   'INT',           'BOOL',          'SINGLE_QUOTED_STRING',  'DOUBLE_QUOTED_STRING',
   'TRIPPLE_QUOTES',  'TRIPPLE_TEXT',  'TRIPPLE_QUOTES_END',  'NAKED_STRING',
-  'OTHER',         'NEWLINE',       'COMMENTSTART',  'error',       
-  'start',         'global_vars',   'sections',      'var_list',    
-  'section',       'newline',       'var',           'value',       
+  'OTHER',         'NEWLINE',       'COMMENTSTART',  'error',
+  'start',         'global_vars',   'sections',      'var_list',
+  'section',       'newline',       'var',           'value',
     );
 
     public static $yyRuleName = array(

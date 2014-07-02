@@ -2,7 +2,7 @@
 /**
  * Smarty Internal Plugin
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Cacher
  */
 
@@ -27,7 +27,7 @@
  * cache groups: if your cache groups look somewhat like »a|b|$page|$items|$whatever«
  * consider using »a|b|c|$page-$items-$whatever« instead.
  *
- * @package Smarty
+ * @package Brainy
  * @subpackage Cacher
  * @author Rodney Rehm
  */

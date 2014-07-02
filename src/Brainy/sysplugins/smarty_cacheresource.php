@@ -2,14 +2,14 @@
 /**
 * Smarty Internal Plugin
 *
-* @package Smarty
+* @package Brainy
 * @subpackage Cacher
 */
 
 /**
 * Cache Handler API
 *
-* @package Smarty
+* @package Brainy
 * @subpackage Cacher
 * @author Rodney Rehm
 */
@@ -197,7 +197,7 @@ abstract class Smarty_CacheResource
 *
 * Cache Data Container for Template Files
 *
-* @package Smarty
+* @package Brainy
 * @subpackage TemplateResources
 * @author Rodney Rehm
 */
