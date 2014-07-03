@@ -15,6 +15,12 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smartyBC->safe_lookups = Smarty::LOOKUP_SAFE;
+    }
+    protected function tearDown() {
+        $this->smarty->clearAllCache();
+        $this->smartyBC->clearAllCache();
     }
 
     static function isRunnable() {

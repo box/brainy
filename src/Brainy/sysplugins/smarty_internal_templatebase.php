@@ -116,7 +116,10 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                         unset($code);
                     } catch (Exception $e) {
                         ob_get_clean();
-                        // if (isset($code)) echo $code;
+                        // if (isset($code)) {
+                        //     echo $e;
+                        //     echo $code;
+                        // }
                         throw $e;
                     }
                 } else {

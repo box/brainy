@@ -1623,6 +1623,8 @@ class Smarty extends Smarty_Internal_TemplateBase {
 
         // walk the muted directories and test against $errfile
         foreach (Smarty::$_muted_directories as $key => &$dir) {
+            // var_dump($dir);
+            // var_dump($errfile);
             if (!$dir) {
                 // resolve directory and length for speedy comparisons
                 $file = realpath($key);
@@ -1636,7 +1638,8 @@ class Smarty extends Smarty_Internal_TemplateBase {
                     'length' => strlen($file),
                 );
             }
-            if (!strncmp($errfile, $dir['file'], $dir['length'])) {
+            // var_dump(strncmp($errfile, $dir['file'], $dir['length']));
+            if (strncmp($errfile, $dir['file'], $dir['length']) === 0) {
                 $_is_muted_directory = true;
                 break;
             }

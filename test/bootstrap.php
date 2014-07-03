@@ -47,6 +47,7 @@ class SmartyTests {
         $smarty->cache_id = null;
         $smarty->compile_id = null;
         $smarty->default_resource_type = 'file';
+        $smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;
     }
 
     public static function init() {
