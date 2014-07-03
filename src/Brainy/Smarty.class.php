@@ -563,8 +563,11 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * when the member does not exist.
      *
      * @var int
+     * @uses Smarty::LOOKUP_UNSAFE
+     * @uses Smarty::LOOKUP_SAFE
+     * @uses Smarty::LOOKUP_SAFE_WARN
      */
-    public $safe_lookups = LOOKUP_UNSAFE;
+    public $safe_lookups = Smarty::LOOKUP_UNSAFE;
     /**
      * The left delimiter string
      * @var string

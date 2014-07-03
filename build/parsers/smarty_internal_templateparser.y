@@ -34,18 +34,25 @@
         $this->template = $this->compiler->template;
         $this->compiler->has_variable_string = false;
         $this->compiler->prefix_code = array();
+        $this->security = isset($this->smarty->security_policy);
         $this->block_nesting_level = 0;
         $this->current_buffer = $this->root_buffer = new _smarty_template_buffer($this);
 
-        $this->safe_lookups = $this->compiler->safe_lookups;
+        $this->safe_lookups = $this->smarty->safe_lookups;
     }
 
     public function compileVariable($variable) {
+        if ($this->safe_lookups === 0) { // Unsafe lookups
+            return '$_smarty_tpl->tpl_vars[' . $variable . ']->value';
+        }
         return 'smarty_safe_array_lookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')->value';
     }
 
     public function compileSafeLookupWithBase($base, $variable) {
-        return 'smarty_safe_array_lookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')->value';
+        if ($this->safe_lookups === 0) { // Unsafe lookups
+            return $base . '[' . $variable . ']';
+        }
+        return 'smarty_safe_array_lookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')';
     }
 }
 
@@ -723,6 +730,10 @@ varindexed(res)  ::= DOLLAR varvar(v) arrayindex(a). {
 //
                     // multiple array index
 arrayindex(res)  ::= arrayindex(a1) indexdef(a2). {
+    res = $this->compileSafeLookupWithBase(a1, a2);
+}
+                    // multiple array index
+arrayindex(res)  ::= arrayindex(a1) bracketassigndef(a2). {
     res = a1.a2;
 }
 
@@ -734,48 +745,47 @@ arrayindex        ::= . {
 // single index definition
                     // Smarty2 style index
 indexdef(res)    ::= DOT DOLLAR varvar(v).  {
-    res = '['.$this->compileVariable(v).']';
+    res = $this->compileVariable(v);
 }
 
 indexdef(res)    ::= DOT DOLLAR varvar(v) AT ID(p). {
-    res = '['.$this->compileVariable(v).'->'.p.']';
+    res = $this->compileVariable(v).'->'.p;
 }
 
 indexdef(res)   ::= DOT ID(i). {
-    res = "['". i ."']";
+    res = "'". i ."'";
 }
 
 indexdef(res)   ::= DOT INTEGER(n). {
-    res = "[". n ."]";
+    res = n;
 }
 
 indexdef(res)   ::= DOT LDEL expr(e) RDEL. {
-    res = "[". e ."]";
+    res = e;
 }
 
                     // section tag index
 indexdef(res)   ::= OPENB ID(i)CLOSEB. {
-    res = '['.$this->compiler->compileTag('private_special_variable',array(),'[\'section\'][\''.i.'\'][\'index\']').']';
+    res = $this->compiler->compileTag('private_special_variable',array(),'[\'section\'][\''.i.'\'][\'index\']');
 }
 
 indexdef(res)   ::= OPENB ID(i) DOT ID(i2) CLOSEB. {
-    res = '['.$this->compiler->compileTag('private_special_variable',array(),'[\'section\'][\''.i.'\'][\''.i2.'\']').']';
+    res = $this->compiler->compileTag('private_special_variable',array(),'[\'section\'][\''.i.'\'][\''.i2.'\']');
 }
 
                     // PHP style index
 indexdef(res)   ::= OPENB expr(e) CLOSEB. {
-    res = "[". e ."]";
+    res = e;
 }
 
-                    // f�r assign append array
-indexdef(res)  ::= OPENB CLOSEB. {
+// for assign append array
+bracketassigndef(res)  ::= OPENB CLOSEB. {
     res = '[]';
 }
 
-//
 // variable variable names
-//
-                    // singel identifier element
+
+// single identifier element
 varvar(res)      ::= varvarele(v). {
     res = v;
 }

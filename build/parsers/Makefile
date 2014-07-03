@@ -24,5 +24,4 @@ smarty_internal_templateparser.php: smarty_internal_templateparser.y
 	php Create_Template_Parser.php
 
 clean:
-	rm smarty_internal_*er.out
-	rm smarty_internal_*er.php
+	rm -f smarty_internal_*er.out smarty_internal_*er.php
