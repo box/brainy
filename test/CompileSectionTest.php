@@ -16,10 +16,6 @@ class CompileSectionTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test {section} tag
     */
@@ -32,7 +28,7 @@ class CompileSectionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
     }
     public function testSection3() {
-         $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
+        $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $tpl = $this->smarty->createTemplate('eval:{section name=bar loop=$foo}{$foo[bar]}{sectionelse}else{/section}');
         $this->assertEquals("else", $this->smarty->fetch($tpl));
     }

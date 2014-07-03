@@ -41,11 +41,11 @@
         $this->safe_lookups = $this->smarty->safe_lookups;
     }
 
-    public function compileVariable($variable) {
+    public function compileVariable($variable, $value = 'value') {
         if ($this->safe_lookups === 0) { // Unsafe lookups
-            return '$_smarty_tpl->tpl_vars[' . $variable . ']->value';
+            return '$_smarty_tpl->tpl_vars[' . $variable . ']->' . $value;
         }
-        return 'smarty_safe_array_lookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')->value';
+        return 'smarty_safe_var_lookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')->' . $value;
     }
 
     public function compileSafeLookupWithBase($base, $variable) {
@@ -215,8 +215,10 @@ smartytag(res)   ::= LDEL expr(e) attributes(a). {
 //
 // Smarty tags start here
 //
+smartytag(res)   ::= LDEL variable(vi) EQUAL expr(e). {
+    res = vi . ' = (' . e . ');';
+}
 
-                  // assign new style
 smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL value(e). {
     res = $this->compiler->compileTag('assign',array(array('value'=>e),array('var'=>"'".i."'")));
 }
@@ -227,10 +229,6 @@ smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e). {
 
 smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e) attributes(a). {
     res = $this->compiler->compileTag('assign',array_merge(array(array('value'=>e),array('var'=>"'".i."'")),a));
-}
-
-smartytag(res)   ::= LDEL varindexed(vi) EQUAL expr(e) attributes(a). {
-    res = $this->compiler->compileTag('assign',array_merge(array(array('value'=>e),array('var'=>vi['var'])),a),array('smarty_internal_index'=>vi['smarty_internal_index']));
 }
 
                   // tag with optional Smarty2 style attributes
@@ -437,7 +435,7 @@ statement(res)    ::= DOLLAR varvar(v) EQUAL expr(e). {
     res = array('var' => v, 'value'=>e);
 }
 
-statement(res)    ::= varindexed(vi) EQUAL expr(e). {
+statement(res)    ::= variablebase(vi) EQUAL expr(e). {
     res = array('var' => vi, 'value'=>e);
 }
 
@@ -645,26 +643,6 @@ value(res)       ::= doublequoted_with_quotes(s). {
     res = s;
 }
 
-                  // static class access
-value(res)       ::= ID(c) DOUBLECOLON static_class_access(r). {
-    if (!$this->security || isset($this->smarty->registered_classes[c]) || $this->smarty->security_policy->isTrustedStaticClass(c, $this->compiler)) {
-        if (isset($this->smarty->registered_classes[c])) {
-            res = $this->smarty->registered_classes[c].'::'.r;
-        } else {
-            res = c.'::'.r;
-        }
-    } else {
-        $this->compiler->trigger_template_error ("static class '".c."' is undefined or not allowed by security setting");
-    }
-}
-
-value(res)    ::= varindexed(vi) DOUBLECOLON static_class_access(r). {
-    if (vi['var'] == '\'smarty\'') {
-        res =  $this->compiler->compileTag('private_special_variable',array(),vi['smarty_internal_index']).'::'.r;
-    } else {
-        res = $this->compileVariable(vi['var']).vi['smarty_internal_index'].'::'.r;
-    }
-}
 
                   // Smarty tag
 value(res)       ::= smartytag(st) RDEL. {
@@ -681,69 +659,70 @@ value(res)       ::= value(v) modifierlist(l). {
 //
 // variables
 //
-                  // Smarty variable (optional array)
-variable(res)    ::= varindexed(vi). {
-    if (vi['var'] == '\'smarty\'') {
-        $smarty_var = $this->compiler->compileTag('private_special_variable',array(),vi['smarty_internal_index']);
-        res = $smarty_var;
+
+variable(res)  ::= variableinternal(base). {
+    res = base;
+}
+
+variablebase(res)  ::= DOLLAR varvar(v). {
+    res = v;
+}
+
+variableinternal(res)  ::= variableinternal(a1) indexdef(a2). {
+    if (a2 === '[]') {
+        res = a1 . a2;
     } else {
-        // used for array reset,next,prev,end,current
-        $this->last_variable = vi['var'];
-        $this->last_index = vi['smarty_internal_index'];
-        res = $this->compileVariable(vi['var']).vi['smarty_internal_index'];
+        res = $this->compileSafeLookupWithBase(a1, a2);
     }
 }
 
-                  // variable with property
-variable(res)    ::= DOLLAR varvar(v) AT ID(p). {
-    res = '$_smarty_tpl->tpl_vars['. v .']->'.p;
+// FIXME: This is a hack to make $smarty.config.foo work. :(
+variableinternal(res)  ::= variablebase(base) indexdef(a) indexdef(b). {
+    if (base == '\'smarty\'') {
+        res = $this->compiler->compileTag('private_special_variable', array(), a, b);
+    } else {
+        res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
+        res = $this->compileSafeLookupWithBase(res, b);
+    }
 }
 
-                  // object
-variable(res)    ::= object(o). {
-    res = o;
+variableinternal(res)  ::= variablebase(base) indexdef(a). {
+    if (base == '\'smarty\'') {
+        res = $this->compiler->compileTag('private_special_variable', array(), a);
+    } elseif (a === '[]') {
+        res = $this->compileVariable(base) . a;
+    } else {
+        res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
+    }
 }
 
-                  // config variable
-variable(res)    ::= HATCH ID(i) HATCH. {
+variableinternal(res)  ::= variablebase(v). {
+    res = $this->compileVariable(v);
+}
+
+variableinternal(res)  ::= variableinternal(a1) objectelement(a2). {
+    res = a1 . a2;
+}
+// variable with property
+variableinternal(res)    ::= DOLLAR varvar(v) AT ID(p). {
+    res = $this->compileVariable(v, p);
+}
+
+// config variable
+variableinternal(res)    ::= HATCH ID(i) HATCH. {
     res = '$_smarty_tpl->getConfigVariable(\''. i .'\')';
 }
 
-variable(res)    ::= HATCH ID(i) HATCH arrayindex(a). {
-    res = '(is_array($tmp = $_smarty_tpl->getConfigVariable(\''. i .'\')) ? $tmp'.a.' :null)';
-}
-
-variable(res)    ::= HATCH variable(v) HATCH. {
+variableinternal(res)    ::= HATCH variableinternal(v) HATCH. {
     res = '$_smarty_tpl->getConfigVariable('. v .')';
 }
 
-variable(res)    ::= HATCH variable(v) HATCH arrayindex(a). {
-    res = '(is_array($tmp = $_smarty_tpl->getConfigVariable('. v .')) ? $tmp'.a.' : null)';
-}
-
-varindexed(res)  ::= DOLLAR varvar(v) arrayindex(a). {
-    res = array('var'=>v, 'smarty_internal_index'=>a);
-}
-
-//
-// array index
-//
-                    // multiple array index
-arrayindex(res)  ::= arrayindex(a1) indexdef(a2). {
-    res = $this->compileSafeLookupWithBase(a1, a2);
-}
-                    // multiple array index
-arrayindex(res)  ::= arrayindex(a1) bracketassigndef(a2). {
-    res = a1.a2;
-}
-
-                    // no array index
-arrayindex        ::= . {
-    return;
+indexdef(res)    ::= OPENB CLOSEB.  {
+    res = '[]';
 }
 
 // single index definition
-                    // Smarty2 style index
+// Smarty2 style index
 indexdef(res)    ::= DOT DOLLAR varvar(v).  {
     res = $this->compileVariable(v);
 }
@@ -764,23 +743,18 @@ indexdef(res)   ::= DOT LDEL expr(e) RDEL. {
     res = e;
 }
 
-                    // section tag index
-indexdef(res)   ::= OPENB ID(i)CLOSEB. {
-    res = $this->compiler->compileTag('private_special_variable',array(),'[\'section\'][\''.i.'\'][\'index\']');
+// section tag index
+indexdef(res)   ::= OPENB ID(i) CLOSEB. {
+    res = $this->compiler->compileTag('private_special_variable', array(), '\'section\'', '\'' . i . '\'') . '[\'index\']';
 }
 
 indexdef(res)   ::= OPENB ID(i) DOT ID(i2) CLOSEB. {
-    res = $this->compiler->compileTag('private_special_variable',array(),'[\'section\'][\''.i.'\'][\''.i2.'\']');
+    res = $this->compiler->compileTag('private_special_variable', array(), '\'section\'', '\'' . i . '\']') . '[\''.i2.'\']';
 }
 
-                    // PHP style index
+// PHP style index
 indexdef(res)   ::= OPENB expr(e) CLOSEB. {
     res = e;
-}
-
-// for assign append array
-bracketassigndef(res)  ::= OPENB CLOSEB. {
-    res = '[]';
 }
 
 // variable variable names
@@ -808,51 +782,34 @@ varvarele(res)   ::= LDEL expr(e) RDEL. {
 //
 // objects
 //
-object(res)    ::= varindexed(vi) objectchain(oc). {
-    if (vi['var'] == '\'smarty\'') {
-        res =  $this->compiler->compileTag('private_special_variable',array(),vi['smarty_internal_index']).oc;
-    } else {
-        res = $this->compileVariable(vi['var']).vi['smarty_internal_index'].oc;
-    }
-}
 
-                    // single element
-objectchain(res) ::= objectelement(oe). {
-    res  = oe;
-}
-
-                    // chain of elements
-objectchain(res) ::= objectchain(oc) objectelement(oe). {
-    res  = oc.oe;
-}
-
-                    // variable
-objectelement(res)::= PTR ID(i) arrayindex(a). {
+// variable
+objectelement(res)::= PTR ID(i). {
     if ($this->security && substr(i,0,1) == '_') {
         $this->compiler->trigger_template_error (self::Err1);
     }
-    res = '->'.i.a;
+    res = '->'.i;
 }
 
-objectelement(res)::= PTR DOLLAR varvar(v) arrayindex(a). {
+objectelement(res)::= PTR DOLLAR varvar(v). {
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
     }
-    res = '->{'.$this->compileVariable(v).a.'}';
+    res = '->{'.$this->compileVariable(v).'}';
 }
 
-objectelement(res)::= PTR LDEL expr(e) RDEL arrayindex(a). {
+objectelement(res)::= PTR LDEL expr(e) RDEL. {
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
     }
-    res = '->{'.e.a.'}';
+    res = '->{'.e.'}';
 }
 
-objectelement(res)::= PTR ID(ii) LDEL expr(e) RDEL arrayindex(a). {
+objectelement(res)::= PTR ID(ii) LDEL expr(e) RDEL. {
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
     }
-    res = '->{\''.ii.'\'.'.e.a.'}';
+    res = '->{\''.ii.'\'.'.e.'}';
 }
 
                     // method
@@ -975,31 +932,6 @@ modparameter(res) ::= COLON array(mp). {
     res = array(mp);
 }
 
-                  // static class method call
-static_class_access(res)       ::= method(m). {
-    res = m;
-}
-
-                  // static class method call with object chaining
-static_class_access(res)       ::= method(m) objectchain(oc). {
-    res = m.oc;
-}
-
-                  // static class constant
-static_class_access(res)       ::= ID(v). {
-    res = v;
-}
-
-                  // static class variables
-static_class_access(res)       ::=  DOLLAR ID(v) arrayindex(a). {
-    res = '$'.v.a;
-}
-
-                  // static class variables with object chain
-static_class_access(res)       ::= DOLLAR ID(v) arrayindex(a) objectchain(oc). {
-    res = '$'.v.a.oc;
-}
-
 
 // if conditions and operators
 ifcond(res)        ::= EQUALS. {
@@ -1104,7 +1036,7 @@ doublequoted(res)          ::= doublequotedcontent(o). {
 }
 
 doublequotedcontent(res)           ::=  DOLLARID(i). {
-    res = new _smarty_code($this, '(string)smarty_array_lookup($_smarty_tpl->tpl_vars, \''. substr(i,1) .'\')->value');
+    res = new _smarty_code($this, '(string)' . $this->compileVariable("'" . substr(i,1) . "'"));
 }
 
 doublequotedcontent(res)           ::=  LDEL variable(v) RDEL. {

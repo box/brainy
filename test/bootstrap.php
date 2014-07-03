@@ -4,10 +4,8 @@ define('SMARTY_DIR', 'src/Brainy/');
 require_once SMARTY_DIR . 'SmartyBC.class.php';
 
 class SmartyTests {
-    public static $cwd = null;
     public static $smarty = null;
     public static $smartyBC = null;
-    public static $smartyBC31 = null;
 
     protected static function _init($smarty) {
         $smarty->setTemplateDir(realpath('test' . DS . 'templates' . DS));
@@ -51,8 +49,6 @@ class SmartyTests {
     }
 
     public static function init() {
-        chdir(self::$cwd);
-        error_reporting(E_ALL | E_STRICT);
         self::_init(SmartyTests::$smarty);
         self::_init(SmartyTests::$smartyBC);
         Smarty_Resource::$sources = array();
@@ -60,11 +56,7 @@ class SmartyTests {
     }
 }
 
-SmartyTests::$cwd = getcwd();
 SmartyTests::$smarty = new Smarty();
 SmartyTests::$smartyBC = new SmartyBC();
 
-ini_set('error_reporting', E_STRICT);
-ini_set('max_execution_time', 800);
 ini_set('date.timezone', 'UTC');
-ini_set('memory_limit', '3500M');

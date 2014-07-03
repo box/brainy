@@ -105,26 +105,4 @@ class CompileAssignTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate("eval:{\$foo=['a'=>9,'b'=>8,'c'=>7,'d'=>6]}{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}");
         $this->assertEquals("a9b8c7d6", $this->smarty->fetch($tpl));
     }
-    public function testAssignArrayAppend() {
-        $tpl = $this->smarty->createTemplate("eval:{\$foo =1}{\$foo[] = 2}{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}");
-        $this->assertEquals("0112", $this->smarty->fetch($tpl));
-    }
-    public function testAssignArrayAppend2() {
-        $this->smarty->assign('foo', 1);
-        $tpl = $this->smarty->createTemplate("eval:{\$foo[]=2}{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}", null, null, $this->smarty);
-        $this->assertEquals("0112", $this->smarty->fetch($tpl));
-        $tpl2 = $this->smarty->createTemplate("eval:{\$foo}", null, null, $this->smarty);
-        $this->assertEquals("1", $this->smarty->fetch($tpl2));
-    }
-    public function testAssignArrayAppend3() {
-        $this->smarty->assign('foo', 1);
-        $tpl = $this->smarty->createTemplate("eval:{\$foo[]=2 scope=root}{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}", null, null, $this->smarty);
-        $this->assertEquals("0112", $this->smarty->fetch($tpl));
-        $tpl2 = $this->smarty->createTemplate("eval:{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}", null, null, $this->smarty);
-        $this->assertEquals("0112", $this->smarty->fetch($tpl2));
-    }
-    public function testAssignNestedArray() {
-        $tpl = $this->smarty->createTemplate("eval:{\$foo['a'][4]=1}{\$foo['a'][4]}");
-        $this->assertEquals("1", $this->smarty->fetch($tpl));
-    }
 }

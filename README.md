@@ -53,15 +53,7 @@ applications, there are some differences that may make it difficult to switch.
 - Whitespace surrounding tags is not always treated the same as in Smarty.
 - PHP template resources are removed: `$smarty->fetch('php:my_php_file.php')`
 
-Additionally, undefined variables do not throw errors (similar to Smarty 2's
-behavior). For example:
-
-```php
-{if $foo}{$bar}{/if}
-```
-
-If either `$foo` or `$bar` are undefined, the template will simply return an
-empty string. In Smarty 3, the behavior is to throw an undefined index error.
+A complete list of incompatibilities is listed [on the wiki](brainy/wiki/Smarty-Incompatibilities).
 
 
 ### Added Features

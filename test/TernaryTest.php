@@ -14,10 +14,7 @@ class TernaryTest extends PHPUnit_Framework_TestCase
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-    }
-
-    static function isRunnable() {
-        return true;
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
     }
 
     /**
@@ -64,20 +61,12 @@ class TernaryTest extends PHPUnit_Framework_TestCase
     /**
     * test output on array element
     */
-    public function testTernaryOutputArray1() {
-        $tpl = $this->smarty->createTemplate("eval:{\$foo[1][2]=true}{(\$foo.1.2) ? 'yes' : 'no'}");
-        $this->assertEquals('yes', $this->smarty->fetch($tpl));
-    }
-    public function testTernaryOutputArray2() {
-        $tpl = $this->smarty->createTemplate("eval:{\$foo[1][2]=true}{(\$foo[1][2]) ? 'yes' : 'no'}");
-        $this->assertEquals('yes', $this->smarty->fetch($tpl));
-    }
     public function testTernaryOutputArray3() {
-        $tpl = $this->smarty->createTemplate("eval:{\$foo[1][2]=false}{(\$foo.1.2) ? 'yes' : 'no'}");
+        $tpl = $this->smarty->createTemplate("eval:{(\$foo.1.2) ? 'yes' : 'no'}");
         $this->assertEquals('no', $this->smarty->fetch($tpl));
     }
     public function testTernaryOutputArray4() {
-        $tpl = $this->smarty->createTemplate("eval:{\$foo[1][2]=false}{(\$foo[1][2]) ? 'yes' : 'no'}");
+        $tpl = $this->smarty->createTemplate("eval:{(\$foo[1][2]) ? 'yes' : 'no'}");
         $this->assertEquals('no', $this->smarty->fetch($tpl));
     }
     /**
@@ -121,10 +110,6 @@ class TernaryTest extends PHPUnit_Framework_TestCase
     */
     public function testTernaryAssignBoolean1() {
         $tpl = $this->smarty->createTemplate("eval:{\$foo=(true) ? 'yes' : 'no'}{\$foo}");
-        $this->assertEquals('yes', $this->smarty->fetch($tpl));
-    }
-    public function testTernaryAssignBoolean2() {
-        $tpl = $this->smarty->createTemplate("eval:{\$foo[1][2]=(true) ? 'yes' : 'no'}{\$foo[1][2]}");
         $this->assertEquals('yes', $this->smarty->fetch($tpl));
     }
     /**

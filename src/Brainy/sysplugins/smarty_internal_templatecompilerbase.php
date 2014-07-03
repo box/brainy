@@ -172,6 +172,11 @@ abstract class Smarty_Internal_TemplateCompilerBase
     public $known_modifier_type = array();
 
     /**
+     * @var boolean
+     */
+    public $has_code = false;
+
+    /**
      * Methode to compile a Smarty template
      *
      * @param  mixed $_content template source
@@ -273,7 +278,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @param  array  $parameter array with compilation parameter
      * @return string compiled   code
      */
-    public function compileTag($tag, $args, $parameter = array()) {
+    public function compileTag($tag, $args, $parameter = array(), $param2 = null, $param3 = null) {
         // $args contains the attributes parsed and compiled by the lexer/parser
         // assume that tag does compile into code, but creates no HTML output
         $this->has_code = true;
@@ -283,7 +288,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
             $this->template->used_tags[] = array($tag, $args);
         }
         // compile the smarty tag (required compile classes to compile the tag are autoloaded)
-        if (($_output = $this->callTagCompiler($tag, $args, $parameter)) === false) {
+        if (($_output = $this->callTagCompiler($tag, $args, $parameter, $param2, $param3)) === false) {
             if (isset($this->smarty->template_functions[$tag])) {
                 // template defined by {template} tag
                 $args['_attr']['name'] = "'" . $tag . "'";
@@ -663,7 +668,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
         }
 //        $line += $this->trace_line_offset;
         $match = preg_split("/\n/", $this->lex->data);
-        $error_text = 'Syntax error in template "' . (empty($this->trace_filepath) ? $this->template->source->filepath : $this->trace_filepath) . '"  on line ' . ($line + $this->trace_line_offset)  . ' "' . trim(preg_replace('![\t\r\n]+!', ' ', $match[$line - 1])) . '" ';
+        $error_text = 'Syntax error in template "' . ($this->template->source->filepath) . '" on line ' . ($line + $this->trace_line_offset)  . ' "' . trim(preg_replace('![\t\r\n]+!', ' ', $match[$line - 1])) . '" ';
         if (isset($args)) {
             // individual error message
             $error_text .= $args;

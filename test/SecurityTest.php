@@ -21,10 +21,6 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         $this->smarty->clearAllCache();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test that security is loaded
     */
@@ -211,30 +207,6 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     public function testDisabledTrustedDirectory() {
         $this->smarty->disableSecurity();
         $this->assertEquals("hello world", $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}'));
-    }
-
-        /**
-    * test trusted static class
-    */
-    public function testTrustedStaticClass() {
-        $this->smarty->security_policy->static_classes = array('mysecuritystaticclass');
-        $tpl = $this->smarty->createTemplate('eval:{mysecuritystaticclass::square(5)}');
-        $this->assertEquals('25', $this->smarty->fetch($tpl));
-    }
-
-    /**
-    * test not trusted PHP function
-    */
-    public function testNotTrustedStaticClass() {
-        $this->smarty->security_policy->static_classes = array('null');
-        try {
-            $this->smarty->fetch('eval:{mysecuritystaticclass::square(5)}');
-        } catch (Exception $e) {
-            $this->assertContains(htmlentities("access to static class 'mysecuritystaticclass' not allowed by security setting"), $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for not trusted static class has not been raised.');
     }
 
     public function testChangedTrustedDirectory() {

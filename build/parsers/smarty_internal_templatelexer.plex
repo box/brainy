@@ -53,7 +53,6 @@
          				'DOLLAR'	=> '$',
          				'SEMICOLON' => ';',
          				'COLON'		=> ':',
-         				'DOUBLECOLON'		=> '::',
          				'AT'		=> '@',
          				'HATCH'		=> '#',
          				'QUOTE'		=> '"',
@@ -75,7 +74,6 @@
 
          function __construct($data,$compiler)
          {
-     //        $this->data = preg_replace("/(\r\n|\r|\n)/", "\n", $data);
              $this->data = $data;
              $this->counter = 0;
              $this->line = 1;
@@ -125,7 +123,6 @@
      dollar = /\$/
      dot = /\./
      comma = /\s*\,\s*/
-     doublecolon = /\:\:/
      colon = /\s*\:\s*/
      at = /@/
      hatch = /#/
@@ -459,9 +456,6 @@
      }
      semicolon {
        $this->token = Smarty_Internal_Templateparser::TP_SEMICOLON;
-     }
-     doublecolon {
-       $this->token = Smarty_Internal_Templateparser::TP_DOUBLECOLON;
      }
      colon {
        $this->token = Smarty_Internal_Templateparser::TP_COLON;

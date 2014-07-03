@@ -22,19 +22,23 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
      *
      * @param  array  $args     array with attributes from parser
      * @param  object $compiler compiler object
+     * @param  string $parameter The parameter being accessed on the smarty variable
+     * @param  string|null $modifier The member of the parameter to fetch.
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter) {
-        $_index = preg_split("/\]\[/", substr($parameter, 1, strlen($parameter)-2));
+    public function compile($args, $compiler, $parameter, $modifier = null) {
         $compiled_ref = ' ';
-        $variable = trim($_index[0], "'");
+        if ($parameter === "'section'" && !$modifier) {
+            throw new Exception('asdf');
+        }
+        $variable = substr($parameter, 1, strlen($parameter)-2);
         switch ($variable) {
             case 'foreach':
-                return "\$_smarty_tpl->getVariable('smarty')->value$parameter";
+                return "\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][$modifier]";
             case 'section':
-                return "\$_smarty_tpl->getVariable('smarty')->value$parameter";
+                return "\$_smarty_tpl->tpl_vars['smarty']->value['section'][$modifier]";
             case 'capture':
-                return "Smarty::\$_smarty_vars$parameter";
+                return "Smarty::\$_smarty_vars['capture'][$modifier]";
             case 'now':
                 return 'time()';
             case 'cookies':
@@ -53,58 +57,49 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
             case 'request':
                 if (isset($compiler->smarty->security_policy) && !$compiler->smarty->security_policy->allow_super_globals) {
                     $compiler->trigger_template_error("(secure mode) super globals not permitted");
-                    break;
+                    return;
                 }
-                $compiled_ref = '$_'.strtoupper($variable);
-                break;
+                return '$_' . strtoupper($variable) . "[$modifier]";
 
             case 'template':
                 return 'basename($_smarty_tpl->source->filepath)';
 
             case 'template_object':
-                return '$_smarty_tpl';
+                $compiled_ref = '$_smarty_tpl';
+                break;
 
             case 'current_dir':
                 return 'dirname($_smarty_tpl->source->filepath)';
 
             case 'version':
                 $_version = Smarty::SMARTY_VERSION;
-
                 return "'$_version'";
 
             case 'const':
                 if (isset($compiler->smarty->security_policy) && !$compiler->smarty->security_policy->allow_constants) {
                     $compiler->trigger_template_error("(secure mode) constants not permitted");
-                    break;
+                    return;
                 }
 
-                return "@constant({$_index[1]})";
+                return "@constant($modifier)";
 
             case 'config':
-                if (isset($_index[2])) {
-                    return "(is_array(\$tmp = \$_smarty_tpl->getConfigVariable($_index[1])) ? \$tmp[$_index[2]] : null)";
-                } else {
-                    return "\$_smarty_tpl->getConfigVariable($_index[1])";
-                }
+                return "\$_smarty_tpl->getConfigVariable($modifier)";
+
             case 'ldelim':
                 $_ldelim = $compiler->smarty->left_delimiter;
-
                 return "'$_ldelim'";
 
             case 'rdelim':
                 $_rdelim = $compiler->smarty->right_delimiter;
-
                 return "'$_rdelim'";
 
             default:
-                $compiler->trigger_template_error('$smarty.' . trim($_index[0], "'") . ' is invalid');
-                break;
+                $compiler->trigger_template_error('$smarty.' . trim($variable, "'") . ' is invalid');
+                return;
         }
-        if (isset($_index[1])) {
-            array_shift($_index);
-            foreach ($_index as $_ind) {
-                $compiled_ref = $compiled_ref . "[$_ind]";
-            }
+        if ($modifier !== null) {
+            $compiled_ref .= "[$modifier]";
         }
 
         return $compiled_ref;

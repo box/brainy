@@ -109,8 +109,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 if ($_template->source->recompiled) {
                     $code = $_template->compiler->compileTemplate($_template);
                     try {
-                        // if (strpos($code, 'myhello') !== false)
-                        //     echo 'code: ', $code;
+                        // echo $code;
                         ob_start();
                         eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
                         unset($code);
@@ -125,11 +124,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 } else {
                     if (!$_template->compiled->exists || ($_template->smarty->force_compile && !$_template->compiled->isCompiled)) {
                         $_template->compileTemplateSource();
-                        $code = file_get_contents($_template->compiled->filepath);
-                        // if (strpos($code, 'hello world') === false && strpos($code, 'smarty_template_function_functest') === false && strpos($code, 'test_recursive_includes') === false)
-                        //     echo $code;
-                        eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
-                        unset($code);
+                        require $_template->compiled->filepath;
                         $_template->compiled->loaded = true;
                         $_template->compiled->isCompiled = true;
                     }
@@ -138,9 +133,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                         if ($_template->mustCompile) {
                             // recompile and load again
                             $_template->compileTemplateSource();
-                            $code = file_get_contents($_template->compiled->filepath);
-                            eval("?>" . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
-                            unset($code);
+                            require $_template->compiled->filepath;
                             $_template->compiled->isCompiled = true;
                         }
                         $_template->compiled->loaded = true;

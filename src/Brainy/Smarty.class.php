@@ -88,22 +88,11 @@ if (SMARTY_SPL_AUTOLOAD && set_include_path(get_include_path() . PATH_SEPARATOR 
     spl_autoload_register('smartyAutoload');
 }
 
-if (!function_exists('smarty_array_lookup')) {
+if (!function_exists('smarty_safe_array_lookup')) {
 
     /**
-     * Performs a safe lookup of an array member.
-     * @param array|null $arr
-     * @param string|int $key
-     * @return mixed
-     * @throws InvalidArgumentException
-     * @internal
-     */
-    function smarty_array_lookup($arr, $key) {
-        return isset($arr[$key]) ? $arr[$key] : new Smarty_Variable;
-    }
-    /**
      * Performs a safe lookup of an array member with a safety value.
-     * @param array|null $arr
+     * @param mixed $arr
      * @param string|int $key
      * @param int $safety
      * @return mixed
@@ -112,13 +101,35 @@ if (!function_exists('smarty_array_lookup')) {
      * @internal
      */
     function smarty_safe_array_lookup($arr, $key, $safety) {
+        if (is_array($arr) && isset($arr[$key])) {
+            return $arr[$key];
+        }
+        if ($safety === Smarty::LOOKUP_SAFE_WARN) {
+            trigger_error('Could not find member "' . $key . '" in Brainy template.', E_USER_WARNING);
+        }
+        return '';
+    }
+}
+
+if (!function_exists('smarty_safe_var_lookup')) {
+    /**
+     * Performs a safe lookup of a variable.
+     * @param array $arr
+     * @param string|int $key
+     * @param int $safety
+     * @return mixed
+     * @throws InvalidArgumentException
+     * @see Smarty::$safe_lookups
+     * @internal
+     */
+    function smarty_safe_var_lookup($arr, $key, $safety) {
         if (isset($arr[$key])) {
             return $arr[$key];
         }
-        if ($safety === 2) {
-            trigger_error('Could not find member "' . $key . '" in Brainy template.', E_USER_WARNING);
+        if ($safety === Smarty::LOOKUP_SAFE_WARN) {
+            trigger_error('Could not find variable "' . $key . '" in Brainy template.', E_USER_WARNING);
         }
-        return new Smarty_Variable;
+        return $arr[$key] = new Smarty_Variable;
     }
 }
 

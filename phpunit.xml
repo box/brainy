@@ -1,5 +1,5 @@
 <phpunit
-    convertErrorsToExceptions="false"
+    convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
     colors="true"
@@ -7,9 +7,14 @@
     bootstrap="test/bootstrap.php">
 
     <testsuites>
-        <testsuite name="Aws">
+        <testsuite name="Original">
             <directory>test/</directory>
         </testsuite>
     </testsuites>
+
+    <php>
+        <ini name="memory_limit" value="512M" />
+        <ini name="max_execution_time" value="800" />
+    </php>
 
 </phpunit>

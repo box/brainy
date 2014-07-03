@@ -1,69 +1,4 @@
 <?php
-class ParseyyToken implements ArrayAccess
-{
-
-    public $string = '';
-    public $metadata = array();
-
-    public function __construct($s, $m = array())
-    {
-        if ($s instanceof ParseyyToken) {
-            $this->string = $s->string;
-            $this->metadata = $s->metadata;
-        } else {
-            $this->string = (string) $s;
-            if ($m instanceof ParseyyToken) {
-                $this->metadata = $m->metadata;
-            } elseif (is_array($m)) {
-                $this->metadata = $m;
-            }
-        }
-    }
-
-    public function __toString()
-    {
-        return $this->_string;
-    }
-
-    public function offsetExists($offset)
-    {
-        return isset($this->metadata[$offset]);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->metadata[$offset];
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        if ($offset === null) {
-            if (isset($value[0])) {
-                $x = ($value instanceof ParseyyToken) ?
-                    $value->metadata : $value;
-                $this->metadata = array_merge($this->metadata, $x);
-
-                return;
-            }
-            $offset = count($this->metadata);
-        }
-        if ($value === null) {
-            return;
-        }
-        if ($value instanceof ParseyyToken) {
-            if ($value->metadata) {
-                $this->metadata[$offset] = $value->metadata;
-            }
-        } elseif ($value) {
-            $this->metadata[$offset] = $value;
-        }
-    }
-
-    public function offsetUnset($offset)
-    {
-        unset($this->metadata[$offset]);
-    }
-}
 
 class ParseyyStackEntry
 {
@@ -87,22 +22,6 @@ class ParseyyStackEntry
     public static $yyFallback = array(
 %%
     );
-    public function Trace($TraceFILE, $zTracePrompt)
-    {
-        if (!$TraceFILE) {
-            $zTracePrompt = 0;
-        } elseif (!$zTracePrompt) {
-            $TraceFILE = 0;
-        }
-        $this->yyTraceFILE = $TraceFILE;
-        $this->yyTracePrompt = $zTracePrompt;
-    }
-
-    public function PrintTrace()
-    {
-        $this->yyTraceFILE = fopen('php://output', 'w');
-        $this->yyTracePrompt = '<br>';
-    }
 
     public $yyTraceFILE;
     public $yyTracePrompt;

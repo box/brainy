@@ -320,23 +320,6 @@ class CompileBlockExtendsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test variable file name in {extends}
-     */
-    public function testVariableExtends_028() {
-        /**
-        $this->smarty->assign('foo','028_parent.tpl');
-        try {
-            $result = $this->smarty->fetch('028_child.tpl');
-        } catch (Exception $e) {
-            $this->assertContains('variable template file name not allowed', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for illegal variable template file name not been raised.');
-         */
-    }
-
-    /**
      * test variable file name in {include}
      */
     public function testVariableExtends_029() {
