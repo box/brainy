@@ -123,4 +123,4 @@ Copyright 2014 Box, Inc. All rights reserved.
 Copyright 2002 – 2014 New Digital Group, Inc.
 
 This library is licensed under the GNU Lesser Public License. A copy of the
-license should have [been provided](COPYING.md).
+license should have [been provided](LICENSE.md).
