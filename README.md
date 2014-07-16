@@ -16,7 +16,7 @@ templating language. It is a fork from the Smarty 3 trunk.
 ## Minimum Requirements
 
 - PHP 5.3 or higher
-- HHVM 3.1.x or higher
+- (optionally) HHVM 3.1.x or higher
 
 Unlike Smarty 3, PHP 5.2.x is not a supported platform. Use Brainy with old
 versions of PHP at your own risk.
@@ -25,40 +25,30 @@ Note that HHVM support is currently experimental, though most common behaviors
 work as expected.
 
 
+## Getting Started
+
+Check out the [Getting Started](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Getting-Started)
+page on the wiki.
+
+
+## Working on Brainy
+
+For information on how to set up a local dev environment and run the tests,
+see the wiki page on [Hacking on Brainy](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Hacking-on-Brainy).
+
+
 ## Differences from Smarty
 
 While Brainy will work as a drop-in replacement for Smarty in most
 applications, there are some differences that may make it difficult to switch.
 
-
-### Incompatibilities
-
-- Inline and arbitrary PHP is disallowed for security reasons.
-  - PHP tags: `<?php ?>`
-  - Shorthand PHP tags: `<? ?>`
-  - ASP tags: `<% %>`
-  - PHP blocks: `{php}`
-  - `{eval}`
-  - `{include_php}`
-- Backticks in template strings no longer function like curly braces in PHP.
-- Caching backends are removed (MySQL, Memcached).
-- `nocache` is always set to `true` and cannot be disabled.
-- Some other features are removed:
-  - `{insert}` (a deprecated Smarty feature) is removed.
-  - `{fetch}` is removed as it can result in unforseen performance and security
-    issues.
-  - `{debug}` is removed as it can reveal sensitive information.
-  - URL-based debugging
-  - Debugging template
-- Whitespace surrounding tags is not always treated the same as in Smarty.
-- PHP template resources are removed: `$smarty->fetch('php:my_php_file.php')`
-
-A complete list of incompatibilities is listed [on the wiki](brainy/wiki/Smarty-Incompatibilities).
+A complete list of incompatibilities is listed [on the wiki](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Smarty-Incompatibilities).
 
 
 ### Added Features
 
 - `stripwhitespace` filter: This functions similarly to `trimwhitespace`, but does not strip HTML comments and does not account for HTML elements like `<pre>` or `<textarea>`. For many applications, these features are not necessary and using `stripwhitespace` instead of `trimwhitespace` can greatly improve performance.
+- The `Smarty` class has a `safe_lookups` member that gives control over Brainy's behavior when an undefined variable or array value is accessed.
 
 
 ## Where is Brainy headed?
