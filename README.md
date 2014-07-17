@@ -64,36 +64,8 @@ A complete list of incompatibilities is listed [on the wiki](https://gitenterpri
   and add full async support.
 
 
-### Planned Releases
-
-#### 1.0.1
-
-- No failing tests under HHVM
-- Proper PHPDoc for API
-
-#### 1.0.2
-
-- All formatting issues resolved; linting rules expanded
-- All variable variables removed
-
-#### 1.0.3
-
-- Performance optimizations
-
-#### 1.1.0
-
-- `eval()` no longer used at all
-- At least 80% code coverage
-
-#### 1.1.1
-
-- Performance optimizations
-
-#### 1.2.0
-
-- At least 90% code coverage
-- 100% code coverage for included plugins
-- Full [augmented types](https://github.com/box/augmented_types) coverage
+See [the project roadmap](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Roadmap)
+for information on upcoming releases.
 
 
 ### Requested Contributions
