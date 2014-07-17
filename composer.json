@@ -2,7 +2,7 @@
     "name": "box/brainy",
     "type": "library",
     "description": "Brainy - A smart, parallel templating engine based on Smarty",
-    "keywords": ["templating"],
+    "keywords": ["templating", "smarty", "template", "mustache", "twig"],
     "license": "LGPL-3.0",
     "authors": [
         {
