@@ -16,7 +16,13 @@ Please report any problems that you encounter.
   `eval` and injecting arbitrary PHP into a template.
 
 
-## Minimum Requirements
+## Getting Started
+
+Check out the [Getting Started](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Getting-Started)
+page on the wiki.
+
+
+### Minimum Requirements
 
 - PHP 5.3 or higher
 - (optionally) HHVM 3.1.x or higher
@@ -28,19 +34,7 @@ Note that HHVM support is currently experimental, though most common behaviors
 work as expected.
 
 
-## Getting Started
-
-Check out the [Getting Started](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Getting-Started)
-page on the wiki.
-
-
-## Working on Brainy
-
-For information on how to set up a local dev environment and run the tests,
-see the wiki page on [Hacking on Brainy](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Hacking-on-Brainy).
-
-
-## Differences from Smarty
+### Differences from Smarty
 
 While Brainy will work as a drop-in replacement for Smarty in most
 applications, there are some differences that may make it difficult to switch.
@@ -48,12 +42,20 @@ applications, there are some differences that may make it difficult to switch.
 A complete list of differences is listed [on the wiki](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Differences-from-Smarty).
 
 
-## Where is Brainy headed?
+## Contributing to Brainy
+
+For information on how to set up a local dev environment and run the tests,
+see the wiki page on [Hacking on Brainy](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Hacking-on-Brainy).
+
+
+### Where is Brainy headed?
+
+The following is the direction that the project is headed in:
 
 - **Phase 1**: Provide a clean, drop-in replacement for Smarty that generates
   cleaner code and increases code quality.
 - **Phase 2**: Provide a backwards-compatible interface for allowing templates
-  to compile asynchronously.
+  to compile and render asynchronously.
 - **Phase 3**: Allow templates to be compiled to [Hack](http://hacklang.org/)
   and add full async support.
 
@@ -64,11 +66,11 @@ for information on upcoming releases.
 
 ### Requested Contributions
 
-If you're interested in helping out, the following tasks are available:
+If you're interested in helping out, pull requests for the following tasks will be warmly welcomed:
 
 - Convert all non-public methods to use camel case.
-- Add proper type annotations to all functions.
-- Remove magic and bad practices.
+- Add proper PHPDoc annotations to all functions and methods.
+- Remove magic and bad practices:
   - Variable variables
   - `__call`, `__get`, etc.
   - Eliminate dead code
