@@ -3,6 +3,9 @@
 Brainy is a replacement for the popular [Smarty](http://www.smarty.net/)
 templating language. It is a fork from the Smarty 3 trunk.
 
+Brainy is still very new and it's likely that you will encounter some issues.
+Please report any problems that you encounter.
+
 
 ## Why Brainy?
 
