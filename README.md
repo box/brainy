@@ -45,13 +45,7 @@ see the wiki page on [Hacking on Brainy](https://gitenterprise.inside-box.net/mb
 While Brainy will work as a drop-in replacement for Smarty in most
 applications, there are some differences that may make it difficult to switch.
 
-A complete list of incompatibilities is listed [on the wiki](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Smarty-Incompatibilities).
-
-
-### Added Features
-
-- `stripwhitespace` filter: This functions similarly to `trimwhitespace`, but does not strip HTML comments and does not account for HTML elements like `<pre>` or `<textarea>`. For many applications, these features are not necessary and using `stripwhitespace` instead of `trimwhitespace` can greatly improve performance.
-- The `Smarty` class has a `safe_lookups` member that gives control over Brainy's behavior when an undefined variable or array value is accessed.
+A complete list of differences is listed [on the wiki](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Differences-from-Smarty).
 
 
 ## Where is Brainy headed?
