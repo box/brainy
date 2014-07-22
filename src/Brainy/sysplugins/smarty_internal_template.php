@@ -210,10 +210,6 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         $this->properties['unifunc'] = 'content_' . str_replace(array('.',','), '_', uniqid('', true));
         $content = $this->createTemplateCodeFrame($content, true);
         $_smarty_tpl = $this;
-        /*
-        return false;
-        eval('?>' . $content);
-        */
         $this->cached->valid = true;
         $this->cached->processed = true;
 
