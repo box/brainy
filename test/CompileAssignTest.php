@@ -101,4 +101,11 @@ class CompileAssignTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate("eval:{\$foo=['a'=>9,'b'=>8,'c'=>7,'d'=>6]}{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}");
         $this->assertEquals("a9b8c7d6", $this->smarty->fetch($tpl));
     }
+
+    /**
+     * @expectedException SmartyCompilerException
+     */
+    public function testInvalidScope() {
+        $this->smarty->fetch('eval:{assign var=foo scope="foo"}');
+    }
 }
