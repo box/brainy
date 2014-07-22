@@ -493,7 +493,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @uses Smarty::COMPILECHECK_OFF
      * @uses Smarty::COMPILECHECK_CACHEMISS
      */
-    public $compile_check = COMPILECHECK_ON;
+    public $compile_check = Smarty::COMPILECHECK_ON;
     /**
      * When true, subdirectories will be created within the cache and compile
      * directories. This is useful for applications with very large numbers of
