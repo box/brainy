@@ -47,9 +47,13 @@ class Smarty_Internal_Compile_Extends extends Smarty_Internal_CompileBase
             $compiler->trigger_template_error('illegal value for file attribute', $compiler->lex->taglineno);
         }
 
-        $name = $_attr['file'];
         $_smarty_tpl = $compiler->template;
-        eval("\$tpl_name = $name;");
+
+        $name = $_attr['file'];
+        if ($name[0] === "'" && $name[strlen($name) - 1] === "'") {
+            $name = '"' . substr($name, 1, -1) . '"';
+        }
+        $tpl_name = json_decode($name);
         // create template object
         $_template = new $compiler->smarty->template_class($tpl_name, $compiler->smarty, $compiler->template);
         // check for recursion
