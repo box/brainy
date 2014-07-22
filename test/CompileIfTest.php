@@ -16,10 +16,6 @@ class CompileIfTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test {if} tag
     */

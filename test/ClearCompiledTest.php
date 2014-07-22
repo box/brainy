@@ -18,10 +18,6 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         $this->smarty->addTemplateDir('test/templates_2/');
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     // helpers
     /**
      * clear $smarty->compile_dir

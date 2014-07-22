@@ -27,10 +27,6 @@ class StreamResourceTest extends PHPUnit_Framework_TestCase
         stream_wrapper_unregister("global");
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test getTemplateFilepath
     */

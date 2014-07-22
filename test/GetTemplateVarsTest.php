@@ -16,10 +16,6 @@ class GetTemplateVarsTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test root getTemplateVars single value
     */

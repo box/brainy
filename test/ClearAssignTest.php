@@ -25,10 +25,6 @@ class ClearAssignTest extends PHPUnit_Framework_TestCase
         $this->smartyBC->assign('blar','blar');
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test all variables accessable
     */

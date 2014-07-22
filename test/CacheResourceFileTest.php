@@ -19,10 +19,6 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     protected function relative($path) {
         $path = str_replace( dirname(__FILE__), '.', $path );
         if (DS == "\\") {
@@ -40,7 +36,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
+        $sha1 = sha1(realpath($this->smarty->getTemplateDir(0) . 'helloworld.tpl'));
         $expected = sprintf('./cache/%s/%s/%s/%s.helloworld.tpl.php',
             substr($sha1, 0, 2),
             substr($sha1, 2, 2),
@@ -57,7 +53,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
         $tpl = $this->smarty->createTemplate('helloworld.tpl', 'foo|bar');
-        $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
+        $sha1 = sha1(realpath($this->smarty->getTemplateDir(0) . 'helloworld.tpl'));
         $expected = sprintf('./cache/foo/bar/%s/%s/%s/%s.helloworld.tpl.php',
             substr($sha1, 0, 2),
             substr($sha1, 2, 2),
@@ -74,7 +70,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
         $tpl = $this->smarty->createTemplate('helloworld.tpl', null, 'blar');
-        $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
+        $sha1 = sha1(realpath($this->smarty->getTemplateDir(0) . 'helloworld.tpl'));
         $expected = sprintf('./cache/blar/%s/%s/%s/%s.helloworld.tpl.php',
             substr($sha1, 0, 2),
             substr($sha1, 2, 2),
@@ -91,7 +87,7 @@ class CacheResourceFileTest extends PHPUnit_Framework_TestCase
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
         $tpl = $this->smarty->createTemplate('helloworld.tpl', 'foo|bar', 'blar');
-        $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
+        $sha1 = sha1(realpath($this->smarty->getTemplateDir(0) . 'helloworld.tpl'));
         $expected = sprintf('./cache/foo/bar/blar/%s/%s/%s/%s.helloworld.tpl.php',
             substr($sha1, 0, 2),
             substr($sha1, 2, 2),

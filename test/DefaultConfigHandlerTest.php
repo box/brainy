@@ -18,10 +18,6 @@ class DefaultConfigHandlerTest extends PHPUnit_Framework_TestCase
         $this->smarty->disableSecurity();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testUnknownConfig() {
         try {
             $this->smarty->configLoad('foo.conf');

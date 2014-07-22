@@ -17,10 +17,6 @@ class AutoEscapeTest extends PHPUnit_Framework_TestCase
         $this->smarty->escape_html = true;
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test escape_html property
     */

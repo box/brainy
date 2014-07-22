@@ -16,10 +16,6 @@ class SharedFunctionsTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test smarty_function_escape_special_chars()
     */

@@ -1068,7 +1068,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
     public function setTemplateDir($template_dir) {
         $this->template_dir = array();
         foreach ((array) $template_dir as $k => $v) {
-            $this->template_dir[$k] = str_replace(array('//','\\\\'), DS, rtrim($v, '/\\')) . DS;
+            $this->template_dir[$k] = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DS;
         }
 
         $this->joined_template_dir = join(DIRECTORY_SEPARATOR, $this->template_dir);
@@ -1090,7 +1090,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
 
         if (is_array($template_dir)) {
             foreach ($template_dir as $k => $v) {
-                $v = str_replace(array('//','\\\\'), DS, rtrim($v, '/\\')) . DS;
+                $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DS;
                 if (is_int($k)) {
                     // indexes are not merged but appended
                     $this->template_dir[] = $v;
@@ -1100,7 +1100,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
                 }
             }
         } else {
-            $v = str_replace(array('//','\\\\'), DS, rtrim($template_dir, '/\\')) . DS;
+            $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($template_dir, '/\\')) . DS;
             if ($key !== null) {
                 // override directory at specified index
                 $this->template_dir[$key] = $v;
@@ -1137,7 +1137,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
     public function setConfigDir($config_dir) {
         $this->config_dir = array();
         foreach ((array) $config_dir as $k => $v) {
-            $this->config_dir[$k] = str_replace(array('//','\\\\'), DS, rtrim($v, '/\\')) . DS;
+            $this->config_dir[$k] = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DS;
         }
 
         $this->joined_config_dir = join(DIRECTORY_SEPARATOR, $this->config_dir);
@@ -1158,7 +1158,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
 
         if (is_array($config_dir)) {
             foreach ($config_dir as $k => $v) {
-                $v = str_replace(array('//','\\\\'), DS, rtrim($v, '/\\')) . DS;
+                $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DS;
                 if (is_int($k)) {
                     // indexes are not merged but appended
                     $this->config_dir[] = $v;
@@ -1168,7 +1168,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
                 }
             }
         } else {
-            $v = str_replace(array('//','\\\\'), DS, rtrim($config_dir, '/\\')) . DS;
+            $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($config_dir, '/\\')) . DS;
             if ($key !== null) {
                 // override directory at specified index
                 $this->config_dir[$key] = rtrim($v, '/\\') . DS;

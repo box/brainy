@@ -18,10 +18,6 @@ class CompileBlockPluginTest extends PHPUnit_Framework_TestCase
         $this->smarty->disableSecurity();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test block plugin tag
     */

@@ -17,10 +17,6 @@ class ResourcePluginTest extends PHPUnit_Framework_TestCase
         Smarty_Resource::$resources = array();
         SmartyTests::init();
     }
-
-    static function isRunnable() {
-        return true;
-    }
     /**
      * test resource plugin rendering
      */

@@ -20,10 +20,6 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
         $this->smartyBC->disableSecurity();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
      * test registerPlugin method for block function
      */

@@ -16,10 +16,6 @@ class GetterSetterTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test setter on Smarty object
     */

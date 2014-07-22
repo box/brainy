@@ -16,10 +16,6 @@ class PluginModifierUpperTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $result = "IF STRIKE ISN'T SETTLED QUICKLY IT MAY LAST A WHILE.";
         $tpl = $this->smarty->createTemplate('eval:{"If Strike isn\'t Settled Quickly it may Last a While."|upper}');

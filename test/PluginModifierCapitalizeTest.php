@@ -16,10 +16,6 @@ class PluginModifierCapitalizeTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $tpl = $this->smarty->createTemplate('eval:{"next x-men fiLm, x3, delayed. ümlauts äre cööl."|capitalize}');
         $this->assertEquals("Next X-Men FiLm, x3, Delayed. Ümlauts Äre Cööl.", $this->smarty->fetch($tpl));

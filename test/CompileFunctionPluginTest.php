@@ -16,10 +16,6 @@ class CompileFunctionPluginTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test function plugin tag in template file
     */

@@ -16,10 +16,6 @@ class PluginModifierLowerTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $result = "two convicts evade noose, jury hung.";
         $tpl = $this->smarty->createTemplate('eval:{"Two Convicts Evade Noose, Jury Hung."|lower}');

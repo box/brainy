@@ -18,10 +18,6 @@ class PluginFunctionHtmlRadiosTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testAssociativeArray() {
         $n = "\n";
         $expected = '<label><input type="radio" name="id" value="1000" />Joe Schmoe</label><br />'

@@ -18,10 +18,6 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Framework_TestCase
         $this->now = mktime( 16, 15, 11, 2, 20, 2011 );
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     protected $now = null;
     protected $hours = array(
         'none' => '<option value="00">00</option>

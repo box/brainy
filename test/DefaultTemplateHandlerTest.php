@@ -18,10 +18,6 @@ class DefaultTemplateHandlerTest extends PHPUnit_Framework_TestCase
         $this->smarty->disableSecurity();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test error on unknow template
     */

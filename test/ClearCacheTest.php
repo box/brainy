@@ -17,10 +17,6 @@ class ClearCacheTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test cache->clear_all method
     */

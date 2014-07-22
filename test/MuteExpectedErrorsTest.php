@@ -23,10 +23,6 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
         $this->smartyBC->clearAllCache();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     protected $_errors = array();
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
         $this->_errors[] = $errfile .' line ' . $errline;

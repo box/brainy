@@ -16,10 +16,6 @@ class EvalResourceTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test template eval exits
     */

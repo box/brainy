@@ -17,10 +17,6 @@ class CompileCompilerPluginTest extends PHPUnit_Framework_TestCase
         $this->smarty->force_compile = true;
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test compiler plugin tag in template file
     */

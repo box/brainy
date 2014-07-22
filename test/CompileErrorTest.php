@@ -16,10 +16,6 @@ class CompileErrorTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test none existing template file error
     */

@@ -20,10 +20,6 @@ class RegisteredResourceTest extends PHPUnit_Framework_TestCase
                 "rr_get_trusted"));
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
      * test resource plugin rendering
      */

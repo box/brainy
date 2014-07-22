@@ -13,12 +13,7 @@ class LiteralTest extends PHPUnit_Framework_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
-        $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
-    }
-
-    static function isRunnable() {
-        return true;
     }
 
     /*
@@ -29,12 +24,25 @@ class LiteralTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(' {$foo} ', $this->smarty->fetch($tpl));
     }
 
+    public function testBlockInLiteralTag() {
+        $tpl = $this->smarty->createTemplate("eval:{literal} {block \"foo\"}{\$foo}{/block} {/literal}");
+        $this->assertEquals(' {block "foo"}{$foo}{/block} ', $this->smarty->fetch($tpl));
+    }
+
+    public function testBlockInLiteralTagInInheritedTemplate() {
+        $this->smarty->clearAllCache();
+        $this->smarty->clearCompiledTemplate();
+        $this->smarty->setTemplateDir(array('test/templates/extendsresource/', 'test/templates/'));
+        $result = $this->smarty->fetch('extends:eval:{literal} {block "title"}{$foo}{/block} {/literal}|004_parent.tpl');
+        $this->assertEquals(' {block "title"}{$foo}{/block} ', $result);
+    }
+
     /*
     *  Test auto literal space
     */
     public function testAutoLiteralSpace() {
         $tpl = $this->smarty->createTemplate("eval: { \$foo} ");
-        $tpl->assign('foo','literal');
+        $tpl->assign('foo', 'literal');
         $this->assertEquals(' { $foo} ', $this->smarty->fetch($tpl));
     }
 
@@ -43,7 +51,7 @@ class LiteralTest extends PHPUnit_Framework_TestCase
     */
     public function testAutoLiteralLineBreak() {
         $tpl = $this->smarty->createTemplate("eval: {\n\$foo} ");
-        $tpl->assign('foo','literal');
+        $tpl->assign('foo', 'literal');
         $this->assertEquals(" {\n\$foo} ", $this->smarty->fetch($tpl));
     }
 
@@ -53,7 +61,7 @@ class LiteralTest extends PHPUnit_Framework_TestCase
     public function testAutoLiteralDisabled() {
         $this->smarty->auto_literal = false;
         $tpl = $this->smarty->createTemplate("eval: { \$foo} ");
-        $tpl->assign('foo','literal');
+        $tpl->assign('foo', 'literal');
         $this->assertEquals(' literal ', $this->smarty->fetch($tpl));
     }
 }

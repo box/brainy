@@ -18,10 +18,6 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Framework_TestCase
         $this->now = mktime( 15, 0, 0, 2, 20, 2014 );
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     protected $now = null;
     protected $years = array(
         'start_2005' => '<option value="2005">2005</option>

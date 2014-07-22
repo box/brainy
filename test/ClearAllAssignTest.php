@@ -34,10 +34,6 @@ class ClearAllAssignTest extends PHPUnit_Framework_TestCase
         $this->_tplBC->assign('blar','blar');
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test all variables accessable
     */

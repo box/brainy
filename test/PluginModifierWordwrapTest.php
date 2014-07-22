@@ -16,10 +16,6 @@ class PluginModifierWordwrapTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $tpl = $this->smarty->createTemplate('eval:{"Blind woman gets new kidney from dad she hasn\'t seen in years."|wordwrap}');
         $this->assertEquals("Blind woman gets new kidney from dad she hasn't seen in years.", $this->smarty->fetch($tpl));

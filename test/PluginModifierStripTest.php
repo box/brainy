@@ -16,10 +16,6 @@ class PluginModifierStripTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $tpl = $this->smarty->createTemplate('eval:{" hello     spaced words  "|strip}');
         $this->assertEquals(" hello spaced words ", $this->smarty->fetch($tpl));

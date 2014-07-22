@@ -16,10 +16,6 @@ class RegisterFunctionTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
    }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
      * test register->templateFunction method for function
      */

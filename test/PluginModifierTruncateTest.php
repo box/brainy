@@ -16,10 +16,6 @@ class PluginModifierTruncateTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $result = 'Two Sisters Reunite after Eighteen Years at Checkout Counter.';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate}');

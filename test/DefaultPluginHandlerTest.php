@@ -19,10 +19,6 @@ class DefaultPluginHandlerTest extends PHPUnit_Framework_TestCase
         $this->smarty->registerDefaultPluginHandler('my_plugin_handler');
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefaultFunctionScript() {
         $this->assertEquals("scriptfunction foo bar", $this->smarty->fetch('test_default_function_script.tpl'));
     }

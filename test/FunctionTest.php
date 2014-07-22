@@ -16,10 +16,6 @@ class FunctionTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test unknown function error
     */

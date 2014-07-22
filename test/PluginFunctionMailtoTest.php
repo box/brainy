@@ -16,10 +16,6 @@ class PluginFunctionMailtoTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $result = '<a href="mailto:me@example.com" >me@example.com</a>';
         $tpl = $this->smarty->createTemplate('eval:{mailto address="me@example.com"}');

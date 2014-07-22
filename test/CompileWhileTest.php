@@ -16,10 +16,6 @@ class CompileWhileTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test {while 'condition'} tag
     */

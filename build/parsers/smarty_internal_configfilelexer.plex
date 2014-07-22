@@ -1,12 +1,13 @@
 <?php
 /**
-* Smarty Internal Plugin Configfilelexer
-*
-* This is the lexer to break the config file source into tokens
-* @package Brainy
-* @subpackage Config
-* @author Uwe Tews
-*/
+ * Smarty Internal Plugin Configfilelexer
+ *
+ * This is the lexer to break the config file source into tokens
+ * @package Brainy
+ * @subpackage Config
+ * @author Uwe Tews
+ */
+
 /**
 * Smarty Internal Plugin Configfilelexer
 */

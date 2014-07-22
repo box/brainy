@@ -17,10 +17,6 @@ class CompileBlockExtendsTest extends PHPUnit_Framework_TestCase
         $this->smarty->setTemplateDir(array('test/templates/compileblockextends/','test/templates/'));
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * clear folders
     */

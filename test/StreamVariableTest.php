@@ -25,10 +25,6 @@ class StreamVariableTest extends PHPUnit_Framework_TestCase
         stream_wrapper_unregister("var");
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test stream variable
     */

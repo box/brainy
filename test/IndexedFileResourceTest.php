@@ -17,10 +17,6 @@ class IndexedFileResourceTest extends PHPUnit_Framework_TestCase
         $this->smarty->addTemplateDir(dirname(__FILE__) .'/templates_4', 'foo');
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     protected function relative($path) {
         $path = str_replace( dirname(__FILE__), '.', $path );
         if (DS == "\\") {

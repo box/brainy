@@ -16,10 +16,6 @@ class PluginModifierSpacifyTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $result = 'h e l l o   w ö r l d';
         $tpl = $this->smarty->createTemplate('eval:{"hello wörld"|spacify}');

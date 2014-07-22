@@ -17,10 +17,6 @@ class VariableScopeTest extends PHPUnit_Framework_TestCase
         $this->smarty->assign('foo', 'bar');
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test root variable
     */

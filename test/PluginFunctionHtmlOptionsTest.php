@@ -18,10 +18,6 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testAssociativeArray() {
         $n = "\n";
         $expected = '<select name="foo">'

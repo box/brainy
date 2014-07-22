@@ -21,10 +21,6 @@ class CompileRegisteredObjectFunctionTest extends PHPUnit_Framework_TestCase
         $this->smarty->registerObject('objectprop', $this->object);
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test resgistered object as function
     */

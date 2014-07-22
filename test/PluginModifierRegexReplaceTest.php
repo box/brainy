@@ -16,10 +16,6 @@ class PluginModifierRegexReplaceTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $tpl = $this->smarty->createTemplate('eval:{"Infertility unlikely to\nbe passed on, experts say."|regex_replace:"/[\r\t\n]/":" "}');
         $this->assertEquals("Infertility unlikely to be passed on, experts say.", $this->smarty->fetch($tpl));

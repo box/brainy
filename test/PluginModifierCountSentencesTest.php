@@ -16,10 +16,6 @@ class PluginModifierCountSentencesTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testDefault() {
         $tpl = $this->smarty->createTemplate('eval:{"hello world."|count_sentences}');
         $this->assertEquals("1", $this->smarty->fetch($tpl));

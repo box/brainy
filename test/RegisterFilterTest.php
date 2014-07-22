@@ -16,10 +16,6 @@ class RegisterFilterTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test register->preFilter method for function
     */

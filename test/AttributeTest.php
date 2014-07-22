@@ -16,10 +16,6 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test required attribute
     */
@@ -34,7 +30,7 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception for required attribute "var" has not been raised.');
     }
     /**
-    * test unexspected attribute
+    * test unexpected attribute
     */
     public function testUnexpectedAttribute() {
         try {

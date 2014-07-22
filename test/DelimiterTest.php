@@ -16,10 +16,6 @@ class DelimiterTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test <{ }> delimiter
     */

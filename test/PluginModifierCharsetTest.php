@@ -16,10 +16,6 @@ class PluginModifierCharsetTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testToLatin1() {
         $encoded = "hällö wörld 1";
         $result = utf8_decode($encoded);

@@ -18,10 +18,6 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     public function testAssociativeArray() {
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="1000" />Joe Schmoe</label><br />'

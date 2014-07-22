@@ -17,10 +17,6 @@ class SpacingTest extends PHPUnit_Framework_TestCase
         $this->smarty->assign('foo','bar');
     }
 
-    static function isRunnable() {
-        return true;
-    }
-
     /**
     * test variable output
     */

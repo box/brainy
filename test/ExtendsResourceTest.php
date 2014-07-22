@@ -14,12 +14,7 @@ class ExtendsResourceTest extends PHPUnit_Framework_TestCase
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-        $this->smarty->setTemplateDir(array('test/templates/extendsresource/','test/templates/'));
-//        $this->smarty->registerFilter(Smarty::FILTER_PRE,'prefilterextends');
-    }
-
-    static function isRunnable() {
-        return true;
+        $this->smarty->setTemplateDir(array('test/templates/extendsresource/', 'test/templates/'));
     }
 
     /**
@@ -44,7 +39,7 @@ class ExtendsResourceTest extends PHPUnit_Framework_TestCase
         $this->assertContains("Default Title - append", $result);
     }
 
- }
+}
 
 function prefilterextends($input) {
     return preg_replace('/{extends .*}/', '', $input);
