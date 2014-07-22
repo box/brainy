@@ -59,14 +59,14 @@ class PluginFunctionMailtoTest extends PHPUnit_Framework_TestCase
     }
 
     public function testEncodeJavascriptCharcode() {
-        $result = "<script type=\"text/javascript\" language=\"javascript\">\n{document.write(String.fromCharCode(60,97,32,104,114,101,102,61,34,109,97,105,108,116,111,58,109,101,64,101,120,97,109,112,108,101,46,99,111,109,34,32,62,109,101,64,101,120,97,109,112,108,101,46,99,111,109,60,47,97,62))}\n</script>\n";
+        $result = "<script type=\"text/javascript\">\n{document.write(String.fromCharCode(60,97,32,104,114,101,102,61,34,109,97,105,108,116,111,58,109,101,64,101,120,97,109,112,108,101,46,99,111,109,34,32,62,109,101,64,101,120,97,109,112,108,101,46,99,111,109,60,47,97,62))}\n</script>\n";
         $tpl = $this->smarty->createTemplate('eval:{mailto address="me@example.com" encode="javascript_charcode"}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
     public function testEncodeJavascriptCharcodeWithoutMbstring() {
         Smarty::$_MBSTRING = false;
-        $result = "<script type=\"text/javascript\" language=\"javascript\">\n{document.write(String.fromCharCode(60,97,32,104,114,101,102,61,34,109,97,105,108,116,111,58,109,101,64,101,120,97,109,112,108,101,46,99,111,109,34,32,62,109,101,64,101,120,97,109,112,108,101,46,99,111,109,60,47,97,62))}\n</script>\n";
+        $result = "<script type=\"text/javascript\">\n{document.write(String.fromCharCode(60,97,32,104,114,101,102,61,34,109,97,105,108,116,111,58,109,101,64,101,120,97,109,112,108,101,46,99,111,109,34,32,62,109,101,64,101,120,97,109,112,108,101,46,99,111,109,60,47,97,62))}\n</script>\n";
         $tpl = $this->smarty->createTemplate('eval:{mailto address="me@example.com" encode="javascript_charcode"}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
         Smarty::$_MBSTRING = true;
