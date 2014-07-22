@@ -92,6 +92,8 @@ class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase
         //varibale name?
         if (!(strpos($_name, '$') === false)) {
             $call_cache = $_name;
+            // FIXME: In Hack, this will need to use `fun()`:
+            // http://docs.hhvm.com/manual/en/function.hack.fun.php
             $call_function = '$tmp = "smarty_template_function_".' . $_name . '; $tmp';
         } else {
             $_name = trim($_name, "'\"");
