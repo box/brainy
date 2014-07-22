@@ -1,15 +1,23 @@
 <?php
 /**
- * Smarty plugin
- *
  * @package Brainy
  * @subpackage PluginsModifierCompiler
  */
 
+
 /**
- * @ignore
+ * Parameter decode helper, since parameters are unparsed
+ *
+ * @author Matt Basta
+ * @param string $value The unparsed parameter
+ * @return mixed
  */
-require_once( SMARTY_PLUGINS_DIR .'shared.literal_compiler_param.php' );
+function smarty_modifiercompiler_escape_helper($value) {
+    if ($value[0] === "'" && $value[strlen($value) - 1] === "'") {
+        $value = '"' . substr($value, 1, -1) . '"';
+    }
+    return json_decode($value);
+}
 
 /**
  * Smarty escape modifier plugin
@@ -18,43 +26,43 @@ require_once( SMARTY_PLUGINS_DIR .'shared.literal_compiler_param.php' );
  * Name:     escape<br>
  * Purpose:  escape string for output
  *
- * @link http://www.smarty.net/docsv2/en/language.modifier.escape count_characters (Smarty online manual)
+ * @link http://www.smarty.net/docsv2/en/language.modifier.escape
  * @author Rodney Rehm
  * @param array $params parameters
  * @return string with compiled code
  */
 function smarty_modifiercompiler_escape($params, $compiler) {
     try {
-        $esc_type = smarty_literal_compiler_param($params, 1, 'html');
-        $char_set = smarty_literal_compiler_param($params, 2, Smarty::$_CHARSET);
-        $double_encode = smarty_literal_compiler_param($params, 3, true);
+        $esc_type = isset($params[1]) ? smarty_modifiercompiler_escape_helper($params[1]) : 'html';
+        $char_set = isset($params[2]) && $params[2] !== 'null' ? $params[2] : '"' . Smarty::$_CHARSET . '"';
+        $double_encode = isset($params[3]) ? $params[3] : 'true';
 
         if (!$char_set) {
-            $char_set = Smarty::$_CHARSET;
+            $char_set = '"' . Smarty::$_CHARSET . '"';
         }
 
         switch ($esc_type) {
             case 'html':
                 return 'htmlspecialchars('
                     . $params[0] .', ENT_QUOTES, '
-                    . var_export($char_set, true) . ', '
-                    . var_export($double_encode, true) . ')';
+                    . $char_set . ', '
+                    . $double_encode . ')';
 
             case 'htmlall':
                 if (Smarty::$_MBSTRING) {
                     return 'mb_convert_encoding(htmlspecialchars('
                         . $params[0] .', ENT_QUOTES, '
-                        . var_export($char_set, true) . ', '
-                        . var_export($double_encode, true)
+                        . $char_set . ', '
+                        . $double_encode
                         . '), "HTML-ENTITIES", '
-                        . var_export($char_set, true) . ')';
+                        . $char_set . ')';
                 }
 
                 // no MBString fallback
                 return 'htmlentities('
                     . $params[0] .', ENT_QUOTES, '
-                    . var_export($char_set, true) . ', '
-                    . var_export($double_encode, true) . ')';
+                    . $char_set . ', '
+                    . $double_encode . ')';
 
             case 'url':
                 return 'rawurlencode(' . $params[0] . ')';
