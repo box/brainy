@@ -24,7 +24,7 @@ page on the wiki.
 
 ### Minimum Requirements
 
-- PHP 5.3 or higher
+- PHP 5.3.2 or higher
 - (optionally) HHVM 3.1.x or higher
 
 Unlike Smarty 3, PHP 5.2.x is not a supported platform. Use Brainy with old

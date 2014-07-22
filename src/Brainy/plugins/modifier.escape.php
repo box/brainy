@@ -22,10 +22,6 @@
  * @return string escaped input string
  */
 function smarty_modifier_escape($string, $esc_type = 'html', $char_set = null, $double_encode = true) {
-    static $_double_encode = null;
-    if ($_double_encode === null) {
-        $_double_encode = version_compare(PHP_VERSION, '5.2.3', '>=');
-    }
 
     if (!$char_set) {
         $char_set = Smarty::$_CHARSET;
@@ -33,61 +29,19 @@ function smarty_modifier_escape($string, $esc_type = 'html', $char_set = null, $
 
     switch ($esc_type) {
         case 'html':
-            if ($_double_encode) {
-                // php >=5.3.2 - go native
-                return htmlspecialchars($string, ENT_QUOTES, $char_set, $double_encode);
-            } else {
-                if ($double_encode) {
-                    // php <5.2.3 - only handle double encoding
-                    return htmlspecialchars($string, ENT_QUOTES, $char_set);
-                } else {
-                    // php <5.2.3 - prevent double encoding
-                    $string = preg_replace('!&(#?\w+);!', '%%%SMARTY_START%%%\\1%%%SMARTY_END%%%', $string);
-                    $string = htmlspecialchars($string, ENT_QUOTES, $char_set);
-                    $string = str_replace(array('%%%SMARTY_START%%%', '%%%SMARTY_END%%%'), array('&', ';'), $string);
-
-                    return $string;
-                }
-            }
+            return htmlspecialchars($string, ENT_QUOTES, $char_set, $double_encode);
 
         case 'htmlall':
             if (Smarty::$_MBSTRING) {
                 // mb_convert_encoding ignores htmlspecialchars()
-                if ($_double_encode) {
-                    // php >=5.3.2 - go native
-                    $string = htmlspecialchars($string, ENT_QUOTES, $char_set, $double_encode);
-                } else {
-                    if ($double_encode) {
-                        // php <5.2.3 - only handle double encoding
-                        $string = htmlspecialchars($string, ENT_QUOTES, $char_set);
-                    } else {
-                        // php <5.2.3 - prevent double encoding
-                        $string = preg_replace('!&(#?\w+);!', '%%%SMARTY_START%%%\\1%%%SMARTY_END%%%', $string);
-                        $string = htmlspecialchars($string, ENT_QUOTES, $char_set);
-                        $string = str_replace(array('%%%SMARTY_START%%%', '%%%SMARTY_END%%%'), array('&', ';'), $string);
-
-                        return $string;
-                    }
-                }
+                $string = htmlspecialchars($string, ENT_QUOTES, $char_set, $double_encode);
 
                 // htmlentities() won't convert everything, so use mb_convert_encoding
                 return mb_convert_encoding($string, 'HTML-ENTITIES', $char_set);
             }
 
             // no MBString fallback
-            if ($_double_encode) {
-                return htmlentities($string, ENT_QUOTES, $char_set, $double_encode);
-            } else {
-                if ($double_encode) {
-                    return htmlentities($string, ENT_QUOTES, $char_set);
-                } else {
-                    $string = preg_replace('!&(#?\w+);!', '%%%SMARTY_START%%%\\1%%%SMARTY_END%%%', $string);
-                    $string = htmlentities($string, ENT_QUOTES, $char_set);
-                    $string = str_replace(array('%%%SMARTY_START%%%', '%%%SMARTY_END%%%'), array('&', ';'), $string);
-
-                    return $string;
-                }
-            }
+            return htmlentities($string, ENT_QUOTES, $char_set, $double_encode);
 
         case 'url':
             return rawurlencode($string);
