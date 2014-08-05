@@ -353,7 +353,17 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         }
         if (!$this->source->recompiled) {
             $output .= "\$_valid = \$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ',' . ($cache ? 'true' : 'false') . "); /*/%%SmartyHeaderCode%%*/\n";
-            $output .= 'if ($_valid && !is_callable(\'' . $this->properties['unifunc'] . '\')) {function ' . $this->properties['unifunc'] . "(\$_smarty_tpl) {\n";
+            $output .= 'if ($_valid && !is_callable(\'' . $this->properties['unifunc'] . '\')) {';
+
+            // Output a proper PHPDoc for Augmented Types users.
+            $output .= <<<'PHPDOC'
+/**
+ * @param Smarty_Internal_TemplateBase $_smarty_tpl The smarty template instance
+ * @return void
+ */
+PHPDOC;
+
+            $output .= 'function ' . $this->properties['unifunc'] . "(\$_smarty_tpl) {\n";
         }
         $output .= $plugins_string;
         $output .= $content;
