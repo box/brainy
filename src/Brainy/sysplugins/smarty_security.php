@@ -130,11 +130,6 @@ class Smarty_Security {
      */
     protected $_secure_dir = null;
     /**
-     * Cache for $php_resource_dir lookups
-     * @internal
-     */
-    protected $_php_resource_dir = null;
-    /**
      * @internal
      */
     private $smarty = null;
@@ -337,7 +332,9 @@ class Smarty_Security {
             // test if the directory is trusted
             if (isset($this->_resource_dir[$directory])) {
                 // merge sub directories of current $directory into _resource_dir to speed up subsequent lookups
-                $this->_resource_dir = array_merge($this->_resource_dir, $_directory);
+                foreach ($_directory as $k => $v) {
+                    $this->_resource_dir[$k] = $v;
+                }
 
                 return true;
             }
