@@ -28,8 +28,8 @@ function smarty_function_counter($params, $template) {
             'start'=>1,
             'skip'=>1,
             'direction'=>'up',
-            'count'=>1
-            );
+            'count'=>1,
+        );
     }
     $counter =& $counters[$name];
 

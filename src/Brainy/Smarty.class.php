@@ -345,6 +345,24 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @internal
      */
     public static $_IS_WINDOWS = false;
+    /**
+     * Sets the default assignment location for a variable. By default,
+     * variables are assigned to the local scope. In some contexts, it may
+     * be desirable for variable assignment to take place in the global scope.
+     * By setting this property, the default scope can be set. This affects the
+     * following:
+     *
+     * * The `assign()` method on any Smarty_Internal_Data instance
+     * * The `{assign}` function
+     * * The `{capture}` function (it uses `assign()`)
+     *
+     * @var int
+     * @uses Smarty::SCOPE_LOCAL
+     * @uses Smarty::SCOPE_PARENT
+     * @uses Smarty::SCOPE_ROOT
+     * @uses Smarty::SCOPE_GLOBAL
+     */
+    public static $default_assign_scope = Smarty::SCOPE_LOCAL;
 
 
 

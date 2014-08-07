@@ -47,29 +47,62 @@ class Smarty_Internal_Data
     public $config_vars = array();
 
     /**
-     * Assigns $var to the variable in $varname. If an associative array is
+     * Assigns $value to the variable in $var. If an associative array is
      * passed as the only parameter, it is a mapping of variables to assign to
      * the values to assign to them.
      *
      * @param  array|string         $var the template variable name(s)
-     * @param  mixed                $value   the value to assign
-     * @param  boolean              $scope   the scope the variable will have  (local, parent or root)
+     * @param  mixed|null|void      $value   the value to assign
+     * @param  int|void             $scope   the scope to associate with the Smarty_Variable instance
      * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
      */
-    public function assign($var, $value = null) {
+    public function assign($var, $value = null, $scope = -1) {
         if (is_array($var)) {
             foreach ($var as $_key => $_val) {
                 if ($_key != '') {
-                    $this->tpl_vars[$_key] = new Smarty_variable($_val);
+                    $this->assignSingleVar($_key, $_val, $scope);
                 }
             }
         } else {
             if ($var != '') {
-                $this->tpl_vars[$var] = new Smarty_variable($value);
+                $this->assignSingleVar($var, $value, $scope);
             }
         }
 
         return $this;
+    }
+
+    /**
+     * Assigns $value to the variale $var.
+     *
+     * @param  string $var the template variable name
+     * @param  mixed $value the value to assign
+     * @param  int $scope the scope to associate with the Smarty_Variable
+     * @return void
+     */
+    private function assignSingleVar($var, $value, $scope) {
+        if ($scope === -1) {
+            $scope = Smarty::$default_assign_scope;
+        }
+
+        $variable = new Smarty_variable($value, $scope);
+        $this->tpl_vars[$var] = $variable;
+
+        if ($scope === Smarty::SCOPE_PARENT) {
+            if ($this->parent != null) {
+                $this->parent->tpl_vars[$var] = clone $variable;
+            }
+        } elseif ($scope === Smarty::SCOPE_ROOT || $scope === Smarty::SCOPE_GLOBAL) {
+            $pointer = $this->parent;
+            while ($pointer != null) {
+                $pointer->tpl_vars[$var] = clone $variable;
+                $pointer = $pointer->parent;
+            }
+        }
+
+        if ($scope === Smarty::SCOPE_GLOBAL) {
+            Smarty::$global_tpl_vars[$var] = clone $variable;
+        }
     }
 
     /**

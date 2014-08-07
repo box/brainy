@@ -30,13 +30,17 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
         $this->required_attributes = array('var', 'value');
         $this->shorttag_order = array('var', 'value');
         $this->optional_attributes = array('scope');
-        $_scope = Smarty::SCOPE_LOCAL;
+
+        $_scope = Smarty::$default_assign_scope;
+
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         // scope setup
         if (isset($_attr['scope'])) {
             $_attr['scope'] = trim($_attr['scope'], "'\"");
-            if ($_attr['scope'] == 'parent') {
+            if ($_attr['scope'] == 'local') {
+                $_scope = Smarty::SCOPE_LOCAL;
+            } elseif ($_attr['scope'] == 'parent') {
                 $_scope = Smarty::SCOPE_PARENT;
             } elseif ($_attr['scope'] == 'root') {
                 $_scope = Smarty::SCOPE_ROOT;
@@ -58,22 +62,10 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->value = $_attr[value];\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->scope = $_scope;\n";
-                $output .= "} else \$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_Variable($_attr[value], $_scope);\n";
+                $output .= "} else \$_smarty_tpl->assign($_attr[var], $_attr[value], $_scope);\n";
             } else {
-                $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]] = new Smarty_Variable($_attr[value], $_scope);\n";
+                $output .= "\$_smarty_tpl->assign($_attr[var], $_attr[value], $_scope);\n";
             }
-        }
-        if ($_scope == Smarty::SCOPE_PARENT) {
-            $output .= "if (\$_smarty_tpl->parent != null) \$_smarty_tpl->parent->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
-        } elseif ($_scope == Smarty::SCOPE_ROOT || $_scope == Smarty::SCOPE_GLOBAL) {
-            $output .= "\$_ptr = \$_smarty_tpl->parent;\n";
-            $output .= "while (\$_ptr != null) {\n";
-            $output .= "  \$_ptr->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];";
-            $output .= "  \$_ptr = \$_ptr->parent;\n";
-            $output .= "}\n";
-        }
-        if ($_scope == Smarty::SCOPE_GLOBAL) {
-            $output .= "Smarty::\$global_tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
         }
 
         return $output;
