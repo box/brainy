@@ -16,7 +16,6 @@
 {
     const Err1 = "Security error: Call to private object member not allowed";
     const Err2 = "Security error: Call to dynamic object member not allowed";
-    const Err3 = "PHP in template not allowed. Use SmartyBC to enable it";
     // states whether the parse was successful or not
     public $successful = true;
     public $retvalue = 0;
@@ -42,17 +41,21 @@
     }
 
     public function compileVariable($variable, $value = 'value') {
+        $unsafe = '$_smarty_tpl->tpl_vars[' . $variable . ']->' . $value;
         if ($this->safe_lookups === 0) { // Unsafe lookups
-            return '$_smarty_tpl->tpl_vars[' . $variable . ']->' . $value;
+            return $unsafe;
         }
-        return 'smarty_safe_var_lookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')->' . $value;
+        $safe = 'smarty_safe_var_lookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')->' . $value;
+        return new BrainySafeLookupWrapper($unsafe, $safe);
     }
 
     public function compileSafeLookupWithBase($base, $variable) {
+        $unsafe = $base . '[' . $variable . ']';
         if ($this->safe_lookups === 0) { // Unsafe lookups
-            return $base . '[' . $variable . ']';
+            return $unsafe;
         }
-        return 'smarty_safe_array_lookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')';
+        $safe = 'smarty_safe_array_lookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')';
+        return new BrainySafeLookupWrapper($unsafe, $safe);
     }
 }
 
@@ -825,11 +828,22 @@ function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
     if (!$this->security || $this->smarty->security_policy->isTrustedPhpFunction(f, $this->compiler)) {
         if (strcasecmp(f,'isset') === 0 || strcasecmp(f,'empty') === 0 || strcasecmp(f,'array') === 0 || is_callable(f)) {
             $func_name = strtolower(f);
-            if ($func_name == 'isset') {
-                if (count(p) == 0) {
-                    $this->compiler->trigger_template_error ('Illegal number of paramer in "isset()"');
+
+            $is_language_construct = $func_name === 'isset' || $func_name === 'empty';
+            $combined_params = array();
+            foreach (p as $param) {
+                if ($is_language_construct && $param instanceof BrainySafeLookupWrapper) {
+                    $combined_params[] = $param->getUnsafe();
+                    continue;
                 }
-                $par = implode(',',p);
+                $combined_params[] = $param;
+            }
+            $par = implode(',', $combined_params);
+
+            if ($func_name == 'isset') {
+                if (count($combined_params) == 0) {
+                    $this->compiler->trigger_template_error('Illegal number of paramer in "isset()"');
+                }
                 if (strncasecmp($par,'$_smarty_tpl->getConfigVariable',strlen('$_smarty_tpl->getConfigVariable')) === 0) {
                     self::$prefix_number++;
                     $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.str_replace(')',', false)',$par).";\n";
@@ -839,16 +853,16 @@ function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
                 }
                 res = f . "(". $isset_par .")";
             } elseif (in_array($func_name,array('empty','reset','current','end','prev','next'))){
-                if (count(p) != 1) {
+                if (count($combined_params) != 1) {
                     $this->compiler->trigger_template_error ('Illegal number of paramer in "empty()"');
                 }
                 if ($func_name == 'empty') {
-                    res = $func_name.'('.str_replace("')->value","',null,true,false)->value",p[0]).')';
+                    res = $func_name.'('.str_replace("')->value","',null,true,false)->value",$combined_params[0]).')';
                 } else {
-                    res = $func_name.'('.p[0].')';
+                    res = $func_name.'('.$combined_params[0].')';
                 }
             } else {
-                res = f . "(". implode(',',p) .")";
+                res = f . "(". $par .")";
             }
         } else {
             $this->compiler->trigger_template_error ("unknown function \"" . f . "\"");

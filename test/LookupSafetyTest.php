@@ -21,7 +21,7 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
     public function testUnsafeLookupsThrowException() {
         $this->expectOutputString('');
         $this->smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;
-        return $this->smarty->fetch('eval:{$does_not_exist}');
+        $this->smarty->display('eval:{$does_not_exist}');
     }
 
     /**
@@ -31,7 +31,7 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
         $this->expectOutputString('');
         $this->smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;
         $this->smarty->assign('foo', array());
-        return $this->smarty->fetch('eval:{$foo[0]}');
+        $this->smarty->display('eval:{$foo[0]}');
     }
 
     /*
@@ -41,14 +41,28 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
     public function testSafeLookupsDoNotThrowException() {
         $this->expectOutputString('');
         $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
-        return $this->smarty->fetch('eval:{$does_not_exist}');
+        $this->smarty->display('eval:{$does_not_exist}');
     }
 
     public function testSafeIndexLookupsDoNotThrowException() {
         $this->expectOutputString('');
         $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
         $this->smarty->assign('foo', array());
-        return $this->smarty->fetch('eval:{$foo[0]}');
+        $this->smarty->display('eval:{$foo[0]}');
+    }
+
+    public function testSafeMemberLookupsInLangConstructsPasses() {
+        $this->expectOutputString('it is unset');
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->assign('foo', array());
+        $this->smarty->display('string:{if !isset($foo.bar)}it is unset{/if}');
+    }
+
+    public function testSafeIndexLookupsInLangConstructsPasses() {
+        $this->expectOutputString('it is empty');
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->assign('foo', '');
+        $this->smarty->display('string:{if empty($foo)}it is empty{/if}');
     }
 
     /*
@@ -61,7 +75,7 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
     public function testSafeWarnLookupsThrowWarning() {
         $this->expectOutputString('');
         $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE_WARN;
-        return $this->smarty->fetch('eval:{$does_not_exist}');
+        $this->smarty->display('eval:{$does_not_exist}');
     }
 
     /**
@@ -71,6 +85,6 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
         $this->expectOutputString('');
         $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE_WARN;
         $this->smarty->assign('foo', array());
-        return $this->smarty->fetch('eval:{$foo[0]}');
+        $this->smarty->display('eval:{$foo[0]}');
     }
 }
