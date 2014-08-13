@@ -22,13 +22,13 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      *
      * This returns the template output instead of displaying it.
      *
-     * @param  string $template         the resource handle of the template file or template object
-     * @param  mixed  $cache_id         cache id to be used with this template
-     * @param  mixed  $compile_id       compile id to be used with this template
-     * @param  object $parent           next higher level of Smarty variables
-     * @param  bool   $display          true: display, false: fetch
-     * @param  bool   $merge_tpl_vars   if true parent template variables merged in to local scope
-     * @param  bool   $no_output_filter if true do not run output filter
+     * @param  string|void $template         the resource handle of the template file or template object
+     * @param  mixed|void  $cache_id         cache id to be used with this template
+     * @param  mixed|void  $compile_id       compile id to be used with this template
+     * @param  object|void $parent           next higher level of Smarty variables
+     * @param  bool|void   $display          true: display, false: fetch
+     * @param  bool|void   $merge_tpl_vars   if true parent template variables merged in to local scope
+     * @param  bool|void   $no_output_filter if true do not run output filter
      * @return string rendered template output
      */
     public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false) {
