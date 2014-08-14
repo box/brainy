@@ -34,6 +34,15 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
         $this->smarty->display('eval:{$foo[0]}');
     }
 
+    /**
+     * @expectedException PHPUnit_Framework_Error_Notice
+     */
+    public function testUnsafeSuperglobalIndexLookupsThrowException() {
+        $this->expectOutputString('');
+        $this->smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;
+        $this->smarty->display('eval:{$smarty.request.this_should_never_exist}');
+    }
+
     /*
     The tests below test the LOOKUP_SAFE behavior.
     */
@@ -63,6 +72,12 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
         $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
         $this->smarty->assign('foo', '');
         $this->smarty->display('string:{if empty($foo)}it is empty{/if}');
+    }
+
+    public function testSafeSuperglobalIndexLookupsPasses() {
+        $this->expectOutputString('');
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->display('eval:{$smarty.request.this_should_never_exist}');
     }
 
     /*

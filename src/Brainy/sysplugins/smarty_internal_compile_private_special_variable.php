@@ -59,7 +59,15 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
                     $compiler->trigger_template_error("(secure mode) super globals not permitted");
                     return;
                 }
-                return '$_' . strtoupper($variable) . "[$modifier]";
+                $unsafe = '$_' . strtoupper($variable) . "[$modifier]";
+                if ($compiler->smarty->safe_lookups === Smarty::LOOKUP_UNSAFE) {
+                    return $unsafe;
+                } else {
+                    return new BrainySafeLookupWrapper(
+                        $unsafe,
+                        'smarty_safe_array_lookup($_' . strtoupper($variable) . ', ' . $modifier . ', ' . $compiler->smarty->safe_lookups . ')'
+                    );
+                }
 
             case 'template':
                 return 'basename($_smarty_tpl->source->filepath)';
