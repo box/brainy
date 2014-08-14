@@ -15,6 +15,7 @@ class AssignByRefTest extends PHPUnit_Framework_TestCase
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
+        Smarty::$assignment_compat = Smarty::ASSIGN_COMPAT;
     }
 
     /**
@@ -43,5 +44,13 @@ class AssignByRefTest extends PHPUnit_Framework_TestCase
         $this->smartyBC->assign_by_ref('foo', $bar);
         $this->smartyBC->fetch('eval:{$foo = "newbar"}');
         $this->assertEquals('newbar', $bar);
+    }
+
+    public function testSmarty2AssignByRefCancelled() {
+        Smarty::$assignment_compat = Smarty::ASSIGN_NO_COMPAT;
+        $bar = 'bar';
+        $this->smartyBC->assign_by_ref('foo', $bar);
+        $this->smartyBC->fetch('eval:{$foo = "newbar"}');
+        $this->assertEquals('bar', $bar);
     }
 }

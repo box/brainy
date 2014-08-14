@@ -301,6 +301,22 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     const LOOKUP_SAFE_WARN = 2;
 
+    /**
+     * When used, assignments under SmartyBC will use the Smarty 2 assignment
+     * semantics. Assignments will preserve references to previously assigned
+     * values.
+     * @var int
+     * @see Smarty::$assignment_compat Usage Information
+     */
+    const ASSIGN_COMPAT = 0;
+    /**
+     * When used, assignments will always use Smarty 3 semantics, regardless of
+     * whether SmartyBC is used.
+     * @var int
+     * @see Smarty::$assignment_compat Usage Information
+     */
+    const ASSIGN_NO_COMPAT = 1;
+
 
     /**
      * assigned global tpl vars
@@ -363,6 +379,23 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @uses Smarty::SCOPE_GLOBAL
      */
     public static $default_assign_scope = Smarty::SCOPE_LOCAL;
+    /**
+     * SmartyBC's usage will--by default--use Smarty 2's semantics for varaible
+     * assignment. This means that if a variable is already defined, a clone of
+     * the existing variable will be made to preserve references.
+     *
+     * If this value is changed to `Smarty::ASSIGN_NO_COMPAT`, Smarty 3's
+     * assignment semantics will always be used regardless of whether SmartyBC
+     * is used or not.
+     *
+     * This is considered at compile time and not at runtime.
+     *
+     * @var int
+     * @uses Smarty::ASSIGN_COMPAT
+     * @uses Smarty::ASSIGN_NO_COMPAT
+     * @see Smarty_Internal_Compile_Assign
+     */
+    public static $assignment_compat = Smarty::ASSIGN_COMPAT;
 
 
 

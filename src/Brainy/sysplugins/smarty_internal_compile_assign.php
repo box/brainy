@@ -57,7 +57,7 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
             $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]]->value$parameter[smarty_internal_index] = $_attr[value];\n";
         } else {
             // implement Smarty2's behaviour of variables assigned by reference
-            if ($compiler->template->smarty instanceof SmartyBC) {
+            if ($compiler->template->smarty instanceof SmartyBC && Smarty::$assignment_compat === Smarty::ASSIGN_COMPAT) {
                 $output .= "if (isset(\$_smarty_tpl->tpl_vars[$_attr[var]])) {\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->value = $_attr[value];\n";
