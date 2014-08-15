@@ -2343,7 +2343,7 @@ static public $yy_action = array(
 #line 2339 "smarty_internal_templateparser.php"
 #line 490 "smarty_internal_templateparser.y"
     function yy_r70(){
-    $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . trim($this->yystack[$this->yyidx + -1]->minor) . $this->yystack[$this->yyidx + 0]->minor;
+    $this->_retvalue = BrainyStaticWrapper::static_if_all($this->yystack[$this->yyidx + -2]->minor . trim($this->yystack[$this->yyidx + -1]->minor) . $this->yystack[$this->yyidx + 0]->minor, array($this->yystack[$this->yyidx + -2]->minor, $this->yystack[$this->yyidx + 0]->minor));
     }
 #line 2344 "smarty_internal_templateparser.php"
 #line 509 "smarty_internal_templateparser.y"

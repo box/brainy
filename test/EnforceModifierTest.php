@@ -135,4 +135,36 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
         $this->smarty->display('eval:{"foo"|escape:$escapetype|capitalize}');
     }
 
+
+    public function passing_example_provider() {
+        return array(
+            array('{($integer+1)|escape:"html"}', array('escape'), '124'),
+        );
+    }
+    public function failing_example_provider() {
+        return array(
+            array('{$integer+1|escape:"html"}', array('escape')),
+        );
+    }
+
+    /**
+     * @dataProvider passing_example_provider
+     */
+    public function testPassingExamples($example, $modifiers, $expected) {
+        $this->expectOutputString($expected);
+        $this->smarty->assign('integer', 123);
+        Smarty::$enforce_expression_modifiers = $modifiers;
+        $this->smarty->display('eval:' . $example);
+    }
+
+    /**
+     * @dataProvider failing_example_provider
+     * @expectedException BrainyModifierEnforcementException
+     */
+    public function testFailingExamples($example, $modifiers) {
+        $this->smarty->assign('integer', 123);
+        Smarty::$enforce_expression_modifiers = $modifiers;
+        $this->smarty->display('eval:' . $example);
+    }
+
 }

@@ -488,16 +488,16 @@ expr(res)        ::= DOLLAR ID(i) COLON ID(i2). {
 
                   // arithmetic expression
 expr(res)        ::= expr(e) MATH(m) value(v). {
-    res = e . trim(m) . v;
+    res = BrainyStaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
 }
 
 expr(res)        ::= expr(e) UNIMATH(m) value(v). {
-    res = e . trim(m) . v;
+    res = BrainyStaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
 }
 
                   // bit operation
 expr(res)        ::= expr(e) ANDSYM(m) value(v). {
-    res = e . trim(m) . v;
+    res = BrainyStaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
 }
 
                   // array
