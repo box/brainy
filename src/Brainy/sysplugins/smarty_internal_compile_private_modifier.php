@@ -34,6 +34,11 @@ class Smarty_Internal_Compile_Private_Modifier extends Smarty_Internal_CompileBa
         foreach ($parameter['modifierlist'] as $single_modifier) {
             $modifier = $single_modifier[0];
             $single_modifier[0] = $output;
+            for ($i = 0; $i < count($single_modifier); $i++) {
+                if ($single_modifier[$i] instanceof BrainyStaticWrapper) {
+                    $single_modifier[$i] = (string) $single_modifier[$i];
+                }
+            }
             $params = implode(',', $single_modifier);
             // check if we know already the type of modifier
             if (isset($compiler->known_modifier_type[$modifier])) {

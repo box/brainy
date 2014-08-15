@@ -40,6 +40,72 @@ class BrainySafeLookupWrapper
     }
 }
 
+class BrainyStaticWrapper
+{
+    private $code;
+
+    /**
+     * @param string $code
+     */
+    public function __construct($code) {
+        $this->code = $code;
+    }
+
+    /**
+     * The __toString() method un-statics the contents
+     * @return string
+     */
+    public function __toString() {
+        return $this->code;
+    }
+
+    /**
+     * Combine two values which may be static wrappers. The output is only a
+     * static wrapper if both the left and the right are static wrappers.
+     * @param string|BrainyStaticWrapper $left
+     * @param string|BrainyStaticWrapper $right
+     * @return string|BrainyStaticWrapper
+     */
+    public static function concat($left, $right) {
+        if ($left instanceof BrainyStaticWrapper && $right instanceof BrainyStaticWrapper) {
+            return new BrainyStaticWrapper($left . $right);
+        }
+        return $left . $right;
+    }
+
+    /**
+     * Combine two values which may be static wrappers. The output is a static
+     * wrapper if either the left or the right are static wrappers. This is
+     * only to be used in cases where the left or the right is known not to
+     * affect whether the result is a static wrapper.
+     * @param string|BrainyStaticWrapper $left
+     * @param string|BrainyStaticWrapper $right
+     * @return string|BrainyStaticWrapper
+     */
+    public static function static_concat($left, $right) {
+        if ($left instanceof BrainyStaticWrapper || $right instanceof BrainyStaticWrapper) {
+            return new BrainyStaticWrapper($left . $right);
+        }
+        return $left . $right;
+    }
+
+    /**
+     * If all of the values in $conditions are static wrappers, the result is a
+     * static wrapper of $code. Otherwise, $code is returned.
+     * @param string $code
+     * @param array $conditions
+     * @return string|BrainyStaticWrapper
+     */
+    public static function static_if_all($code, $conditions) {
+        foreach ($conditions as $cond) {
+            if (!($cond instanceof BrainyStaticWrapper)) {
+                return $code;
+            }
+        }
+        return $code;
+    }
+}
+
 class TP_yyStackEntry
 {
     public $stateno;       /* The state-number */
@@ -51,7 +117,7 @@ class TP_yyStackEntry
 
 
 #line 14 "smarty_internal_templateparser.y"
-class Smarty_Internal_Templateparser#line 75 "smarty_internal_templateparser.php"
+class Smarty_Internal_Templateparser#line 112 "smarty_internal_templateparser.php"
 {
 #line 16 "smarty_internal_templateparser.y"
 
@@ -98,7 +164,7 @@ class Smarty_Internal_Templateparser#line 75 "smarty_internal_templateparser.php
         $safe = 'smarty_safe_array_lookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')';
         return new BrainySafeLookupWrapper($unsafe, $safe);
     }
-#line 123 "smarty_internal_templateparser.php"
+#line 160 "smarty_internal_templateparser.php"
 
     const TP_VERT                           =  1;
     const TP_COLON                          =  2;
@@ -1106,33 +1172,33 @@ static public $yy_action = array(
     public $yystack = array();  /* The parser's stack */
 
     public $yyTokenName = array(
-  '$',             'VERT',          'COLON',         'RDEL',
-  'COMMENT',       'TEXT',          'STRIPON',       'STRIPOFF',
-  'BLOCKSOURCE',   'LITERALSTART',  'LITERALEND',    'LITERAL',
-  'LDEL',          'EQUAL',         'DOLLAR',        'ID',
-  'PTR',           'LDELIF',        'LDELFOR',       'SEMICOLON',
-  'INCDEC',        'TO',            'STEP',          'LDELFOREACH',
+  '$',             'VERT',          'COLON',         'RDEL',        
+  'COMMENT',       'TEXT',          'STRIPON',       'STRIPOFF',    
+  'BLOCKSOURCE',   'LITERALSTART',  'LITERALEND',    'LITERAL',     
+  'LDEL',          'EQUAL',         'DOLLAR',        'ID',          
+  'PTR',           'LDELIF',        'LDELFOR',       'SEMICOLON',   
+  'INCDEC',        'TO',            'STEP',          'LDELFOREACH', 
   'SPACE',         'AS',            'APTR',          'LDELSETFILTER',
-  'SMARTYBLOCKCHILDPARENT',  'LDELSLASH',     'ATTR',          'INTEGER',
-  'COMMA',         'OPENP',         'CLOSEP',        'MATH',
-  'UNIMATH',       'ANDSYM',        'ISIN',          'ISDIVBY',
-  'ISNOTDIVBY',    'ISEVEN',        'ISNOTEVEN',     'ISEVENBY',
-  'ISNOTEVENBY',   'ISODD',         'ISNOTODD',      'ISODDBY',
-  'ISNOTODDBY',    'INSTANCEOF',    'QMARK',         'NOT',
+  'SMARTYBLOCKCHILDPARENT',  'LDELSLASH',     'ATTR',          'INTEGER',     
+  'COMMA',         'OPENP',         'CLOSEP',        'MATH',        
+  'UNIMATH',       'ANDSYM',        'ISIN',          'ISDIVBY',     
+  'ISNOTDIVBY',    'ISEVEN',        'ISNOTEVEN',     'ISEVENBY',    
+  'ISNOTEVENBY',   'ISODD',         'ISNOTODD',      'ISODDBY',     
+  'ISNOTODDBY',    'INSTANCEOF',    'QMARK',         'NOT',         
   'TYPECAST',      'HEX',           'DOT',           'SINGLEQUOTESTRING',
-  'AT',            'HATCH',         'OPENB',         'CLOSEB',
-  'EQUALS',        'NOTEQUALS',     'GREATERTHAN',   'LESSTHAN',
+  'AT',            'HATCH',         'OPENB',         'CLOSEB',      
+  'EQUALS',        'NOTEQUALS',     'GREATERTHAN',   'LESSTHAN',    
   'GREATEREQUAL',  'LESSEQUAL',     'IDENTITY',      'NONEIDENTITY',
-  'MOD',           'LAND',          'LOR',           'LXOR',
-  'QUOTE',         'DOLLARID',      'error',         'start',
-  'template',      'template_element',  'smartytag',     'literal',
+  'MOD',           'LAND',          'LOR',           'LXOR',        
+  'QUOTE',         'DOLLARID',      'error',         'start',       
+  'template',      'template_element',  'smartytag',     'literal',     
   'literal_elements',  'literal_element',  'value',         'modifierlist',
-  'attributes',    'expr',          'variable',      'statement',
-  'statements',    'optspace',      'varvar',        'foraction',
-  'modparameters',  'attribute',     'variablebase',  'ternary',
-  'array',         'ifcond',        'lop',           'function',
+  'attributes',    'expr',          'variable',      'statement',   
+  'statements',    'optspace',      'varvar',        'foraction',   
+  'modparameters',  'attribute',     'variablebase',  'ternary',     
+  'array',         'ifcond',        'lop',           'function',    
   'doublequoted_with_quotes',  'variableinternal',  'indexdef',      'objectelement',
-  'varvarele',     'method',        'params',        'modifier',
+  'varvarele',     'method',        'params',        'modifier',    
   'modparameter',  'arrayelements',  'arrayelement',  'doublequoted',
   'doublequotedcontent',
     );
@@ -1586,7 +1652,7 @@ static public $yy_action = array(
 
     $this->internalError = true;
     $this->compiler->trigger_template_error("Stack overflow in template parser");
-#line 1614 "smarty_internal_templateparser.php"
+#line 1651 "smarty_internal_templateparser.php"
 
             return;
         }
@@ -1811,9 +1877,9 @@ static public $yy_action = array(
         125 => 12,
         128 => 12,
         13 => 13,
-        94 => 13,
         96 => 13,
         97 => 13,
+        116 => 13,
         15 => 15,
         16 => 15,
         37 => 15,
@@ -1823,11 +1889,7 @@ static public $yy_action = array(
         68 => 15,
         73 => 15,
         93 => 15,
-        98 => 15,
-        99 => 15,
         104 => 15,
-        106 => 15,
-        107 => 15,
         110 => 15,
         111 => 15,
         124 => 15,
@@ -1911,7 +1973,12 @@ static public $yy_action = array(
         90 => 90,
         91 => 91,
         92 => 92,
+        94 => 94,
         95 => 95,
+        98 => 98,
+        99 => 98,
+        106 => 98,
+        107 => 98,
         100 => 100,
         101 => 101,
         102 => 102,
@@ -1923,7 +1990,6 @@ static public $yy_action = array(
         114 => 114,
         115 => 115,
         121 => 115,
-        116 => 116,
         117 => 117,
         118 => 118,
         119 => 119,
@@ -1979,14 +2045,14 @@ static public $yy_action = array(
     function yy_r0(){
     $this->_retvalue = $this->root_buffer->to_smarty_php();
     }
-#line 2007 "smarty_internal_templateparser.php"
+#line 2044 "smarty_internal_templateparser.php"
 #line 100 "smarty_internal_templateparser.y"
     function yy_r1(){
     if ($this->yystack[$this->yyidx + 0]->minor != null) {
         $this->current_buffer->append_subtree($this->yystack[$this->yyidx + 0]->minor);
     }
     }
-#line 2014 "smarty_internal_templateparser.php"
+#line 2051 "smarty_internal_templateparser.php"
 #line 120 "smarty_internal_templateparser.y"
     function yy_r4(){
     if ($this->compiler->has_code) {
@@ -1998,17 +2064,17 @@ static public $yy_action = array(
     $this->compiler->has_variable_string = false;
     $this->block_nesting_level = count($this->compiler->_tag_stack);
     }
-#line 2026 "smarty_internal_templateparser.php"
+#line 2063 "smarty_internal_templateparser.php"
 #line 132 "smarty_internal_templateparser.y"
     function yy_r5(){
     $this->_retvalue = null;
     }
-#line 2031 "smarty_internal_templateparser.php"
+#line 2068 "smarty_internal_templateparser.php"
 #line 137 "smarty_internal_templateparser.y"
     function yy_r6(){
     $this->_retvalue = new _smarty_text($this, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2036 "smarty_internal_templateparser.php"
+#line 2073 "smarty_internal_templateparser.php"
 #line 142 "smarty_internal_templateparser.y"
     function yy_r7(){
         if ($this->strip) {
@@ -2017,17 +2083,17 @@ static public $yy_action = array(
             $this->_retvalue = new _smarty_text($this, $this->yystack[$this->yyidx + 0]->minor);
         }
     }
-#line 2045 "smarty_internal_templateparser.php"
+#line 2082 "smarty_internal_templateparser.php"
 #line 151 "smarty_internal_templateparser.y"
     function yy_r8(){
     $this->strip = true;
     }
-#line 2050 "smarty_internal_templateparser.php"
+#line 2087 "smarty_internal_templateparser.php"
 #line 155 "smarty_internal_templateparser.y"
     function yy_r9(){
     $this->strip = false;
     }
-#line 2055 "smarty_internal_templateparser.php"
+#line 2092 "smarty_internal_templateparser.php"
 #line 159 "smarty_internal_templateparser.y"
     function yy_r10(){
         if ($this->strip) {
@@ -2036,145 +2102,154 @@ static public $yy_action = array(
             SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, $this->yystack[$this->yyidx + 0]->minor);
         }
     }
-#line 2064 "smarty_internal_templateparser.php"
+#line 2101 "smarty_internal_templateparser.php"
 #line 168 "smarty_internal_templateparser.y"
     function yy_r11(){
     $this->_retvalue = '';
     }
-#line 2069 "smarty_internal_templateparser.php"
+#line 2106 "smarty_internal_templateparser.php"
 #line 172 "smarty_internal_templateparser.y"
     function yy_r12(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
-#line 2074 "smarty_internal_templateparser.php"
+#line 2111 "smarty_internal_templateparser.php"
 #line 176 "smarty_internal_templateparser.y"
     function yy_r13(){
-    $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor.$this->yystack[$this->yyidx + 0]->minor;
+    $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2079 "smarty_internal_templateparser.php"
+#line 2116 "smarty_internal_templateparser.php"
 #line 184 "smarty_internal_templateparser.y"
     function yy_r15(){
     $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2084 "smarty_internal_templateparser.php"
+#line 2121 "smarty_internal_templateparser.php"
 #line 198 "smarty_internal_templateparser.y"
     function yy_r17(){
-    $this->compiler->assert_no_enforced_modifiers();
+    $this->compiler->assert_no_enforced_modifiers($this->yystack[$this->yyidx + 0]->minor instanceof BrainyStaticWrapper);
+    if ($this->yystack[$this->yyidx + 0]->minor instanceof BrainyStaticWrapper) {
+        $this->yystack[$this->yyidx + 0]->minor = (string) $this->yystack[$this->yyidx + 0]->minor;
+    }
     $this->_retvalue = $this->compiler->compileTag('private_print_expression',array(),array('value'=>$this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2090 "smarty_internal_templateparser.php"
-#line 203 "smarty_internal_templateparser.y"
+#line 2130 "smarty_internal_templateparser.php"
+#line 206 "smarty_internal_templateparser.y"
     function yy_r18(){
-    $this->compiler->assert_expected_modifier($this->yystack[$this->yyidx + -1]->minor);
+    $this->compiler->assert_expected_modifier($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + -2]->minor instanceof BrainyStaticWrapper);
+    if ($this->yystack[$this->yyidx + -2]->minor instanceof BrainyStaticWrapper) {
+        $this->yystack[$this->yyidx + -2]->minor = (string) $this->yystack[$this->yyidx + -2]->minor;
+    }
     $this->_retvalue = $this->compiler->compileTag('private_print_expression',$this->yystack[$this->yyidx + 0]->minor,array('value'=>$this->yystack[$this->yyidx + -2]->minor, 'modifierlist'=>$this->yystack[$this->yyidx + -1]->minor));
     }
-#line 2096 "smarty_internal_templateparser.php"
-#line 208 "smarty_internal_templateparser.y"
+#line 2139 "smarty_internal_templateparser.php"
+#line 214 "smarty_internal_templateparser.y"
     function yy_r19(){
-    $this->compiler->assert_no_enforced_modifiers();
+    $this->compiler->assert_no_enforced_modifiers($this->yystack[$this->yyidx + -1]->minor instanceof BrainyStaticWrapper);
+    if ($this->yystack[$this->yyidx + -1]->minor instanceof BrainyStaticWrapper) {
+        $this->yystack[$this->yyidx + -1]->minor = (string) $this->yystack[$this->yyidx + -1]->minor;
+    }
     $this->_retvalue = $this->compiler->compileTag('private_print_expression',$this->yystack[$this->yyidx + 0]->minor,array('value'=>$this->yystack[$this->yyidx + -1]->minor));
     }
-#line 2102 "smarty_internal_templateparser.php"
-#line 226 "smarty_internal_templateparser.y"
+#line 2148 "smarty_internal_templateparser.php"
+#line 241 "smarty_internal_templateparser.y"
     function yy_r22(){
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . ' = (' . $this->yystack[$this->yyidx + 0]->minor . ');';
     }
-#line 2107 "smarty_internal_templateparser.php"
-#line 230 "smarty_internal_templateparser.y"
+#line 2153 "smarty_internal_templateparser.php"
+#line 245 "smarty_internal_templateparser.y"
     function yy_r23(){
     $this->_retvalue = $this->compiler->compileTag('assign',array(array('value'=>$this->yystack[$this->yyidx + 0]->minor),array('var'=>"'".$this->yystack[$this->yyidx + -2]->minor."'")));
     }
-#line 2112 "smarty_internal_templateparser.php"
-#line 238 "smarty_internal_templateparser.y"
+#line 2158 "smarty_internal_templateparser.php"
+#line 253 "smarty_internal_templateparser.y"
     function yy_r25(){
     $this->_retvalue = $this->compiler->compileTag('assign',array_merge(array(array('value'=>$this->yystack[$this->yyidx + -1]->minor),array('var'=>"'".$this->yystack[$this->yyidx + -3]->minor."'")),$this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2117 "smarty_internal_templateparser.php"
-#line 243 "smarty_internal_templateparser.y"
+#line 2163 "smarty_internal_templateparser.php"
+#line 258 "smarty_internal_templateparser.y"
     function yy_r26(){
     $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -1]->minor,$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2122 "smarty_internal_templateparser.php"
-#line 247 "smarty_internal_templateparser.y"
+#line 2168 "smarty_internal_templateparser.php"
+#line 262 "smarty_internal_templateparser.y"
     function yy_r27(){
     $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + 0]->minor,array());
     }
-#line 2127 "smarty_internal_templateparser.php"
-#line 252 "smarty_internal_templateparser.y"
+#line 2173 "smarty_internal_templateparser.php"
+#line 267 "smarty_internal_templateparser.y"
     function yy_r28(){
     $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -3]->minor,$this->yystack[$this->yyidx + 0]->minor,array('object_methode'=>$this->yystack[$this->yyidx + -1]->minor));
     }
-#line 2132 "smarty_internal_templateparser.php"
-#line 257 "smarty_internal_templateparser.y"
+#line 2178 "smarty_internal_templateparser.php"
+#line 272 "smarty_internal_templateparser.y"
     function yy_r29(){
     $this->_retvalue = "ob_start();\n".$this->compiler->compileTag($this->yystack[$this->yyidx + -2]->minor,$this->yystack[$this->yyidx + 0]->minor).'echo ';
     $this->_retvalue .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>$this->yystack[$this->yyidx + -1]->minor,'value'=>'ob_get_clean()')) . ";\n";
     }
-#line 2138 "smarty_internal_templateparser.php"
-#line 263 "smarty_internal_templateparser.y"
+#line 2184 "smarty_internal_templateparser.php"
+#line 278 "smarty_internal_templateparser.y"
     function yy_r30(){
     $this->_retvalue = "ob_start();\n".$this->compiler->compileTag($this->yystack[$this->yyidx + -4]->minor,$this->yystack[$this->yyidx + 0]->minor,array('object_methode'=>$this->yystack[$this->yyidx + -2]->minor)).'echo ';
     $this->_retvalue .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>$this->yystack[$this->yyidx + -1]->minor,'value'=>'ob_get_clean()')) . ";\n";
     }
-#line 2144 "smarty_internal_templateparser.php"
-#line 269 "smarty_internal_templateparser.y"
+#line 2190 "smarty_internal_templateparser.php"
+#line 284 "smarty_internal_templateparser.y"
     function yy_r31(){
     $tag = trim(substr($this->yystack[$this->yyidx + -1]->minor,$this->lex->ldel_length));
     $this->_retvalue = $this->compiler->compileTag(($tag == 'else if')? 'elseif' : $tag,array(),array('if condition'=>$this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2150 "smarty_internal_templateparser.php"
-#line 274 "smarty_internal_templateparser.y"
+#line 2196 "smarty_internal_templateparser.php"
+#line 289 "smarty_internal_templateparser.y"
     function yy_r32(){
     $tag = trim(substr($this->yystack[$this->yyidx + -2]->minor,$this->lex->ldel_length));
     $this->_retvalue = $this->compiler->compileTag(($tag == 'else if')? 'elseif' : $tag,$this->yystack[$this->yyidx + 0]->minor,array('if condition'=>$this->yystack[$this->yyidx + -1]->minor));
     }
-#line 2156 "smarty_internal_templateparser.php"
-#line 290 "smarty_internal_templateparser.y"
+#line 2202 "smarty_internal_templateparser.php"
+#line 305 "smarty_internal_templateparser.y"
     function yy_r35(){
     $this->_retvalue = $this->compiler->compileTag('for',array_merge($this->yystack[$this->yyidx + 0]->minor,array(array('start'=>$this->yystack[$this->yyidx + -9]->minor),array('ifexp'=>$this->yystack[$this->yyidx + -6]->minor),array('var'=>$this->yystack[$this->yyidx + -2]->minor),array('step'=>$this->yystack[$this->yyidx + -1]->minor))),1);
     }
-#line 2161 "smarty_internal_templateparser.php"
-#line 294 "smarty_internal_templateparser.y"
+#line 2207 "smarty_internal_templateparser.php"
+#line 309 "smarty_internal_templateparser.y"
     function yy_r36(){
     $this->_retvalue = '='.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2166 "smarty_internal_templateparser.php"
-#line 302 "smarty_internal_templateparser.y"
+#line 2212 "smarty_internal_templateparser.php"
+#line 317 "smarty_internal_templateparser.y"
     function yy_r38(){
     $this->_retvalue = $this->compiler->compileTag('for',array_merge($this->yystack[$this->yyidx + 0]->minor,array(array('start'=>$this->yystack[$this->yyidx + -3]->minor),array('to'=>$this->yystack[$this->yyidx + -1]->minor))),0);
     }
-#line 2171 "smarty_internal_templateparser.php"
-#line 306 "smarty_internal_templateparser.y"
+#line 2217 "smarty_internal_templateparser.php"
+#line 321 "smarty_internal_templateparser.y"
     function yy_r39(){
     $this->_retvalue = $this->compiler->compileTag('for',array_merge($this->yystack[$this->yyidx + 0]->minor,array(array('start'=>$this->yystack[$this->yyidx + -5]->minor),array('to'=>$this->yystack[$this->yyidx + -3]->minor),array('step'=>$this->yystack[$this->yyidx + -1]->minor))),0);
     }
-#line 2176 "smarty_internal_templateparser.php"
-#line 311 "smarty_internal_templateparser.y"
+#line 2222 "smarty_internal_templateparser.php"
+#line 326 "smarty_internal_templateparser.y"
     function yy_r40(){
     $this->_retvalue = $this->compiler->compileTag('foreach',$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2181 "smarty_internal_templateparser.php"
-#line 316 "smarty_internal_templateparser.y"
+#line 2227 "smarty_internal_templateparser.php"
+#line 331 "smarty_internal_templateparser.y"
     function yy_r41(){
     $this->_retvalue = $this->compiler->compileTag('foreach',array_merge($this->yystack[$this->yyidx + 0]->minor,array(array('from'=>$this->yystack[$this->yyidx + -4]->minor),array('item'=>$this->yystack[$this->yyidx + -1]->minor))));
     }
-#line 2186 "smarty_internal_templateparser.php"
-#line 320 "smarty_internal_templateparser.y"
+#line 2232 "smarty_internal_templateparser.php"
+#line 335 "smarty_internal_templateparser.y"
     function yy_r42(){
     $this->_retvalue = $this->compiler->compileTag('foreach',array_merge($this->yystack[$this->yyidx + 0]->minor,array(array('from'=>$this->yystack[$this->yyidx + -7]->minor),array('item'=>$this->yystack[$this->yyidx + -1]->minor),array('key'=>$this->yystack[$this->yyidx + -4]->minor))));
     }
-#line 2191 "smarty_internal_templateparser.php"
-#line 333 "smarty_internal_templateparser.y"
+#line 2237 "smarty_internal_templateparser.php"
+#line 348 "smarty_internal_templateparser.y"
     function yy_r45(){
     $this->_retvalue = $this->compiler->compileTag('setfilter',array(),array('modifier_list'=>array(array_merge(array($this->yystack[$this->yyidx + -1]->minor),$this->yystack[$this->yyidx + 0]->minor))));
     }
-#line 2196 "smarty_internal_templateparser.php"
-#line 337 "smarty_internal_templateparser.y"
+#line 2242 "smarty_internal_templateparser.php"
+#line 352 "smarty_internal_templateparser.y"
     function yy_r46(){
     $this->_retvalue = $this->compiler->compileTag('setfilter',array(),array('modifier_list'=>array_merge(array(array_merge(array($this->yystack[$this->yyidx + -2]->minor),$this->yystack[$this->yyidx + -1]->minor)),$this->yystack[$this->yyidx + 0]->minor)));
     }
-#line 2201 "smarty_internal_templateparser.php"
-#line 342 "smarty_internal_templateparser.y"
+#line 2247 "smarty_internal_templateparser.php"
+#line 357 "smarty_internal_templateparser.y"
     function yy_r47(){
     $j = strrpos($this->yystack[$this->yyidx + 0]->minor,'.');
     if ($this->yystack[$this->yyidx + 0]->minor[$j+1] == 'c') {
@@ -2185,44 +2260,44 @@ static public $yy_action = array(
         $this->_retvalue = SMARTY_INTERNAL_COMPILE_BLOCK::compileParentBlock($this->compiler);
     }
     }
-#line 2213 "smarty_internal_templateparser.php"
-#line 355 "smarty_internal_templateparser.y"
+#line 2259 "smarty_internal_templateparser.php"
+#line 370 "smarty_internal_templateparser.y"
     function yy_r48(){
     $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + 0]->minor.'close',array());
     }
-#line 2218 "smarty_internal_templateparser.php"
-#line 359 "smarty_internal_templateparser.y"
+#line 2264 "smarty_internal_templateparser.php"
+#line 374 "smarty_internal_templateparser.y"
     function yy_r49(){
     $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -1]->minor.'close',array(),array('modifier_list'=>$this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2223 "smarty_internal_templateparser.php"
-#line 364 "smarty_internal_templateparser.y"
+#line 2269 "smarty_internal_templateparser.php"
+#line 379 "smarty_internal_templateparser.y"
     function yy_r50(){
     $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -2]->minor.'close',array(),array('object_methode'=>$this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2228 "smarty_internal_templateparser.php"
-#line 368 "smarty_internal_templateparser.y"
+#line 2274 "smarty_internal_templateparser.php"
+#line 383 "smarty_internal_templateparser.y"
     function yy_r51(){
     $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -3]->minor.'close',array(),array('object_methode'=>$this->yystack[$this->yyidx + -1]->minor, 'modifier_list'=>$this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2233 "smarty_internal_templateparser.php"
-#line 376 "smarty_internal_templateparser.y"
+#line 2279 "smarty_internal_templateparser.php"
+#line 391 "smarty_internal_templateparser.y"
     function yy_r52(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     $this->_retvalue[] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2239 "smarty_internal_templateparser.php"
-#line 382 "smarty_internal_templateparser.y"
+#line 2285 "smarty_internal_templateparser.php"
+#line 397 "smarty_internal_templateparser.y"
     function yy_r53(){
     $this->_retvalue = array($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2244 "smarty_internal_templateparser.php"
-#line 387 "smarty_internal_templateparser.y"
+#line 2290 "smarty_internal_templateparser.php"
+#line 402 "smarty_internal_templateparser.y"
     function yy_r54(){
     $this->_retvalue = array();
     }
-#line 2249 "smarty_internal_templateparser.php"
-#line 392 "smarty_internal_templateparser.y"
+#line 2295 "smarty_internal_templateparser.php"
+#line 407 "smarty_internal_templateparser.y"
     function yy_r55(){
     if (preg_match('~^true$~i', $this->yystack[$this->yyidx + 0]->minor)) {
         $this->_retvalue = array($this->yystack[$this->yyidx + -2]->minor=>'true');
@@ -2234,156 +2309,166 @@ static public $yy_action = array(
         $this->_retvalue = array($this->yystack[$this->yyidx + -2]->minor=>"'".$this->yystack[$this->yyidx + 0]->minor."'");
     }
     }
-#line 2262 "smarty_internal_templateparser.php"
-#line 404 "smarty_internal_templateparser.y"
+#line 2308 "smarty_internal_templateparser.php"
+#line 419 "smarty_internal_templateparser.y"
     function yy_r56(){
     $this->_retvalue = array(trim($this->yystack[$this->yyidx + -1]->minor," =\n\r\t")=>$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2267 "smarty_internal_templateparser.php"
-#line 412 "smarty_internal_templateparser.y"
+#line 2313 "smarty_internal_templateparser.php"
+#line 427 "smarty_internal_templateparser.y"
     function yy_r58(){
     $this->_retvalue = "'".$this->yystack[$this->yyidx + 0]->minor."'";
     }
-#line 2272 "smarty_internal_templateparser.php"
-#line 424 "smarty_internal_templateparser.y"
+#line 2318 "smarty_internal_templateparser.php"
+#line 439 "smarty_internal_templateparser.y"
     function yy_r61(){
     $this->_retvalue = array($this->yystack[$this->yyidx + -2]->minor=>$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2277 "smarty_internal_templateparser.php"
-#line 437 "smarty_internal_templateparser.y"
+#line 2323 "smarty_internal_templateparser.php"
+#line 452 "smarty_internal_templateparser.y"
     function yy_r63(){
     $this->yystack[$this->yyidx + -2]->minor[]=$this->yystack[$this->yyidx + 0]->minor;
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor;
     }
-#line 2283 "smarty_internal_templateparser.php"
-#line 442 "smarty_internal_templateparser.y"
+#line 2329 "smarty_internal_templateparser.php"
+#line 457 "smarty_internal_templateparser.y"
     function yy_r64(){
     $this->_retvalue = array('var' => $this->yystack[$this->yyidx + -2]->minor, 'value'=>$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2288 "smarty_internal_templateparser.php"
-#line 470 "smarty_internal_templateparser.y"
+#line 2334 "smarty_internal_templateparser.php"
+#line 485 "smarty_internal_templateparser.y"
     function yy_r69(){
     $this->_retvalue = '$_smarty_tpl->getStreamVariable(\''. $this->yystack[$this->yyidx + -2]->minor .'://'. $this->yystack[$this->yyidx + 0]->minor . '\')';
     }
-#line 2293 "smarty_internal_templateparser.php"
-#line 475 "smarty_internal_templateparser.y"
+#line 2339 "smarty_internal_templateparser.php"
+#line 490 "smarty_internal_templateparser.y"
     function yy_r70(){
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . trim($this->yystack[$this->yyidx + -1]->minor) . $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2298 "smarty_internal_templateparser.php"
-#line 494 "smarty_internal_templateparser.y"
+#line 2344 "smarty_internal_templateparser.php"
+#line 509 "smarty_internal_templateparser.y"
     function yy_r74(){
     $this->_retvalue = $this->compiler->compileTag('private_modifier',array(),array('value'=>$this->yystack[$this->yyidx + -1]->minor,'modifierlist'=>$this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2303 "smarty_internal_templateparser.php"
-#line 500 "smarty_internal_templateparser.y"
+#line 2349 "smarty_internal_templateparser.php"
+#line 515 "smarty_internal_templateparser.y"
     function yy_r75(){
-    $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor.$this->yystack[$this->yyidx + -1]->minor.$this->yystack[$this->yyidx + 0]->minor;
+    $this->_retvalue = new BrainyStaticWrapper($this->yystack[$this->yyidx + -2]->minor.$this->yystack[$this->yyidx + -1]->minor.$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2308 "smarty_internal_templateparser.php"
-#line 504 "smarty_internal_templateparser.y"
+#line 2354 "smarty_internal_templateparser.php"
+#line 519 "smarty_internal_templateparser.y"
     function yy_r76(){
-    $this->_retvalue = 'in_array('.$this->yystack[$this->yyidx + -2]->minor.','.$this->yystack[$this->yyidx + 0]->minor.')';
+    $this->_retvalue = new BrainyStaticWrapper('in_array('.$this->yystack[$this->yyidx + -2]->minor.','.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2313 "smarty_internal_templateparser.php"
-#line 508 "smarty_internal_templateparser.y"
+#line 2359 "smarty_internal_templateparser.php"
+#line 523 "smarty_internal_templateparser.y"
     function yy_r77(){
-    $this->_retvalue = 'in_array('.$this->yystack[$this->yyidx + -2]->minor.',(array)'.$this->yystack[$this->yyidx + 0]->minor.')';
+    $this->_retvalue = new BrainyStaticWrapper('in_array('.$this->yystack[$this->yyidx + -2]->minor.',(array)'.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2318 "smarty_internal_templateparser.php"
-#line 516 "smarty_internal_templateparser.y"
+#line 2364 "smarty_internal_templateparser.php"
+#line 531 "smarty_internal_templateparser.y"
     function yy_r79(){
-    $this->_retvalue = '!('.$this->yystack[$this->yyidx + -2]->minor.' % '.$this->yystack[$this->yyidx + 0]->minor.')';
+    $this->_retvalue = new BrainyStaticWrapper('!('.$this->yystack[$this->yyidx + -2]->minor.' % '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2323 "smarty_internal_templateparser.php"
-#line 520 "smarty_internal_templateparser.y"
+#line 2369 "smarty_internal_templateparser.php"
+#line 535 "smarty_internal_templateparser.y"
     function yy_r80(){
-    $this->_retvalue = '('.$this->yystack[$this->yyidx + -2]->minor.' % '.$this->yystack[$this->yyidx + 0]->minor.')';
+    $this->_retvalue = new BrainyStaticWrapper('('.$this->yystack[$this->yyidx + -2]->minor.' % '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2328 "smarty_internal_templateparser.php"
-#line 524 "smarty_internal_templateparser.y"
+#line 2374 "smarty_internal_templateparser.php"
+#line 539 "smarty_internal_templateparser.y"
     function yy_r81(){
-    $this->_retvalue = '!(1 & '.$this->yystack[$this->yyidx + -1]->minor.')';
+    $this->_retvalue = new BrainyStaticWrapper('!(1 & '.$this->yystack[$this->yyidx + -1]->minor.')');
     }
-#line 2333 "smarty_internal_templateparser.php"
-#line 528 "smarty_internal_templateparser.y"
+#line 2379 "smarty_internal_templateparser.php"
+#line 543 "smarty_internal_templateparser.y"
     function yy_r82(){
-    $this->_retvalue = '(1 & '.$this->yystack[$this->yyidx + -1]->minor.')';
+    $this->_retvalue = new BrainyStaticWrapper('(1 & '.$this->yystack[$this->yyidx + -1]->minor.')');
     }
-#line 2338 "smarty_internal_templateparser.php"
-#line 532 "smarty_internal_templateparser.y"
+#line 2384 "smarty_internal_templateparser.php"
+#line 547 "smarty_internal_templateparser.y"
     function yy_r83(){
-    $this->_retvalue = '!(1 & '.$this->yystack[$this->yyidx + -2]->minor.' / '.$this->yystack[$this->yyidx + 0]->minor.')';
+    $this->_retvalue = new BrainyStaticWrapper('!(1 & '.$this->yystack[$this->yyidx + -2]->minor.' / '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2343 "smarty_internal_templateparser.php"
-#line 536 "smarty_internal_templateparser.y"
+#line 2389 "smarty_internal_templateparser.php"
+#line 551 "smarty_internal_templateparser.y"
     function yy_r84(){
-    $this->_retvalue = '(1 & '.$this->yystack[$this->yyidx + -2]->minor.' / '.$this->yystack[$this->yyidx + 0]->minor.')';
+    $this->_retvalue = new BrainyStaticWrapper('(1 & '.$this->yystack[$this->yyidx + -2]->minor.' / '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2348 "smarty_internal_templateparser.php"
-#line 560 "smarty_internal_templateparser.y"
+#line 2394 "smarty_internal_templateparser.php"
+#line 575 "smarty_internal_templateparser.y"
     function yy_r90(){
     self::$prefix_number++;
     $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.$this->yystack[$this->yyidx + 0]->minor.";\n";
-    $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor.$this->yystack[$this->yyidx + -1]->minor.'$_tmp'.self::$prefix_number;
+    $this->_retvalue = new BrainyStaticWrapper($this->yystack[$this->yyidx + -2]->minor.$this->yystack[$this->yyidx + -1]->minor.'$_tmp'.self::$prefix_number);
     }
-#line 2355 "smarty_internal_templateparser.php"
-#line 569 "smarty_internal_templateparser.y"
+#line 2401 "smarty_internal_templateparser.php"
+#line 584 "smarty_internal_templateparser.y"
     function yy_r91(){
     $this->_retvalue = $this->yystack[$this->yyidx + -6]->minor.' ? '. $this->compileVariable("'".$this->yystack[$this->yyidx + -2]->minor."'") . ' : '.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2360 "smarty_internal_templateparser.php"
-#line 573 "smarty_internal_templateparser.y"
+#line 2406 "smarty_internal_templateparser.php"
+#line 588 "smarty_internal_templateparser.y"
     function yy_r92(){
     $this->_retvalue = $this->yystack[$this->yyidx + -5]->minor.' ? '.$this->yystack[$this->yyidx + -2]->minor.' : '.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2365 "smarty_internal_templateparser.php"
-#line 588 "smarty_internal_templateparser.y"
+#line 2411 "smarty_internal_templateparser.php"
+#line 598 "smarty_internal_templateparser.y"
+    function yy_r94(){
+    $this->_retvalue = BrainyStaticWrapper::concat($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor);
+    }
+#line 2416 "smarty_internal_templateparser.php"
+#line 603 "smarty_internal_templateparser.y"
     function yy_r95(){
-    $this->_retvalue = '!'.$this->yystack[$this->yyidx + 0]->minor;
+    $this->_retvalue = BrainyStaticWrapper::static_concat('!', $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2370 "smarty_internal_templateparser.php"
-#line 609 "smarty_internal_templateparser.y"
+#line 2421 "smarty_internal_templateparser.php"
+#line 616 "smarty_internal_templateparser.y"
+    function yy_r98(){
+    $this->_retvalue = new BrainyStaticWrapper($this->yystack[$this->yyidx + 0]->minor);
+    }
+#line 2426 "smarty_internal_templateparser.php"
+#line 624 "smarty_internal_templateparser.y"
     function yy_r100(){
-    $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor.'.'.$this->yystack[$this->yyidx + 0]->minor;
+    $this->_retvalue = new BrainyStaticWrapper($this->yystack[$this->yyidx + -2]->minor.'.'.$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2375 "smarty_internal_templateparser.php"
-#line 613 "smarty_internal_templateparser.y"
+#line 2431 "smarty_internal_templateparser.php"
+#line 628 "smarty_internal_templateparser.y"
     function yy_r101(){
-    $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor.'.';
+    $this->_retvalue = new BrainyStaticWrapper($this->yystack[$this->yyidx + -1]->minor.'.');
     }
-#line 2380 "smarty_internal_templateparser.php"
-#line 617 "smarty_internal_templateparser.y"
+#line 2436 "smarty_internal_templateparser.php"
+#line 632 "smarty_internal_templateparser.y"
     function yy_r102(){
-    $this->_retvalue = '.'.$this->yystack[$this->yyidx + 0]->minor;
+    $this->_retvalue = new BrainyStaticWrapper('.'.$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2385 "smarty_internal_templateparser.php"
-#line 622 "smarty_internal_templateparser.y"
+#line 2441 "smarty_internal_templateparser.php"
+#line 637 "smarty_internal_templateparser.y"
     function yy_r103(){
     if (preg_match('~^true$~i', $this->yystack[$this->yyidx + 0]->minor)) {
-        $this->_retvalue = 'true';
+        $this->_retvalue = new BrainyStaticWrapper('true');
     } elseif (preg_match('~^false$~i', $this->yystack[$this->yyidx + 0]->minor)) {
-        $this->_retvalue = 'false';
+        $this->_retvalue = new BrainyStaticWrapper('false');
     } elseif (preg_match('~^null$~i', $this->yystack[$this->yyidx + 0]->minor)) {
-        $this->_retvalue = 'null';
+        $this->_retvalue = new BrainyStaticWrapper('null');
     } else {
-        $this->_retvalue = "'".$this->yystack[$this->yyidx + 0]->minor."'";
+        $this->_retvalue = new BrainyStaticWrapper(var_export($this->yystack[$this->yyidx + 0]->minor, true));
     }
     }
-#line 2398 "smarty_internal_templateparser.php"
-#line 640 "smarty_internal_templateparser.y"
+#line 2454 "smarty_internal_templateparser.php"
+#line 655 "smarty_internal_templateparser.y"
     function yy_r105(){
-    $this->_retvalue = "(". $this->yystack[$this->yyidx + -1]->minor .")";
+    $this->_retvalue = BrainyStaticWrapper::static_if_all("(". $this->yystack[$this->yyidx + -1]->minor .")", array($this->yystack[$this->yyidx + -1]->minor));
     }
-#line 2403 "smarty_internal_templateparser.php"
-#line 656 "smarty_internal_templateparser.y"
+#line 2459 "smarty_internal_templateparser.php"
+#line 671 "smarty_internal_templateparser.y"
     function yy_r108(){
     self::$prefix_number++;
     $this->compiler->prefix_code[] = 'ob_start();'.$this->yystack[$this->yyidx + -1]->minor.'$_tmp'.self::$prefix_number.'=ob_get_clean();';
     $this->_retvalue = '$_tmp'.self::$prefix_number;
     }
-#line 2410 "smarty_internal_templateparser.php"
-#line 679 "smarty_internal_templateparser.y"
+#line 2466 "smarty_internal_templateparser.php"
+#line 694 "smarty_internal_templateparser.y"
     function yy_r112(){
     if ($this->yystack[$this->yyidx + 0]->minor === '[]') {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
@@ -2391,8 +2476,8 @@ static public $yy_action = array(
         $this->_retvalue = $this->compileSafeLookupWithBase($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor);
     }
     }
-#line 2419 "smarty_internal_templateparser.php"
-#line 688 "smarty_internal_templateparser.y"
+#line 2475 "smarty_internal_templateparser.php"
+#line 703 "smarty_internal_templateparser.y"
     function yy_r113(){
     if ($this->yystack[$this->yyidx + -2]->minor == '\'smarty\'') {
         $this->_retvalue = $this->compiler->compileTag('private_special_variable', array(), $this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor);
@@ -2401,8 +2486,8 @@ static public $yy_action = array(
         $this->_retvalue = $this->compileSafeLookupWithBase($this->_retvalue, $this->yystack[$this->yyidx + 0]->minor);
     }
     }
-#line 2429 "smarty_internal_templateparser.php"
-#line 697 "smarty_internal_templateparser.y"
+#line 2485 "smarty_internal_templateparser.php"
+#line 712 "smarty_internal_templateparser.y"
     function yy_r114(){
     if ($this->yystack[$this->yyidx + -1]->minor == '\'smarty\'') {
         $this->_retvalue = $this->compiler->compileTag('private_special_variable', array(), $this->yystack[$this->yyidx + 0]->minor);
@@ -2412,110 +2497,105 @@ static public $yy_action = array(
         $this->_retvalue = $this->compileSafeLookupWithBase($this->compileVariable($this->yystack[$this->yyidx + -1]->minor), $this->yystack[$this->yyidx + 0]->minor);
     }
     }
-#line 2440 "smarty_internal_templateparser.php"
-#line 707 "smarty_internal_templateparser.y"
+#line 2496 "smarty_internal_templateparser.php"
+#line 722 "smarty_internal_templateparser.y"
     function yy_r115(){
     $this->_retvalue = $this->compileVariable($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2445 "smarty_internal_templateparser.php"
-#line 711 "smarty_internal_templateparser.y"
-    function yy_r116(){
-    $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
-    }
-#line 2450 "smarty_internal_templateparser.php"
-#line 715 "smarty_internal_templateparser.y"
+#line 2501 "smarty_internal_templateparser.php"
+#line 730 "smarty_internal_templateparser.y"
     function yy_r117(){
     $this->_retvalue = $this->compileVariable($this->yystack[$this->yyidx + -2]->minor, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2455 "smarty_internal_templateparser.php"
-#line 720 "smarty_internal_templateparser.y"
+#line 2506 "smarty_internal_templateparser.php"
+#line 735 "smarty_internal_templateparser.y"
     function yy_r118(){
     $this->_retvalue = '$_smarty_tpl->getConfigVariable(\''. $this->yystack[$this->yyidx + -1]->minor .'\')';
     }
-#line 2460 "smarty_internal_templateparser.php"
-#line 724 "smarty_internal_templateparser.y"
+#line 2511 "smarty_internal_templateparser.php"
+#line 739 "smarty_internal_templateparser.y"
     function yy_r119(){
     $this->_retvalue = '$_smarty_tpl->getConfigVariable('. $this->yystack[$this->yyidx + -1]->minor .')';
     }
-#line 2465 "smarty_internal_templateparser.php"
-#line 728 "smarty_internal_templateparser.y"
+#line 2516 "smarty_internal_templateparser.php"
+#line 743 "smarty_internal_templateparser.y"
     function yy_r120(){
     $this->_retvalue = '[]';
     }
-#line 2470 "smarty_internal_templateparser.php"
-#line 738 "smarty_internal_templateparser.y"
+#line 2521 "smarty_internal_templateparser.php"
+#line 753 "smarty_internal_templateparser.y"
     function yy_r122(){
     $this->_retvalue = $this->compileVariable($this->yystack[$this->yyidx + -2]->minor).'->'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2475 "smarty_internal_templateparser.php"
-#line 742 "smarty_internal_templateparser.y"
+#line 2526 "smarty_internal_templateparser.php"
+#line 757 "smarty_internal_templateparser.y"
     function yy_r123(){
     $this->_retvalue = "'". $this->yystack[$this->yyidx + 0]->minor ."'";
     }
-#line 2480 "smarty_internal_templateparser.php"
-#line 755 "smarty_internal_templateparser.y"
+#line 2531 "smarty_internal_templateparser.php"
+#line 770 "smarty_internal_templateparser.y"
     function yy_r126(){
     $this->_retvalue = $this->compiler->compileTag('private_special_variable', array(), '\'section\'', '\'' . $this->yystack[$this->yyidx + -1]->minor . '\'') . '[\'index\']';
     }
-#line 2485 "smarty_internal_templateparser.php"
-#line 759 "smarty_internal_templateparser.y"
+#line 2536 "smarty_internal_templateparser.php"
+#line 774 "smarty_internal_templateparser.y"
     function yy_r127(){
     $this->_retvalue = $this->compiler->compileTag('private_special_variable', array(), '\'section\'', '\'' . $this->yystack[$this->yyidx + -3]->minor . '\']') . '[\''.$this->yystack[$this->yyidx + -1]->minor.'\']';
     }
-#line 2490 "smarty_internal_templateparser.php"
-#line 776 "smarty_internal_templateparser.y"
+#line 2541 "smarty_internal_templateparser.php"
+#line 791 "smarty_internal_templateparser.y"
     function yy_r130(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor.'.'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2495 "smarty_internal_templateparser.php"
-#line 781 "smarty_internal_templateparser.y"
+#line 2546 "smarty_internal_templateparser.php"
+#line 796 "smarty_internal_templateparser.y"
     function yy_r131(){
     $this->_retvalue = '\''.$this->yystack[$this->yyidx + 0]->minor.'\'';
     }
-#line 2500 "smarty_internal_templateparser.php"
-#line 786 "smarty_internal_templateparser.y"
+#line 2551 "smarty_internal_templateparser.php"
+#line 801 "smarty_internal_templateparser.y"
     function yy_r132(){
     $this->_retvalue = '('.$this->yystack[$this->yyidx + -1]->minor.')';
     }
-#line 2505 "smarty_internal_templateparser.php"
-#line 795 "smarty_internal_templateparser.y"
+#line 2556 "smarty_internal_templateparser.php"
+#line 810 "smarty_internal_templateparser.y"
     function yy_r133(){
     if ($this->security && substr($this->yystack[$this->yyidx + 0]->minor,0,1) == '_') {
         $this->compiler->trigger_template_error (self::Err1);
     }
     $this->_retvalue = '->'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2513 "smarty_internal_templateparser.php"
-#line 802 "smarty_internal_templateparser.y"
+#line 2564 "smarty_internal_templateparser.php"
+#line 817 "smarty_internal_templateparser.y"
     function yy_r134(){
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
     }
     $this->_retvalue = '->{'.$this->compileVariable($this->yystack[$this->yyidx + 0]->minor).'}';
     }
-#line 2521 "smarty_internal_templateparser.php"
-#line 809 "smarty_internal_templateparser.y"
+#line 2572 "smarty_internal_templateparser.php"
+#line 824 "smarty_internal_templateparser.y"
     function yy_r135(){
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
     }
     $this->_retvalue = '->{'.$this->yystack[$this->yyidx + -1]->minor.'}';
     }
-#line 2529 "smarty_internal_templateparser.php"
-#line 816 "smarty_internal_templateparser.y"
+#line 2580 "smarty_internal_templateparser.php"
+#line 831 "smarty_internal_templateparser.y"
     function yy_r136(){
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
     }
     $this->_retvalue = '->{\''.$this->yystack[$this->yyidx + -3]->minor.'\'.'.$this->yystack[$this->yyidx + -1]->minor.'}';
     }
-#line 2537 "smarty_internal_templateparser.php"
-#line 824 "smarty_internal_templateparser.y"
+#line 2588 "smarty_internal_templateparser.php"
+#line 839 "smarty_internal_templateparser.y"
     function yy_r137(){
     $this->_retvalue = '->'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2542 "smarty_internal_templateparser.php"
-#line 832 "smarty_internal_templateparser.y"
+#line 2593 "smarty_internal_templateparser.php"
+#line 847 "smarty_internal_templateparser.y"
     function yy_r138(){
     if (!$this->security || $this->smarty->security_policy->isTrustedPhpFunction($this->yystack[$this->yyidx + -3]->minor, $this->compiler)) {
         if (strcasecmp($this->yystack[$this->yyidx + -3]->minor,'isset') === 0 || strcasecmp($this->yystack[$this->yyidx + -3]->minor,'empty') === 0 || strcasecmp($this->yystack[$this->yyidx + -3]->minor,'array') === 0 || is_callable($this->yystack[$this->yyidx + -3]->minor)) {
@@ -2561,16 +2641,16 @@ static public $yy_action = array(
         }
     }
     }
-#line 2589 "smarty_internal_templateparser.php"
-#line 881 "smarty_internal_templateparser.y"
+#line 2640 "smarty_internal_templateparser.php"
+#line 896 "smarty_internal_templateparser.y"
     function yy_r139(){
     if ($this->security && substr($this->yystack[$this->yyidx + -3]->minor,0,1) == '_') {
         $this->compiler->trigger_template_error (self::Err1);
     }
     $this->_retvalue = $this->yystack[$this->yyidx + -3]->minor . "(". implode(',',$this->yystack[$this->yyidx + -1]->minor) .")";
     }
-#line 2597 "smarty_internal_templateparser.php"
-#line 888 "smarty_internal_templateparser.y"
+#line 2648 "smarty_internal_templateparser.php"
+#line 903 "smarty_internal_templateparser.y"
     function yy_r140(){
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
@@ -2579,163 +2659,163 @@ static public $yy_action = array(
     $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.$this->compileVariable("'".$this->yystack[$this->yyidx + -3]->minor."'").';';
     $this->_retvalue = '$_tmp'.self::$prefix_number.'('. implode(',',$this->yystack[$this->yyidx + -1]->minor) .')';
     }
-#line 2607 "smarty_internal_templateparser.php"
-#line 899 "smarty_internal_templateparser.y"
+#line 2658 "smarty_internal_templateparser.php"
+#line 914 "smarty_internal_templateparser.y"
     function yy_r141(){
     $this->_retvalue = array_merge($this->yystack[$this->yyidx + -2]->minor,array($this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2612 "smarty_internal_templateparser.php"
-#line 916 "smarty_internal_templateparser.y"
+#line 2663 "smarty_internal_templateparser.php"
+#line 931 "smarty_internal_templateparser.y"
     function yy_r144(){
     $this->_retvalue = array_merge($this->yystack[$this->yyidx + -2]->minor,array(array_merge($this->yystack[$this->yyidx + -1]->minor,$this->yystack[$this->yyidx + 0]->minor)));
     }
-#line 2617 "smarty_internal_templateparser.php"
-#line 920 "smarty_internal_templateparser.y"
+#line 2668 "smarty_internal_templateparser.php"
+#line 935 "smarty_internal_templateparser.y"
     function yy_r145(){
     $this->_retvalue = array(array_merge($this->yystack[$this->yyidx + -1]->minor,$this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2622 "smarty_internal_templateparser.php"
-#line 928 "smarty_internal_templateparser.y"
+#line 2673 "smarty_internal_templateparser.php"
+#line 943 "smarty_internal_templateparser.y"
     function yy_r147(){
     $this->_retvalue =  array($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2627 "smarty_internal_templateparser.php"
-#line 936 "smarty_internal_templateparser.y"
+#line 2678 "smarty_internal_templateparser.php"
+#line 951 "smarty_internal_templateparser.y"
     function yy_r148(){
     $this->_retvalue = array_merge($this->yystack[$this->yyidx + -1]->minor,$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2632 "smarty_internal_templateparser.php"
-#line 956 "smarty_internal_templateparser.y"
+#line 2683 "smarty_internal_templateparser.php"
+#line 971 "smarty_internal_templateparser.y"
     function yy_r152(){
     $this->_retvalue = '==';
     }
-#line 2637 "smarty_internal_templateparser.php"
-#line 960 "smarty_internal_templateparser.y"
+#line 2688 "smarty_internal_templateparser.php"
+#line 975 "smarty_internal_templateparser.y"
     function yy_r153(){
     $this->_retvalue = '!=';
     }
-#line 2642 "smarty_internal_templateparser.php"
-#line 964 "smarty_internal_templateparser.y"
+#line 2693 "smarty_internal_templateparser.php"
+#line 979 "smarty_internal_templateparser.y"
     function yy_r154(){
     $this->_retvalue = '>';
     }
-#line 2647 "smarty_internal_templateparser.php"
-#line 968 "smarty_internal_templateparser.y"
+#line 2698 "smarty_internal_templateparser.php"
+#line 983 "smarty_internal_templateparser.y"
     function yy_r155(){
     $this->_retvalue = '<';
     }
-#line 2652 "smarty_internal_templateparser.php"
-#line 972 "smarty_internal_templateparser.y"
+#line 2703 "smarty_internal_templateparser.php"
+#line 987 "smarty_internal_templateparser.y"
     function yy_r156(){
     $this->_retvalue = '>=';
     }
-#line 2657 "smarty_internal_templateparser.php"
-#line 976 "smarty_internal_templateparser.y"
+#line 2708 "smarty_internal_templateparser.php"
+#line 991 "smarty_internal_templateparser.y"
     function yy_r157(){
     $this->_retvalue = '<=';
     }
-#line 2662 "smarty_internal_templateparser.php"
-#line 980 "smarty_internal_templateparser.y"
+#line 2713 "smarty_internal_templateparser.php"
+#line 995 "smarty_internal_templateparser.y"
     function yy_r158(){
     $this->_retvalue = '===';
     }
-#line 2667 "smarty_internal_templateparser.php"
-#line 984 "smarty_internal_templateparser.y"
+#line 2718 "smarty_internal_templateparser.php"
+#line 999 "smarty_internal_templateparser.y"
     function yy_r159(){
     $this->_retvalue = '!==';
     }
-#line 2672 "smarty_internal_templateparser.php"
-#line 988 "smarty_internal_templateparser.y"
+#line 2723 "smarty_internal_templateparser.php"
+#line 1003 "smarty_internal_templateparser.y"
     function yy_r160(){
     $this->_retvalue = '%';
     }
-#line 2677 "smarty_internal_templateparser.php"
-#line 992 "smarty_internal_templateparser.y"
+#line 2728 "smarty_internal_templateparser.php"
+#line 1007 "smarty_internal_templateparser.y"
     function yy_r161(){
     $this->_retvalue = '&&';
     }
-#line 2682 "smarty_internal_templateparser.php"
-#line 996 "smarty_internal_templateparser.y"
+#line 2733 "smarty_internal_templateparser.php"
+#line 1011 "smarty_internal_templateparser.y"
     function yy_r162(){
     $this->_retvalue = '||';
     }
-#line 2687 "smarty_internal_templateparser.php"
-#line 1000 "smarty_internal_templateparser.y"
+#line 2738 "smarty_internal_templateparser.php"
+#line 1015 "smarty_internal_templateparser.y"
     function yy_r163(){
     $this->_retvalue = ' XOR ';
     }
-#line 2692 "smarty_internal_templateparser.php"
-#line 1007 "smarty_internal_templateparser.y"
+#line 2743 "smarty_internal_templateparser.php"
+#line 1022 "smarty_internal_templateparser.y"
     function yy_r164(){
     $this->_retvalue = 'array('.$this->yystack[$this->yyidx + -1]->minor.')';
     }
-#line 2697 "smarty_internal_templateparser.php"
-#line 1015 "smarty_internal_templateparser.y"
+#line 2748 "smarty_internal_templateparser.php"
+#line 1030 "smarty_internal_templateparser.y"
     function yy_r166(){
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor.','.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2702 "smarty_internal_templateparser.php"
-#line 1019 "smarty_internal_templateparser.y"
+#line 2753 "smarty_internal_templateparser.php"
+#line 1034 "smarty_internal_templateparser.y"
     function yy_r167(){
     return;
     }
-#line 2707 "smarty_internal_templateparser.php"
-#line 1023 "smarty_internal_templateparser.y"
+#line 2758 "smarty_internal_templateparser.php"
+#line 1038 "smarty_internal_templateparser.y"
     function yy_r168(){
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor.'=>'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2712 "smarty_internal_templateparser.php"
-#line 1027 "smarty_internal_templateparser.y"
+#line 2763 "smarty_internal_templateparser.php"
+#line 1042 "smarty_internal_templateparser.y"
     function yy_r169(){
     $this->_retvalue = '\''.$this->yystack[$this->yyidx + -2]->minor.'\'=>'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2717 "smarty_internal_templateparser.php"
-#line 1039 "smarty_internal_templateparser.y"
+#line 2768 "smarty_internal_templateparser.php"
+#line 1054 "smarty_internal_templateparser.y"
     function yy_r171(){
     $this->_retvalue = "''";
     }
-#line 2722 "smarty_internal_templateparser.php"
-#line 1043 "smarty_internal_templateparser.y"
+#line 2773 "smarty_internal_templateparser.php"
+#line 1058 "smarty_internal_templateparser.y"
     function yy_r172(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor->to_smarty_php();
     }
-#line 2727 "smarty_internal_templateparser.php"
-#line 1048 "smarty_internal_templateparser.y"
+#line 2778 "smarty_internal_templateparser.php"
+#line 1063 "smarty_internal_templateparser.y"
     function yy_r173(){
     $this->yystack[$this->yyidx + -1]->minor->append_subtree($this->yystack[$this->yyidx + 0]->minor);
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
-#line 2733 "smarty_internal_templateparser.php"
-#line 1053 "smarty_internal_templateparser.y"
+#line 2784 "smarty_internal_templateparser.php"
+#line 1068 "smarty_internal_templateparser.y"
     function yy_r174(){
     $this->_retvalue = new _smarty_doublequoted($this, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2738 "smarty_internal_templateparser.php"
-#line 1057 "smarty_internal_templateparser.y"
+#line 2789 "smarty_internal_templateparser.php"
+#line 1072 "smarty_internal_templateparser.y"
     function yy_r175(){
     $this->_retvalue = new _smarty_code($this, '(string)' . $this->compileVariable("'" . substr($this->yystack[$this->yyidx + 0]->minor,1) . "'"));
     }
-#line 2743 "smarty_internal_templateparser.php"
-#line 1061 "smarty_internal_templateparser.y"
+#line 2794 "smarty_internal_templateparser.php"
+#line 1076 "smarty_internal_templateparser.y"
     function yy_r176(){
     $this->_retvalue = new _smarty_code($this, '(string)'.$this->yystack[$this->yyidx + -1]->minor);
     }
-#line 2748 "smarty_internal_templateparser.php"
-#line 1065 "smarty_internal_templateparser.y"
+#line 2799 "smarty_internal_templateparser.php"
+#line 1080 "smarty_internal_templateparser.y"
     function yy_r177(){
     $this->_retvalue = new _smarty_code($this, '(string)('.$this->yystack[$this->yyidx + -1]->minor.')');
     }
-#line 2753 "smarty_internal_templateparser.php"
-#line 1069 "smarty_internal_templateparser.y"
+#line 2804 "smarty_internal_templateparser.php"
+#line 1084 "smarty_internal_templateparser.y"
     function yy_r178(){
     $this->_retvalue = new _smarty_tag($this, $this->yystack[$this->yyidx + -1]->minor);
     }
-#line 2758 "smarty_internal_templateparser.php"
-#line 1073 "smarty_internal_templateparser.y"
+#line 2809 "smarty_internal_templateparser.php"
+#line 1088 "smarty_internal_templateparser.y"
     function yy_r179(){
     $this->_retvalue = new _smarty_dq_content($this, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2763 "smarty_internal_templateparser.php"
+#line 2814 "smarty_internal_templateparser.php"
 
     private $_retvalue;
 
@@ -2796,7 +2876,7 @@ static public $yy_action = array(
     $this->internalError = true;
     $this->yymajor = $yymajor;
     $this->compiler->trigger_template_error();
-#line 2825 "smarty_internal_templateparser.php"
+#line 2876 "smarty_internal_templateparser.php"
     }
 
     public function yy_accept()
@@ -2812,7 +2892,7 @@ static public $yy_action = array(
     $this->internalError = false;
     $this->retvalue = $this->_retvalue;
     //echo $this->retvalue."\n\n";
-#line 2842 "smarty_internal_templateparser.php"
+#line 2893 "smarty_internal_templateparser.php"
     }
 
     public function doParse($yymajor, $yytokenvalue)

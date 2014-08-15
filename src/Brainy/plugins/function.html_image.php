@@ -90,7 +90,7 @@ function smarty_function_html_image($params, $template) {
         return;
     }
 
-    if ($options['file'][0] == '/') {
+    if (((string) $options['file'])[0] == '/') {
         $_image_path = $options['basedir'] . $options['file'];
     } else {
         $_image_path = $options['file'];

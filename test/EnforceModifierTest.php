@@ -16,33 +16,43 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
     }
     public function tearDown() {
         Smarty::$enforce_expression_modifiers = array();
+        Smarty::$enforce_modifiers_on_static_expressions = false;
     }
 
     public function testNormalExpressionsPass() {
         $this->expectOutputString('foo');
+        // Static expressions should not require escaping by default.
+        Smarty::$enforce_expression_modifiers = array('foo');
         $this->smarty->display('eval:{"foo"}');
     }
 
     public function testModifiedExpressionsPass() {
         $this->expectOutputString('foo');
+        // Static expressions should not require escaping by default.
+        Smarty::$enforce_expression_modifiers = array('foo');
         $this->smarty->display('eval:{"foo"|escape}');
     }
 
     public function testDeeplyModifiedExpressionsPass() {
         $this->expectOutputString('Foo');
+        // Static expressions should not require escaping by default.
+        Smarty::$enforce_expression_modifiers = array('foo');
         $this->smarty->display('eval:{"foo"|escape|capitalize}');
     }
 
     public function testModifiedExpressionsWithAttributesPass() {
         $this->expectOutputString('%66%6f%6f');
+        // Static expressions should not require escaping by default.
+        Smarty::$enforce_expression_modifiers = array('foo');
         $this->smarty->display('eval:{"foo"|escape:"hex"}');
     }
 
     /**
      * @expectedException BrainyModifierEnforcementException
      */
-    public function testNormalExpressionsThrow() {
+    public function testNormalExpressionsThrowWithStatic() {
         Smarty::$enforce_expression_modifiers = array('foo');
+        Smarty::$enforce_modifiers_on_static_expressions = true;
         $this->smarty->display('eval:{"foo"}');
     }
 
@@ -51,6 +61,7 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
      */
     public function testModifiedExpressionsThrow() {
         Smarty::$enforce_expression_modifiers = array('foo');
+        Smarty::$enforce_modifiers_on_static_expressions = true;
         $this->smarty->display('eval:{"foo"|escape}');
     }
 
@@ -59,13 +70,12 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
      */
     public function testDeeplyModifiedExpressionsThrow() {
         Smarty::$enforce_expression_modifiers = array('foo');
+        Smarty::$enforce_modifiers_on_static_expressions = true;
         $this->smarty->display('eval:{"foo"|escape|capitalize}');
     }
 
-    /**
-     * @expectedException BrainyModifierEnforcementException
-     */
     public function testModifiedExpressionsWithAttributesThrow() {
+        $this->expectOutputString('%66%6f%6f');
         Smarty::$enforce_expression_modifiers = array('foo');
         $this->smarty->display('eval:{"foo"|escape:"hex"}');
     }
@@ -88,6 +98,7 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
      */
     public function testExpressionsThatDoNotEndWithEnforcedModifiersThrow() {
         Smarty::$enforce_expression_modifiers = array('escape');
+        Smarty::$enforce_modifiers_on_static_expressions = true;
         $this->smarty->display('eval:{"foo"|escape|capitalize}');
     }
 
@@ -104,6 +115,24 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
         $this->expectOutputString('bar');
         Smarty::$enforce_expression_modifiers = array('escape');
         $this->smarty->display('eval:{$smarty.request.foo|escape}');
+    }
+
+    /**
+     * @expectedException BrainyModifierEnforcementException
+     */
+    public function testNonStaticModifiersThrow() {
+        Smarty::$enforce_expression_modifiers = array('foo');
+        $this->smarty->assign('escapetype', 'html');
+        $this->smarty->display('eval:{"foo"|escape:$escapetype}');
+    }
+
+    /**
+     * @expectedException BrainyModifierEnforcementException
+     */
+    public function testNestedNonStaticModifiersThrow() {
+        Smarty::$enforce_expression_modifiers = array('foo');
+        $this->smarty->assign('escapetype', 'html');
+        $this->smarty->display('eval:{"foo"|escape:$escapetype|capitalize}');
     }
 
 }

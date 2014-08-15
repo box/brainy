@@ -164,7 +164,7 @@ template_element ::= BLOCKSOURCE(s). {
         }
 }
 
-                    // Litteral
+// Literal
 literal(res) ::= LITERALSTART LITERALEND. {
     res = '';
 }
@@ -174,7 +174,7 @@ literal(res) ::= LITERALSTART literal_elements(l) LITERALEND. {
 }
 
 literal_elements(res) ::= literal_elements(l1) literal_element(l2). {
-    res = l1.l2;
+    res = l1 . l2;
 }
 
 literal_elements(res) ::= . {
@@ -196,27 +196,42 @@ literal_element(res) ::= LITERAL(l). {
 
                   // output with optional attributes
 smartytag(res)   ::= LDEL value(e). {
-    $this->compiler->assert_no_enforced_modifiers();
+    $this->compiler->assert_no_enforced_modifiers(e instanceof BrainyStaticWrapper);
+    if (e instanceof BrainyStaticWrapper) {
+        e = (string) e;
+    }
     res = $this->compiler->compileTag('private_print_expression',array(),array('value'=>e));
 }
 
 smartytag(res)   ::= LDEL value(e) modifierlist(l) attributes(a). {
-    $this->compiler->assert_expected_modifier(l);
+    $this->compiler->assert_expected_modifier(l, e instanceof BrainyStaticWrapper);
+    if (e instanceof BrainyStaticWrapper) {
+        e = (string) e;
+    }
     res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e, 'modifierlist'=>l));
 }
 
 smartytag(res)   ::= LDEL value(e) attributes(a). {
-    $this->compiler->assert_no_enforced_modifiers();
+    $this->compiler->assert_no_enforced_modifiers(e instanceof BrainyStaticWrapper);
+    if (e instanceof BrainyStaticWrapper) {
+        e = (string) e;
+    }
     res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e));
 }
 
 smartytag(res)   ::= LDEL expr(e) modifierlist(l) attributes(a). {
-    $this->compiler->assert_expected_modifier(l);
+    $this->compiler->assert_expected_modifier(l, e instanceof BrainyStaticWrapper);
+    if (e instanceof BrainyStaticWrapper) {
+        e = (string) e;
+    }
     res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e, 'modifierlist'=>l));
 }
 
 smartytag(res)   ::= LDEL expr(e) attributes(a). {
-    $this->compiler->assert_no_enforced_modifiers();
+    $this->compiler->assert_no_enforced_modifiers(e instanceof BrainyStaticWrapper);
+    if (e instanceof BrainyStaticWrapper) {
+        e = (string) e;
+    }
     res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e));
 }
 
@@ -498,69 +513,69 @@ expr(res)        ::= expr(e) modifierlist(l). {
 // if expression
                     // simple expression
 expr(res)        ::= expr(e1) ifcond(c) expr(e2). {
-    res = e1.c.e2;
+    res = new BrainyStaticWrapper(e1.c.e2);
 }
 
 expr(res)        ::= expr(e1) ISIN array(a).  {
-    res = 'in_array('.e1.','.a.')';
+    res = new BrainyStaticWrapper('in_array('.e1.','.a.')');
 }
 
 expr(res)        ::= expr(e1) ISIN value(v).  {
-    res = 'in_array('.e1.',(array)'.v.')';
+    res = new BrainyStaticWrapper('in_array('.e1.',(array)'.v.')');
 }
 
 expr(res)        ::= expr(e1) lop(o) expr(e2).  {
-    res = e1.o.e2;
+    res = new BrainyStaticWrapper(e1.o.e2);
 }
 
 expr(res)        ::= expr(e1) ISDIVBY expr(e2). {
-    res = '!('.e1.' % '.e2.')';
+    res = new BrainyStaticWrapper('!('.e1.' % '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTDIVBY expr(e2).  {
-    res = '('.e1.' % '.e2.')';
+    res = new BrainyStaticWrapper('('.e1.' % '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISEVEN. {
-    res = '!(1 & '.e1.')';
+    res = new BrainyStaticWrapper('!(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTEVEN.  {
-    res = '(1 & '.e1.')';
+    res = new BrainyStaticWrapper('(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISEVENBY expr(e2).  {
-    res = '!(1 & '.e1.' / '.e2.')';
+    res = new BrainyStaticWrapper('!(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTEVENBY expr(e2). {
-    res = '(1 & '.e1.' / '.e2.')';
+    res = new BrainyStaticWrapper('(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISODD.  {
-    res = '(1 & '.e1.')';
+    res = new BrainyStaticWrapper('(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTODD. {
-    res = '!(1 & '.e1.')';
+    res = new BrainyStaticWrapper('!(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISODDBY expr(e2). {
-    res = '(1 & '.e1.' / '.e2.')';
+    res = new BrainyStaticWrapper('(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTODDBY expr(e2).  {
-    res = '!(1 & '.e1.' / '.e2.')';
+    res = new BrainyStaticWrapper('!(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= value(v1) INSTANCEOF(i) ID(id). {
-    res = v1.i.id;
+    res = new BrainyStaticWrapper(v1.i.id);
 }
 
 expr(res)        ::= value(v1) INSTANCEOF(i) value(v2). {
     self::$prefix_number++;
     $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.v2.";\n";
-    res = v1.i.'$_tmp'.self::$prefix_number;
+    res = new BrainyStaticWrapper(v1.i.'$_tmp'.self::$prefix_number);
 }
 
 //
@@ -581,53 +596,53 @@ value(res)       ::= variable(v). {
 
                   // +/- value
 value(res)        ::= UNIMATH(m) value(v). {
-    res = m.v;
+    res = BrainyStaticWrapper::concat(m, v);
 }
 
                   // logical negation
 value(res)       ::= NOT value(v). {
-    res = '!'.v;
+    res = BrainyStaticWrapper::static_concat('!', v);
 }
 
 value(res)       ::= TYPECAST(t) value(v). {
-    res = t.v;
+    res = t . v;
 }
 
 value(res)       ::= variable(v) INCDEC(o). {
-    res = v.o;
+    res = v . o;
 }
 
                  // numeric
 value(res)       ::= HEX(n). {
-    res = n;
+    res = new BrainyStaticWrapper(n);
 }
 
 value(res)       ::= INTEGER(n). {
-    res = n;
+    res = new BrainyStaticWrapper(n);
 }
 
 value(res)       ::= INTEGER(n1) DOT INTEGER(n2). {
-    res = n1.'.'.n2;
+    res = new BrainyStaticWrapper(n1.'.'.n2);
 }
 
 value(res)       ::= INTEGER(n1) DOT. {
-    res = n1.'.';
+    res = new BrainyStaticWrapper(n1.'.');
 }
 
 value(res)       ::= DOT INTEGER(n1). {
-    res = '.'.n1;
+    res = new BrainyStaticWrapper('.'.n1);
 }
 
                  // ID, true, false, null
 value(res)       ::= ID(id). {
     if (preg_match('~^true$~i', id)) {
-        res = 'true';
+        res = new BrainyStaticWrapper('true');
     } elseif (preg_match('~^false$~i', id)) {
-        res = 'false';
+        res = new BrainyStaticWrapper('false');
     } elseif (preg_match('~^null$~i', id)) {
-        res = 'null';
+        res = new BrainyStaticWrapper('null');
     } else {
-        res = "'".id."'";
+        res = new BrainyStaticWrapper(var_export(id, true));
     }
 }
 
@@ -638,17 +653,17 @@ value(res)       ::= function(f). {
 
                   // expression
 value(res)       ::= OPENP expr(e) CLOSEP. {
-    res = "(". e .")";
+    res = BrainyStaticWrapper::static_if_all("(". e .")", array(e));
 }
 
                   // singele quoted string
 value(res)       ::= SINGLEQUOTESTRING(t). {
-    res = t;
+    res = new BrainyStaticWrapper(t);
 }
 
                   // double quoted string
 value(res)       ::= doublequoted_with_quotes(s). {
-    res = s;
+    res = new BrainyStaticWrapper(s);
 }
 
 

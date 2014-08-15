@@ -57,6 +57,9 @@ abstract class Smarty_Internal_CompileBase
         $_indexed_attr = array();
         // loop over attributes
         foreach ($attributes as $key => $mixed) {
+            if ($mixed instanceof BrainyStaticWrapper) {
+                $mixed = (string) $mixed;
+            }
             // shorthand ?
             if (!is_array($mixed)) {
                 // option flag ?
@@ -94,7 +97,11 @@ abstract class Smarty_Internal_CompileBase
                     // must be named attribute
                 } else {
                     reset($mixed);
-                    $_indexed_attr[key($mixed)] = $mixed[key($mixed)];
+                    $intermediate = $mixed[key($mixed)];
+                    if ($intermediate instanceof BrainyStaticWrapper) {
+                        $intermediate = (string) $intermediate;
+                    }
+                    $_indexed_attr[key($mixed)] = $intermediate;
                 }
             }
         }

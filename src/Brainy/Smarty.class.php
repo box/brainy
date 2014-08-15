@@ -404,6 +404,19 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @var string[]
      */
     public static $enforce_expression_modifiers = array();
+    /**
+     * When Smarty::$enforce_expression_modifiers is set and this member is set
+     * to true, even static values will require a modifier. For example:
+     *
+     *     {'foo'}
+     *
+     * The above would--by default--not require a modifier. When this is set to
+     * true, it would.
+     *
+     * @var bool
+     * @uses Smarty::$enforce_expression_modifiers
+     */
+    public static $enforce_modifiers_on_static_expressions = false;
 
 
 
