@@ -40,35 +40,6 @@ class BrainySafeLookupWrapper
     }
 }
 
-class BrainyModifierWrapper
-{
-    private $code;
-    private $modifier;
-
-    /**
-     * @param string $modifier_name
-     */
-    public function __construct($code, $modifier_name) {
-        $this->code = $code;
-        $this->unsafeVersion = $unsafe;
-    }
-
-    /**
-     * @return string The name of the modifier that's wrapped.
-     */
-    public function getName() {
-        return $this->modifier;
-    }
-
-    /**
-     * The __toString() method should always return the generated PHP.
-     * @return string
-     */
-    public function __toString() {
-        return $this->code;
-    }
-}
-
 class TP_yyStackEntry
 {
     public $stateno;       /* The state-number */
@@ -1135,33 +1106,33 @@ static public $yy_action = array(
     public $yystack = array();  /* The parser's stack */
 
     public $yyTokenName = array(
-  '$',             'VERT',          'COLON',         'RDEL',        
-  'COMMENT',       'TEXT',          'STRIPON',       'STRIPOFF',    
-  'BLOCKSOURCE',   'LITERALSTART',  'LITERALEND',    'LITERAL',     
-  'LDEL',          'EQUAL',         'DOLLAR',        'ID',          
-  'PTR',           'LDELIF',        'LDELFOR',       'SEMICOLON',   
-  'INCDEC',        'TO',            'STEP',          'LDELFOREACH', 
+  '$',             'VERT',          'COLON',         'RDEL',
+  'COMMENT',       'TEXT',          'STRIPON',       'STRIPOFF',
+  'BLOCKSOURCE',   'LITERALSTART',  'LITERALEND',    'LITERAL',
+  'LDEL',          'EQUAL',         'DOLLAR',        'ID',
+  'PTR',           'LDELIF',        'LDELFOR',       'SEMICOLON',
+  'INCDEC',        'TO',            'STEP',          'LDELFOREACH',
   'SPACE',         'AS',            'APTR',          'LDELSETFILTER',
-  'SMARTYBLOCKCHILDPARENT',  'LDELSLASH',     'ATTR',          'INTEGER',     
-  'COMMA',         'OPENP',         'CLOSEP',        'MATH',        
-  'UNIMATH',       'ANDSYM',        'ISIN',          'ISDIVBY',     
-  'ISNOTDIVBY',    'ISEVEN',        'ISNOTEVEN',     'ISEVENBY',    
-  'ISNOTEVENBY',   'ISODD',         'ISNOTODD',      'ISODDBY',     
-  'ISNOTODDBY',    'INSTANCEOF',    'QMARK',         'NOT',         
+  'SMARTYBLOCKCHILDPARENT',  'LDELSLASH',     'ATTR',          'INTEGER',
+  'COMMA',         'OPENP',         'CLOSEP',        'MATH',
+  'UNIMATH',       'ANDSYM',        'ISIN',          'ISDIVBY',
+  'ISNOTDIVBY',    'ISEVEN',        'ISNOTEVEN',     'ISEVENBY',
+  'ISNOTEVENBY',   'ISODD',         'ISNOTODD',      'ISODDBY',
+  'ISNOTODDBY',    'INSTANCEOF',    'QMARK',         'NOT',
   'TYPECAST',      'HEX',           'DOT',           'SINGLEQUOTESTRING',
-  'AT',            'HATCH',         'OPENB',         'CLOSEB',      
-  'EQUALS',        'NOTEQUALS',     'GREATERTHAN',   'LESSTHAN',    
+  'AT',            'HATCH',         'OPENB',         'CLOSEB',
+  'EQUALS',        'NOTEQUALS',     'GREATERTHAN',   'LESSTHAN',
   'GREATEREQUAL',  'LESSEQUAL',     'IDENTITY',      'NONEIDENTITY',
-  'MOD',           'LAND',          'LOR',           'LXOR',        
-  'QUOTE',         'DOLLARID',      'error',         'start',       
-  'template',      'template_element',  'smartytag',     'literal',     
+  'MOD',           'LAND',          'LOR',           'LXOR',
+  'QUOTE',         'DOLLARID',      'error',         'start',
+  'template',      'template_element',  'smartytag',     'literal',
   'literal_elements',  'literal_element',  'value',         'modifierlist',
-  'attributes',    'expr',          'variable',      'statement',   
-  'statements',    'optspace',      'varvar',        'foraction',   
-  'modparameters',  'attribute',     'variablebase',  'ternary',     
-  'array',         'ifcond',        'lop',           'function',    
+  'attributes',    'expr',          'variable',      'statement',
+  'statements',    'optspace',      'varvar',        'foraction',
+  'modparameters',  'attribute',     'variablebase',  'ternary',
+  'array',         'ifcond',        'lop',           'function',
   'doublequoted_with_quotes',  'variableinternal',  'indexdef',      'objectelement',
-  'varvarele',     'method',        'params',        'modifier',    
+  'varvarele',     'method',        'params',        'modifier',
   'modparameter',  'arrayelements',  'arrayelement',  'doublequoted',
   'doublequotedcontent',
     );
