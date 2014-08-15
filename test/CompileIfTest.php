@@ -291,4 +291,12 @@ class CompileIfTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate('eval:{$x=0}{if $x++}yes{else}no{/if} {$x}');
         $this->assertEquals("no 1", $this->smarty->fetch($tpl));
     }
+
+    public function testSpacedElseIf() {
+        $tpl = $this->smarty->createTemplate('eval:{if false}yes{else if false}no{/if}');
+        $this->assertEquals("", $this->smarty->fetch($tpl));
+
+        $tpl = $this->smarty->createTemplate('eval:{if false}yes{else if true}no{/if}');
+        $this->assertEquals("no", $this->smarty->fetch($tpl));
+    }
 }
