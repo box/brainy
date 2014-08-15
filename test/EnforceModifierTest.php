@@ -39,7 +39,7 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException SmartyCompilerException
+     * @expectedException BrainyModifierEnforcementException
      */
     public function testNormalExpressionsThrow() {
         Smarty::$enforce_expression_modifiers = array('foo');
@@ -47,7 +47,7 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException SmartyCompilerException
+     * @expectedException BrainyModifierEnforcementException
      */
     public function testModifiedExpressionsThrow() {
         Smarty::$enforce_expression_modifiers = array('foo');
@@ -55,7 +55,7 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException SmartyCompilerException
+     * @expectedException BrainyModifierEnforcementException
      */
     public function testDeeplyModifiedExpressionsThrow() {
         Smarty::$enforce_expression_modifiers = array('foo');
@@ -63,7 +63,7 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException SmartyCompilerException
+     * @expectedException BrainyModifierEnforcementException
      */
     public function testModifiedExpressionsWithAttributesThrow() {
         Smarty::$enforce_expression_modifiers = array('foo');
@@ -84,7 +84,7 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException SmartyCompilerException
+     * @expectedException BrainyModifierEnforcementException
      */
     public function testExpressionsThatDoNotEndWithEnforcedModifiersThrow() {
         Smarty::$enforce_expression_modifiers = array('escape');
@@ -92,7 +92,7 @@ class EnforceModifierTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException SmartyCompilerException
+     * @expectedException BrainyModifierEnforcementException
      */
     public function testBareSmartyVariablesThrow() {
         Smarty::$enforce_expression_modifiers = array('escape');

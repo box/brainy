@@ -659,14 +659,14 @@ abstract class Smarty_Internal_TemplateCompilerBase
      *
      * @param  string $args individual error message or null
      * @param  string $line line-number
+     * @param  string|void $exception_class The name of the exception class to raise
      * @throws SmartyCompilerException when an unexpected token is found
      */
-    public function trigger_template_error($args = null, $line = null) {
+    public function trigger_template_error($args = null, $line = null, $exception_class = 'SmartyCompilerException') {
         // get template source line which has error
         if (!isset($line)) {
             $line = $this->lex->line;
         }
-//        $line += $this->trace_line_offset;
         $match = preg_split("/\n/", $this->lex->data);
         $error_text = 'Syntax error in template "' . ($this->template->source->filepath) . '" on line ' . ($line + $this->trace_line_offset)  . ' "' . trim(preg_replace('![\t\r\n]+!', ' ', $match[$line - 1])) . '" ';
         if (isset($args)) {
@@ -689,7 +689,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
                 $error_text .= ', expected one of: ' . implode(' , ', $expect);
             }
         }
-        $e = new SmartyCompilerException($error_text);
+        $e = new $exception_class($error_text);
         $e->line = $line;
         $e->source = trim(preg_replace('![\t\r\n]+!', ' ', $match[$line - 1]));
         $e->desc = $args;
@@ -706,8 +706,10 @@ abstract class Smarty_Internal_TemplateCompilerBase
      */
     public function trigger_expression_modifiers_error() {
         $this->trigger_template_error(
-            'Modifier Enforcement: All expressions must be suffixed with any of the following modifiers: ' .
-            implode(',', Smarty::$enforce_expression_modifiers)
+            'Modifier Enforcement: All expressions must be suffixed with one of the following modifiers: ' .
+            implode(',', Smarty::$enforce_expression_modifiers),
+            null,
+            'BrainyModifierEnforcementException'
         );
     }
 
