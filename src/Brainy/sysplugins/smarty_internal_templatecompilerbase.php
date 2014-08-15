@@ -697,4 +697,49 @@ abstract class Smarty_Internal_TemplateCompilerBase
         throw $e;
     }
 
+    /**
+     * Show an error related to Smarty::$enforce_expression_modifiers
+     *
+     * @see Smarty::$enforce_expression_modifiers
+     * @return void
+     * @throws SmartyCompilerException
+     */
+    public function trigger_expression_modifiers_error() {
+        $this->trigger_template_error(
+            'Modifier Enforcement: All expressions must be suffixed with any of the following modifiers: ' .
+            implode(',', Smarty::$enforce_expression_modifiers)
+        );
+    }
+
+    /**
+     * Show an error related to Smarty::$enforce_expression_modifiers
+     *
+     * @see Smarty::$enforce_expression_modifiers
+     * @return void
+     */
+    public function assert_no_enforced_modifiers() {
+        if (!empty(Smarty::$enforce_expression_modifiers)) {
+            $this->trigger_expression_modifiers_error();
+        }
+    }
+
+    /**
+     * Accepts a modifier list. If the last modifier is not acceptable for the
+     * modifier enforcement, an error will be thrown.
+     *
+     * @see Smarty::$enforce_expression_modifiers
+     * @param string $modifier_list
+     * @return void
+     */
+    public function assert_expected_modifier($modifier_list) {
+        if (empty(Smarty::$enforce_expression_modifiers)) {
+            return;
+        }
+        $last_modifier = end($modifier_list)[0];
+        reset($modifier_list);
+        if (!in_array($last_modifier, Smarty::$enforce_expression_modifiers)) {
+            $this->trigger_expression_modifiers_error();
+        }
+    }
+
 }

@@ -396,6 +396,14 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @see Smarty_Internal_Compile_Assign
      */
     public static $assignment_compat = Smarty::ASSIGN_COMPAT;
+    /**
+     * This member allows the enforcement of a modifier being applied to
+     * expressions that are output. If one of the modifiers in the list is not
+     * used, a SmartyException will be raised.
+     *
+     * @var string[]
+     */
+    public static $enforce_expression_modifiers = array();
 
 
 

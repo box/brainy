@@ -196,22 +196,27 @@ literal_element(res) ::= LITERAL(l). {
 
                   // output with optional attributes
 smartytag(res)   ::= LDEL value(e). {
+    $this->compiler->assert_no_enforced_modifiers();
     res = $this->compiler->compileTag('private_print_expression',array(),array('value'=>e));
 }
 
 smartytag(res)   ::= LDEL value(e) modifierlist(l) attributes(a). {
+    $this->compiler->assert_expected_modifier(l);
     res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e, 'modifierlist'=>l));
 }
 
 smartytag(res)   ::= LDEL value(e) attributes(a). {
+    $this->compiler->assert_no_enforced_modifiers();
     res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e));
 }
 
 smartytag(res)   ::= LDEL expr(e) modifierlist(l) attributes(a). {
-    res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e,'modifierlist'=>l));
+    $this->compiler->assert_expected_modifier(l);
+    res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e, 'modifierlist'=>l));
 }
 
 smartytag(res)   ::= LDEL expr(e) attributes(a). {
+    $this->compiler->assert_no_enforced_modifiers();
     res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e));
 }
 
