@@ -49,20 +49,30 @@ function smarty_block_textformat($params, $content, $template, &$repeat) {
     foreach ($params as $_key => $_val) {
         switch ($_key) {
             case 'style':
+                $style = (string) $_val;
+                break;
             case 'indent_char':
+                $indent_char = (string) $_val;
+                break;
             case 'wrap_char':
+                $wrap_char = (string) $_val;
+                break;
             case 'assign':
-                $$_key = (string) $_val;
+                $assign = (string) $_val;
                 break;
 
             case 'indent':
+                $indent = (int) $_val;
+                break;
             case 'indent_first':
+                $indent_first = (int) $_val;
+                break;
             case 'wrap':
-                $$_key = (int) $_val;
+                $wrap = (int) $_val;
                 break;
 
             case 'wrap_cut':
-                $$_key = (bool) $_val;
+                $wrap_cut = (bool) $_val;
                 break;
 
             default:

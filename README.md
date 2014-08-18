@@ -71,7 +71,6 @@ If you're interested in helping out, pull requests for the following tasks will 
 - Convert all non-public methods to use camel case.
 - Add proper PHPDoc annotations to all functions and methods.
 - Remove magic and bad practices:
-  - Variable variables
   - `__call`, `__get`, etc.
   - Eliminate dead code
   - `@` error suppression

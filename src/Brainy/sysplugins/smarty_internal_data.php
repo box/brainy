@@ -347,8 +347,7 @@ class Smarty_Internal_Data
             return Smarty::$global_tpl_vars[$variable];
         }
         if ($this->smarty->error_unassigned && $error_enable) {
-            // force a notice
-            $x = $$variable;
+            trigger_error('Undefined variable "' . $variable . '"', E_USER_NOTICE);
         }
 
         return new Undefined_Smarty_Variable;
@@ -371,8 +370,7 @@ class Smarty_Internal_Data
             $_ptr = $_ptr->parent;
         }
         if ($this->smarty->error_unassigned && $error_enable) {
-            // force a notice
-            $x = $$variable;
+            trigger_error('Undefined variable "' . $variable . '"', E_USER_NOTICE);
         }
 
         return null;

@@ -81,8 +81,11 @@ function smarty_function_mailto($params, $template) {
                 break;
 
             case 'extra':
+                $extra = $value;
+                break;
             case 'text':
-                $$var = $value;
+                $text = $value;
+                break;
 
             default:
         }
