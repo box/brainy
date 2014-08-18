@@ -2057,7 +2057,7 @@ static public $yy_action = array(
     function yy_r4(){
     if ($this->compiler->has_code) {
         $tmp =''; foreach ($this->compiler->prefix_code as $code) {$tmp.=$code;} $this->compiler->prefix_code=array();
-        $this->_retvalue = new _smarty_tag($this, $this->compiler->processNocacheCode($tmp.$this->yystack[$this->yyidx + -1]->minor,true));
+        $this->_retvalue = new _smarty_tag($this, $tmp.$this->yystack[$this->yyidx + -1]->minor);
     } else {
         $this->_retvalue = null;
     }

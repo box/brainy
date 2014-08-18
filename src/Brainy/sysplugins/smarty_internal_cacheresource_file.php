@@ -11,8 +11,6 @@
     /**
     * This class does contain all necessary methods for the HTML cache on file system
     *
-    * Implements the file system as resource for the HTML cache Version ussing nocache inserts.
-    *
     * @package Brainy
     * @subpackage Cacher
     */

@@ -120,7 +120,7 @@ template       ::= .
 template_element(res)::= smartytag(st) RDEL. {
     if ($this->compiler->has_code) {
         $tmp =''; foreach ($this->compiler->prefix_code as $code) {$tmp.=$code;} $this->compiler->prefix_code=array();
-        res = new _smarty_tag($this, $this->compiler->processNocacheCode($tmp.st,true));
+        res = new _smarty_tag($this, $tmp.st);
     } else {
         res = null;
     }

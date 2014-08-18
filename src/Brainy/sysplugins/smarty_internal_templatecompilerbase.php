@@ -603,26 +603,6 @@ abstract class Smarty_Internal_TemplateCompilerBase
     }
 
     /**
-     * Inject inline code for nocache template sections
-     *
-     * This method gets the content of each template element from the parser.
-     * If the content is compiled code and it should be not cached the code is injected
-     * into the rendered output.
-     *
-     * @param  string $content content of template element
-     * @param  boolean $is_code true if content is compiled code
-     * @return string  content
-     */
-    public function processNocacheCode($content, $is_code) {
-        $_output = $content;
-        $this->modifier_plugins = array();
-        $this->suppressNocacheProcessing = false;
-        $this->tag_nocache = false;
-
-        return $_output;
-    }
-
-    /**
      *  push current file and line offset on stack for tracing {block} source lines
      *
      * @param string $file new filename
