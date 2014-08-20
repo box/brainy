@@ -15,6 +15,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
     }
 
     /**

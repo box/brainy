@@ -34,7 +34,7 @@ class Smarty_Internal_Resource_File extends Smarty_Resource
 
             $source->uid = sha1($source->filepath);
             if ($source->smarty->compile_check && !isset($source->timestamp)) {
-                $source->timestamp = @filemtime($source->filepath);
+                $source->timestamp = filemtime($source->filepath);
                 $source->exists = !!$source->timestamp;
             }
         }

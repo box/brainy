@@ -58,6 +58,10 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
     }
 
     public function testIterator() {
+        if (count(array_values((array) new ArrayIterator(array('first')))) != 1) {
+            $this->markTestSkipped('https://github.com/facebook/hhvm/issues/2214');
+        }
+
         $n = "\n";
         $expected = '<label><input type="checkbox" name="id[]" value="1000" />Joe Schmoe</label><br />'
             . $n . '<label><input type="checkbox" name="id[]" value="1001" checked="checked" />Jack Smith</label><br />'
@@ -97,6 +101,10 @@ class PluginFunctionHtmlCheckboxesTest extends PHPUnit_Framework_TestCase
     }
 
     public function testWithId() {
+        if (htmlentities('ä', ENT_QUOTES) === '') {
+            $this->markTestSkipped('https://github.com/facebook/hhvm/issues/2266');
+        }
+
         $n = "\n";
         $expected = '<label for="id_1000"><input type="checkbox" name="id[]" value="1000" id="id_1000" />Joe Schmoe</label><br />'
             . $n . '<label for="id_1001"><input type="checkbox" name="id[]" value="1001" id="id_1001" checked="checked" />Jack Smith</label><br />'

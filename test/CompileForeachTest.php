@@ -14,6 +14,7 @@ class CompileForeachTest extends PHPUnit_Framework_TestCase
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
     }
 
     /**
@@ -36,7 +37,7 @@ class CompileForeachTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
     }
     public function testForeachElse() {
-         $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
+        $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $tpl = $this->smarty->createTemplate('string:{foreach item=x from=$foo}{$x}{foreachelse}else{/foreach}');
         $this->assertEquals("else", $this->smarty->fetch($tpl));
     }

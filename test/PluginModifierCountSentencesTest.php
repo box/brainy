@@ -37,6 +37,9 @@ class PluginModifierCountSentencesTest extends PHPUnit_Framework_TestCase
     }
 
     public function testUmlauts() {
+        if (preg_match_all('/\w/Su', 'ä') != 1) {
+            $this->markTestSkipped('https://github.com/facebook/hhvm/issues/3543');
+        }
         $tpl = $this->smarty->createTemplate('eval:{"hello worldä."|count_sentences}');
         $this->assertEquals("1", $this->smarty->fetch($tpl));
         $tpl = $this->smarty->createTemplate('eval:{"hello worldü. ä\'m another? Sentence!"|count_sentences}');

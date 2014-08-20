@@ -254,18 +254,6 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hello world', $this->smarty->fetch('../helloworld.tpl'));
     }
 
-    public function testRelativeFetchCwd() {
-        $cwd = getcwd();
-        chdir(dirname(__FILE__) . '/templates/sub/');
-        $this->smarty->setTemplateDir(array(
-            dirname(__FILE__) . '/does-not-exist/',
-        ));
-        $this->smarty->security_policy = null;
-        $this->assertEquals('hello world', $this->smarty->fetch('./relative.tpl'));
-        $this->assertEquals('hello world', $this->smarty->fetch('../helloworld.tpl'));
-        chdir($cwd);
-    }
-
     protected function _relativeMap($map, $cwd=null) {
         foreach ($map as $file => $result) {
             $this->smarty->clearCompiledTemplate();
@@ -348,32 +336,6 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
         );
 
         $this->_relativeMap($map);
-    }
-    public function testRelativityCwd() {
-        $this->smarty->security_policy = null;
-
-        $cwd = getcwd();
-        $dn = dirname(__FILE__);
-
-        $this->smarty->setCompileDir($dn . '/compiled/');
-        $this->smarty->setTemplateDir(array(
-            $dn . '/templates/',
-        ));
-        chdir($dn . '/templates/relativity/theory/');
-
-        $map = array(
-            'foo.tpl' => 'theory',
-            './foo.tpl' => 'theory',
-            '././foo.tpl' => 'theory',
-            '../foo.tpl' => 'relativity',
-            '.././foo.tpl' => 'relativity',
-            './../foo.tpl' => 'relativity',
-            'einstein/foo.tpl' => 'einstein',
-            './einstein/foo.tpl' => 'einstein',
-            '../theory/einstein/foo.tpl' => 'einstein',
-        );
-
-        $this->_relativeMap($map, $cwd);
     }
     public function testRelativityPrecedence() {
         $this->smarty->security_policy = null;

@@ -25,6 +25,9 @@ class PluginModifierStripTest extends PHPUnit_Framework_TestCase
         // Some Unicode Spaces
         $string = "&#8199;hello      spaced&#8196; &#8239;  &#8197;&#8199;  words  ";
         $string = mb_convert_encoding($string, 'UTF-8', "HTML-ENTITIES");
+        if (iconv_strlen(preg_replace('!\s+!u', '', $string)) > 30) {
+            $this->markTestSkipped('https://github.com/facebook/hhvm/issues/3542');
+        }
         $tpl = $this->smarty->createTemplate('eval:{"' . $string . '"|strip}');
         $this->assertEquals(" hello spaced words ", $this->smarty->fetch($tpl));
     }

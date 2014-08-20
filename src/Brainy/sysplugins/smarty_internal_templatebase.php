@@ -109,16 +109,11 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 if ($_template->source->recompiled) {
                     $code = $_template->compiler->compileTemplate($_template);
                     try {
-                        // echo $code;
                         ob_start();
                         eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
                         unset($code);
                     } catch (Exception $e) {
                         ob_get_clean();
-                        // if (isset($code)) {
-                        //     echo $e;
-                        //     echo $code;
-                        // }
                         throw $e;
                     }
                 } else {
@@ -149,7 +144,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                         //
                         // render compiled template
                         //
-                        $_template->properties['unifunc']($_template);
+                        call_user_func($_template->properties['unifunc'], $_template);
                         // any unclosed {capture} tags ?
                         if (isset($_template->_capture_stack[0][0])) {
                             $_template->capture_error();

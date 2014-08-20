@@ -1,10 +1,10 @@
 <?php
 /**
-* Smarty PHPunit tests of modifier
-*
-* @package PHPunit
-* @author Rodney Rehm
-*/
+ * Smarty PHPunit tests of modifier
+ *
+ * @package PHPunit
+ * @author Rodney Rehm
+ */
 
 /**
 * class for modifier tests
@@ -16,6 +16,16 @@ class PluginModifierEscapeTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
+    public function tearDown() {
+        Smarty::$_MBSTRING = true;
+    }
+
+    protected function hhvmBugTest() {
+        if (htmlentities('ä', ENT_QUOTES) === '') {
+            $this->markTestSkipped('https://github.com/facebook/hhvm/issues/2266');
+        }
+    }
+
     public function testHtml() {
         $tpl = $this->smarty->createTemplate('eval:{"I\'m some <html> to ä be \"escaped\" or &copy;"|escape:"html"}');
         $this->assertEquals("I&#039;m some &lt;html&gt; to ä be &quot;escaped&quot; or &amp;copy;", $this->smarty->fetch($tpl));
@@ -25,7 +35,6 @@ class PluginModifierEscapeTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = false;
         $tpl = $this->smarty->createTemplate('eval:{"I\'m some <html> to ä be \"escaped\" or &copy;"|escape:"html"}');
         $this->assertEquals("I&#039;m some &lt;html&gt; to ä be &quot;escaped&quot; or &amp;copy;", $this->smarty->fetch($tpl));
-        Smarty::$_MBSTRING = true;
     }
 
     public function testHtmlDouble() {
@@ -37,7 +46,6 @@ class PluginModifierEscapeTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = false;
         $tpl = $this->smarty->createTemplate('eval:{"I\'m some <html> to ä be \"escaped\" or &copy;"|escape:"html":null:false}');
         $this->assertEquals("I&#039;m some &lt;html&gt; to ä be &quot;escaped&quot; or &copy;", $this->smarty->fetch($tpl));
-        Smarty::$_MBSTRING = true;
     }
 
     public function testHtmlall() {
@@ -46,10 +54,10 @@ class PluginModifierEscapeTest extends PHPUnit_Framework_TestCase
     }
 
     public function testHtmlallWithoutMbstring() {
+        $this->hhvmBugTest();
         Smarty::$_MBSTRING = false;
         $tpl = $this->smarty->createTemplate('eval:{"I\'m some <html> to ä be \"escaped\" or &copy;"|escape:"htmlall"}');
         $this->assertEquals("I&#039;m some &lt;html&gt; to &auml; be &quot;escaped&quot; or &amp;copy;", $this->smarty->fetch($tpl));
-        Smarty::$_MBSTRING = true;
     }
 
     public function testHtmlallDouble() {
@@ -58,10 +66,10 @@ class PluginModifierEscapeTest extends PHPUnit_Framework_TestCase
     }
 
     public function testHtmlallDoubleWithoutMbstring() {
+        $this->hhvmBugTest();
         Smarty::$_MBSTRING = false;
         $tpl = $this->smarty->createTemplate('eval:{"I\'m some <html> to ä be \"escaped\" or &copy;"|escape:"htmlall":null:false}');
         $this->assertEquals("I&#039;m some &lt;html&gt; to &auml; be &quot;escaped&quot; or &copy;", $this->smarty->fetch($tpl));
-        Smarty::$_MBSTRING = true;
     }
 
     public function testUrl() {

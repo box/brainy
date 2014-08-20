@@ -58,6 +58,10 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
     }
 
     public function testIterator() {
+        if (count(array_values((array) new ArrayIterator(array('first')))) != 1) {
+            $this->markTestSkipped('https://github.com/facebook/hhvm/issues/2214');
+        }
+
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="1800">Joe Schmoe</option>'

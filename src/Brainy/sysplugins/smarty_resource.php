@@ -321,7 +321,7 @@ abstract class Smarty_Resource
             $_return = call_user_func_array($_default_handler,
                 array($source->type, $source->name, &$_content, &$_timestamp, $source->smarty));
             if (is_string($_return)) {
-                $source->timestamp = @filemtime($_return);
+                $source->timestamp = $this->getFileTime($_return);
                 $source->exists = !!$source->timestamp;
 
                 return $_return;
@@ -339,6 +339,19 @@ abstract class Smarty_Resource
     }
 
     /**
+     * @param string $path
+     * @return int|bool
+     */
+    protected function getFileTime($path)
+    {
+        try {
+            return filemtime($path);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * test is file exists and save timestamp
      *
      * @param  Smarty_Template_Source $source source object
@@ -346,7 +359,7 @@ abstract class Smarty_Resource
      * @return bool                   true if file exists
      */
     protected function fileExists(Smarty_Template_Source $source, $file) {
-        $source->timestamp = is_file($file) ? @filemtime($file) : false;
+        $source->timestamp = is_file($file) ? $this->getFileTime($file) : false;
 
         return $source->exists = !!$source->timestamp;
 
@@ -726,7 +739,13 @@ class Smarty_Template_Source
 
         $compiled = new Smarty_Template_Compiled($this);
         $this->handler->populateCompiledFilepath($compiled, $_template);
-        $compiled->timestamp = @filemtime($compiled->filepath);
+        if ($compiled->filepath) {
+            try {
+                $compiled->timestamp = filemtime($compiled->filepath);
+            } catch (Exception $e) {
+                $compiled->timestamp = false;
+            }
+        }
         $compiled->exists = !!$compiled->timestamp;
 
         // runtime cache

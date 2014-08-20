@@ -74,4 +74,13 @@ class Smarty_Internal_Resource_Stream extends Smarty_Resource_Recompiled
     protected function buildUniqueResourceName(Smarty $smarty, $resource_name, $is_config = false) {
         return get_class($this) . '#' . $resource_name;
     }
+
+    /**
+     * @param string $path
+     * @return bool
+     */
+    protected function getFileTime($path)
+    {
+        return false;
+    }
 }

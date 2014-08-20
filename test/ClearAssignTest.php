@@ -15,6 +15,8 @@ class ClearAssignTest extends PHPUnit_Framework_TestCase
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smartyBC->safe_lookups = Smarty::LOOKUP_SAFE;
 
         $this->smarty->assign('foo','foo');
         $this->smarty->assign('bar','bar');

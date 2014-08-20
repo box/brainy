@@ -142,8 +142,14 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             throw new SmartyException("Unable to load template {$this->source->type} '{$this->source->name}'{$parent_resource}");
         }
         if ($this->mustCompile === null) {
-            $this->mustCompile = (!$this->source->uncompiled && ($this->smarty->force_compile || $this->source->recompiled || $this->compiled->timestamp === false ||
-                    ($this->smarty->compile_check && $this->compiled->timestamp < $this->source->timestamp)));
+            $this->mustCompile = (
+                !$this->source->uncompiled &&
+                ($this->smarty->force_compile ||
+                    $this->source->recompiled ||
+                    $this->compiled->timestamp === false ||
+                    ($this->smarty->compile_check && $this->compiled->timestamp < $this->source->timestamp)
+                    )
+                );
         }
 
         return $this->mustCompile;
