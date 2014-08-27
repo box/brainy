@@ -35,6 +35,9 @@
  * @uses smarty_function_escape_special_chars()
  */
 function smarty_function_html_image($params, $template) {
+
+    $template->assert_is_not_strict('`{html_image}` is a deprecated plugin and is not allowed in strict mode');
+
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
     $options = array(
@@ -90,7 +93,8 @@ function smarty_function_html_image($params, $template) {
         return;
     }
 
-    if (((string) $options['file'])[0] == '/') {
+    $filename = (string) $options['file'];
+    if ($filename[0] == '/') {
         $_image_path = $options['basedir'] . $options['file'];
     } else {
         $_image_path = $options['file'];

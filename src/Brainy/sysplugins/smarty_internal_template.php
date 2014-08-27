@@ -76,6 +76,11 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
      * @var array
      */
     public $_capture_stack = array(0 => array());
+    /**
+     * Flag indicating that the template is running in strict mode
+     * @var bool
+     */
+    public $strict_mode = false;
 
     /**
      * Create template data object
@@ -568,6 +573,18 @@ PHPDOC;
         }
 
         throw new SmartyException("template property '$property_name' does not exist.");
+    }
+
+    /**
+     * @param string $reason
+     * @return void
+     * @throws BrainyStrictModeException
+     */
+    public function assert_is_not_strict($reason)
+    {
+        if (Smarty::$strict_mode || $this->strict_mode) {
+            throw new BrainyStrictModeException('Strict Mode: ' . $reason);
+        }
     }
 
 }

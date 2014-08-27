@@ -32,6 +32,9 @@ require_once(SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php');
  * @uses smarty_make_timestamp()
  */
 function smarty_function_html_select_time($params, $template) {
+
+    $template->assert_is_not_strict('`{html_select_time}` is a deprecated plugin and is not allowed in strict mode');
+
     $options = array(
         'prefix' => "Time_",
         'field_array' => null,

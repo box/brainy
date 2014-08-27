@@ -47,6 +47,9 @@ class Smarty_Internal_Compile_Section extends Smarty_Internal_CompileBase
      * @return string compiled code
      */
     public function compile($args, $compiler) {
+
+        $compiler->assert_is_not_strict('{section} is not allowed in strict mode');
+
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 

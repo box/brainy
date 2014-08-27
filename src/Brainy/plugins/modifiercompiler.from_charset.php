@@ -18,6 +18,9 @@
  * @return string with compiled code
  */
 function smarty_modifiercompiler_from_charset($params, $compiler) {
+
+    $compiler->assert_is_not_strict('from_charset is not allowed in strict mode');
+
     if (!Smarty::$_MBSTRING) {
         // FIXME: (rodneyrehm) shouldn't this throw an error?
         return $params[0];

@@ -28,6 +28,7 @@
     private $strip = 0;
 
     private $safe_lookups = 0;
+    private $strict_mode = false;
 
     function __construct($lex, $compiler) {
         $this->lex = $lex;
@@ -70,7 +71,20 @@
         return $string;
     }
 
-    public function compileVariable($variable, $value = 'value') {
+    /**
+     * @return bool
+     */
+    public function isStrictMode() {
+        return $this->strict_mode;
+    }
+
+    /**
+     * @param string $variable The name of the variable to look up
+     * @param string|void $value The member of the SmartyVariable to access
+     * @return string|BrainySafeLookupWrapper
+     */
+    public function compileVariable($variable, $value = 'value')
+    {
         $unsafe = '$_smarty_tpl->tpl_vars[' . $variable . ']->' . $value;
         if ($this->safe_lookups === 0) { // Unsafe lookups
             return $unsafe;
@@ -79,7 +93,13 @@
         return new BrainySafeLookupWrapper($unsafe, $safe);
     }
 
-    public function compileSafeLookupWithBase($base, $variable) {
+    /**
+     * @param string $base
+     * @param string $variable
+     * @return string|BrainySafeLookupWrapper
+     */
+    public function compileSafeLookupWithBase($base, $variable)
+    {
         $unsafe = $base . '[' . $variable . ']';
         if ($this->safe_lookups === 0) { // Unsafe lookups
             return $unsafe;
@@ -115,9 +135,17 @@
 %left VERT.
 %left COLON.
 
+// complete template
+start(res) ::= strictmode(strict) template. {
+    res = strict . $this->root_buffer->to_smarty_php();
+}
 
-start(res) ::= template. {
-    res = $this->root_buffer->to_smarty_php();
+strictmode(res) ::= SETSTRICT(foo). {
+    $this->strict_mode = true;
+    res = "/* strict mode */\n\$_smarty_tpl->strict_mode = true;\n";
+}
+strictmode(res) ::= . {
+    res = '';
 }
 
 
@@ -137,7 +165,6 @@ template ::= template template_element(e). {
 
 // empty template
 template ::= .
-
 
 // Smarty tag
 template_element(res) ::= smartytag(st) RDEL. {
@@ -276,6 +303,7 @@ smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e). {
 }
 
 smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e) attributes(a). {
+    $this->compiler->assert_is_not_strict('Passing attributes in an assignment without using {assign} is not supported in strict mode', $this);
     res = $this->compiler->compileTag('assign',array_merge(array(array('value'=>e),array('var'=>"'".i."'")),a));
 }
 
@@ -461,6 +489,7 @@ statements(res)   ::= statements(s1) COMMA statement(s). {
 }
 
 statement(res)    ::= DOLLAR varvar(v) EQUAL expr(e). {
+    $this->compiler->assert_is_not_strict('Variable variable assignment is not supported in strict mode', $this);
     res = array('var' => v, 'value'=>e);
 }
 
@@ -489,6 +518,7 @@ expr(res)        ::= ternary(v). {
 
                  // resources/streams
 expr(res)        ::= DOLLAR ID(i) COLON ID(i2). {
+    $this->compiler->assert_is_not_strict('Stream access is not supported in strict mode', $this);
     res = '$_smarty_tpl->getStreamVariable(\''. i .'://'. i2 . '\')';
 }
 
@@ -539,6 +569,7 @@ expr(res)        ::= expr(e1) ISDIVBY expr(e2). {
 }
 
 expr(res)        ::= expr(e1) ISNOTDIVBY expr(e2).  {
+    $this->compiler->assert_is_not_strict('`is not div by` is not supported in strict mode', $this);
     res = new BrainyStaticWrapper('('.e1.' % '.e2.')');
 }
 
@@ -547,14 +578,17 @@ expr(res)        ::= expr(e1) ISEVEN. {
 }
 
 expr(res)        ::= expr(e1) ISNOTEVEN.  {
+    $this->compiler->assert_is_not_strict('`is not even` is not supported in strict mode', $this);
     res = new BrainyStaticWrapper('(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISEVENBY expr(e2).  {
+    $this->compiler->assert_is_not_strict('`is even by` is not supported in strict mode', $this);
     res = new BrainyStaticWrapper('!(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTEVENBY expr(e2). {
+    $this->compiler->assert_is_not_strict('`is not even by` is not supported in strict mode', $this);
     res = new BrainyStaticWrapper('(1 & '.e1.' / '.e2.')');
 }
 
@@ -563,22 +597,27 @@ expr(res)        ::= expr(e1) ISODD.  {
 }
 
 expr(res)        ::= expr(e1) ISNOTODD. {
+    $this->compiler->assert_is_not_strict('`is not odd` is not supported in strict mode', $this);
     res = new BrainyStaticWrapper('!(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISODDBY expr(e2). {
+    $this->compiler->assert_is_not_strict('`is odd by` is not supported in strict mode', $this);
     res = new BrainyStaticWrapper('(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTODDBY expr(e2).  {
+    $this->compiler->assert_is_not_strict('`is not odd by` is not supported in strict mode', $this);
     res = new BrainyStaticWrapper('!(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= value(v1) INSTANCEOF(i) ID(id). {
+    $this->compiler->assert_is_not_strict('`instanceof` is not supported in strict mode', $this);
     res = new BrainyStaticWrapper(v1.i.id);
 }
 
 expr(res)        ::= value(v1) INSTANCEOF(i) value(v2). {
+    $this->compiler->assert_is_not_strict('`instanceof` is not supported in strict mode', $this);
     self::$prefix_number++;
     $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.v2.";\n";
     res = new BrainyStaticWrapper(v1.i.'$_tmp'.self::$prefix_number);
@@ -602,7 +641,7 @@ value(res)       ::= variable(v). {
 
                   // +/- value
 value(res)        ::= UNIMATH(m) value(v). {
-    res = BrainyStaticWrapper::concat(m, v);
+    res = BrainyStaticWrapper::static_concat(m, v);
 }
 
                   // logical negation
@@ -618,11 +657,7 @@ value(res)       ::= variable(v) INCDEC(o). {
     res = v . o;
 }
 
-                 // numeric
-value(res)       ::= HEX(n). {
-    res = new BrainyStaticWrapper(n);
-}
-
+// numeric
 value(res)       ::= INTEGER(n). {
     res = new BrainyStaticWrapper(n);
 }
@@ -694,6 +729,7 @@ variable(res)  ::= variableinternal(base). {
 }
 
 variablebase(res)  ::= DOLLAR varvar(v). {
+    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     res = v;
 }
 
@@ -753,10 +789,12 @@ indexdef(res)    ::= OPENB CLOSEB.  {
 // single index definition
 // Smarty2 style index
 indexdef(res)    ::= DOT DOLLAR varvar(v).  {
+    $this->compiler->assert_is_not_strict('Variable indicies with dot syntax is not supported in strict mode', $this);
     res = $this->compileVariable(v);
 }
 
 indexdef(res)    ::= DOT DOLLAR varvar(v) AT ID(p). {
+    $this->compiler->assert_is_not_strict('Variable indicies with dot syntax is not supported in strict mode', $this);
     res = $this->compileVariable(v).'->'.p;
 }
 
@@ -769,15 +807,18 @@ indexdef(res)   ::= DOT INTEGER(n). {
 }
 
 indexdef(res)   ::= DOT LDEL expr(e) RDEL. {
+    $this->compiler->assert_is_not_strict('Dot syntax with expressions is not supported in strict mode', $this);
     res = e;
 }
 
 // section tag index
 indexdef(res)   ::= OPENB ID(i) CLOSEB. {
+    $this->compiler->assert_is_not_strict('Section tags are not supported in strict mode', $this);
     res = $this->compiler->compileTag('private_special_variable', array(), '\'section\'', '\'' . i . '\'') . '[\'index\']';
 }
 
 indexdef(res)   ::= OPENB ID(i) DOT ID(i2) CLOSEB. {
+    $this->compiler->assert_is_not_strict('Section tags are not supported in strict mode', $this);
     res = $this->compiler->compileTag('private_special_variable', array(), '\'section\'', '\'' . i . '\']') . '[\''.i2.'\']';
 }
 
@@ -790,11 +831,13 @@ indexdef(res)   ::= OPENB expr(e) CLOSEB. {
 
 // single identifier element
 varvar(res)      ::= varvarele(v). {
+    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     res = v;
 }
 
                     // sequence of identifier elements
 varvar(res)      ::= varvar(v1) varvarele(v2). {
+    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     res = v1.'.'.v2;
 }
 
@@ -814,13 +857,14 @@ varvarele(res)   ::= LDEL expr(e) RDEL. {
 
 // variable
 objectelement(res)::= PTR ID(i). {
-    if ($this->security && substr(i,0,1) == '_') {
-        $this->compiler->trigger_template_error (self::Err1);
+    if ($this->security && substr(i, 0, 1) == '_') {
+        $this->compiler->trigger_template_error(self::Err1);
     }
     res = '->'.i;
 }
 
 objectelement(res)::= PTR DOLLAR varvar(v). {
+    $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
     }
@@ -828,6 +872,7 @@ objectelement(res)::= PTR DOLLAR varvar(v). {
 }
 
 objectelement(res)::= PTR LDEL expr(e) RDEL. {
+    $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
     }
@@ -835,6 +880,7 @@ objectelement(res)::= PTR LDEL expr(e) RDEL. {
 }
 
 objectelement(res)::= PTR ID(ii) LDEL expr(e) RDEL. {
+    $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
         $this->compiler->trigger_template_error (self::Err2);
     }
@@ -852,7 +898,7 @@ objectelement(res)::= PTR method(f).  {
 //
 function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
     if (!$this->security || $this->smarty->security_policy->isTrustedPhpFunction(f, $this->compiler)) {
-        if (strcasecmp(f,'isset') === 0 || strcasecmp(f,'empty') === 0 || strcasecmp(f,'array') === 0 || is_callable(f)) {
+        if (strcasecmp(f, 'isset') === 0 || strcasecmp(f, 'empty') === 0 || strcasecmp(f, 'array') === 0 || is_callable(f)) {
             $func_name = strtolower(f);
 
             $is_language_construct = $func_name === 'isset' || $func_name === 'empty';
@@ -870,7 +916,8 @@ function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
                 if (count($combined_params) == 0) {
                     $this->compiler->trigger_template_error('Illegal number of paramer in "isset()"');
                 }
-                if (strncasecmp($par,'$_smarty_tpl->getConfigVariable',strlen('$_smarty_tpl->getConfigVariable')) === 0) {
+                if (strncasecmp($par, '$_smarty_tpl->getConfigVariable', strlen('$_smarty_tpl->getConfigVariable')) === 0) {
+                    $this->compiler->assert_is_not_strict('isset() is not allowed on config variables', $this);
                     self::$prefix_number++;
                     $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.str_replace(')',', false)',$par).";\n";
                     $isset_par = '$_tmp'.self::$prefix_number;
@@ -878,9 +925,15 @@ function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
                     $isset_par=str_replace("')->value","',null,true,false)->value",$par);
                 }
                 res = f . "(". $isset_par .")";
-            } elseif (in_array($func_name,array('empty','reset','current','end','prev','next'))){
+
+            } elseif (in_array($func_name, array('empty', 'reset', 'current', 'end', 'prev', 'next'))) {
+
+                if ($func_name !== 'empty') {
+                    $this->compiler->assert_is_not_strict($func_name . ' is not allowed in strict mode', $this);
+                }
+
                 if (count($combined_params) != 1) {
-                    $this->compiler->trigger_template_error ('Illegal number of paramer in "empty()"');
+                    $this->compiler->trigger_template_error('Illegal number of paramer in "empty()"');
                 }
                 if ($func_name == 'empty') {
                     res = $func_name.'('.str_replace("')->value","',null,true,false)->value",$combined_params[0]).')';
@@ -891,7 +944,7 @@ function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
                 res = f . "(". $par .")";
             }
         } else {
-            $this->compiler->trigger_template_error ("unknown function \"" . f . "\"");
+            $this->compiler->trigger_template_error("unknown function \"" . f . "\"");
         }
     }
 }
@@ -901,14 +954,14 @@ function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
 //
 method(res)     ::= ID(f) OPENP params(p) CLOSEP. {
     if ($this->security && substr(f,0,1) == '_') {
-        $this->compiler->trigger_template_error (self::Err1);
+        $this->compiler->trigger_template_error(self::Err1);
     }
     res = f . "(". implode(',',p) .")";
 }
 
 method(res)     ::= DOLLAR ID(f) OPENP params(p) CLOSEP.  {
     if ($this->security) {
-        $this->compiler->trigger_template_error (self::Err2);
+        $this->compiler->trigger_template_error(self::Err2);
     }
     self::$prefix_number++;
     $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.$this->compileVariable("'".f."'").';';
@@ -943,6 +996,7 @@ modifierlist(res) ::= modifier(m) modparameters(p). {
 }
 
 modifier(res)    ::= VERT AT ID(m). {
+    $this->compiler->assert_is_not_strict('@ is not allowed in templates', $this);
     res = array(m);
 }
 
@@ -1019,6 +1073,7 @@ lop(res)        ::= LOR. {
 }
 
 lop(res)        ::= LXOR. {
+    $this->compiler->assert_is_not_strict('XOR is not supported in strict mode', $this);
     res = ' XOR ';
 }
 

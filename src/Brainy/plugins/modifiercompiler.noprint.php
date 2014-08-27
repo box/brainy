@@ -18,5 +18,8 @@
  * @return string with compiled code
  */
 function smarty_modifiercompiler_noprint($params, $compiler) {
+
+    $compiler->assert_is_not_strict('noprint is not allowed in strict mode');
+
     return "''";
 }

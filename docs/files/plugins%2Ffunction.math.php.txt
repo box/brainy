@@ -22,6 +22,9 @@
  * @return string|null
  */
 function smarty_function_math($params, $template) {
+
+    $template->assert_is_not_strict('`{math}` is deprecated and is not allowed in strict mode');
+
     static $_allowed_funcs = array(
         'int' => true, 'abs' => true, 'ceil' => true, 'cos' => true, 'exp' => true, 'floor' => true,
         'log' => true, 'log10' => true, 'max' => true, 'min' => true, 'pi' => true, 'pow' => true,

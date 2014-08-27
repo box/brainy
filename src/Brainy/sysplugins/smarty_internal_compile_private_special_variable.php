@@ -28,20 +28,19 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
      */
     public function compile($args, $compiler, $parameter, $modifier = null) {
         $compiled_ref = ' ';
-        if ($parameter === "'section'" && !$modifier) {
-            throw new Exception('asdf');
-        }
         $variable = substr($parameter, 1, strlen($parameter)-2);
         switch ($variable) {
             case 'foreach':
                 return "\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][$modifier]";
             case 'section':
+                $compiler->assert_is_not_strict('{$smarty.section} is not allowed in strict mode');
                 return "\$_smarty_tpl->tpl_vars['smarty']->value['section'][$modifier]";
             case 'capture':
                 return "Smarty::\$_smarty_vars['capture'][$modifier]";
             case 'now':
                 return 'time()';
             case 'cookies':
+                $compiler->assert_is_not_strict('{$smarty.cookies} is not allowed in strict mode');
                 if (isset($compiler->smarty->security_policy) && !$compiler->smarty->security_policy->allow_super_globals) {
                     $compiler->trigger_template_error("(secure mode) super globals not permitted");
                     break;
@@ -55,6 +54,11 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
             case 'server':
             case 'session':
             case 'request':
+                $compiler->assert_is_not_strict(
+                    '{$smarty.' . $variable . '} is not allowed in strict ' .
+                    'mode because it can expose sensitive data or increase ' .
+                    'the risk of XSS.'
+                );
                 if (isset($compiler->smarty->security_policy) && !$compiler->smarty->security_policy->allow_super_globals) {
                     $compiler->trigger_template_error("(secure mode) super globals not permitted");
                     return;
@@ -73,6 +77,7 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
                 return 'basename($_smarty_tpl->source->filepath)';
 
             case 'template_object':
+                $compiler->assert_is_not_strict('{$smarty.template_object} is not allowed in strict mode');
                 $compiled_ref = '$_smarty_tpl';
                 break;
 
@@ -84,6 +89,7 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
                 return "'$_version'";
 
             case 'const':
+                $compiler->assert_is_not_strict('{$smarty.const} is not allowed in strict mode');
                 if (isset($compiler->smarty->security_policy) && !$compiler->smarty->security_policy->allow_constants) {
                     $compiler->trigger_template_error("(secure mode) constants not permitted");
                     return;

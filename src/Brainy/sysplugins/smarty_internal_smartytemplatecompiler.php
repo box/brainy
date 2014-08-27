@@ -136,4 +136,18 @@ class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCom
         return $this->parser->retvalue;
     }
 
+    /**
+     * @param string $reason
+     * @param Smarty_Internal_Template|null|void $template
+     * @return void
+     * @throws BrainyStrictModeException
+     */
+    public function assert_is_not_strict($reason, $template = null)
+    {
+        parent::assert_is_not_strict($reason, $template);
+        if ($this->parser && $this->parser->isStrictMode()) {
+            $this->trigger_template_error('Strict Mode: ' . $reason, null, 'BrainyStrictModeException');
+        }
+    }
+
 }

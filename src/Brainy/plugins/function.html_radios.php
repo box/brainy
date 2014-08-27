@@ -43,6 +43,9 @@
  * @uses smarty_function_escape_special_chars()
  */
 function smarty_function_html_radios($params, $template) {
+
+    $template->assert_is_not_strict('`{html_radios}` is a deprecated plugin and is not allowed in strict mode');
+
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
     $options = array(

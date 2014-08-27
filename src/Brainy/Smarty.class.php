@@ -19,7 +19,7 @@
  *
  * More information is available on the Brainy GitHub page.
  *
- * @link http://www.smarty.net/
+ * @link https://github.com/box/brainy
  * @copyright 2008 New Digital Group, Inc.
  * @copyright 2014 Box, Inc.
  * @author Monte Ohrt <monte at ohrt dot com>
@@ -390,6 +390,14 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @uses Smarty::$enforce_expression_modifiers
      */
     public static $enforce_modifiers_on_static_expressions = false;
+    /**
+     * Setting this option enables strict mode. This removes access to
+     * deprecated, unperformant, or otherwise suspect features that were
+     * previously available to Smarty templates.
+     *
+     * @var bool
+     */
+    public static $strict_mode = false;
 
 
 
@@ -1297,11 +1305,11 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * Smarty::display() or Smarty::fetch() method.
      *
      * @param  string  $template   the resource handle of the template file
-     * @param  mixed   $cache_id   no-op
-     * @param  mixed   $compile_id compile id to be used with this template
-     * @param  object|array|null  $parent     Parent scope to assign to the template
-     * @param  boolean|null $do_clone   When true, the Smarty object will be cloned
-     * @return object  template object
+     * @param  mixed|void   $cache_id   cache id to be used with this template
+     * @param  mixed|void   $compile_id compile id to be used with this template
+     * @param  object|null|void  $parent     Parent scope to assign to the template
+     * @param  boolean|void $do_clone   When true, the Smarty object will be cloned
+     * @return Smarty_Internal_Template
      */
     public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true) {
         if ($cache_id !== null && (is_object($cache_id) || is_array($cache_id))) {
@@ -1677,6 +1685,14 @@ class SmartyCompilerException extends SmartyException {
  * @see Smarty::$enforce_expression_modifiers
  */
 class BrainyModifierEnforcementException extends SmartyCompilerException { }
+
+/**
+ * Exception used to indicate a violation of Strict Mode.
+ *
+ * @package Brainy
+ * @see Smarty::$strict_mode
+ */
+class BrainyStrictModeException extends SmartyCompilerException { }
 
 
 

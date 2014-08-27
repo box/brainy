@@ -19,7 +19,8 @@
  * @param integer      $length  maximum string length if $var is a string
  * @return string
  */
-function smarty_modifier_debug_print_var ($var, $depth = 0, $length = 40) {
+function smarty_modifier_debug_print_var($var, $depth = 0, $length = 40) {
+
     $_replace = array("\n" => '<i>\n</i>',
         "\r" => '<i>\r</i>',
         "\t" => '<i>\t</i>'

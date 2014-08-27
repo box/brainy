@@ -66,6 +66,7 @@
       						'LITERALSTART'  => 'Literal start',
       						'LITERALEND'    => 'Literal end',
          				'LDELSLASH' => 'closing tag',
+                'SETSTRICT' => 'setstrict',
          				'COMMENT' => 'comment',
          				'AS' => 'as',
          				'TO' => 'to',
@@ -111,8 +112,8 @@
      rdel = /\s*SMARTYrdel/
      smartyblockchildparent = /[\$]smarty\.block\.(child|parent)/
      integer = /\d+/
-     hex =  /0[xX][0-9a-fA-F]+/
      math = /\s*(\*|\/|\%)\s*/
+     setstrict = /SMARTYldel\*\s*set strict\s*\*SMARTYrdel/
      comment = /SMARTYldel\*([\S\s]*?)\*SMARTYrdel/
      incdec = /\+\+|\-\-/
      unimath = /\s*(\+|\-)\s*/
@@ -181,6 +182,9 @@
      %statename TEXT
      emptyjava {
        $this->token = Smarty_Internal_Templateparser::TP_TEXT;
+     }
+     setstrict {
+       $this->token = Smarty_Internal_Templateparser::TP_SETSTRICT;
      }
      comment {
        $this->token = Smarty_Internal_Templateparser::TP_COMMENT;
@@ -465,9 +469,6 @@
      }
      qmark {
        $this->token = Smarty_Internal_Templateparser::TP_QMARK;
-     }
-     hex {
-       $this->token = Smarty_Internal_Templateparser::TP_HEX;
      }
      space {
        $this->token = Smarty_Internal_Templateparser::TP_SPACE;

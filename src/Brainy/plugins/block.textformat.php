@@ -33,6 +33,9 @@
  * @author Monte Ohrt <monte at ohrt dot com>
  */
 function smarty_block_textformat($params, $content, $template, &$repeat) {
+
+    $template->assert_is_not_strict('`{textformat}` is a deprecated plugin and is not allowed in strict mode');
+
     if (is_null($content)) {
         return;
     }

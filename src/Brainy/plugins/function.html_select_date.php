@@ -52,6 +52,9 @@ require_once(SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php');
  * @return string
  */
 function smarty_function_html_select_date($params, $template) {
+
+    $template->assert_is_not_strict('`{html_select_date}` is a deprecated plugin and is not allowed in strict mode');
+
     // generate timestamps used for month names only
     static $_month_timestamps = null;
     static $_current_year = null;
