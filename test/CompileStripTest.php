@@ -16,11 +16,15 @@ class CompileStripTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    /**
-    * test strip tag
-    */
     public function testStrip() {
         $tpl = $this->smarty->createTemplate("eval:{strip}<table>\n </table>{/strip}");
         $this->assertEquals('<table></table>', $this->smarty->fetch($tpl));
+    }
+
+    /**
+     * @expectedException SmartyCompilerException
+     */
+    public function testUnbalancedStrip() {
+        $this->smarty->fetch("eval:{strip}<table>\n </table>{/strip}{/strip}");
     }
 }

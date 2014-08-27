@@ -22,7 +22,7 @@
     public static $prefix_number = 0;
     private $lex;
     private $internalError = false;
-    private $strip = false;
+    private $strip = 0;
 
     private $safe_lookups = 0;
 
@@ -140,28 +140,31 @@ template_element(res) ::= literal(l). {
 
                       // template text
 template_element(res)::= TEXT(o). {
-        if ($this->strip) {
-            res = new _smarty_text($this, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', o));
-        } else {
-            res = new _smarty_text($this, o);
-        }
+    if ($this->strip) {
+        res = new _smarty_text($this, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', o));
+    } else {
+        res = new _smarty_text($this, o);
+    }
 }
 
                       // strip on
 template_element ::= STRIPON(d). {
-    $this->strip = true;
+    $this->strip++;
 }
                       // strip off
 template_element ::= STRIPOFF(d). {
-    $this->strip = false;
+    if (!$this->strip) {
+        $this->compiler->trigger_template_error('Unbalanced {strip} tags');
+    }
+    $this->strip--;
 }
                       // process source of inheritance child block
 template_element ::= BLOCKSOURCE(s). {
-        if ($this->strip) {
-            SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', s));
-        } else {
-            SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, s);
-        }
+    if ($this->strip) {
+        SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', s));
+    } else {
+        SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, s);
+    }
 }
 
 // Literal
@@ -306,11 +309,11 @@ smartytag(res)   ::= LDELFOR statements(st) SEMICOLON optspace expr(ie) SEMICOLO
     res = $this->compiler->compileTag('for',array_merge(a,array(array('start'=>st),array('ifexp'=>ie),array('var'=>v2),array('step'=>e2))),1);
 }
 
-  foraction(res)   ::= EQUAL expr(e). {
+foraction(res)   ::= EQUAL expr(e). {
     res = '='.e;
 }
 
-  foraction(res)   ::= INCDEC(e). {
+foraction(res)   ::= INCDEC(e). {
     res = e;
 }
 
