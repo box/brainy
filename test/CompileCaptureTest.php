@@ -1,10 +1,10 @@
 <?php
 /**
-* Smarty PHPunit tests compilation of capture tags
-*
-* @package PHPunit
-* @author Uwe Tews
-*/
+ * Smarty PHPunit tests compilation of capture tags
+ *
+ * @package PHPunit
+ * @author Uwe Tews
+ */
 
 /**
 * class for capture tags tests
@@ -14,6 +14,10 @@ class CompileCaptureTest extends PHPUnit_Framework_TestCase
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
+    }
+    public function tearDown() {
+        Smarty::$assignment_compat = Smarty::ASSIGN_COMPAT;
+        Smarty::$enforce_expression_modifiers = [];
     }
 
     /**
@@ -47,11 +51,55 @@ class CompileCaptureTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate('eval:{capture append=foo}hello{/capture}bar{capture append=foo}world{/capture}{foreach $foo item} {$item@key} {$item}{/foreach}');
         $this->assertEquals("bar 0 hello 1 world", $this->smarty->fetch($tpl));
     }
-    /*
-    *  The following test has been disabled. It fails only in PHPunit
-    */
     public function testCapture8() {
         $tpl = $this->smarty->createTemplate('eval:{capture assign=foo}hello {capture assign=bar}this is my {/capture}world{/capture}{$foo} {$bar}');
-        $this->assertEquals("hello world this is my ", $this->smarty->fetch($tpl),'This failure pops up only during PHPunit test ?????');
+        $this->assertEquals("hello world this is my ", $this->smarty->fetch($tpl));
     }
+
+    public function dataProviderSwitch()
+    {
+        return array(
+            array(true, '<success>', null),
+            array(false, '<fail>', null),
+            array(true, '<success>', array('escape')),
+            array(false, '<fail>', array('escape')),
+        );
+    }
+
+    /**
+     * @dataProvider dataProviderSwitch
+     */
+    public function testConditionalsInCapture($x, $result, $modifiers)
+    {
+        Smarty::$enforce_expression_modifiers = $modifiers;
+        $this->smarty->assign('x', $x);
+        $this->assertEquals($result, $this->smarty->fetch('eval:{capture assign="foo"}{if $x && true}success{else}fail{/if}{/capture}<{$foo|escape}>'));
+    }
+
+    /**
+     * @dataProvider dataProviderSwitch
+     */
+    public function testStripAroundCapture($x, $result, $modifiers)
+    {
+        Smarty::$enforce_expression_modifiers = $modifiers;
+        $this->smarty->assign('x', $x);
+        $this->assertEquals($result, $this->smarty->fetch('eval:{strip}{capture assign="foo"}{if $x && true}success{else}fail{/if}{/capture}<{$foo|escape}>{/strip}'));
+    }
+
+    /**
+     * @dataProvider dataProviderSwitch
+     */
+    public function testMultipleStripsAroundCapture($x, $result, $modifiers)
+    {
+        Smarty::$enforce_expression_modifiers = $modifiers;
+        $this->smarty->assign('x', $x);
+        $this->assertEquals($result, $this->smarty->fetch('eval:{strip}{strip}{capture assign="foo"}{if $x && true}success{else}fail{/if}{/capture}<{$foo|escape}>{/strip}{/strip}'));
+    }
+
+    public function testNumericStringsInConditionalInCapture()
+    {
+        $this->smarty->assign('x', true);
+        $this->assertEquals('<1>', $this->smarty->fetch('eval:{capture assign="foo"}{if $x}1{else}0{/if}{/capture}<{$foo}>'));
+    }
+
 }

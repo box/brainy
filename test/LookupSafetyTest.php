@@ -1,10 +1,10 @@
 <?php
 /**
-* Brainy lookup safety test suite
-*
-* @package PHPunit
-* @author Matt Basta
-*/
+ * Brainy lookup safety test suite
+ *
+ * @package PHPunit
+ * @author Matt Basta
+ */
 
 class LookupSafetyTest extends PHPUnit_Framework_TestCase
 {

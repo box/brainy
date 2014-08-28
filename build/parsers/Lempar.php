@@ -92,7 +92,7 @@ class BrainyStaticWrapper
                 return $code;
             }
         }
-        return $code;
+        return new BrainyStaticWrapper($code);
     }
 }
 
@@ -298,7 +298,7 @@ class ParseyyStackEntry
                     } elseif ($nextstate == self::YYNSTATE + self::YYNRULE + 1) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
-                        if (!$token) {
+                        if (!$token && $token !== '0') {
                             // end of input: this is valid
                             return true;
                         }

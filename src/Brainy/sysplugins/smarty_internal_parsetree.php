@@ -378,24 +378,27 @@ class _smarty_template_buffer extends _smarty_parsetree
         $code = '';
         $buffer = '';
         for ($key = 0, $cnt = count($this->subtrees); $key < $cnt; $key++) {
-            if ($key + 2 < $cnt) {
-                if ($this->subtrees[$key] instanceof _smarty_linebreak && $this->subtrees[$key + 1] instanceof _smarty_tag && $this->subtrees[$key + 1]->data == '' && $this->subtrees[$key + 2] instanceof _smarty_linebreak) {
-                    $key++;
-                    continue;
-                }
+            if ($key + 2 < $cnt &&
+                $this->subtrees[$key] instanceof _smarty_linebreak &&
+                $this->subtrees[$key + 1] instanceof _smarty_tag &&
+                $this->subtrees[$key + 1]->data === '' &&
+                $this->subtrees[$key + 2] instanceof _smarty_linebreak) {
+
+                $key++;
+                continue;
             }
             $node = $this->subtrees[$key];
             if ($node->can_combine_inline_data()) {
                 $buffer .= $node->to_inline_data();
-            } else {
-                if (!empty($buffer)) {
-                    $code .= $this->echo_data($buffer);
-                    $buffer = '';
-                }
-                $code .= $node->to_smarty_php();
+                continue;
             }
+            if ($buffer !== '') {
+                $code .= $this->echo_data($buffer);
+                $buffer = '';
+            }
+            $code .= $node->to_smarty_php();
         }
-        if (!empty($buffer)) {
+        if ($buffer !== '') {
             $code .= $this->echo_data($buffer);
         }
         return $code;

@@ -1,14 +1,17 @@
-/*<?php*/
+/*<?php*/ // Commented PHP tag for syntax highlighting
+
 /**
-* Smarty Internal Plugin Templateparser
-*
-* This is the template parser
-*
-*
-* @package Brainy
-* @subpackage Compiler
-* @author Uwe Tews
-*/
+ * Smarty Internal Plugin Templateparser
+ *
+ * This is the template parser
+ *
+ *
+ * @package Brainy
+ * @subpackage Compiler
+ * @author Uwe Tews
+ * @author Matt Basta
+ */
+
 %stack_size 500
 %name TP_
 %declare_class {class Smarty_Internal_Templateparser}
@@ -67,7 +70,6 @@
     $this->successful = !$this->internalError;
     $this->internalError = false;
     $this->retvalue = $this->_retvalue;
-    //echo $this->retvalue."\n\n";
 }
 
 %syntax_error
@@ -86,38 +88,32 @@
 %left VERT.
 %left COLON.
 
-//
-// complete template
-//
-start(res)       ::= template. {
+
+start(res) ::= template. {
     res = $this->root_buffer->to_smarty_php();
 }
 
-//
-// loop over template elements
-//
-                      // single template element
-template       ::= template_element(e). {
-    if (e != null) {
+
+// single template element
+template ::= template_element(e). {
+    if (e !== null) {
         $this->current_buffer->append_subtree(e);
     }
 }
 
-                      // loop of elements
-template       ::= template template_element(e). {
-    if (e != null) {
+// loop of elements
+template ::= template template_element(e). {
+    if (e !== null) {
         $this->current_buffer->append_subtree(e);
     }
 }
 
-                      // empty template
-template       ::= .
+// empty template
+template ::= .
 
-//
-// template elements
-//
-                      // Smarty tag
-template_element(res)::= smartytag(st) RDEL. {
+
+// Smarty tag
+template_element(res) ::= smartytag(st) RDEL. {
     if ($this->compiler->has_code) {
         $tmp =''; foreach ($this->compiler->prefix_code as $code) {$tmp.=$code;} $this->compiler->prefix_code=array();
         res = new _smarty_tag($this, $tmp.st);
@@ -128,18 +124,18 @@ template_element(res)::= smartytag(st) RDEL. {
     $this->block_nesting_level = count($this->compiler->_tag_stack);
 }
 
-                      // comments
-template_element(res)::= COMMENT(c). {
+// comments
+template_element(res) ::= COMMENT(c). {
     res = null;
 }
 
-                      // Literal
+// Literal
 template_element(res) ::= literal(l). {
     res = new _smarty_text($this, l);
 }
 
-                      // template text
-template_element(res)::= TEXT(o). {
+// template text
+template_element(res) ::= TEXT(o). {
     if ($this->strip) {
         res = new _smarty_text($this, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', o));
     } else {
@@ -147,11 +143,11 @@ template_element(res)::= TEXT(o). {
     }
 }
 
-                      // strip on
+// strip on
 template_element ::= STRIPON(d). {
     $this->strip++;
 }
-                      // strip off
+// strip off
 template_element ::= STRIPOFF(d). {
     if (!$this->strip) {
         $this->compiler->trigger_template_error('Unbalanced {strip} tags');
@@ -167,7 +163,6 @@ template_element ::= BLOCKSOURCE(s). {
     }
 }
 
-// Literal
 literal(res) ::= LITERALSTART LITERALEND. {
     res = '';
 }
