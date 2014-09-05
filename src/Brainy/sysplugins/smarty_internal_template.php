@@ -123,6 +123,8 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         if ($this->parent instanceof Smarty_Internal_Template) {
             $this->block_data = $this->parent->block_data;
         }
+
+        $this->smarty->fetchedTemplate($template_resource);
     }
 
     /**
@@ -268,7 +270,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             $tpl->tpl_vars = &$scope_ptr->tpl_vars;
         }
         $tpl->config_vars = $this->config_vars;
-        if (!empty($data)) {
+        if ($data) {
             // set up variable values
             foreach ($data as $_key => $_val) {
                 $tpl->tpl_vars[$_key] = new Smarty_variable($_val);

@@ -1,14 +1,12 @@
 <?php
 /**
-* Smarty PHPunit basic core function tests
-*
-* @package PHPunit
-* @author Uwe Tews
-*/
+ * Smarty PHPunit basic core function tests
+ *
+ * @package PHPunit
+ * @author Uwe Tews
+ */
 
-/**
-* class core function tests
-*/
+
 class CoreTest extends PHPUnit_Framework_TestCase
 {
     public function setUp() {

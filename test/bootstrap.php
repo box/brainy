@@ -3,11 +3,12 @@
 define('SMARTY_DIR', 'src/Brainy/');
 require_once SMARTY_DIR . 'SmartyBC.class.php';
 
-class SmartyTests {
+class SmartyTests
+{
     public static $smarty = null;
     public static $smartyBC = null;
 
-    protected static function _init($smarty) {
+    public static function _init($smarty) {
         $smarty->setTemplateDir(realpath('test' . DS . 'templates' . DS));
         $smarty->setCompileDir(realpath('test' . DS . 'compiled' . DS));
         $smarty->setPluginsDir(SMARTY_PLUGINS_DIR);
@@ -53,6 +54,22 @@ class SmartyTests {
         self::_init(SmartyTests::$smartyBC);
         Smarty_Resource::$sources = array();
         Smarty_Resource::$compileds = array();
+    }
+}
+
+class Smarty_TestCase extends PHPUnit_Framework_TestCase
+{
+    public function setUp()
+    {
+        $this->smarty = SmartyTests::$smarty;
+        SmartyTests::init();
+        $this->smarty->escape_html = true;
+        parent::setUp();
+    }
+
+    protected function setUpInstance($smarty)
+    {
+        return SmartyTests::_init($smarty);
     }
 }
 

@@ -1690,7 +1690,8 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @param  integer $errno Error level
      * @return boolean
      */
-    public static function mutingErrorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
+    public static function mutingErrorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    {
         $_is_muted_directory = false;
 
         // add the SMARTY_DIR to the list of muted directories
@@ -1761,7 +1762,8 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @return void
      * @deprecated Brainy will not support misbehaving code.
      */
-    public static function muteExpectedErrors() {
+    public static function muteExpectedErrors()
+    {
         $error_handler = array('Smarty', 'mutingErrorHandler');
         $previous = set_error_handler($error_handler);
 
@@ -1777,9 +1779,19 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @return void
      * @deprecated Brainy will not support misbehaving code.
      */
-    public static function unmuteExpectedErrors() {
+    public static function unmuteExpectedErrors()
+    {
         restore_error_handler();
     }
+
+    /**
+     * A stub function that is called whenever a template is included. This is
+     * included to allow implementers to detect when a template was included by
+     * Brainy.
+     * @param string $templatePath The path to the included template
+     * @return void
+     */
+    public function fetchedTemplate($templatePath) {}
 }
 
 // Check if we're running on windows
@@ -1794,7 +1806,8 @@ if (Smarty::$_CHARSET !== 'UTF-8') {
  * Smarty exception class
  * @package Brainy
  */
-class SmartyException extends Exception {
+class SmartyException extends Exception
+{
     /**
      * Whether to HTML escape the contents of the exception.
      * @var boolean
