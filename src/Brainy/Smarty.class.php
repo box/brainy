@@ -139,6 +139,7 @@ if (!function_exists('smarty_safe_var_lookup')) {
 include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_data.php';
 include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_templatebase.php';
 include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_template.php';
+include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_write_file.php';
 include_once SMARTY_SYSPLUGINS_DIR . 'smarty_resource.php';
 include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_resource_file.php';
 include_once SMARTY_SYSPLUGINS_DIR . 'smarty_cacheresource.php';
