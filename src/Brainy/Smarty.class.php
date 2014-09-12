@@ -136,14 +136,14 @@ if (!function_exists('smarty_safe_var_lookup')) {
 /**
  * Load always needed external class files
  */
-include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_data.php';
-include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_templatebase.php';
-include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_template.php';
-include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_write_file.php';
-include_once SMARTY_SYSPLUGINS_DIR . 'smarty_resource.php';
-include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_resource_file.php';
-include_once SMARTY_SYSPLUGINS_DIR . 'smarty_cacheresource.php';
-include_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_cacheresource_file.php';
+require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_data.php';
+require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_templatebase.php';
+require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_template.php';
+require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_write_file.php';
+require_once SMARTY_SYSPLUGINS_DIR . 'smarty_resource.php';
+require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_resource_file.php';
+require_once SMARTY_SYSPLUGINS_DIR . 'smarty_cacheresource.php';
+require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_cacheresource_file.php';
 
 /**
  * This is the main Brainy class
