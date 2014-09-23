@@ -1,4 +1,4 @@
-![Brainy](https://gitenterprise.inside-box.net/mbasta/brainy/raw/fixes/documentation/brainy.png)
+# Brainy
 
 Brainy is a replacement for the popular [Smarty](http://www.smarty.net/)
 templating language. It is a fork from the Smarty 3 trunk.
@@ -18,7 +18,7 @@ Please report any problems that you encounter.
 
 ## Getting Started
 
-Check out the [Getting Started](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Getting-Started)
+Check out the [Getting Started](https://github.com/box/brainy/wiki/Getting-Started)
 page on the wiki.
 
 
@@ -39,13 +39,13 @@ work as expected.
 While Brainy will work as a drop-in replacement for Smarty in most
 applications, there are some differences that may make it difficult to switch.
 
-A complete list of differences is listed [on the wiki](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Differences-from-Smarty).
+A complete list of differences is listed [on the wiki](https://github.com/box/brainy/wiki/Differences-from-Smarty).
 
 
 ## Contributing to Brainy
 
 For information on how to set up a local dev environment and run the tests,
-see the wiki page on [Hacking on Brainy](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Hacking-on-Brainy).
+see the wiki page on [Hacking on Brainy](https://github.com/box/brainy/wiki/Hacking-on-Brainy).
 
 
 ### Where is Brainy headed?
@@ -60,7 +60,7 @@ The following is the direction that the project is headed in:
   and add full async support.
 
 
-See [the project roadmap](https://gitenterprise.inside-box.net/mbasta/brainy/wiki/Roadmap)
+See [the project roadmap](https://github.com/box/brainy/wiki/Roadmap)
 for information on upcoming releases.
 
 
