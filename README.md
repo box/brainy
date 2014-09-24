@@ -1,5 +1,6 @@
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 
+![Brainy](logo.png "Brainy")
 # Brainy
 
 Brainy is a replacement for the popular [Smarty](http://www.smarty.net/)
