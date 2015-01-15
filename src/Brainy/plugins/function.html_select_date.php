@@ -103,6 +103,7 @@ function smarty_function_html_select_date($params, $template) {
         'field_separator' => "\n",
         'option_separator' => "\n",
         'time' => null,
+        'rel_time' => null,
         'extra_attrs' => '',
         'all_id' => null,
         'day_id' => null,
@@ -117,9 +118,10 @@ function smarty_function_html_select_date($params, $template) {
 
     foreach ($params as $_key => $_value) {
         switch ($_key) {
+            case 'rel_time':
             case 'time':
                 if (!is_array($_value) && $_value !== null) {
-                    $options['time'] = smarty_make_timestamp($_value);
+                    $options[$_key] = smarty_make_timestamp($_value);
                 }
                 break;
 
@@ -176,6 +178,10 @@ function smarty_function_html_select_date($params, $template) {
                 }
                 break;
         }
+    }
+
+    if (!empty($params['rel_time'])) {
+        $_current_year = date('Y', $params['rel_time']);
     }
 
     $timeData = array(
