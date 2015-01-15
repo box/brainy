@@ -49,7 +49,6 @@ class RegisterFunctionTest extends PHPUnit_Framework_TestCase
     }
     public function testRegisterFunctionCaching1() {
         $this->smarty->caching = 1;
-        $this->smarty->cache_lifetime = 10;
         $this->smarty->force_compile = true;
         $this->smarty->assign('x', 0);
         $this->smarty->assign('y', 10);
@@ -58,7 +57,6 @@ class RegisterFunctionTest extends PHPUnit_Framework_TestCase
     }
     public function testRegisterFunctionCaching3() {
         $this->smarty->caching = 1;
-        $this->smarty->cache_lifetime = 10;
         $this->smarty->force_compile = true;
         $this->smarty->assign('x', 2);
         $this->smarty->assign('y', 30);

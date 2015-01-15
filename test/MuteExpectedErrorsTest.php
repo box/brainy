@@ -27,9 +27,6 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
     }
     protected function tearDown() {
         restore_error_handler();
-
-        $this->smarty->clearAllCache();
-        $this->smartyBC->clearAllCache();
     }
 
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
@@ -39,7 +36,6 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
     public function testMuted() {
         Smarty::muteExpectedErrors();
 
-        $this->smarty->clearCache('default.tpl');
         $this->smarty->clearCompiledTemplate('default.tpl');
         $this->smarty->fetch('default.tpl');
 
@@ -49,7 +45,6 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
     }
 
     public function testUnmuted() {
-        $this->smarty->clearCache('default.tpl');
         $this->smarty->clearCompiledTemplate('default.tpl');
         $this->smarty->fetch('default.tpl');
 
@@ -64,7 +59,6 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
         Smarty::muteExpectedErrors();
 
         $this->smarty->caching = true;
-        $this->smarty->clearCache('default.tpl');
         $this->smarty->clearCompiledTemplate('default.tpl');
         $this->smarty->fetch('default.tpl');
 
@@ -74,7 +68,6 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
 
     public function testUnmutedCaching() {
         $this->smarty->caching = true;
-        $this->smarty->clearCache('default.tpl');
         $this->smarty->clearCompiledTemplate('default.tpl');
         $this->smarty->fetch('default.tpl');
 

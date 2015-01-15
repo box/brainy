@@ -53,7 +53,6 @@ class CompileBlockPluginTest extends PHPUnit_Framework_TestCase
     public function testBlockPluginFromTemplateFileCache() {
         $this->smarty->force_compile = false;
         $this->smarty->caching = 1;
-        $this->smarty->cache_lifetime = 10;
         $tpl = $this->smarty->createTemplate('blockplugintest.tpl');
         $this->assertEquals("abc", $this->smarty->fetch($tpl));
     }

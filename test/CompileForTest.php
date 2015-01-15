@@ -75,25 +75,4 @@ class CompileForTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate('eval:{for $x=8 to 0 step -1 max=3}{$x}{/for}');
         $this->assertEquals("876", $this->smarty->fetch($tpl));
     }
-    /*
-    *  test for
-    */
-    public function testForNocacheVar1() {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 5}{$x} {/for}');
-        $tpl->assign('foo',1, true);
-        $this->assertEquals("1 2 3 4 5 ", $this->smarty->fetch($tpl));
-    }
-    public function testForNocacheVar2() {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 5}{$x} {/for}');
-        $tpl->assign('foo',4, true);
-        $this->assertEquals("4 5 ", $this->smarty->fetch($tpl));
-    }
-    public function testForCache1() {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{for $x=$foo to 2}{$x} {/for}');
-        $tpl->assign('foo', 1);
-        $this->assertEquals("1 2 ", $this->smarty->fetch($tpl));
-    }
 }

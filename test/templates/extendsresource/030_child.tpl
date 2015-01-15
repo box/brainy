@@ -6,7 +6,7 @@
     child b4 {$b4}*
     {$smarty.block.child}*
 {/block}
-{block 'b5' nocache}
+{block 'b5'}
     child b5 {$b5}*
     {$smarty.block.child}*
 {/block}
@@ -14,7 +14,7 @@
     child b61 {$b6}*
     include 61 {include '030_include.tpl'}
 {/block}
-{block 'b62' nocache}
+{block 'b62'}
     child b62 {$b6}*
     include 62 {include '030_include.tpl'}
 {/block}
@@ -24,5 +24,5 @@
 {/block}
 {block 'b64'}
     child b64 {$b6}*
-    include b64 {include '030_include.tpl' nocache}
+    include b64 {include '030_include.tpl'}
 {/block}

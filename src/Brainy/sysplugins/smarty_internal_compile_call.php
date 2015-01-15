@@ -104,17 +104,9 @@ class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase
         $_params = 'array(' . implode(",", $_paramsArray) . ')';
         // was there an assign attribute
         if (isset($_assign)) {
-            if ($compiler->template->caching) {
-                $_output = "ob_start(); Smarty_Internal_Function_Call_Handler::call ({$call_cache},\$_smarty_tpl,{$_params}); \$_smarty_tpl->assign({$_assign}, ob_get_clean());\n";
-            } else {
-                $_output = "ob_start(); {$call_function}(\$_smarty_tpl,{$_params}); \$_smarty_tpl->assign({$_assign}, ob_get_clean());\n";
-            }
+            $_output = "ob_start(); {$call_function}(\$_smarty_tpl,{$_params}); \$_smarty_tpl->assign({$_assign}, ob_get_clean());\n";
         } else {
-            if ($compiler->template->caching) {
-                $_output = "Smarty_Internal_Function_Call_Handler::call ({$call_cache},\$_smarty_tpl,{$_params});\n";
-            } else {
-                $_output = "{$call_function}(\$_smarty_tpl,{$_params});\n";
-            }
+            $_output = "{$call_function}(\$_smarty_tpl,{$_params});\n";
         }
 
         return $_output;

@@ -14,7 +14,6 @@ class OutputFilterTrimWhitespaceTest extends PHPUnit_Framework_TestCase
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-        $this->smarty->clearAllCache();
         $this->smarty->clearCompiledTemplate();
         $this->smarty->loadFilter('output', 'trimwhitespace');
     }
@@ -38,7 +37,6 @@ EOT;
     }
 
     public function teardown() {
-        $this->smarty->clearAllCache();
         $this->smarty->clearCompiledTemplate();
     }
 }

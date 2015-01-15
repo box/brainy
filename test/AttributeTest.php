@@ -43,19 +43,6 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception for unexpected attribute "bar" has not been raised.');
     }
     /**
-    * test illegal option value
-    */
-    public function testIllegalOptionValue() {
-        try {
-            $this->smarty->fetch('string:{include "test" caching=foo}');
-        } catch (Exception $e) {
-            $this->assertContains(htmlentities('illegal value of option flag'), $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for illegal value of option flag has not been raised.');
-    }
-    /**
     * test too many shorthands
     */
     public function testTooManyShorthands() {

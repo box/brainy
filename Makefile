@@ -4,12 +4,10 @@ parsers:
 	cd build/parsers; make all
 
 test: clean
-	mkdir -p test/cache
 	mkdir -p test/compiled
 	phpunit
 
 test-hhvm: clean
-	mkdir -p test/cache
 	mkdir -p test/compiled
 	./phpunit-hhvm
 
@@ -22,7 +20,7 @@ lint:
 	phpcs -v --standard=build/phpcs-ruleset.xml src/
 
 clean:
-	rm -rf test/cache/*.php test/compiled/*.php
+	rm -rf test/compiled/*
 
 docs: clean
 	vendor/bin/phpdoc -d src/Brainy -t docs/ --ignore "*_internal_compile_*,*_internal_*parser.php,*_internal_*lexer.php,*/plugins/*"

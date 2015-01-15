@@ -30,7 +30,6 @@ class LiteralTest extends PHPUnit_Framework_TestCase
     }
 
     public function testBlockInLiteralTagInInheritedTemplate() {
-        $this->smarty->clearAllCache();
         $this->smarty->clearCompiledTemplate();
         $this->smarty->setTemplateDir(array('test/templates/extendsresource/', 'test/templates/'));
         $result = $this->smarty->fetch('extends:eval:{literal} {block "title"}{$foo}{/block} {/literal}|004_parent.tpl');

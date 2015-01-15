@@ -286,9 +286,10 @@ class SmartyBC extends Smarty
      * @param  string  $compile_id name of compile_id
      * @param  string  $exp_time   expiration time
      * @return boolean
+     * @deprecated This is a no-op.
      */
     public function clear_cache($tpl_file = null, $cache_id = null, $compile_id = null, $exp_time = null) {
-        return $this->clearCache($tpl_file, $cache_id, $compile_id, $exp_time);
+        return false;
     }
 
     /**
@@ -296,9 +297,10 @@ class SmartyBC extends Smarty
      *
      * @param  string  $exp_time expire time
      * @return boolean
+     * @deprecated This is a no-op.
      */
     public function clear_all_cache($exp_time = null) {
-        return $this->clearCache(null, null, null, $exp_time);
+        return false;
     }
 
     /**
@@ -308,11 +310,11 @@ class SmartyBC extends Smarty
      * @param  string  $cache_id
      * @param  string  $compile_id
      * @return boolean
-     * @deprecated
+     * @deprecated This is a no-op
      * @see Smarty_Internal_TemplateBase::isCached() Information on why this is deprecated
      */
     public function is_cached($tpl_file, $cache_id = null, $compile_id = null) {
-        return $this->isCached($tpl_file, $cache_id, $compile_id);
+        return false;
     }
 
     /**

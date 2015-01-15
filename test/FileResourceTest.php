@@ -128,87 +128,10 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(file_exists($tpl->compiled->filepath));
     }
 
-    public function testGetCachedFilepath() {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $expected = './cache/'.sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl').'.helloworld.tpl.php';
-        $this->assertEquals($expected, $this->relative($tpl->cached->filepath));
-    }
-
-    public function testGetCachedTimestamp() {
-        // create dummy cache file for the following test
-        file_put_contents('test/cache/' . sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl').'.helloworld.tpl.php', '<?php ?>');
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertTrue(is_integer($tpl->cached->timestamp));
-        $this->assertEquals(10, strlen($tpl->cached->timestamp));
-    }
-
-    public function testIsCachedPrepare() {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        // clean up for next tests
-        $this->smarty->clearCompiledTemplate();
-        $this->smarty->clearAllCache();
-        // compile and cache
-        $this->smarty->fetch($tpl);
-    }
-
-    public function testForceCache() {
-        $this->smarty->caching = true;
-        $this->smarty->force_cache = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertFalse($tpl->isCached());
-    }
-
-    public function testIsCachedTouchedSourcePrepare() {
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        sleep(0.5);
-        touch ($tpl->source->filepath);
-    }
-    public function testIsCachedTouchedSource() {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertFalse($tpl->isCached());
-    }
-
-    public function testIsCachedCachingDisabled() {
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertFalse($tpl->isCached());
-    }
-
-    public function testIsCachedForceCompile() {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $this->smarty->force_compile = true;
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertFalse($tpl->isCached());
-    }
 
     public function testGetRenderedTemplate() {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $this->assertEquals('hello world', $tpl->fetch());
-    }
-
-    public function testSmartyIsCachedPrepare() {
-        // prepare files for next test
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        // clean up for next tests
-        $this->smarty->clearCompiledTemplate();
-        $this->smarty->clearAllCache();
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->smarty->fetch($tpl);
-    }
-
-    public function testSmartyIsCachedCachingDisabled() {
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertFalse($this->smarty->isCached($tpl));
     }
 
     public function testRelativeInclude() {
@@ -257,8 +180,6 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
     protected function _relativeMap($map, $cwd=null) {
         foreach ($map as $file => $result) {
             $this->smarty->clearCompiledTemplate();
-            $this->smarty->clearAllCache();
-
             if ($result === null) {
                 try {
                     $this->smarty->fetch($file);
@@ -360,9 +281,6 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
 
         $newdest = $dn . '/templates/relativity/theory/';
         chdir($newdest);
-        if (!file_exists($newdest . 'cache')) {
-            mkdir($newdest . 'cache');
-        }
         $this->_relativeMap($map, $cwd);
 
         $map = array(
@@ -397,9 +315,6 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
 
         $newdest = $dn . '/templates/relativity/theory/einstein';
         chdir($newdest);
-        if (!file_exists($newdest . '/cache')) {
-            mkdir($newdest . '/cache');
-        }
         $this->_relativeMap($map, $cwd);
 
         $map = array(
@@ -411,9 +326,6 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
 
         $newdest = $dn . '/templates/relativity/theory/einstein/';
         chdir($newdest);
-        if (!file_exists($newdest . 'cache')) {
-            mkdir($newdest . 'cache');
-        }
         $this->_relativeMap($map, $cwd);
 
         $map = array(
@@ -468,6 +380,5 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
     */
     public function testFinalCleanup() {
         $this->smarty->clearCompiledTemplate();
-        $this->smarty->clearAllCache();
-    }
+        }
 }

@@ -142,8 +142,6 @@ require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_template.php';
 require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_write_file.php';
 require_once SMARTY_SYSPLUGINS_DIR . 'smarty_resource.php';
 require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_resource_file.php';
-require_once SMARTY_SYSPLUGINS_DIR . 'smarty_cacheresource.php';
-require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_cacheresource_file.php';
 
 /**
  * This is the main Brainy class
@@ -176,27 +174,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @var int
      */
     const SCOPE_GLOBAL = 3;
-
-    /**
-     * Represents disabled caching.
-     * @var int
-     * @see Smarty::$caching Usage Information
-     */
-    const CACHING_OFF = 0;
-    /**
-     * When used, $cache_lifetime will be used to determine if the cache has
-     * expired.
-     * @var int
-     * @see Smarty::$caching Usage Information
-     */
-    const CACHING_LIFETIME_CURRENT = 1;
-    /**
-     * When used, $cache_lifetime will be used to determine if the cache has
-     * expired at the time the cache is generated.
-     * @var int
-     * @see Smarty::$caching Usage Information
-     */
-    const CACHING_LIFETIME_SAVED = 2;
 
 
     /**
@@ -438,7 +415,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public $use_include_path = false;
     /**
-     * Directory that cached templates are stored in. See the following
+     * Directory that templates are stored in. See the following
      * methods instead:
      *
      * * Smarty::setTemplateDir()
@@ -528,15 +505,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     private $plugins_dir = array();
     /**
-     * Directory that cached templates are stored in. See the following methods
-     * instead:
-     *
-     * * Smarty::setCacheDir()
-     * * Smarty::getCacheDir()
-     * @var string|null
-     */
-    private $cache_dir = null;
-    /**
      * Directory that config files are stored in. See the following methods
      * instead:
      *
@@ -568,8 +536,8 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public $compile_check = Smarty::COMPILECHECK_ON;
     /**
-     * When true, subdirectories will be created within the cache and compile
-     * directories. This is useful for applications with very large numbers of
+     * When true, subdirectories will be created within compile directory.
+     * This is useful for applications with very large numbers of
      * templates, as it minimizes the number of files in each of the
      * directories. This does not work when PHP's safe_mode is set to on.
      * @var boolean
@@ -583,15 +551,10 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Controls the caching strategy.
      *
-     * * Smarty::CACHING_LIFETIME_CURRENT and Smarty::CACHING_LIFETIME_SAVED enable caching.
-     * * Smarty::CACHING_LIFETIME_CURRENT uses $cache_lifetime to determine if the cache has expired.
-     * * Smarty::CACHING_LIFETIME_SAVED works similarly, except $cache_lifetime is checked at the time the cache is generated.
      * * If $compile_check is true, cached content will be regenerated when the templates or configs change.
      * * If $force_compile is true, caching will be disabled.
      *
      * @var boolean|int
-     * @uses Smarty::CACHING_LIFETIME_CURRENT
-     * @uses Smarty::CACHING_LIFETIME_SAVED
      */
     public $caching = false;
     /**
@@ -608,31 +571,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @var boolean
      */
     public $inheritance_merge_compiled_includes = true;
-    /**
-     * The amount of time that a cached template will live for.
-     *
-     * Smarty::$caching must be turned on for this to have an effect.
-     *
-     * -1 will prevent the cache from expiring. 0 will disable the cache.
-     *
-     * @var integer
-     * @see Smarty::$caching More information on caching
-     */
-    public $cache_lifetime = 3600;
-    /**
-     * When true, Brainy will never use the cached versions of templates,
-     * though cache files will continue to be generated if Smarty::$caching
-     * specifies it. Do not use this in production.
-     * @var boolean
-     */
-    public $force_cache = false;
-    /**
-     * Set this if you want different sets of cache files for the same
-     * templates.
-     *
-     * @var string
-     */
-    public $cache_id = null;
     /**
      * Set this if you want different sets of compiled files for the same
      * templates.
@@ -677,18 +615,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public $security_policy = null;
     /**
-     * When true, browsers will be blocked from accessing compiled or cached
-     * templates. Changing this to false is not recommended.
-     *
-     * {@internal
-     * Currently used by Smarty_Internal_Template only.
-     * }}
-     *
-     * @var boolean
-     * @todo Evaluate whether this is still useful
-     */
-    public $direct_access_security = true;
-    /**
      * When set, this will be used as the default error reporting level.
      * @var int|null
      */
@@ -730,18 +656,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @var boolean
      */
     public $compile_locking = true;
-    /**
-     * When true, cached templates will not be generated concurrently by
-     * multiple requests.
-     * @var boolean
-     */
-    public $cache_locking = false;
-    /**
-     * The maximum amount of time (in seconds) that a cached template will lock
-     * for, when $cache_locking is set.
-     * @var float
-     */
-    public $locking_timeout = 10;
 
 
     /**
@@ -757,13 +671,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @var string
      */
     public $default_resource_type = 'file';
-    /**
-     * The type of resource to use to load templates.
-     *
-     * Must be an element of Smarty::$cache_resource_types.
-     * @var string
-     */
-    public $caching_type = 'file';
     /**
      * internal config properties
      * @var array
@@ -830,12 +737,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @internal
      */
     public $registered_cache_resources = array();
-    /**
-     * cache resource handler cache
-     * @var array
-     * @internal
-     */
-    public $_cacheresource_handlers = array();
     /**
      * autoload filter
      * @var array
@@ -932,7 +833,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
         $this->setTemplateDir('.' . DS . 'templates' . DS)
             ->setCompileDir('.' . DS . 'compiled' . DS)
             ->setPluginsDir(SMARTY_PLUGINS_DIR)
-            ->setCacheDir('.' . DS . 'cache' . DS)
             ->setConfigDir('.' . DS . 'configs' . DS);
 
         if (isset($_SERVER['SCRIPT_NAME'])) {
@@ -970,7 +870,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
             'config_dir' => 'getConfigDir',
             'plugins_dir' => 'getPluginsDir',
             'compile_dir' => 'getCompileDir',
-            'cache_dir' => 'getCacheDir',
         );
 
         if (isset($allowed[$name])) {
@@ -996,7 +895,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
             'config_dir' => 'setConfigDir',
             'plugins_dir' => 'setPluginsDir',
             'compile_dir' => 'setCompileDir',
-            'cache_dir' => 'setCacheDir',
         );
 
         if (isset($allowed[$name])) {
@@ -1045,51 +943,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
 
             return $_result;
         }
-    }
-
-    /**
-     * Clear the entire template cache folder.
-     *
-     * If $expire_time is set, only files older than $expire_time seconds will
-     * be deleted. Smarty::CLEAR_EXPIRED can also be passed to delete all
-     * expired templates.
-     *
-     * @param  integer|null $exp_time expiration time
-     * @param  string|null  $type     resource type
-     * @return integer Number of cache files deleted
-     * @uses Smarty::CLEAR_EXPIRED
-     */
-    public function clearAllCache($exp_time = null, $type = null) {
-        // load cache resource and call clearAll
-        $_cache_resource = Smarty_CacheResource::load($this, $type);
-        Smarty_CacheResource::invalidLoadedCache($this);
-
-        return $_cache_resource->clearAll($this, $exp_time);
-    }
-
-    /**
-     * Empty cache for a specific template.
-     *
-     * If $cache_id or $compile_id are specified, they will limit the
-     * operation to only cached files with those IDs, respectively. If
-     * $expire_time is set, it will be used as the minimum age for files to be
-     * deleted. Smarty::CLEAR_EXPIRED can also be passed to delete all expired
-     * templates.
-     *
-     * @param  string  $template_name template name
-     * @param  string|null  $cache_id      cache id
-     * @param  string|null  $compile_id    compile id
-     * @param  integer|null $exp_time      expiration time
-     * @param  string|null  $type          resource type
-     * @return integer Number of cache files deleted
-     * @uses Smarty::CLEAR_EXPIRED
-     */
-    public function clearCache($template_name, $cache_id = null, $compile_id = null, $exp_time = null, $type = null) {
-        // load cache resource and call clear
-        $_cache_resource = Smarty_CacheResource::load($this, $type);
-        Smarty_CacheResource::invalidLoadedCache($this);
-
-        return $_cache_resource->clear($this, $template_name, $cache_id, $compile_id, $exp_time);
     }
 
     /**
@@ -1349,30 +1202,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
     }
 
     /**
-     * Set cache directory
-     *
-     * @param  string $cache_dir directory to store cached templates in
-     * @return Smarty current Smarty instance for chaining
-     */
-    public function setCacheDir($cache_dir) {
-        $this->cache_dir = rtrim($cache_dir, '/\\') . DS;
-        if (!isset(Smarty::$_muted_directories[$this->cache_dir])) {
-            Smarty::$_muted_directories[$this->cache_dir] = null;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get cached template directory
-     *
-     * @return string Path of cache directory
-     */
-    public function getCacheDir() {
-        return $this->cache_dir;
-    }
-
-    /**
      * Set default modifiers
      *
      * @param  array|string $modifiers modifier or list of modifiers to set
@@ -1479,31 +1308,29 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * Smarty::display() or Smarty::fetch() method.
      *
      * @param  string  $template   the resource handle of the template file
-     * @param  mixed   $cache_id   cache id to be used with this template
+     * @param  mixed   $cache_id   no-op
      * @param  mixed   $compile_id compile id to be used with this template
-     * @param  object|null  $parent     Parent scope to assign to the template
+     * @param  object|array|null  $parent     Parent scope to assign to the template
      * @param  boolean|null $do_clone   When true, the Smarty object will be cloned
      * @return object  template object
      */
     public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true) {
         if ($cache_id !== null && (is_object($cache_id) || is_array($cache_id))) {
-            $parent = $cache_id;
-            $cache_id = null;
-        }
+             $parent = $cache_id;
+             $cache_id = null;
+         }
         if ($parent !== null && is_array($parent)) {
             $data = $parent;
             $parent = null;
         } else {
             $data = null;
         }
-        // default to cache_id and compile_id of Smarty object
-        $cache_id = $cache_id === null ? $this->cache_id : $cache_id;
-        $compile_id = $compile_id === null ? $this->compile_id : $compile_id;
+
         // already in template cache?
         if ($this->allow_ambiguous_resources) {
-            $_templateId = Smarty_Resource::getUniqueTemplateName($this, $template) . $cache_id . $compile_id;
+            $_templateId = Smarty_Resource::getUniqueTemplateName($this, $template) . $compile_id;
         } else {
-            $_templateId = $this->joined_template_dir . '#' . $template . $cache_id . $compile_id;
+            $_templateId = $this->joined_template_dir . '#' . $template . $compile_id;
         }
         if (isset($_templateId[150])) {
             $_templateId = sha1($_templateId);
@@ -1517,7 +1344,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
                 $tpl->tpl_vars = array();
                 $tpl->config_vars = array();
             } else {
-                $tpl = new $this->template_class($template, clone $this, $parent, $cache_id, $compile_id);
+                $tpl = new $this->template_class($template, clone $this, $parent, $compile_id);
             }
         } else {
             if (isset($this->template_objects[$_templateId])) {
@@ -1527,7 +1354,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
                 $tpl->tpl_vars = array();
                 $tpl->config_vars = array();
             } else {
-                $tpl = new $this->template_class($template, $this, $parent, $cache_id, $compile_id);
+                $tpl = new $this->template_class($template, $this, $parent, $compile_id);
             }
         }
         // fill data if present
@@ -1877,9 +1704,6 @@ function smartyAutoload($class) {
         'smarty_config_source' => true,
         'smarty_config_compiled' => true,
         'smarty_security' => true,
-        'smarty_cacheresource' => true,
-        'smarty_cacheresource_custom' => true,
-        'smarty_cacheresource_keyvaluestore' => true,
         'smarty_resource' => true,
         'smarty_resource_custom' => true,
         'smarty_resource_uncompiled' => true,

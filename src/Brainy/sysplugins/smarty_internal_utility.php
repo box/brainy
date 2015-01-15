@@ -182,17 +182,14 @@ class Smarty_Internal_Utility
         $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
         $_dir_sep = $smarty->use_sub_dirs ? '/' : '^';
         if (isset($resource_name)) {
-            $_save_stat = $smarty->caching;
-            $smarty->caching = false;
             $tpl = new $smarty->template_class($resource_name, $smarty);
-            $smarty->caching = $_save_stat;
 
             // remove from template cache
             $tpl->source; // have the template registered before unset()
             if ($smarty->allow_ambiguous_resources) {
-                $_templateId = $tpl->source->unique_resource . $tpl->cache_id . $tpl->compile_id;
+                $_templateId = $tpl->source->unique_resource . $tpl->compile_id;
             } else {
-                $_templateId = $smarty->joined_template_dir . '#' . $resource_name . $tpl->cache_id . $tpl->compile_id;
+                $_templateId = $smarty->joined_template_dir . '#' . $resource_name . $tpl->compile_id;
             }
             if (isset($_templateId[150])) {
                 $_templateId = sha1($_templateId);
@@ -205,9 +202,6 @@ class Smarty_Internal_Utility
             } else {
                 return 0;
             }
-
-            $_resource_part_2 = str_replace('.php', '.cache.php', $_resource_part_1);
-            $_resource_part_2_length = strlen($_resource_part_2);
         }
         $_dir = $_compile_dir;
         if ($smarty->use_sub_dirs && isset($_compile_id)) {
@@ -241,9 +235,7 @@ class Smarty_Internal_Utility
                 if ((!isset($_compile_id) || (isset($_filepath[$_compile_id_part_length]) && $a = !strncmp($_filepath, $_compile_id_part, $_compile_id_part_length)))
                     && (!isset($resource_name)
                         || (isset($_filepath[$_resource_part_1_length])
-                            && substr_compare($_filepath, $_resource_part_1, -$_resource_part_1_length, $_resource_part_1_length) == 0)
-                        || (isset($_filepath[$_resource_part_2_length])
-                            && substr_compare($_filepath, $_resource_part_2, -$_resource_part_2_length, $_resource_part_2_length) == 0))) {
+                            && substr_compare($_filepath, $_resource_part_1, -$_resource_part_1_length, $_resource_part_1_length) == 0))) {
                     if (isset($exp_time)) {
                         if (time() - @filemtime($_filepath) >= $exp_time) {
                             $unlink = true;
@@ -500,51 +492,6 @@ class Smarty_Internal_Utility
         }
 
         if ($errors === null) {
-            echo "Testing cache directory...\n";
-        }
-
-        // test if all registered cache_dir is accessible
-        $__cache_dir = $smarty->getCacheDir();
-        $_cache_dir = realpath($__cache_dir);
-        if (!$_cache_dir) {
-            $status = false;
-            $message = "FAILED: {$__cache_dir} does not exist";
-            if ($errors === null) {
-                echo $message . ".\n";
-            } else {
-                $errors['cache_dir'] = $message;
-            }
-        } elseif (!is_dir($_cache_dir)) {
-            $status = false;
-            $message = "FAILED: {$_cache_dir} is not a directory";
-            if ($errors === null) {
-                echo $message . ".\n";
-            } else {
-                $errors['cache_dir'] = $message;
-            }
-        } elseif (!is_readable($_cache_dir)) {
-            $status = false;
-            $message = "FAILED: {$_cache_dir} is not readable";
-            if ($errors === null) {
-                echo $message . ".\n";
-            } else {
-                $errors['cache_dir'] = $message;
-            }
-        } elseif (!is_writable($_cache_dir)) {
-            $status = false;
-            $message = "FAILED: {$_cache_dir} is not writable";
-            if ($errors === null) {
-                echo $message . ".\n";
-            } else {
-                $errors['cache_dir'] = $message;
-            }
-        } else {
-            if ($errors === null) {
-                echo "{$_cache_dir} is OK.\n";
-            }
-        }
-
-        if ($errors === null) {
             echo "Testing configs directory...\n";
         }
 
@@ -622,11 +569,7 @@ class Smarty_Internal_Utility
         $source = SMARTY_SYSPLUGINS_DIR;
         if (is_dir($source)) {
             $expected = array(
-                "smarty_cacheresource.php" => true,
-                "smarty_cacheresource_custom.php" => true,
-                "smarty_cacheresource_keyvaluestore.php" => true,
                 "smarty_config_source.php" => true,
-                "smarty_internal_cacheresource_file.php" => true,
                 "smarty_internal_compile_append.php" => true,
                 "smarty_internal_compile_assign.php" => true,
                 "smarty_internal_compile_block.php" => true,

@@ -4,7 +4,7 @@
     {block 'b2'}
        parent b2*
     {/block}
-    {block 'b3' nocache}
+    {block 'b3'}
         parent b3*
     {/block}
 {/block}<br>
@@ -26,5 +26,5 @@
 {block 'b64'}
     parent b64*
 {/block}<br>
-parent include {include '030_include.tpl' nocache inline}<br>
+parent include {include '030_include.tpl' inline}<br>
 parent include2 {include '030_include_2.tpl' inline}<br><br>

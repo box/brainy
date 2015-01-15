@@ -64,27 +64,24 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase
             $compiler->template->properties['function'][$_name]['parameter'][$_key] = $_data;
         }
         $compiler->smarty->template_functions[$_name]['parameter'] = $compiler->template->properties['function'][$_name]['parameter'];
-        if ($compiler->template->caching) {
-            $output = '';
-        } else {
 
-            // TODO: Is this $saved_tpl_vars business actually doing anything?
-            $output = "if (!function_exists('smarty_template_function_{$_name}')) {
-    function smarty_template_function_{$_name}(\$_smarty_tpl, \$params) {
-    \$saved_tpl_vars = \$_smarty_tpl->tpl_vars;\n";
+        // TODO: Is this $saved_tpl_vars business actually doing anything?
+        $output = "if (!function_exists('smarty_template_function_{$_name}')) {
+function smarty_template_function_{$_name}(\$_smarty_tpl, \$params) {
+\$saved_tpl_vars = \$_smarty_tpl->tpl_vars;\n";
 
-            foreach ($_attr as $_key => $_data) {
-                $enc_key = var_export($_key, true);
-                $output .= "    if (isset(\$params[" . $enc_key . "])) {\n";
-                $output .= "        \$_smarty_tpl->tpl_vars[" . $enc_key . "] = new Smarty_variable(\$params[" . $enc_key . "]);\n";
-                $output .= "        unset(\$params[" . $enc_key . "]);\n";
-                $output .= "    } else {\n";
-                $output .= "        \$_smarty_tpl->tpl_vars[" . $enc_key . "] = new Smarty_variable(" . $_data . ");\n";
-                $output .= "    }\n";
-            }
-
-            $output .= "    foreach (\$params as \$key => \$value) {\$_smarty_tpl->tpl_vars[\$key] = new Smarty_variable(\$value);}\n";
+        foreach ($_attr as $_key => $_data) {
+            $enc_key = var_export($_key, true);
+            $output .= "    if (isset(\$params[" . $enc_key . "])) {\n";
+            $output .= "        \$_smarty_tpl->tpl_vars[" . $enc_key . "] = new Smarty_variable(\$params[" . $enc_key . "]);\n";
+            $output .= "        unset(\$params[" . $enc_key . "]);\n";
+            $output .= "    } else {\n";
+            $output .= "        \$_smarty_tpl->tpl_vars[" . $enc_key . "] = new Smarty_variable(" . $_data . ");\n";
+            $output .= "    }\n";
         }
+
+        $output .= "    foreach (\$params as \$key => \$value) {\$_smarty_tpl->tpl_vars[\$key] = new Smarty_variable(\$value);}\n";
+
         // Init temporay context
         $compiler->template->required_plugins = array('compiled' => array());
         $compiler->parser->current_buffer = new _smarty_template_buffer($compiler->parser);

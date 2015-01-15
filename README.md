@@ -91,7 +91,7 @@ of this project in the subject.
 
 ## Copyright and License
 
-Copyright 2014 Box, Inc. All rights reserved.
+Copyright 2014-2015 Box, Inc. All rights reserved.
 
 Copyright 2002 – 2014 New Digital Group, Inc.
 

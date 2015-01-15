@@ -83,20 +83,6 @@ class EvalResourceTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($tpl->compiled->timestamp);
     }
     /**
-    * test writeCachedContent
-    */
-    public function testWriteCachedContent() {
-        $tpl = $this->smarty->createTemplate('eval:hello world');
-        $this->assertFalse($tpl->writeCachedContent('dummy'));
-    }
-    /**
-    * test isCached
-    */
-    public function testIsCached() {
-        $tpl = $this->smarty->createTemplate('eval:hello world');
-        $this->assertFalse($tpl->isCached());
-    }
-    /**
     * test getRenderedTemplate
     */
     public function testGetRenderedTemplate() {
@@ -108,23 +94,10 @@ class EvalResourceTest extends PHPUnit_Framework_TestCase
     */
     public function testNoFiles() {
         $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 20;
         $this->smarty->clearCompiledTemplate();
-        $this->smarty->clearAllCache();
         $tpl = $this->smarty->createTemplate('eval:hello world');
         $this->assertEquals('hello world', $this->smarty->fetch($tpl));
-        $this->assertEquals(0, $this->smarty->clearAllCache());
         $this->assertEquals(0, $this->smarty->clearCompiledTemplate());
-    }
-    /**
-    * test $smarty->is_cached
-    */
-    public function testSmartyIsCached() {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 20;
-        $tpl = $this->smarty->createTemplate('eval:hello world');
-        $this->assertEquals('hello world', $this->smarty->fetch($tpl));
-        $this->assertFalse($this->smarty->isCached($tpl));
     }
 
     public function testUrlencodeTemplate() {

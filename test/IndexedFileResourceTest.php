@@ -65,17 +65,7 @@ class IndexedFileResourceTest extends PHPUnit_Framework_TestCase
         $expected = './compiled/'.sha1($this->smarty->getTemplateDir('foo').'dirname.tpl').'.file.dirname.tpl.php';
         $this->assertEquals($expected, $this->relative($tpl->compiled->filepath));
     }
-
-    public function testGetCachedFilepath() {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('[foo]dirname.tpl');
-        $expected = './cache/'.sha1($this->smarty->getTemplateDir('foo').'dirname.tpl').'.dirname.tpl.php';
-        $this->assertEquals($expected, $this->relative($tpl->cached->filepath));
-    }
-
     public function testFinalCleanup() {
         $this->smarty->clearCompiledTemplate();
-      $this->smarty->clearAllCache();
     }
 }

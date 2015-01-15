@@ -12,7 +12,6 @@ class SmartyTests
         $smarty->setTemplateDir(realpath('test' . DS . 'templates' . DS));
         $smarty->setCompileDir(realpath('test' . DS . 'compiled' . DS));
         $smarty->setPluginsDir(SMARTY_PLUGINS_DIR);
-        $smarty->setCacheDir(realpath('test' . DS . 'cache' . DS));
         $smarty->setConfigDir(realpath('test' . DS . 'configs' . DS));
         $smarty->template_objects = array();
         $smarty->config_vars = array();
@@ -20,9 +19,7 @@ class SmartyTests
         $smarty->template_functions = array();
         $smarty->tpl_vars = array();
         $smarty->force_compile = false;
-        $smarty->force_cache = false;
         $smarty->auto_literal = true;
-        $smarty->caching = false;
         Smarty::$_smarty_vars = array();
         $smarty->registered_plugins = array();
         $smarty->default_plugin_handler_func = null;
@@ -41,9 +38,6 @@ class SmartyTests
         $smarty->enableSecurity();
         $smarty->error_reporting = null;
         $smarty->error_unassigned = true;
-        $smarty->caching_type = 'file';
-        $smarty->cache_locking = false;
-        $smarty->cache_id = null;
         $smarty->compile_id = null;
         $smarty->default_resource_type = 'file';
         $smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;

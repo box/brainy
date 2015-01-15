@@ -13,7 +13,6 @@ class StringResourceTest extends PHPUnit_Framework_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
-        $this->smarty->clearAllCache();
         $this->smarty->clearCompiledTemplate();
         SmartyTests::init();
     }
@@ -92,27 +91,6 @@ class StringResourceTest extends PHPUnit_Framework_TestCase
     public function testGetCompiledTimestamp() {
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertFalse($tpl->compiled->timestamp);
-    }
-    /**
-    * test getCachedTimestamp
-    */
-    public function testGetCachedTimestamp() {
-        $tpl = $this->smarty->createTemplate('string:hello world');
-        $this->assertFalse($tpl->cached->timestamp);
-    }
-    /**
-    * test writeCachedContent
-    */
-    public function testWriteCachedContent() {
-        $tpl = $this->smarty->createTemplate('string:hello world');
-        $this->assertFalse($tpl->writeCachedContent('dummy'));
-    }
-    /**
-    * test isCached
-    */
-    public function testIsCached() {
-        $tpl = $this->smarty->createTemplate('string:hello world');
-        $this->assertFalse($tpl->isCached());
     }
     /**
     * test getRenderedTemplate

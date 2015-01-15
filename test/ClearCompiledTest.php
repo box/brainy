@@ -31,10 +31,9 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         }
 
         $di = new RecursiveDirectoryIterator($directory);
-        // $it = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST | FilesystemIterator::SKIP_DOTS);
         $it = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($it as $file) {
-           $_file = $file->__toString();
+            $_file = $file->__toString();
 
             if (preg_match("#[\\\\/]\.#", $_file)) {
                 continue;
@@ -71,7 +70,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         foreach ($templates as $template => $compile_ids) {
             foreach ($compile_ids as $compile_id) {
                 $tpl = $this->smarty->createTemplate($template, null, $compile_id);
-                $tpl->fetch();
+                $tpl->fetch(); // Force a compile and render
                 $this->_files[$template . '#' . $compile_id] = substr($tpl->compiled->filepath, $directory_length - 1);
             }
         }
@@ -170,12 +169,6 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
     public function testSubsClearTemplate() {
         $this->runClearTemplate(true);
     }
-    public function testClearOtherTemplate() {
-        $this->runClearOtherTemplate(false);
-    }
-    public function testSubsClearOtherTemplate() {
-        $this->runClearOtherTemplate(true);
-    }
     public function runClearTemplate($use_sub_dirs) {
         $this->smarty->use_sub_dirs = $use_sub_dirs;
         $this->clearFiles();
@@ -186,10 +179,19 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
             'ambiguous/case1/foobar.tpl#', 'ambiguous/case1/foobar.tpl#compile1', 'ambiguous/case1/foobar.tpl#compile2',
             '[1]ambiguous/case1/foobar.tpl#', '[1]ambiguous/case1/foobar.tpl#compile1', '[1]ambiguous/case1/foobar.tpl#compile2',
         );
-        $this->assertEquals(3, $this->smarty->clearCompiledTemplate('helloworld.tpl'));
+        $numRemoved = $this->smarty->clearCompiledTemplate('helloworld.tpl');
+        $actual = $this->getFiles();
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
+        $this->assertEquals(3, $numRemoved);
+
+        $this->assertEquals($this->expectFiles($expected), $actual);
         $this->clearFiles();
+    }
+    public function testClearOtherTemplate() {
+        $this->runClearOtherTemplate(false);
+    }
+    public function testSubsClearOtherTemplate() {
+        $this->runClearOtherTemplate(true);
     }
     public function runClearOtherTemplate($use_sub_dirs) {
         $this->smarty->use_sub_dirs = $use_sub_dirs;

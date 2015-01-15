@@ -117,31 +117,4 @@ class CompileForeachTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate('eval:{assign var=foo value=[9,8,7,6,5,4,3,2,1, 0]}{foreach $foo as $x}{$x@key}{$x}{foreachelse}else{/foreach}');
         $this->assertEquals("09182736455463728190", $this->smarty->fetch($tpl));
     }
-    /*
-    *  test foreach
-    */
-    public function testForeachNocacheVar1() {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{foreach $foo as $x}{$x} {/foreach}');
-        $tpl->assign('foo',array(1,2), true);
-        $this->assertEquals("1 2 ", $this->smarty->fetch($tpl));
-    }
-    public function testForeachNocacheVar2() {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{foreach $foo as $x}{$x} {/foreach}');
-        $tpl->assign('foo',array(9,8), true);
-        $this->assertEquals("9 8 ", $this->smarty->fetch($tpl));
-    }
-    public function testForeachCache1() {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{foreach $foo as $x name=bar}{$x} {/foreach}');
-        $tpl->assign('foo',array(1, 2));
-        $this->assertEquals("1 2 ", $this->smarty->fetch($tpl));
-    }
-    public function testForeachCache2() {
-        $this->smarty->caching = true;
-        $tpl = $this->smarty->createTemplate('string:{foreach $foo as $x name=bar}{$x} {/foreach}');
-        $tpl->assign('foo',array(9, 8));
-        $this->assertEquals("9 8 ", $this->smarty->fetch($tpl));
-    }
 }

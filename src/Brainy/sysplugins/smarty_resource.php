@@ -126,12 +126,6 @@ abstract class Smarty_Resource
         if (isset($_compile_id)) {
             $_filepath = $_compile_id . $_compile_dir_sep . $_filepath;
         }
-        // caching token
-        if ($_template->caching) {
-            $_cache = '.cache';
-        } else {
-            $_cache = '';
-        }
         $_compile_dir = $_template->smarty->getCompileDir();
         // set basename if not specified
         $_basename = $this->getBasename($compiled->source);
@@ -143,7 +137,7 @@ abstract class Smarty_Resource
             $_basename = '.' . $_basename;
         }
 
-        $compiled->filepath = $_compile_dir . $_filepath . '.' . $compiled->source->type . $_basename . $_cache . '.php';
+        $compiled->filepath = $_compile_dir . $_filepath . '.' . $compiled->source->type . $_basename . '.php';
     }
 
     /**

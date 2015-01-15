@@ -25,7 +25,6 @@ desktop.ini
 *.sublime-project
 cache/
 *.tpl.php
-*.cache.php
 *.out
 coverage/
 test/compiled

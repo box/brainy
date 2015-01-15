@@ -6,7 +6,6 @@
         <directory suffix=".php">../../distribution/demo</directory>
         <exclude>
         <file>../../distribution/demo/index.php</file>
-        <directory suffix=".php">../../distribution/demo/cache</directory>
         <directory suffix=".php">../../distribution/demo/templates_c</directory>
         </exclude>
     </whitelist>

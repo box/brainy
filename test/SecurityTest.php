@@ -18,8 +18,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         $this->smarty->force_compile = true;
         $this->smartyBC->force_compile = true;
         $this->smarty->clearCompiledTemplate();
-        $this->smarty->clearAllCache();
-    }
+        }
 
     /**
     * test that security is loaded

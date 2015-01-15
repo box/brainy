@@ -94,7 +94,6 @@ class CustomResourceAmbiguousTest extends PHPUnit_Framework_TestCase
     */
     public function testFinalCleanup() {
         $this->smarty->clearCompiledTemplate();
-        $this->smarty->clearAllCache();
         $this->smarty->allow_ambiguous_resources = false;
     }
 }

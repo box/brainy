@@ -21,7 +21,6 @@ class CompileBlockExtendsTest extends PHPUnit_Framework_TestCase
     * clear folders
     */
     public function clear() {
-        $this->smarty->clearAllCache();
         $this->smarty->clearCompiledTemplate();
    }
     /**
@@ -190,9 +189,7 @@ class CompileBlockExtendsTest extends PHPUnit_Framework_TestCase
     */
     public function testCompileBlockGrandChildMustCompile_021_1() {
         $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
         $tpl = $this->smarty->createTemplate('021_grandchild.tpl');
-        $this->assertFalse($tpl->isCached());
         $result = $this->smarty->fetch($tpl);
         $this->assertContains('Grandchild Page Title', $result);
         $this->smarty->template_objects = null;
@@ -206,9 +203,7 @@ class CompileBlockExtendsTest extends PHPUnit_Framework_TestCase
     public function testCompileBlockGrandChildMustCompile_021_2() {
         touch($this->smarty->getTemplateDir(0) . '021_grandchild.tpl');
         $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
         $tpl = $this->smarty->createTemplate('021_grandchild.tpl');
-        $this->assertFalse($tpl->isCached());
         $result = $this->smarty->fetch($tpl);
         $this->assertContains('Grandchild Page Title', $result);
         $this->smarty->template_objects = null;
@@ -222,9 +217,7 @@ class CompileBlockExtendsTest extends PHPUnit_Framework_TestCase
     public function testCompileBlockGrandChildMustCompile_021_3() {
         touch($this->smarty->getTemplateDir(0) . '021_child.tpl');
         $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
         $tpl = $this->smarty->createTemplate('021_grandchild.tpl');
-        $this->assertFalse($tpl->isCached());
         $result = $this->smarty->fetch($tpl);
         $this->assertContains('Grandchild Page Title', $result);
         $this->smarty->template_objects = null;
@@ -238,9 +231,7 @@ class CompileBlockExtendsTest extends PHPUnit_Framework_TestCase
     public function testCompileBlockGrandChildMustCompile_021_4() {
         touch($this->smarty->getTemplateDir(0) . '021_parent.tpl');
         $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
         $tpl = $this->smarty->createTemplate('021_grandchild.tpl');
-        $this->assertFalse($tpl->isCached());
         $result = $this->smarty->fetch($tpl);
         $this->assertContains('Grandchild Page Title', $result);
         $this->smarty->template_objects = null;

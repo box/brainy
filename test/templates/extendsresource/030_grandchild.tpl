@@ -3,7 +3,7 @@
     grandchild b3 {$b3}*
     include b3 {include '030_include.tpl'}
 {/block}
-{block 'b4' nocache}
+{block 'b4'}
     grandchild b4 {$b4}*
 {/block}
 {block 'b5'}

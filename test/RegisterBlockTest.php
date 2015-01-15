@@ -77,7 +77,6 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
      */
     public function testRegisterBlockCaching1() {
         $this->smarty->caching = 1;
-        $this->smarty->cache_lifetime = 10;
         $this->smarty->force_compile = true;
         $this->smarty->assign('x', 1);
         $this->smarty->assign('y', 10);
@@ -87,7 +86,6 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
     }
     public function testRegisterBlockCaching3() {
         $this->smarty->caching = 1;
-        $this->smarty->cache_lifetime = 10;
         $this->smarty->force_compile = true;
         $this->smarty->assign('x', 3);
         $this->smarty->assign('y', 30);
@@ -97,7 +95,6 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
     }
     public function testRegisterBlockCaching1Wrapper() {
         $this->smartyBC->caching = 1;
-        $this->smartyBC->cache_lifetime = 10;
         $this->smartyBC->force_compile = true;
         $this->smartyBC->assign('x', 1);
         $this->smartyBC->assign('y', 10);
@@ -107,7 +104,6 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
     }
     public function testRegisterBlockCaching3Wrapper() {
         $this->smartyBC->caching = 1;
-        $this->smartyBC->cache_lifetime = 10;
         $this->smartyBC->force_compile = true;
         $this->smartyBC->assign('x', 3);
         $this->smartyBC->assign('y', 30);

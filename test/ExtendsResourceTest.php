@@ -21,7 +21,6 @@ class ExtendsResourceTest extends PHPUnit_Framework_TestCase
     * clear folders
     */
     public function clear() {
-        $this->smarty->clearAllCache();
         $this->smarty->clearCompiledTemplate();
     }
     /**
