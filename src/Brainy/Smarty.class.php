@@ -335,11 +335,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
     public static $_UTF8_MODIFIER = 'u';
 
     /**
-     * Flag denoting if operating system is windows
-     * @internal
-     */
-    public static $_IS_WINDOWS = false;
-    /**
      * Sets the default assignment location for a variable. By default,
      * variables are assigned to the local scope. In some contexts, it may
      * be desirable for variable assignment to take place in the global scope.
@@ -1621,9 +1616,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public function fetchedTemplate($templatePath) {}
 }
-
-// Check if we're running on windows
-Smarty::$_IS_WINDOWS = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
 
 // let PCRE (preg_*) treat strings as ISO-8859-1 if we're not dealing with UTF-8
 if (Smarty::$_CHARSET !== 'UTF-8') {

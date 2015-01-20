@@ -52,7 +52,7 @@ class Smarty_Internal_Write_File
          * seems to be smart enough to handle that for us.
          */
         try {
-            if (Smarty::$_IS_WINDOWS) {
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
                 // remove original file
                 unlink($_filepath);
                 // rename tmp file

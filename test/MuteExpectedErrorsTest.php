@@ -14,6 +14,8 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
 
     private $_errors;
 
+    private $is_windows;
+
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
@@ -23,6 +25,8 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
 
         $this->_errors = array();
         set_error_handler(array($this, 'error_handler'));
+
+        $this->is_windows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
 
     }
     protected function tearDown() {
@@ -48,11 +52,11 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
         $this->smarty->clearCompiledTemplate('default.tpl');
         $this->smarty->fetch('default.tpl');
 
-        $this->assertLessThanOrEqual(Smarty::$_IS_WINDOWS ? 5 : 2, count($this->_errors));
+        $this->assertLessThanOrEqual($this->is_windows ? 5 : 2, count($this->_errors));
 
         @filemtime('ckxladanwijicajscaslyxck');
         $error = array( __FILE__ . ' line ' . (__LINE__ -1));
-        $this->assertLessThanOrEqual(Smarty::$_IS_WINDOWS ? 6 : 3, count($this->_errors));
+        $this->assertLessThanOrEqual($this->is_windows ? 6 : 3, count($this->_errors));
     }
 
     public function testMutedCaching() {
@@ -71,10 +75,10 @@ class MuteExpectedErrorsTest extends PHPUnit_Framework_TestCase
         $this->smarty->clearCompiledTemplate('default.tpl');
         $this->smarty->fetch('default.tpl');
 
-        $this->assertLessThanOrEqual(Smarty::$_IS_WINDOWS ? 7 : 4, count($this->_errors));
+        $this->assertLessThanOrEqual($this->is_windows ? 7 : 4, count($this->_errors));
 
         @filemtime('ckxladanwijicajscaslyxck');
         $error = array( __FILE__ . ' line ' . (__LINE__ -1));
-        $this->assertLessThanOrEqual(Smarty::$_IS_WINDOWS ? 8 : 5, count($this->_errors));
+        $this->assertLessThanOrEqual($this->is_windows ? 8 : 5, count($this->_errors));
     }
 }
