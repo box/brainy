@@ -7,6 +7,7 @@
  * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
+ * @author Matt Basta
  */
 
 /**
@@ -43,14 +44,12 @@ class Smarty_Internal_Compile_Capture extends Smarty_Internal_CompileBase
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
-        $buffer = isset($_attr['name']) ? $_attr['name'] : "'default'";
+        $name = isset($_attr['name']) ? $_attr['name'] : "'default'";
         $assign = isset($_attr['assign']) ? $_attr['assign'] : 'null';
         $append = isset($_attr['append']) ? $_attr['append'] : 'null';
 
-        $compiler->_capture_stack[0][] = array($buffer, $assign, $append);
-        $_output = "\$_smarty_tpl->_capture_stack[0][] = array($buffer, $assign, $append);\nob_start();\n";
-
-        return $_output;
+        $compiler->_capture_stack[0][] = array($name, $assign, $append);
+        return "ob_start();\n";
     }
 
 }
@@ -74,16 +73,19 @@ class Smarty_Internal_Compile_CaptureClose extends Smarty_Internal_CompileBase
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
-        list($buffer, $assign, $append) = array_pop($compiler->_capture_stack[0]);
+        list($name, $assign, $append) = array_pop($compiler->_capture_stack[0]);
 
-        $_output  = "list(\$_capture_buffer, \$_capture_assign, \$_capture_append) = array_pop(\$_smarty_tpl->_capture_stack[0]);\n";
-        $_output .= "if (!empty(\$_capture_buffer)) {\n";
-        $_output .= " if (isset(\$_capture_assign)) \$_smarty_tpl->assign(\$_capture_assign, ob_get_contents());\n";
-        $_output .= " if (isset(\$_capture_append)) \$_smarty_tpl->append(\$_capture_append, ob_get_contents());\n";
-        $_output .= " Smarty::\$_smarty_vars['capture'][\$_capture_buffer]=ob_get_clean();\n";
-        $_output .= "} else \$_smarty_tpl->capture_error();\n";
+        $output = '';
 
-        return $_output;
+        if (isset($assign)) {
+            $output .= '$_smarty_tpl->assign(' . $assign . ', ob_get_contents());';
+        }
+        if (isset($append)) {
+            $output .= '$_smarty_tpl->append(' . $append . ', ob_get_contents());';
+        }
+        $output .= 'Smarty::$_smarty_vars[\'capture\'][' . $name . '] = ob_get_clean();';
+
+        return $output;
     }
 
 }
