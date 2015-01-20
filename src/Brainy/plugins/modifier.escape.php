@@ -31,18 +31,6 @@ function smarty_modifier_escape($string, $esc_type = 'html', $char_set = null, $
         case 'html':
             return htmlspecialchars($string, ENT_QUOTES, $char_set, $double_encode);
 
-        case 'htmlall':
-            if (Smarty::$_MBSTRING) {
-                // mb_convert_encoding ignores htmlspecialchars()
-                $string = htmlspecialchars($string, ENT_QUOTES, $char_set, $double_encode);
-
-                // htmlentities() won't convert everything, so use mb_convert_encoding
-                return mb_convert_encoding($string, 'HTML-ENTITIES', $char_set);
-            }
-
-            // no MBString fallback
-            return htmlentities($string, ENT_QUOTES, $char_set, $double_encode);
-
         case 'url':
             return rawurlencode($string);
 

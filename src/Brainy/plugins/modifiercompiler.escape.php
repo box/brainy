@@ -48,22 +48,6 @@ function smarty_modifiercompiler_escape($params, $compiler) {
                     . $char_set . ', '
                     . $double_encode . ')';
 
-            case 'htmlall':
-                if (Smarty::$_MBSTRING) {
-                    return 'mb_convert_encoding(htmlspecialchars('
-                        . $params[0] .', ENT_QUOTES, '
-                        . $char_set . ', '
-                        . $double_encode
-                        . '), "HTML-ENTITIES", '
-                        . $char_set . ')';
-                }
-
-                // no MBString fallback
-                return 'htmlentities('
-                    . $params[0] .', ENT_QUOTES, '
-                    . $char_set . ', '
-                    . $double_encode . ')';
-
             case 'url':
                 return 'rawurlencode(' . $params[0] . ')';
 

@@ -29,7 +29,6 @@ function smarty_modifiercompiler_unescape($params, $compiler) {
 
     switch (trim($params[1], '"\'')) {
         case 'entity':
-        case 'htmlall':
             if (Smarty::$_MBSTRING) {
                 return 'mb_convert_encoding(' . $params[0] . ', ' . $params[2] . ', \'HTML-ENTITIES\')';
             }

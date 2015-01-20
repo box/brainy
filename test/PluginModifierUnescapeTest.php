@@ -43,7 +43,7 @@ class PluginModifierUnescapeTest extends PHPUnit_Framework_TestCase
     public function testHtmlall() {
         $encoded = "a&#228;&#1047;&#1076;&#1088;&#1072;&gt;&lt;&amp;amp;&auml;&#228;&#1074;&#1089;&#1089;&#1090;&#1074;&#1091;&#1081;&#1090;&#1077;";
         $result = "aäЗдра><&amp;ääвсствуйте";
-        $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|unescape:"htmlall"}');
+        $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|unescape:"entity"}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
@@ -51,7 +51,7 @@ class PluginModifierUnescapeTest extends PHPUnit_Framework_TestCase
         Smarty::$_MBSTRING = false;
         $encoded = "a&#228;&#1047;&#1076;&#1088;&#1072;&gt;&lt;&amp;amp;&auml;&#228;&#1074;&#1089;&#1089;&#1090;&#1074;&#1091;&#1081;&#1090;&#1077;";
         $result = "aäЗдра><&amp;ääвсствуйте";
-        $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|unescape:"htmlall"}');
+        $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|unescape:"entity"}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
         Smarty::$_MBSTRING = true;
     }

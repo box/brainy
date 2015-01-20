@@ -48,30 +48,6 @@ class PluginModifierEscapeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("I&#039;m some &lt;html&gt; to ä be &quot;escaped&quot; or &copy;", $this->smarty->fetch($tpl));
     }
 
-    public function testHtmlall() {
-        $tpl = $this->smarty->createTemplate('eval:{"I\'m some <html> to ä be \"escaped\" or &copy;"|escape:"htmlall"}');
-        $this->assertEquals("I&#039;m some &lt;html&gt; to &auml; be &quot;escaped&quot; or &amp;copy;", $this->smarty->fetch($tpl));
-    }
-
-    public function testHtmlallWithoutMbstring() {
-        $this->hhvmBugTest();
-        Smarty::$_MBSTRING = false;
-        $tpl = $this->smarty->createTemplate('eval:{"I\'m some <html> to ä be \"escaped\" or &copy;"|escape:"htmlall"}');
-        $this->assertEquals("I&#039;m some &lt;html&gt; to &auml; be &quot;escaped&quot; or &amp;copy;", $this->smarty->fetch($tpl));
-    }
-
-    public function testHtmlallDouble() {
-        $tpl = $this->smarty->createTemplate('eval:{"I\'m some <html> to ä be \"escaped\" or &copy;"|escape:"htmlall":null:false}');
-        $this->assertEquals("I&#039;m some &lt;html&gt; to &auml; be &quot;escaped&quot; or &copy;", $this->smarty->fetch($tpl));
-    }
-
-    public function testHtmlallDoubleWithoutMbstring() {
-        $this->hhvmBugTest();
-        Smarty::$_MBSTRING = false;
-        $tpl = $this->smarty->createTemplate('eval:{"I\'m some <html> to ä be \"escaped\" or &copy;"|escape:"htmlall":null:false}');
-        $this->assertEquals("I&#039;m some &lt;html&gt; to &auml; be &quot;escaped&quot; or &copy;", $this->smarty->fetch($tpl));
-    }
-
     public function testUrl() {
         $tpl = $this->smarty->createTemplate('eval:{"http://some.encoded.com/url?parts#foo"|escape:"url"}');
         $this->assertEquals("http%3A%2F%2Fsome.encoded.com%2Furl%3Fparts%23foo", $this->smarty->fetch($tpl));
