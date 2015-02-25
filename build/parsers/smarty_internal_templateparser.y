@@ -43,6 +43,33 @@
         $this->safe_lookups = $this->smarty->safe_lookups;
     }
 
+    /**
+     * Strips whitespace from a string
+     * @param string $string
+     * @return string
+     */
+    protected static function stripString($string) {
+        // Replaces whitespace followed by a `<` with null.
+        // `     \n     <foo>` -> `<foo>`
+        $string = preg_replace('/\s+(?=<)/ims', '', $string);
+        // Replaces `>` followed by whitespace with `>`
+        // `<div>\n  foo` -> `<div>foo`
+        $string = preg_replace('/>\s+(?=\S)/ims', '>', $string);
+        // Replaces whitespace followed by anything else with a space.
+        // `            data-hello="` -> ` data-hello="`
+        $string = preg_replace('/\s+(?=\w)/ims', ' ', $string);
+
+        // Is there work to be done at the end of the string?
+        if ($string !== rtrim($string)) {
+            $string = rtrim($string);
+            // If the last non-whitespace character is not a `>`, add a space.
+            if (substr($string, -1) !== '>') {
+                $string .= ' ';
+            }
+        }
+        return $string;
+    }
+
     public function compileVariable($variable, $value = 'value') {
         $unsafe = '$_smarty_tpl->tpl_vars[' . $variable . ']->' . $value;
         if ($this->safe_lookups === 0) { // Unsafe lookups
@@ -137,7 +164,7 @@ template_element(res) ::= literal(l). {
 // template text
 template_element(res) ::= TEXT(o). {
     if ($this->strip) {
-        res = new _smarty_text($this, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', o));
+        res = new _smarty_text($this, self::stripString(o));
     } else {
         res = new _smarty_text($this, o);
     }
@@ -157,7 +184,7 @@ template_element ::= STRIPOFF(d). {
                       // process source of inheritance child block
 template_element ::= BLOCKSOURCE(s). {
     if ($this->strip) {
-        SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, preg_replace('![\t ]*[\r\n]+[\t ]*!', '', s));
+        SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, self::stripString(s));
     } else {
         SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, s);
     }

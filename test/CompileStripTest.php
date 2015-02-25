@@ -7,8 +7,8 @@
 */
 
 /**
-* class for strip tags tests
-*/
+ * class for strip tags tests
+ */
 class CompileStripTest extends PHPUnit_Framework_TestCase
 {
     public function setUp() {
@@ -16,9 +16,23 @@ class CompileStripTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    public function testStrip() {
-        $tpl = $this->smarty->createTemplate("eval:{strip}<table>\n </table>{/strip}");
-        $this->assertEquals('<table></table>', $this->smarty->fetch($tpl));
+    public function dataProviderForStripTests() {
+        return array(
+            array("<table>\n </table>", '<table></table>'),
+            array("<table>\n foo\n  </table>", '<table>foo</table>'),
+            array("<table foo=\"bar\"\n\t hello=\"there\">", '<table foo="bar" hello="there">'),
+            array("<input \n disabled\n\t checked>", '<input disabled checked>'),
+            array("foo  ", 'foo '),
+            array("foo>  ", 'foo>'),
+        );
+    }
+
+    /**
+     * @dataProvider dataProviderForStripTests
+     */
+    public function testStrip($source, $output) {
+        $tpl = $this->smarty->createTemplate('eval:{strip}' . $source);
+        $this->assertEquals($output, $this->smarty->fetch($tpl));
     }
 
     /**

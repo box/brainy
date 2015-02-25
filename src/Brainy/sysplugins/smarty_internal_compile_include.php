@@ -78,7 +78,10 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
         }
 
         // flag if included template code should be merged into caller
-        $merge_compiled_includes = ($compiler->smarty->merge_compiled_includes ||($compiler->inheritance && $compiler->smarty->inheritance_merge_compiled_includes)|| $_attr['inline'] === true) && !$compiler->template->source->recompiled;
+        $merge_compiled_includes = ($compiler->smarty->merge_compiled_includes ||
+                                    ($compiler->inheritance && $compiler->smarty->inheritance_merge_compiled_includes) ||
+                                    $_attr['inline'] === true) &&
+                                   !$compiler->template->source->recompiled;
 
         if (isset($_attr['compile_id'])) {
             $_compile_id = $_attr['compile_id'];
@@ -136,7 +139,6 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
                     $compiler->template->properties['file_dependency'] = array_merge($compiler->template->properties['file_dependency'], $tpl->properties['file_dependency']);
                     // remove header code
                     $compiled_code = preg_replace("/(<\?php \/\* Brainy(.+?)\/\*\/%%SmartyHeaderCode%%\*\/\n)/s", '', $compiled_code);
-                    // $compiled_code = preg_replace("/(\/\*%%SmartyHeaderCode%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%\*\/\n)/s", '', $compiled_code);
                     $compiler->merged_templates[$tpl->properties['unifunc']] = $compiled_code;
                     $has_compiled_template = true;
                     unset ($tpl);
@@ -182,11 +184,8 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
 
         // was there an assign attribute
         if (isset($_assign)) {
-            $_output = "\$_smarty_tpl->tpl_vars[$_assign] = new Smarty_variable(\$_smarty_tpl->getSubTemplate($include_file, $_compile_id, $_vars, $_parent_scope));\n";;
-        } else {
-            $_output = "echo \$_smarty_tpl->getSubTemplate($include_file, $_compile_id, $_vars, $_parent_scope);\n";
+            return "\$_smarty_tpl->tpl_vars[$_assign] = new Smarty_variable(\$_smarty_tpl->getSubTemplate($include_file, $_compile_id, $_vars, $_parent_scope));\n";;
         }
-
-        return $_output;
+        return "echo \$_smarty_tpl->getSubTemplate($include_file, $_compile_id, $_vars, $_parent_scope);\n";
     }
 }
