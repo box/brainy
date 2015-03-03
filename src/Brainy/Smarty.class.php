@@ -697,12 +697,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public $plugin_search_order = array('function', 'block', 'compiler', 'class');
     /**
-     * registered objects
-     * @var array
-     * @internal
-     */
-    public $registered_objects = array();
-    /**
      * registered classes
      * @var array
      * @internal

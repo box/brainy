@@ -109,30 +109,6 @@ class SmartyBC extends Smarty
     }
 
     /**
-     * Registers object to be used in templates
-     *
-     * @param string  $object       name of template object
-     * @param object  $object_impl  the referenced PHP object to register
-     * @param array   $allowed      list of allowed methods (empty = all)
-     * @param boolean $smarty_args  smarty argument format, else traditional
-     * @param array   $block_functs list of methods that are block format
-     */
-    public function register_object($object, $object_impl, $allowed = array(), $smarty_args = true, $block_methods = array()) {
-        settype($allowed, 'array');
-        settype($smarty_args, 'boolean');
-        $this->registerObject($object, $object_impl, $allowed, $smarty_args, $block_methods);
-    }
-
-    /**
-     * Unregisters object
-     *
-     * @param string $object name of template object
-     */
-    public function unregister_object($object) {
-        $this->unregisterObject($object);
-    }
-
-    /**
      * Registers block function to be used in templates
      *
      * @param string $block       name of template block

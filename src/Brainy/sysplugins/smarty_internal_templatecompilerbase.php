@@ -317,19 +317,6 @@ abstract class Smarty_Internal_TemplateCompilerBase
         }
         // not an internal compiler tag
         if (strlen($tag) < 6 || substr($tag, -5) !== 'close') {
-            // check if tag is a registered object
-            if (isset($this->smarty->registered_objects[$tag]) && isset($parameter['object_method'])) {
-                $method = $parameter['object_method'];
-                if (!in_array($method, $this->smarty->registered_objects[$tag][3]) &&
-                    (empty($this->smarty->registered_objects[$tag][1]) || in_array($method, $this->smarty->registered_objects[$tag][1]))
-                ) {
-                    return $this->callTagCompiler('private_object_function', $args, $parameter, $tag, $method);
-                } elseif (in_array($method, $this->smarty->registered_objects[$tag][3])) {
-                    return $this->callTagCompiler('private_object_block_function', $args, $parameter, $tag, $method);
-                } else {
-                    return $this->trigger_template_error('unallowed method "' . $method . '" in registered object "' . $tag . '"', $this->lex->taglineno);
-                }
-            }
 
             if (isset($this->smarty->registered_plugins[Smarty::PLUGIN_COMPILER][$tag])) {
                 $new_args = array();
@@ -427,15 +414,6 @@ abstract class Smarty_Internal_TemplateCompilerBase
 
         // compile closing tag of block function
         $base_tag = substr($tag, 0, -5);
-        // check if closing tag is a registered object
-        if (isset($this->smarty->registered_objects[$base_tag]) && isset($parameter['object_method'])) {
-            $method = $parameter['object_method'];
-            if (in_array($method, $this->smarty->registered_objects[$base_tag][3])) {
-                return $this->callTagCompiler('private_object_block_function', $args, $parameter, $tag, $method);
-            } else {
-                return $this->trigger_template_error('unallowed closing tag method "' . $method . '" in registered object "' . $base_tag . '"', $this->lex->taglineno);
-            }
-        }
         // registered block tag ?
         if (isset($this->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$base_tag]) || isset($this->default_handler_plugins[Smarty::PLUGIN_BLOCK][$base_tag])) {
             return $this->callTagCompiler('private_registered_block', $args, $parameter, $tag);

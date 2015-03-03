@@ -588,8 +588,6 @@ class Smarty_Internal_Utility
                 "smarty_internal_compile_private_block_plugin.php" => true,
                 "smarty_internal_compile_private_function_plugin.php" => true,
                 "smarty_internal_compile_private_modifier.php" => true,
-                "smarty_internal_compile_private_object_block_function.php" => true,
-                "smarty_internal_compile_private_object_function.php" => true,
                 "smarty_internal_compile_private_print_expression.php" => true,
                 "smarty_internal_compile_private_registered_block.php" => true,
                 "smarty_internal_compile_private_registered_function.php" => true,

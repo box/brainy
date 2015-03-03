@@ -288,22 +288,12 @@ smartytag(res)   ::= LDEL ID(i). {
     res = $this->compiler->compileTag(i,array());
 }
 
-                  // registered object tag
-smartytag(res)   ::= LDEL ID(i) PTR ID(m) attributes(a). {
-    res = $this->compiler->compileTag(i,a,array('object_methode'=>m));
-}
-
                   // tag with modifier and optional Smarty2 style attributes
 smartytag(res)   ::= LDEL ID(i) modifierlist(l)attributes(a). {
     res = "ob_start();\n".$this->compiler->compileTag(i,a).'echo ';
     res .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>l,'value'=>'ob_get_clean()')) . ";\n";
 }
 
-                  // registered object tag with modifiers
-smartytag(res)   ::= LDEL ID(i) PTR ID(me) modifierlist(l) attributes(a). {
-    res = "ob_start();\n".$this->compiler->compileTag(i,a,array('object_methode'=>me)).'echo ';
-    res .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>l,'value'=>'ob_get_clean()')) . ";\n";
-}
 
                   // {if}, {elseif} and {while} tag
 smartytag(res)   ::= LDELIF(i) expr(ie). {
@@ -398,15 +388,6 @@ smartytag(res)   ::= LDELSLASH ID(i). {
 
 smartytag(res)   ::= LDELSLASH ID(i) modifierlist(l). {
     res = $this->compiler->compileTag(i.'close',array(),array('modifier_list'=>l));
-}
-
-                  // end of block object tag  {/....}
-smartytag(res)   ::= LDELSLASH ID(i) PTR ID(m). {
-    res = $this->compiler->compileTag(i.'close',array(),array('object_methode'=>m));
-}
-
-smartytag(res)   ::= LDELSLASH ID(i) PTR ID(m) modifierlist(l). {
-    res = $this->compiler->compileTag(i.'close',array(),array('object_methode'=>m, 'modifier_list'=>l));
 }
 
 //
