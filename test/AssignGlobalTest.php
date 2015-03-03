@@ -1,13 +1,13 @@
 <?php
 /**
-* Smarty PHPunit tests assignGlobal methode  and {assignGlobal} tag
+* Smarty PHPunit tests assignGlobal method  and {assignGlobal} tag
 *
 * @package PHPunit
 * @author Uwe Tews
 */
 
 /**
-* class for assignGlobal methode  and {assignGlobal} tag tests
+* class for assignGlobal method  and {assignGlobal} tag tests
 */
 class AssignGlobalTest extends PHPUnit_Framework_TestCase
 {

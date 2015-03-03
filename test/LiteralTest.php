@@ -1,6 +1,6 @@
 <?php
 /**
-* Smarty PHPunit tests appendByRef methode
+* Smarty PHPunit tests appendByRef method
 *
 * @package PHPunit
 * @author Uwe Tews

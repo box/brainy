@@ -26,12 +26,11 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @param  mixed|void  $cache_id         no-op
      * @param  mixed|void  $compile_id       compile id to be used with this template
      * @param  object|void $parent           next higher level of Smarty variables
-     * @param  bool|void   $display          true: display, false: fetch
+     * @param  bool|void   $display          noop
      * @param  bool|void   $merge_tpl_vars   if true parent template variables merged in to local scope
-     * @param  bool|void   $no_output_filter if true do not run output filter
      * @return string rendered template output
      */
-    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false) {
+    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true) {
         if ($template === null && $this instanceof $this->template_class) {
             $template = $this;
         }
@@ -75,95 +74,89 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
             $_template->tpl_vars = $tpl_vars;
             $_template->config_vars = $config_vars;
         }
+
         // dummy local smarty variable
-        if (!isset($_template->tpl_vars['smarty'])) {
-            $_template->tpl_vars['smarty'] = new Smarty_Variable;
-        }
+        $_template->tpl_vars['smarty'] = new Smarty_Variable;
+
         if (isset($this->smarty->error_reporting)) {
             $_smarty_old_error_level = error_reporting($this->smarty->error_reporting);
         }
+
         // must reset merge template date
         $_template->smarty->merged_templates_func = array();
         // get rendered template
         // checks if template exists
         if (!$_template->source->exists) {
+            $parent_resource = '';
             if ($_template->parent instanceof Smarty_Internal_Template) {
                 $parent_resource = " in '{$_template->parent->template_resource}'";
-            } else {
-                $parent_resource = '';
             }
             throw new SmartyException("Unable to load template {$_template->source->type} '{$_template->source->name}'{$parent_resource}");
         }
+
         // read from cache or render
-        // render template (not loaded and not in cache)
-        if (!$_template->source->uncompiled) {
+        if ($_template->source->uncompiled) {
+            try {
+                ob_start();
+                $_template->source->renderUncompiled($_template);
+            } catch (Exception $e) {
+                ob_get_clean();
+                throw $e;
+            }
+        } elseif ($_template->source->recompiled) {
             $_smarty_tpl = $_template;
-            if ($_template->source->recompiled) {
-                $code = $_template->compiler->compileTemplate($_template);
-                try {
-                    ob_start();
-                    eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
-                    unset($code);
-                } catch (Exception $e) {
-                    ob_get_clean();
-                    throw $e;
-                }
-            } else {
-                if (!$_template->compiled->exists || ($_template->smarty->force_compile && !$_template->compiled->isCompiled)) {
-                    $_template->compileTemplateSource();
-                    require $_template->compiled->filepath;
-                    $_template->compiled->loaded = true;
-                    $_template->compiled->isCompiled = true;
-                }
-                if (!$_template->compiled->loaded) {
-                    include($_template->compiled->filepath);
-                    if ($_template->mustCompile) {
-                        // recompile and load again
-                        $_template->compileTemplateSource();
-                        require $_template->compiled->filepath;
-                        $_template->compiled->isCompiled = true;
-                    }
-                    $_template->compiled->loaded = true;
-                } else {
-                    $_template->decodeProperties($_template->compiled->_properties, false);
-                }
-                try {
-                    ob_start();
-                    if (empty($_template->properties['unifunc']) || !is_callable($_template->properties['unifunc'])) {
-                        throw new SmartyException("Invalid compiled template for '{$_template->template_resource}'");
-                    }
-                    array_unshift($_template->_capture_stack, array());
-                    //
-                    // render compiled template
-                    //
-                    call_user_func($_template->properties['unifunc'], $_template);
-                    // any unclosed {capture} tags ?
-                    if (isset($_template->_capture_stack[0][0])) {
-                        $_template->capture_error();
-                    }
-                    array_shift($_template->_capture_stack);
-                } catch (Exception $e) {
-                    ob_get_clean();
-                    // if (isset($code)) echo $code;
-                    throw $e;
-                }
+            $code = $_template->compiler->compileTemplate($_template);
+            try {
+                ob_start();
+                eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
+                unset($code);
+            } catch (Exception $e) {
+                ob_get_clean();
+                throw $e;
             }
         } else {
-            if ($_template->source->uncompiled) {
-                try {
-                    ob_start();
-                    $_template->source->renderUncompiled($_template);
-                } catch (Exception $e) {
-                    ob_get_clean();
-                    throw $e;
+            $_smarty_tpl = $_template;
+            if (!$_template->compiled->exists || ($_template->smarty->force_compile && !$_template->compiled->isCompiled)) {
+                $_template->compileTemplateSource();
+                require $_template->compiled->filepath;
+                $_template->compiled->loaded = true;
+                $_template->compiled->isCompiled = true;
+            }
+            if (!$_template->compiled->loaded) {
+                require $_template->compiled->filepath;
+                if ($_template->mustCompile) {
+                    // recompile and load again
+                    $_template->compileTemplateSource();
+                    require $_template->compiled->filepath;
+                    $_template->compiled->isCompiled = true;
                 }
+                $_template->compiled->loaded = true;
             } else {
-                throw new SmartyException("Resource '$_template->source->type' must have 'renderUncompiled' method");
+                $_template->decodeProperties($_template->compiled->_properties, false);
+            }
+            try {
+                ob_start();
+                if (empty($_template->properties['unifunc']) || !is_callable($_template->properties['unifunc'])) {
+                    throw new SmartyException("Invalid compiled template for '{$_template->template_resource}'");
+                }
+                array_unshift($_template->_capture_stack, array());
+                //
+                // render compiled template
+                //
+                call_user_func($_template->properties['unifunc'], $_template);
+                // any unclosed {capture} tags ?
+                if (isset($_template->_capture_stack[0][0])) {
+                    $_template->capture_error();
+                }
+                array_shift($_template->_capture_stack);
+            } catch (Exception $e) {
+                ob_get_clean();
+                // if (isset($code)) echo $code;
+                throw $e;
             }
         }
-        $_output = ob_get_clean();
-        // echo $_output;
-        // return;
+        $output = ob_get_clean();
+
         if (!$_template->source->recompiled && empty($_template->properties['file_dependency'][$_template->source->uid])) {
             $_template->properties['file_dependency'][$_template->source->uid] = array($_template->source->filepath, $_template->source->timestamp, $_template->source->type);
         }
@@ -177,31 +170,21 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 }
             }
         }
-        if (!$no_output_filter && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
-            $_output = Smarty_Internal_Filter_Handler::runFilter('output', $_output, $_template);
+
+        if (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output'])) {
+            $output = Smarty_Internal_Filter_Handler::runFilter('output', $output, $_template);
         }
         if (isset($this->error_reporting)) {
             error_reporting($_smarty_old_error_level);
         }
-        // display or fetch
-        if ($display) {
-            echo $_output;
-            if ($merge_tpl_vars) {
-                // restore local variables
-                $_template->tpl_vars = $save_tpl_vars;
-                $_template->config_vars =  $save_config_vars;
-            }
 
-            return;
-        } else {
-            if ($merge_tpl_vars) {
-                // restore local variables
-                $_template->tpl_vars = $save_tpl_vars;
-                $_template->config_vars =  $save_config_vars;
-            }
-            // return fetched content
-            return $_output;
+        if ($merge_tpl_vars) {
+            // restore local variables
+            $_template->tpl_vars = $save_tpl_vars;
+            $_template->config_vars =  $save_config_vars;
         }
+
+        return $output;
     }
 
     /**
@@ -223,8 +206,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @return void
      */
     public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) {
-        // display template
-        $this->fetch($template, null, $compile_id, $parent, true);
+        echo $this->fetch($template, null, $compile_id, $parent);
     }
 
     /**
@@ -354,8 +336,12 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
             }
         }
         // register the object
-        $this->smarty->registered_objects[$object_name] =
-        array($object_impl, (array) $allowed, (boolean) $smarty_args, (array) $block_methods);
+        $this->smarty->registered_objects[$object_name] = array(
+            $object_impl,
+            (array) $allowed,
+            (boolean) $smarty_args,
+            (array) $block_methods
+        );
 
         return $this;
     }
@@ -590,7 +576,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 // lcfirst() not available < PHP 5.3.0, so improvise
                 $property_name = strtolower(substr($name, 3, 1)) . substr($name, 4);
                 // convert camel case to underscored name
-                $property_name = preg_replace_callback('/([A-Z])/', array($this,'replaceCamelcase'), $property_name);
+                $property_name = preg_replace_callback('/([A-Z])/', array($this, 'replaceCamelcase'), $property_name);
                 $_resolved_property_name[$name] = $property_name;
             }
             if (isset($_resolved_property_source[$property_name])) {
@@ -611,9 +597,9 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 return $this->$property_name = $args[0];
             } elseif ($_is_this === false) {
                 if ($first3 == 'get')
-                return $this->smarty->$property_name;
+                    return $this->smarty->$property_name;
                 else
-                return $this->smarty->$property_name = $args[0];
+                    return $this->smarty->$property_name = $args[0];
             } else {
                 throw new SmartyException("property '$property_name' does not exist.");
 

@@ -79,7 +79,7 @@ class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCom
     }
 
     /**
-     * Methode to compile a Smarty template
+     * method to compile a Smarty template
      *
      * @param  mixed $_content template source
      * @return bool  true if compiling succeeded, false if it failed

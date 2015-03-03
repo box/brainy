@@ -117,7 +117,7 @@ class ModifierTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("mymodifier static 1", $this->smarty->fetch($tpl));
     }
     /**
-    * test registered modifier methode call
+    * test registered modifier method call
     */
     public function testModifierRegisteredMethodCall() {
         $obj= new testmodifierclass();

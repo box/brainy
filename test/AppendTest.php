@@ -1,6 +1,6 @@
 <?php
 /**
-* Smarty PHPunit tests append methode
+* Smarty PHPunit tests append method
 *
 * @package PHPunit
 * @author Uwe Tews

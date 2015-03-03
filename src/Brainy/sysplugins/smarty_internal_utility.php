@@ -676,7 +676,6 @@ class Smarty_Internal_Utility
                 "function.html_select_time.php" => true,
                 "function.html_table.php" => true,
                 "function.mailto.php" => true,
-                "function.math.php" => true,
                 "modifier.capitalize.php" => true,
                 "modifier.date_format.php" => true,
                 "modifier.debug_print_var.php" => true,

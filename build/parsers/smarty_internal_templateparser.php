@@ -1202,33 +1202,33 @@ static public $yy_action = array(
     public $yystack = array();  /* The parser's stack */
 
     public $yyTokenName = array(
-  '$',             'VERT',          'COLON',         'RDEL',        
-  'COMMENT',       'TEXT',          'STRIPON',       'STRIPOFF',    
-  'BLOCKSOURCE',   'LITERALSTART',  'LITERALEND',    'LITERAL',     
-  'LDEL',          'EQUAL',         'DOLLAR',        'ID',          
-  'PTR',           'LDELIF',        'LDELFOR',       'SEMICOLON',   
-  'INCDEC',        'TO',            'STEP',          'LDELFOREACH', 
+  '$',             'VERT',          'COLON',         'RDEL',
+  'COMMENT',       'TEXT',          'STRIPON',       'STRIPOFF',
+  'BLOCKSOURCE',   'LITERALSTART',  'LITERALEND',    'LITERAL',
+  'LDEL',          'EQUAL',         'DOLLAR',        'ID',
+  'PTR',           'LDELIF',        'LDELFOR',       'SEMICOLON',
+  'INCDEC',        'TO',            'STEP',          'LDELFOREACH',
   'SPACE',         'AS',            'APTR',          'LDELSETFILTER',
-  'SMARTYBLOCKCHILDPARENT',  'LDELSLASH',     'ATTR',          'INTEGER',     
-  'COMMA',         'OPENP',         'CLOSEP',        'MATH',        
-  'UNIMATH',       'ANDSYM',        'ISIN',          'ISDIVBY',     
-  'ISNOTDIVBY',    'ISEVEN',        'ISNOTEVEN',     'ISEVENBY',    
-  'ISNOTEVENBY',   'ISODD',         'ISNOTODD',      'ISODDBY',     
-  'ISNOTODDBY',    'INSTANCEOF',    'QMARK',         'NOT',         
+  'SMARTYBLOCKCHILDPARENT',  'LDELSLASH',     'ATTR',          'INTEGER',
+  'COMMA',         'OPENP',         'CLOSEP',        'MATH',
+  'UNIMATH',       'ANDSYM',        'ISIN',          'ISDIVBY',
+  'ISNOTDIVBY',    'ISEVEN',        'ISNOTEVEN',     'ISEVENBY',
+  'ISNOTEVENBY',   'ISODD',         'ISNOTODD',      'ISODDBY',
+  'ISNOTODDBY',    'INSTANCEOF',    'QMARK',         'NOT',
   'TYPECAST',      'HEX',           'DOT',           'SINGLEQUOTESTRING',
-  'AT',            'HATCH',         'OPENB',         'CLOSEB',      
-  'EQUALS',        'NOTEQUALS',     'GREATERTHAN',   'LESSTHAN',    
+  'AT',            'HATCH',         'OPENB',         'CLOSEB',
+  'EQUALS',        'NOTEQUALS',     'GREATERTHAN',   'LESSTHAN',
   'GREATEREQUAL',  'LESSEQUAL',     'IDENTITY',      'NONEIDENTITY',
-  'MOD',           'LAND',          'LOR',           'LXOR',        
-  'QUOTE',         'DOLLARID',      'error',         'start',       
-  'template',      'template_element',  'smartytag',     'literal',     
+  'MOD',           'LAND',          'LOR',           'LXOR',
+  'QUOTE',         'DOLLARID',      'error',         'start',
+  'template',      'template_element',  'smartytag',     'literal',
   'literal_elements',  'literal_element',  'value',         'modifierlist',
-  'attributes',    'expr',          'variable',      'statement',   
-  'statements',    'optspace',      'varvar',        'foraction',   
-  'modparameters',  'attribute',     'variablebase',  'ternary',     
-  'array',         'ifcond',        'lop',           'function',    
+  'attributes',    'expr',          'variable',      'statement',
+  'statements',    'optspace',      'varvar',        'foraction',
+  'modparameters',  'attribute',     'variablebase',  'ternary',
+  'array',         'ifcond',        'lop',           'function',
   'doublequoted_with_quotes',  'variableinternal',  'indexdef',      'objectelement',
-  'varvarele',     'method',        'params',        'modifier',    
+  'varvarele',     'method',        'params',        'modifier',
   'modparameter',  'arrayelements',  'arrayelement',  'doublequoted',
   'doublequotedcontent',
     );
@@ -2210,7 +2210,7 @@ static public $yy_action = array(
 #line 2206 "smarty_internal_templateparser.php"
 #line 294 "smarty_internal_templateparser.y"
     function yy_r28(){
-    $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -3]->minor,$this->yystack[$this->yyidx + 0]->minor,array('object_methode'=>$this->yystack[$this->yyidx + -1]->minor));
+    $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -3]->minor,$this->yystack[$this->yyidx + 0]->minor,array('object_method'=>$this->yystack[$this->yyidx + -1]->minor));
     }
 #line 2211 "smarty_internal_templateparser.php"
 #line 299 "smarty_internal_templateparser.y"
@@ -2221,7 +2221,7 @@ static public $yy_action = array(
 #line 2217 "smarty_internal_templateparser.php"
 #line 305 "smarty_internal_templateparser.y"
     function yy_r30(){
-    $this->_retvalue = "ob_start();\n".$this->compiler->compileTag($this->yystack[$this->yyidx + -4]->minor,$this->yystack[$this->yyidx + 0]->minor,array('object_methode'=>$this->yystack[$this->yyidx + -2]->minor)).'echo ';
+    $this->_retvalue = "ob_start();\n".$this->compiler->compileTag($this->yystack[$this->yyidx + -4]->minor,$this->yystack[$this->yyidx + 0]->minor,array('object_method'=>$this->yystack[$this->yyidx + -2]->minor)).'echo ';
     $this->_retvalue .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>$this->yystack[$this->yyidx + -1]->minor,'value'=>'ob_get_clean()')) . ";\n";
     }
 #line 2223 "smarty_internal_templateparser.php"
@@ -2306,12 +2306,12 @@ static public $yy_action = array(
 #line 2302 "smarty_internal_templateparser.php"
 #line 406 "smarty_internal_templateparser.y"
     function yy_r50(){
-    $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -2]->minor.'close',array(),array('object_methode'=>$this->yystack[$this->yyidx + 0]->minor));
+    $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -2]->minor.'close',array(),array('object_method'=>$this->yystack[$this->yyidx + 0]->minor));
     }
 #line 2307 "smarty_internal_templateparser.php"
 #line 410 "smarty_internal_templateparser.y"
     function yy_r51(){
-    $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -3]->minor.'close',array(),array('object_methode'=>$this->yystack[$this->yyidx + -1]->minor, 'modifier_list'=>$this->yystack[$this->yyidx + 0]->minor));
+    $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -3]->minor.'close',array(),array('object_method'=>$this->yystack[$this->yyidx + -1]->minor, 'modifier_list'=>$this->yystack[$this->yyidx + 0]->minor));
     }
 #line 2312 "smarty_internal_templateparser.php"
 #line 418 "smarty_internal_templateparser.y"

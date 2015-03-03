@@ -1,6 +1,6 @@
 <?php
 /**
-* Smarty PHPunit tests for templateExists methode
+* Smarty PHPunit tests for templateExists method
 *
 * @package PHPunit
 * @author Uwe Tews
