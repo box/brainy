@@ -33,13 +33,6 @@ class Smarty_Resource_Extendsall extends Smarty_Internal_Resource_Extends
             } catch (SmartyException $e) {}
         }
 
-        if (!$sources) {
-            $source->exists = false;
-            $source->template = $_template;
-
-            return;
-        }
-
         $sources = array_reverse($sources, true);
         reset($sources);
         $s = current($sources);

@@ -18,10 +18,6 @@ class Smarty_Resource_Db4 extends Smarty_Resource
     }
 
     public function getContent(Smarty_Template_Source $source) {
-        if ($source instanceof Smarty_Config_Source) {
-            return "foo = 'bar'\n";
-        }
-
-        return '{$x="hello world"}{$x}';
+        return "foo = 'bar'\n";
     }
 }
