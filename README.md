@@ -13,10 +13,10 @@ Please report any problems that you encounter.
 ## Why Brainy?
 
 - Brainy generates cleaner and faster code than Smarty by default.
+- Brainy has security defaults that align better with [best practices](http://www.phptherightway.com/#security).
 - Brainy removes features that are infrequently used and increase code bloat.
-  Brainy's feature set promotes best practices and discourages hacks.
 - Brainy is safer than Smarty in that it removes support for features like
-  `eval` and injecting arbitrary PHP into a template.
+  `eval` and injecting arbitrary PHP into a template. Brainy uses less PHP magic.
 
 
 ## Getting Started
@@ -53,16 +53,6 @@ see the wiki page on [Hacking on Brainy](https://github.com/box/brainy/wiki/Hack
 
 ### Where is Brainy headed?
 
-The following is the direction that the project is headed in:
-
-- **Phase 1**: Provide a clean, drop-in replacement for Smarty that generates
-  cleaner code and increases code quality.
-- **Phase 2**: Provide a backwards-compatible interface for allowing templates
-  to compile and render asynchronously.
-- **Phase 3**: Allow templates to be compiled to [Hack](http://hacklang.org/)
-  and add full async support.
-
-
 See [the project roadmap](https://github.com/box/brainy/wiki/Roadmap)
 for information on upcoming releases.
 
@@ -79,6 +69,8 @@ If you're interested in helping out, pull requests for the following tasks will 
   - `@` error suppression
   - etc.
 - Remove workarounds for unsupported versions of PHP.
+- Help identify and resolve potential security issues, or find ways to help developers avoid security issues.
+- Performance optimization of generated code
 
 At the time of writing, the project has approximately 68% line coverage.
 
