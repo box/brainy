@@ -9,6 +9,7 @@ class SmartyTests
     public static $smartyBC = null;
 
     public static function _init($smarty) {
+        Smarty::$enforce_expression_modifiers = array();
         $smarty->setTemplateDir(realpath('test' . DS . 'templates' . DS));
         $smarty->setCompileDir(realpath('test' . DS . 'compiled' . DS));
         $smarty->setPluginsDir(SMARTY_PLUGINS_DIR);
