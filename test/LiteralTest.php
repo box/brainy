@@ -1,10 +1,8 @@
 <?php
 /**
-* Smarty PHPunit tests appendByRef method
-*
-* @package PHPunit
-* @author Uwe Tews
-*/
+ * @package PHPunit
+ * @author Uwe Tews
+ */
 
 /**
 * class for appendByRef tests
@@ -16,12 +14,14 @@ class LiteralTest extends PHPUnit_Framework_TestCase
         SmartyTests::init();
     }
 
-    /*
-    *  Test literal tag
-    */
     public function testLiteralTag() {
         $tpl = $this->smarty->createTemplate("eval:{literal} {\$foo} {/literal}");
         $this->assertEquals(' {$foo} ', $this->smarty->fetch($tpl));
+    }
+
+    public function testLiteralTagWithDoubleBackslashes() {
+        $tpl = $this->smarty->createTemplate("eval:{literal} \\\\ {/literal}"); // \\\\ -> \\
+        $this->assertEquals(' \\\\ ', $this->smarty->fetch($tpl));
     }
 
     public function testBlockInLiteralTag() {
