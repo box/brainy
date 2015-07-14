@@ -54,7 +54,7 @@ class SmartyBC extends Smarty
      * @param array $options options to set during initialization, e.g. array( 'forceCompile' => false )
      */
     public function __construct(array $options=array()) {
-        parent::__construct($options);
+        parent::__construct();
     }
 
     /**
