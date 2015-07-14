@@ -1485,19 +1485,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
     }
 
     /**
-     * Run installation test
-     *
-     * This function verifies that all required working folders of the current
-     * installation can be accessed appropriately.
-     *
-     * @param  array   $errors Array to write errors into, rather than outputting them
-     * @return boolean true if setup is fine, false if something is wrong
-     */
-    public function testInstall(&$errors=null) {
-        return Smarty_Internal_Utility::testInstall($this, $errors);
-    }
-
-    /**
      * Error Handler to mute expected messages
      *
      * @link http://php.net/set_error_handler
