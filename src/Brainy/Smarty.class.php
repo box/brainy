@@ -763,12 +763,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public static $_smarty_vars = array();
     /**
-     * start time for execution time calculation
-     * @var int
-     * @internal
-     */
-    public $start_time = 0;
-    /**
      * default file permissions
      * @var int
      * @todo Make this a constant
@@ -825,16 +819,11 @@ class Smarty extends Smarty_Internal_TemplateBase {
         if (is_callable('mb_internal_encoding')) {
             mb_internal_encoding(Smarty::$_CHARSET);
         }
-        $this->start_time = microtime(true);
         // set default dirs
         $this->setTemplateDir('.' . DS . 'templates' . DS)
             ->setCompileDir('.' . DS . 'compiled' . DS)
             ->setPluginsDir(SMARTY_PLUGINS_DIR)
             ->setConfigDir('.' . DS . 'configs' . DS);
-
-        if (isset($_SERVER['SCRIPT_NAME'])) {
-            $this->assignGlobal('SCRIPT_NAME', $_SERVER['SCRIPT_NAME']);
-        }
     }
 
     /**
