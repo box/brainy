@@ -157,13 +157,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
 
 
     /**
-     * When passed to various cache-clearing methods, expired cache items will
-     * be removed.
-     * @var int
-     */
-    const CLEAR_EXPIRED = -1;
-
-    /**
      * Disables checking templates of compiled files to detect changes.
      * @var int
      * @see Smarty::$compile_check Usage Information
