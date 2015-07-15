@@ -377,31 +377,6 @@ class Smarty_Internal_Data
     }
 
     /**
-     * gets  a stream variable
-     *
-     * @param  string $variable the stream of the variable
-     * @return mixed  the value of the stream variable
-     */
-    public function getStreamVariable($variable) {
-        $_result = '';
-        $fp = fopen($variable, 'r+');
-        if ($fp) {
-            while (!feof($fp) && ($current_line = fgets($fp)) !== false ) {
-                $_result .= $current_line;
-            }
-            fclose($fp);
-
-            return $_result;
-        }
-
-        if ($this->smarty->error_unassigned) {
-            throw new SmartyException('Undefined stream variable "' . $variable . '"');
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Returns a single or all config variables
      *
      * @param  string|null $varname Variable name or null (to retrieve all)

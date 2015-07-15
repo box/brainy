@@ -91,13 +91,6 @@ class Smarty_Security {
      */
     public $disabled_modifiers = array();
     /**
-     * This is an array of trusted streams.
-     *
-     * If empty all streams are allowed. IF null, no streams are allowed
-     * @var string[]
-     */
-    public $streams = array('file');
-    /**
      * When true, constants can be accessed from templates
      * @var boolean
      */
@@ -252,21 +245,6 @@ class Smarty_Security {
         }
 
         return false; // should not, but who knows what happens to the compiler in the future?
-    }
-
-    /**
-     * Check if stream is trusted.
-     *
-     * @param  string          $stream_name The name of the stream
-     * @return boolean         true if stream is trusted
-     * @throws SmartyException if stream is not trusted
-     */
-    public function isTrustedStream($stream_name) {
-        if (isset($this->streams) && (empty($this->streams) || in_array($stream_name, $this->streams))) {
-            return true;
-        }
-
-        throw new SmartyException("stream '{$stream_name}' not allowed by security setting");
     }
 
     /**

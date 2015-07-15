@@ -278,7 +278,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
         $this->has_code = true;
         $this->has_output = false;
         // log tag/attributes
-        if (isset($this->smarty->get_used_tags) && $this->smarty->get_used_tags) {
+        if ($this->smarty->get_used_tags) {
             $this->template->used_tags[] = array($tag, $args);
         }
         // compile the smarty tag (required compile classes to compile the tag are autoloaded)

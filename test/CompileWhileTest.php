@@ -28,7 +28,7 @@ class CompileWhileTest extends PHPUnit_Framework_TestCase
     * test {while 'statement'} tag
     */
     public function testWhileStatement() {
-        $tpl = $this->smarty->createTemplate('eval:{$y=5}{while $y=$y-1}{$y}{/while}');
+        $tpl = $this->smarty->createTemplate('eval:{$y=4}{while $y}{$y}{$y=$y-1}{/while}');
         $this->assertEquals("4321", $this->smarty->fetch($tpl));
     }
 }

@@ -24,7 +24,6 @@ class StrictModeTest extends Smarty_TestCase
         return array(
             array('{$foo="bar" scope="global"}'), // Passing attributes in shorthand assignments
             array('{${$foo}="bar"}'), // Variable variable assignment
-            array('{$foo:bar}'), // Resource and stream access
             array('{${$foo}}'), // Variable variable lookups
             array('{$foo.$bar}'), // Variable variable indices
             array('{$foo.$bar@zap}'), // Variable variable indices

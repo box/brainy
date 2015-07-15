@@ -307,25 +307,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
     }
 
     /**
-     * Registers static classes to be used in templates
-     *
-     * @param  string                       $class      name of template class
-     * @param  string                       $class_impl the referenced PHP class to register
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
-     * @throws SmartyException              if $class_impl does not refer to an existing class
-     */
-    public function registerClass($class_name, $class_impl) {
-        // test if exists
-        if (!class_exists($class_impl)) {
-            throw new SmartyException("Undefined class '$class_impl' in register template class");
-        }
-        // register the class
-        $this->smarty->registered_classes[$class_name] = $class_impl;
-
-        return $this;
-    }
-
-    /**
      * Registers a default plugin handler
      *
      * A default plugin handler gets called on undefined tags.

@@ -510,13 +510,10 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * for changes. If changes exist, the template will be recompiled
      * regardless of whether it has been compiled or cached. Disabling this
      * in production may yield performance improvements if templates and config
-     * do not change. If set to Smarty::COMPILECHECK_CACHEMISS, compiled
-     * templates are revalidated once a cache file is generated, preventing
-     * multiple compile_checks when a cached template expires.
+     * do not change.
      * @var boolean|int
      * @uses Smarty::COMPILECHECK_ON
      * @uses Smarty::COMPILECHECK_OFF
-     * @uses Smarty::COMPILECHECK_CACHEMISS
      */
     public $compile_check = Smarty::COMPILECHECK_ON;
     /**
@@ -686,12 +683,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public $plugin_search_order = array('function', 'block', 'compiler', 'class');
     /**
-     * registered classes
-     * @var array
-     * @internal
-     */
-    public $registered_classes = array();
-    /**
      * registered filters
      * @var array
      * @internal
@@ -709,12 +700,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @internal
      */
     public $_resource_handlers = array();
-    /**
-     * registered cache resources
-     * @var array
-     * @internal
-     */
-    public $registered_cache_resources = array();
     /**
      * autoload filter
      * @var array
@@ -1477,8 +1462,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
 
         // walk the muted directories and test against $errfile
         foreach (Smarty::$_muted_directories as $key => &$dir) {
-            // var_dump($dir);
-            // var_dump($errfile);
             if (!$dir) {
                 // resolve directory and length for speedy comparisons
                 $file = realpath($key);
@@ -1492,7 +1475,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
                     'length' => strlen($file),
                 );
             }
-            // var_dump(strncmp($errfile, $dir['file'], $dir['length']));
             if (strncmp($errfile, $dir['file'], $dir['length']) === 0) {
                 $_is_muted_directory = true;
                 break;

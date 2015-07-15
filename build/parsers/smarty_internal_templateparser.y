@@ -334,16 +334,6 @@ smartytag(res)   ::= LDELIF(i) expr(ie) attributes(a). {
     res = $this->compiler->compileTag(($tag == 'else if')? 'elseif' : $tag,a,array('if condition'=>ie));
 }
 
-smartytag(res)   ::= LDELIF(i) statement(ie). {
-    $tag = trim(substr(i,$this->lex->ldel_length));
-    res = $this->compiler->compileTag(($tag == 'else if')? 'elseif' : $tag,array(),array('if condition'=>ie));
-}
-
-smartytag(res)   ::= LDELIF(i) statement(ie)  attributes(a). {
-    $tag = trim(substr(i,$this->lex->ldel_length));
-    res = $this->compiler->compileTag(($tag == 'else if')? 'elseif' : $tag,a,array('if condition'=>ie));
-}
-
                   // {for} tag
 smartytag(res)   ::= LDELFOR statements(st) SEMICOLON optspace expr(ie) SEMICOLON optspace DOLLAR varvar(v2) foraction(e2) attributes(a). {
     res = $this->compiler->compileTag('for',array_merge(a,array(array('start'=>st),array('ifexp'=>ie),array('var'=>v2),array('step'=>e2))),1);
@@ -514,12 +504,6 @@ expr(res)        ::= value(v). {
                  // ternary
 expr(res)        ::= ternary(v). {
     res = v;
-}
-
-                 // resources/streams
-expr(res)        ::= DOLLAR ID(i) COLON ID(i2). {
-    $this->compiler->assert_is_not_strict('Stream access is not supported in strict mode', $this);
-    res = '$_smarty_tpl->getStreamVariable(\''. i .'://'. i2 . '\')';
 }
 
                   // arithmetic expression

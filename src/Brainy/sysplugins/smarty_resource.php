@@ -40,7 +40,6 @@ abstract class Smarty_Resource
         'file' => true,
         'string' => true,
         'extends' => true,
-        'stream' => true,
         'eval' => true,
     );
 
@@ -272,8 +271,6 @@ abstract class Smarty_Resource
             }
         }
 
-        $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
-
         // relative file name?
         if (!preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $file)) {
             foreach ($_directories as $_directory) {
@@ -283,11 +280,7 @@ abstract class Smarty_Resource
                 }
                 if ($source->smarty->use_include_path && !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_directory)) {
                     // try PHP include_path
-                    if ($_stream_resolve_include_path) {
-                        $_filepath = stream_resolve_include_path($_filepath);
-                    } else {
-                        $_filepath = Smarty_Internal_Get_Include_Path::getIncludePath($_filepath);
-                    }
+                    $_filepath = Smarty_Internal_Get_Include_Path::getIncludePath($_filepath);
 
                     if ($_filepath !== false) {
                         if ($this->fileExists($source, $_filepath)) {
@@ -432,20 +425,6 @@ abstract class Smarty_Resource
                 // give it another try, now that the resource is registered properly
                 return self::load($smarty, $type);
             }
-        }
-
-        // try streams
-        $_known_stream = stream_get_wrappers();
-        if (in_array($type, $_known_stream)) {
-            // is known stream
-            if (is_object($smarty->security_policy)) {
-                $smarty->security_policy->isTrustedStream($type);
-            }
-            if (!isset(self::$resources['stream'])) {
-                self::$resources['stream'] = new Smarty_Internal_Resource_Stream();
-            }
-
-            return $smarty->_resource_handlers[$type] = self::$resources['stream'];
         }
 
         // TODO: try default_(template|config)_handler
