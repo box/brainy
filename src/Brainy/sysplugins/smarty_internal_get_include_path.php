@@ -35,8 +35,8 @@ class Smarty_Internal_Get_Include_Path
         }
 
         foreach ($_include_path as $_path) {
-            if (file_exists($_path . DS . $filepath)) {
-                return $_path . DS . $filepath;
+            if (file_exists($_path . DIRECTORY_SEPARATOR . $filepath)) {
+                return $_path . DIRECTORY_SEPARATOR . $filepath;
             }
         }
 

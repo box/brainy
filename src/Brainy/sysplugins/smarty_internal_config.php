@@ -104,12 +104,12 @@ class Smarty_Internal_Config
         $_filepath = sha1($this->source->filepath . $_flag);
         // if use_sub_dirs, break file into directories
         if ($this->smarty->use_sub_dirs) {
-            $_filepath = substr($_filepath, 0, 2) . DS
-                    . substr($_filepath, 2, 2) . DS
-                    . substr($_filepath, 4, 2) . DS
+            $_filepath = substr($_filepath, 0, 2) . DIRECTORY_SEPARATOR
+                    . substr($_filepath, 2, 2) . DIRECTORY_SEPARATOR
+                    . substr($_filepath, 4, 2) . DIRECTORY_SEPARATOR
                     . $_filepath;
         }
-        $_compile_dir_sep = $this->smarty->use_sub_dirs ? DS : '^';
+        $_compile_dir_sep = $this->smarty->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
         if (isset($_compile_id)) {
             $_filepath = $_compile_id . $_compile_dir_sep . $_filepath;
         }

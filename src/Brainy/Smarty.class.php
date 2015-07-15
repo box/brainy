@@ -31,18 +31,11 @@
 
 
 /**
- * define shorthand directory separator constant
- */
-if (!defined('DS')) {
-    define('DS', DIRECTORY_SEPARATOR);
-}
-
-/**
  * set SMARTY_DIR to absolute path to Smarty library files.
  * Sets SMARTY_DIR only if user application has not already defined it.
  */
 if (!defined('SMARTY_DIR')) {
-    define('SMARTY_DIR', dirname(__FILE__) . DS);
+    define('SMARTY_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 }
 
 /**
@@ -50,10 +43,10 @@ if (!defined('SMARTY_DIR')) {
  * Sets SMARTY_SYSPLUGINS_DIR only if user application has not already defined it.
  */
 if (!defined('SMARTY_SYSPLUGINS_DIR')) {
-    define('SMARTY_SYSPLUGINS_DIR', SMARTY_DIR . 'sysplugins' . DS);
+    define('SMARTY_SYSPLUGINS_DIR', SMARTY_DIR . 'sysplugins' . DIRECTORY_SEPARATOR);
 }
 if (!defined('SMARTY_PLUGINS_DIR')) {
-    define('SMARTY_PLUGINS_DIR', SMARTY_DIR . 'plugins' . DS);
+    define('SMARTY_PLUGINS_DIR', SMARTY_DIR . 'plugins' . DIRECTORY_SEPARATOR);
 }
 if (!defined('SMARTY_MBSTRING')) {
     define('SMARTY_MBSTRING', function_exists('mb_split'));
@@ -820,10 +813,10 @@ class Smarty extends Smarty_Internal_TemplateBase {
             mb_internal_encoding(Smarty::$_CHARSET);
         }
         // set default dirs
-        $this->setTemplateDir('.' . DS . 'templates' . DS)
-            ->setCompileDir('.' . DS . 'compiled' . DS)
+        $this->setTemplateDir('.' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR)
+            ->setCompileDir('.' . DIRECTORY_SEPARATOR . 'compiled' . DIRECTORY_SEPARATOR)
             ->setPluginsDir(SMARTY_PLUGINS_DIR)
-            ->setConfigDir('.' . DS . 'configs' . DS);
+            ->setConfigDir('.' . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -980,7 +973,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
     public function setTemplateDir($template_dir) {
         $this->template_dir = array();
         foreach ((array) $template_dir as $k => $v) {
-            $this->template_dir[$k] = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DS;
+            $this->template_dir[$k] = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DIRECTORY_SEPARATOR;
         }
 
         $this->joined_template_dir = join(DIRECTORY_SEPARATOR, $this->template_dir);
@@ -1002,7 +995,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
 
         if (is_array($template_dir)) {
             foreach ($template_dir as $k => $v) {
-                $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DS;
+                $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DIRECTORY_SEPARATOR;
                 if (is_int($k)) {
                     // indexes are not merged but appended
                     $this->template_dir[] = $v;
@@ -1012,7 +1005,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
                 }
             }
         } else {
-            $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($template_dir, '/\\')) . DS;
+            $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($template_dir, '/\\')) . DIRECTORY_SEPARATOR;
             if ($key !== null) {
                 // override directory at specified index
                 $this->template_dir[$key] = $v;
@@ -1049,7 +1042,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
     public function setConfigDir($config_dir) {
         $this->config_dir = array();
         foreach ((array) $config_dir as $k => $v) {
-            $this->config_dir[$k] = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DS;
+            $this->config_dir[$k] = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DIRECTORY_SEPARATOR;
         }
 
         $this->joined_config_dir = join(DIRECTORY_SEPARATOR, $this->config_dir);
@@ -1070,7 +1063,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
 
         if (is_array($config_dir)) {
             foreach ($config_dir as $k => $v) {
-                $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DS;
+                $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DIRECTORY_SEPARATOR;
                 if (is_int($k)) {
                     // indexes are not merged but appended
                     $this->config_dir[] = $v;
@@ -1080,13 +1073,13 @@ class Smarty extends Smarty_Internal_TemplateBase {
                 }
             }
         } else {
-            $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($config_dir, '/\\')) . DS;
+            $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($config_dir, '/\\')) . DIRECTORY_SEPARATOR;
             if ($key !== null) {
                 // override directory at specified index
-                $this->config_dir[$key] = rtrim($v, '/\\') . DS;
+                $this->config_dir[$key] = rtrim($v, '/\\') . DIRECTORY_SEPARATOR;
             } else {
                 // append new directory
-                $this->config_dir[] = rtrim($v, '/\\') . DS;
+                $this->config_dir[] = rtrim($v, '/\\') . DIRECTORY_SEPARATOR;
             }
         }
 
@@ -1118,7 +1111,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
     public function setPluginsDir($plugins_dir) {
         $this->plugins_dir = array();
         foreach ((array) $plugins_dir as $k => $v) {
-            $this->plugins_dir[$k] = rtrim($v, '/\\') . DS;
+            $this->plugins_dir[$k] = rtrim($v, '/\\') . DIRECTORY_SEPARATOR;
         }
 
         return $this;
@@ -1138,15 +1131,15 @@ class Smarty extends Smarty_Internal_TemplateBase {
             foreach ($plugins_dir as $k => $v) {
                 if (is_int($k)) {
                     // indexes are not merged but appended
-                    $this->plugins_dir[] = rtrim($v, '/\\') . DS;
+                    $this->plugins_dir[] = rtrim($v, '/\\') . DIRECTORY_SEPARATOR;
                 } else {
                     // string indexes are overridden
-                    $this->plugins_dir[$k] = rtrim($v, '/\\') . DS;
+                    $this->plugins_dir[$k] = rtrim($v, '/\\') . DIRECTORY_SEPARATOR;
                 }
             }
         } else {
             // append new directory
-            $this->plugins_dir[] = rtrim($plugins_dir, '/\\') . DS;
+            $this->plugins_dir[] = rtrim($plugins_dir, '/\\') . DIRECTORY_SEPARATOR;
         }
 
         $this->plugins_dir = array_unique($this->plugins_dir);
@@ -1170,7 +1163,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @return Smarty current Smarty instance for chaining
      */
     public function setCompileDir($compile_dir) {
-        $this->compile_dir = rtrim($compile_dir, '/\\') . DS;
+        $this->compile_dir = rtrim($compile_dir, '/\\') . DIRECTORY_SEPARATOR;
         if (!isset(Smarty::$_muted_directories[$this->compile_dir])) {
             Smarty::$_muted_directories[$this->compile_dir] = null;
         }

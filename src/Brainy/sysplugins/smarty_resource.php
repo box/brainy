@@ -117,12 +117,12 @@ abstract class Smarty_Resource
         $_filepath = $compiled->source->uid;
         // if use_sub_dirs, break file into directories
         if ($_template->smarty->use_sub_dirs) {
-            $_filepath = substr($_filepath, 0, 2) . DS
-             . substr($_filepath, 2, 2) . DS
-             . substr($_filepath, 4, 2) . DS
+            $_filepath = substr($_filepath, 0, 2) . DIRECTORY_SEPARATOR
+             . substr($_filepath, 2, 2) . DIRECTORY_SEPARATOR
+             . substr($_filepath, 4, 2) . DIRECTORY_SEPARATOR
              . $_filepath;
         }
-        $_compile_dir_sep = $_template->smarty->use_sub_dirs ? DS : '^';
+        $_compile_dir_sep = $_template->smarty->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
         if (isset($_compile_id)) {
             $_filepath = $_compile_id . $_compile_dir_sep . $_filepath;
         }
@@ -176,7 +176,7 @@ abstract class Smarty_Resource
             $_path = substr_replace($_path, '', $_pos, $_parent + 3 - $_pos);
         }
 
-        if ($ds && DS != '/') {
+        if ($ds && DIRECTORY_SEPARATOR != '/') {
             // don't we all just love windows?
             $_path = str_replace('/', '\\', $_path);
         }
@@ -208,12 +208,12 @@ abstract class Smarty_Resource
             if ($_template->parent->source->type != 'file' && $_template->parent->source->type != 'extends' && !$_template->parent->allow_relative_path) {
                 throw new SmartyException("Template '{$file}' cannot be relative to template of resource type '{$_template->parent->source->type}'");
             }
-            $file = dirname($_template->parent->source->filepath) . DS . $file;
+            $file = dirname($_template->parent->source->filepath) . DIRECTORY_SEPARATOR . $file;
             $_file_exact_match = true;
             if (!preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $file)) {
                 // the path gained from the parent template is relative to the current working directory
                 // as expansions (like include_path) have already been done
-                $file = getcwd() . DS . $file;
+                $file = getcwd() . DIRECTORY_SEPARATOR . $file;
             }
         }
 
@@ -221,14 +221,14 @@ abstract class Smarty_Resource
         if (!preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $file)) {
             // don't we all just love windows?
             $_path = str_replace('\\', '/', $file);
-            $_path = DS . trim($file, '/');
+            $_path = DIRECTORY_SEPARATOR . trim($file, '/');
             $_was_relative = true;
         } else {
             // don't we all just love windows?
             $_path = str_replace('\\', '/', $file);
         }
         $_path = $this->normalizePath($_path, false);
-        if (DS != '/') {
+        if (DIRECTORY_SEPARATOR != '/') {
             // don't we all just love windows?
             $_path = str_replace('/', '\\', $_path);
         }
@@ -499,7 +499,7 @@ abstract class Smarty_Resource
         // go relative to a given template?
         $_file_is_dotted = $name[0] == '.' && ($name[1] == '.' || $name[1] == '/' || $name[1] == "\\");
         if ($template instanceof Smarty_Internal_Template && $_file_is_dotted && ($template->source->type == 'file' || $template->parent->source->type == 'extends')) {
-            $name = dirname($template->source->filepath) . DS . $name;
+            $name = dirname($template->source->filepath) . DIRECTORY_SEPARATOR . $name;
         }
         return $resource->buildUniqueResourceName($template->smarty, $name);
     }
@@ -526,7 +526,7 @@ abstract class Smarty_Resource
         // go relative to a given template?
         $_file_is_dotted = isset($name[0]) && $name[0] == '.' && ($name[1] == '.' || $name[1] == '/' || $name[1] == "\\");
         if ($_file_is_dotted && isset($_template) && $_template->parent instanceof Smarty_Internal_Template && ($_template->parent->source->type == 'file' || $_template->parent->source->type == 'extends')) {
-            $name2 = dirname($_template->parent->source->filepath) . DS . $name;
+            $name2 = dirname($_template->parent->source->filepath) . DIRECTORY_SEPARATOR . $name;
         } else {
             $name2 = $name;
         }

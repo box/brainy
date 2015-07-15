@@ -10,10 +10,10 @@ class SmartyTests
 
     public static function _init($smarty) {
         Smarty::$enforce_expression_modifiers = array();
-        $smarty->setTemplateDir(realpath('test' . DS . 'templates' . DS));
-        $smarty->setCompileDir(realpath('test' . DS . 'compiled' . DS));
+        $smarty->setTemplateDir(realpath('test' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR));
+        $smarty->setCompileDir(realpath('test' . DIRECTORY_SEPARATOR . 'compiled' . DIRECTORY_SEPARATOR));
         $smarty->setPluginsDir(SMARTY_PLUGINS_DIR);
-        $smarty->setConfigDir(realpath('test' . DS . 'configs' . DS));
+        $smarty->setConfigDir(realpath('test' . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR));
         $smarty->template_objects = array();
         $smarty->config_vars = array();
         Smarty::$global_tpl_vars = array();

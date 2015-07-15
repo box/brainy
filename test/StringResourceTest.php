@@ -19,7 +19,7 @@ class StringResourceTest extends PHPUnit_Framework_TestCase
 
     protected function relative($path) {
         $path = str_replace( dirname(__FILE__), '.', $path );
-        if (DS == "\\") {
+        if (DIRECTORY_SEPARATOR == "\\") {
             $path = str_replace( "\\", "/", $path );
         }
 

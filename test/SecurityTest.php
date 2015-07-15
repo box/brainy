@@ -181,7 +181,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     * test trusted directory
     */
     public function testTrustedDirectory() {
-        $this->smarty->security_policy->secure_dir = array('test' . DS . 'templates_2' . DS);
+        $this->smarty->security_policy->secure_dir = array('test' . DIRECTORY_SEPARATOR . 'templates_2' . DIRECTORY_SEPARATOR);
         $this->assertEquals("hello world", $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}'));
     }
 
@@ -189,7 +189,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     * test not trusted directory
     */
     public function testNotTrustedDirectory() {
-        $this->smarty->security_policy->secure_dir = array('test' . DS . 'templates_3' . DS);
+        $this->smarty->security_policy->secure_dir = array('test' . DIRECTORY_SEPARATOR . 'templates_3' . DIRECTORY_SEPARATOR);
         try {
             $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}');
         } catch (Exception $e) {
@@ -210,13 +210,13 @@ class SecurityTest extends PHPUnit_Framework_TestCase
 
     public function testChangedTrustedDirectory() {
         $this->smarty->security_policy->secure_dir = array(
-            'test' . DS . 'templates_2' . DS,
+            'test' . DIRECTORY_SEPARATOR . 'templates_2' . DIRECTORY_SEPARATOR,
         );
         $this->assertEquals("hello world", $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}'));
 
         $this->smarty->security_policy->secure_dir = array(
-            'test' . DS . 'templates_2' . DS,
-            'test' . DS . 'templates_3' . DS,
+            'test' . DIRECTORY_SEPARATOR . 'templates_2' . DIRECTORY_SEPARATOR,
+            'test' . DIRECTORY_SEPARATOR . 'templates_3' . DIRECTORY_SEPARATOR,
         );
         $this->assertEquals("templates_3", $this->smarty->fetch('eval:{include file="test/templates_3/dirname.tpl"}'));
     }
