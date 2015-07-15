@@ -502,11 +502,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public $use_sub_dirs = false;
     /**
-     * When true, ambiguous resources are allowed.
-     * @var boolean
-     */
-    public $allow_ambiguous_resources = false;
-    /**
      * Controls the caching strategy.
      *
      * * If $compile_check is true, cached content will be regenerated when the templates or configs change.
@@ -1239,11 +1234,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
         }
 
         // already in template cache?
-        if ($this->allow_ambiguous_resources) {
-            $_templateId = Smarty_Resource::getUniqueTemplateName($this, $template) . $compile_id;
-        } else {
-            $_templateId = $this->joined_template_dir . '#' . $template . $compile_id;
-        }
+        $_templateId = $this->joined_template_dir . '#' . $template . $compile_id;
         if (isset($_templateId[150])) {
             $_templateId = sha1($_templateId);
         }

@@ -186,11 +186,7 @@ class Smarty_Internal_Utility
 
             // remove from template cache
             $tpl->source; // have the template registered before unset()
-            if ($smarty->allow_ambiguous_resources) {
-                $_templateId = $tpl->source->unique_resource . $tpl->compile_id;
-            } else {
-                $_templateId = $smarty->joined_template_dir . '#' . $resource_name . $tpl->compile_id;
-            }
+            $_templateId = $tpl->source->unique_resource . $tpl->compile_id;
             if (isset($_templateId[150])) {
                 $_templateId = sha1($_templateId);
             }
