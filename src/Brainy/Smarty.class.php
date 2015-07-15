@@ -51,19 +51,6 @@ if (!defined('SMARTY_PLUGINS_DIR')) {
 if (!defined('SMARTY_MBSTRING')) {
     define('SMARTY_MBSTRING', function_exists('mb_split'));
 }
-if (!defined('SMARTY_RESOURCE_CHAR_SET')) {
-    // UTF-8 can only be done properly when mbstring is available!
-    /**
-     * @deprecated in favor of Smarty::$_CHARSET
-     */
-    define('SMARTY_RESOURCE_CHAR_SET', SMARTY_MBSTRING ? 'UTF-8' : 'ISO-8859-1');
-}
-if (!defined('SMARTY_RESOURCE_DATE_FORMAT')) {
-    /**
-     * @deprecated in favor of Smarty::$_DATE_FORMAT
-     */
-    define('SMARTY_RESOURCE_DATE_FORMAT', '%b %e, %Y');
-}
 
 /**
  * register the class autoloader
@@ -145,7 +132,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * The current version string for the current version of Brainy.
      * @var string
      */
-    const SMARTY_VERSION = 'Brainy-1.0.0-dev';
+    const SMARTY_VERSION = 'Brainy-2.1.0';
 
     /**
      * Represents local scope.
@@ -313,14 +300,15 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * The character set to adhere to (e.g. "UTF-8")
      * @internal
+     * @deprecated The charset should be assumed to be UTF-8.
      */
-    public static $_CHARSET = SMARTY_RESOURCE_CHAR_SET;
+    public static $_CHARSET = 'UTF-8';
     /**
      * The date format to be used internally
      * (accepts date() and strftime())
      * @internal
      */
-    public static $_DATE_FORMAT = SMARTY_RESOURCE_DATE_FORMAT;
+    public static $_DATE_FORMAT = '%b %e, %Y';
     /**
      * Flag denoting if PCRE should run in UTF-8 mode
      * @internal
@@ -742,7 +730,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * When true, all variables will be implicitly wrapped in
      *
      * ```
-     * htmlspecialchars({$variable}, ENT_QUOTES, SMARTY_RESOURCE_CHAR_SET)
+     * htmlspecialchars({$variable}, ENT_QUOTES, 'UTF-8')
      * ```
      *
      * Variables may use the {$variable nofilter} syntax to prevent this behavior.
@@ -782,18 +770,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @todo Investigate whether this is necessary.
      */
     public $smarty;
-    /**
-     * required by the compiler for BC
-     * @var string
-     * @internal
-     */
-    public $_current_file = null;
-    /**
-     * internal flag to enable parser debugging
-     * @var bool
-     * @internal
-     */
-    public $_parserdebug = false;
     /**
      * Saved parameter of merged templates during compilation
      *

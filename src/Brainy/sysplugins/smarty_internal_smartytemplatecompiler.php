@@ -103,16 +103,8 @@ class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCom
             $mbEncoding = null;
         }
 
-        if ($this->smarty->_parserdebug) {
-            $this->parser->PrintTrace();
-            $this->lex->PrintTrace();
-        }
         // get tokens from lexer and parse them
         while ($this->lex->yylex() && !$this->abort_and_recompile) {
-            if ($this->smarty->_parserdebug) {
-                echo "<pre>Line {$this->lex->line} Parsing  {$this->parser->yyTokenName[$this->lex->token]} Token " .
-                    htmlentities($this->lex->value) . "</pre>";
-            }
             $this->parser->doParse($this->lex->token, $this->lex->value);
         }
 

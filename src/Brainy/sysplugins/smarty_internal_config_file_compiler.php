@@ -84,10 +84,8 @@ class Smarty_Internal_Config_File_Compiler
         // init the lexer/parser to compile the config file
         $lex = new Smarty_Internal_Configfilelexer($_content, $this->smarty);
         $parser = new Smarty_Internal_Configfileparser($lex, $this);
-        if ($this->smarty->_parserdebug) $parser->PrintTrace();
         // get tokens from lexer and parse them
         while ($lex->yylex()) {
-            if ($this->smarty->_parserdebug) echo "<br>Parsing  {$parser->yyTokenName[$lex->token]} Token {$lex->value} Line {$lex->line} \n";
             $parser->doParse($lex->token, $lex->value);
         }
         // finish parsing process

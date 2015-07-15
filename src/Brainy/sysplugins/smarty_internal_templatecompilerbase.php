@@ -210,7 +210,6 @@ abstract class Smarty_Internal_TemplateCompilerBase
         $loop = 0;
         // the $this->sources array can get additional elements while compiling by the {extends} tag
         while ($this->template->source = array_shift($this->sources)) {
-            $this->smarty->_current_file = $this->template->source->filepath;
             $no_sources = count($this->sources);
             if ($loop || $no_sources) {
                 $this->template->properties['file_dependency'][$this->template->source->uid] = array($this->template->source->filepath, $this->template->source->timestamp, $this->template->source->type);
@@ -237,7 +236,6 @@ abstract class Smarty_Internal_TemplateCompilerBase
         // restore source
         $this->template->source = $save_source;
         unset($save_source);
-        $this->smarty->_current_file = $this->template->source->filepath;
         // free memory
         unset($this->parser->root_buffer, $this->parser->current_buffer, $this->parser, $this->lex, $this->template);
         self::$_tag_objects = array();
@@ -573,14 +571,12 @@ abstract class Smarty_Internal_TemplateCompilerBase
     /**
      *  push current file and line offset on stack for tracing {block} source lines
      *
-     * @param string $file new filename
      * @param string $uid uid of file
      * @param string $debug false debug end_compile shall not be called
      * @param int $line line offset to source
      */
-    public function pushTrace($file, $uid, $line, $debug = true) {
-        array_push($this->trace_stack, array($this->smarty->_current_file, $this->trace_filepath, $this->trace_uid, $this->trace_line_offset));
-        $this->trace_filepath = $this->smarty->_current_file = $file;
+    public function pushTrace($uid, $line, $debug = true) {
+        array_push($this->trace_stack, array($this->trace_filepath, $this->trace_uid, $this->trace_line_offset));
         $this->trace_uid = $uid;
         $this->trace_line_offset = $line;
     }
@@ -591,10 +587,9 @@ abstract class Smarty_Internal_TemplateCompilerBase
      */
     public function popTrace() {
         $r = array_pop($this->trace_stack);
-        $this->smarty->_current_file = $r[0];
-        $this->trace_filepath = $r[1];
-        $this->trace_uid = $r[2];
-        $this->trace_line_offset = $r[3];
+        $this->trace_filepath = $r[0];
+        $this->trace_uid = $r[1];
+        $this->trace_line_offset = $r[2];
     }
 
     /**
