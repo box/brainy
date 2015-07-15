@@ -93,14 +93,13 @@ class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase
         if (empty($compiler->prefix_code)) {
             $this->openTag($compiler, 'elseif', array($nesting));
             return "} elseif ({$parameter['if condition']}) {\n";
-        } else {
-            $tmp = '';
-            foreach ($compiler->prefix_code as $code)
-            $tmp .= $code;
-            $compiler->prefix_code = array();
-            $this->openTag($compiler, 'elseif', array($nesting + 1));
-            return "} else {\n{$tmp}\nif ({$parameter['if condition']}) {\n";
         }
+
+        $tmp = '';
+        foreach ($compiler->prefix_code as $code) $tmp .= $code;
+        $compiler->prefix_code = array();
+        $this->openTag($compiler, 'elseif', array($nesting + 1));
+        return "} else {\n{$tmp}\nif ({$parameter['if condition']}) {\n";
     }
 
 }
@@ -114,13 +113,13 @@ class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase
 class Smarty_Internal_Compile_Ifclose extends Smarty_Internal_CompileBase
 {
     /**
-    * Compiles code for the {/if} tag
-    *
-    * @param array  $args       array with attributes from parser
-    * @param object $compiler   compiler object
-    * @param array  $parameter  array with compilation parameter
-    * @return string compiled code
-    */
+     * Compiles code for the {/if} tag
+     *
+     * @param array  $args       array with attributes from parser
+     * @param object $compiler   compiler object
+     * @param array  $parameter  array with compilation parameter
+     * @return string compiled code
+     */
     public function compile($args, $compiler, $parameter) {
         list($nesting) = $this->closeTag($compiler, array('if', 'else', 'elseif'));
         $tmp = '';
