@@ -278,16 +278,6 @@ abstract class Smarty_Resource
                 if ($this->fileExists($source, $_filepath)) {
                     return $this->normalizePath($_filepath);
                 }
-                if ($source->smarty->use_include_path && !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_directory)) {
-                    // try PHP include_path
-                    $_filepath = Smarty_Internal_Get_Include_Path::getIncludePath($_filepath);
-
-                    if ($_filepath !== false) {
-                        if ($this->fileExists($source, $_filepath)) {
-                            return $this->normalizePath($_filepath);
-                        }
-                    }
-                }
             }
         }
 
@@ -348,7 +338,7 @@ abstract class Smarty_Resource
     protected function fileExists(Smarty_Template_Source $source, $file) {
         $source->timestamp = is_file($file) ? $this->getFileTime($file) : false;
 
-        return $source->exists = !!$source->timestamp;
+        return $source->exists = (bool) $source->timestamp;
 
     }
 

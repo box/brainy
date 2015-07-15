@@ -376,12 +376,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public $error_unassigned = false;
     /**
-     * When `true`, the include_path will be respected for finding file resources.
-     * @var boolean
-     * @deprecated This can cause incompatibility issues between environments and generally causes confusion. It is a source of problems.
-     */
-    public $use_include_path = false;
-    /**
      * Directory that templates are stored in. See the following
      * methods instead:
      *
@@ -1333,25 +1327,11 @@ class Smarty extends Smarty_Internal_TemplateBase {
                 $_plugin_dir . strtolower($_plugin_filename),
             );
             foreach ($names as $file) {
-                if (file_exists($file)) {
-                    require_once($file);
-
-                    return $file;
+                if (!file_exists($file)) {
+                    continue;
                 }
-                if ($this->use_include_path && !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_plugin_dir)) {
-                    // try PHP include_path
-                    if ($_stream_resolve_include_path) {
-                        $file = stream_resolve_include_path($file);
-                    } else {
-                        $file = Smarty_Internal_Get_Include_Path::getIncludePath($file);
-                    }
-
-                    if ($file !== false) {
-                        require_once($file);
-
-                        return $file;
-                    }
-                }
+                require_once($file);
+                return $file;
             }
         }
         // no plugin loaded
