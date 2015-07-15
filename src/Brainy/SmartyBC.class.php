@@ -58,27 +58,6 @@ class SmartyBC extends Smarty
     }
 
     /**
-     * wrapper for assign_by_ref
-     *
-     * @param string $tpl_var the template variable name
-     * @param mixed  &$value  the referenced value to assign
-     */
-    public function assign_by_ref($tpl_var, &$value) {
-        $this->assignByRef($tpl_var, $value);
-    }
-
-    /**
-     * wrapper for append_by_ref
-     *
-     * @param string  $tpl_var the template variable name
-     * @param mixed   &$value  the referenced value to append
-     * @param boolean $merge   flag if array elements shall be merged
-     */
-    public function append_by_ref($tpl_var, &$value, $merge = false) {
-        $this->appendByRef($tpl_var, $value, $merge);
-    }
-
-    /**
      * clear the given assigned template variable.
      *
      * @param string $tpl_var the template variable to clear

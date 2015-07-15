@@ -116,7 +116,8 @@ function smarty_block_textformat($params, $content, $template, &$repeat) {
 
     if ($assign) {
         $template->assign($assign, $_output);
-    } else {
-        return $_output;
+        return '';
     }
+
+    return $_output;
 }

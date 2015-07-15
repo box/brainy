@@ -125,23 +125,6 @@ class Smarty_Internal_Data
 
         return $this;
     }
-    /**
-     * Assigns values to template variables by reference
-     *
-     * @param string $tpl_var the template variable name
-     * @param mixed &$value the referenced value to assign
-     * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
-     * @deprecated Limited usefulness in PHP5
-     * @deprecated In cases where appendByRef is useful, its use discourages proper separation of presentation from application logic.
-     */
-    public function assignByRef($tpl_var, &$value) {
-        if ($tpl_var != '') {
-            $this->tpl_vars[$tpl_var] = new Smarty_variable(null);
-            $this->tpl_vars[$tpl_var]->value = &$value;
-        }
-
-        return $this;
-    }
 
     /**
      * Append an element to an assigned array
@@ -192,36 +175,6 @@ class Smarty_Internal_Data
                 }
             } else {
                 $this->tpl_vars[$tpl_var]->value[] = $value;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Appends values to template variables by reference
-     *
-     * @param  string               $tpl_var the template variable name
-     * @param  mixed                &$value  the referenced value to append
-     * @param  boolean              $merge   flag if array elements shall be merged
-     * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
-     * @deprecated Limited usefulness in PHP5
-     * @deprecated In cases where assignByRef is useful, its use discourages proper separation of presentation from application logic.
-     */
-    public function appendByRef($tpl_var, &$value, $merge = false) {
-        if ($tpl_var != '' && isset($value)) {
-            if (!isset($this->tpl_vars[$tpl_var])) {
-                $this->tpl_vars[$tpl_var] = new Smarty_variable();
-            }
-            if (!is_array($this->tpl_vars[$tpl_var]->value)) {
-                settype($this->tpl_vars[$tpl_var]->value, 'array');
-            }
-            if ($merge && is_array($value)) {
-                foreach ($value as $_key => $_val) {
-                    $this->tpl_vars[$tpl_var]->value[$_key] = &$value[$_key];
-                }
-            } else {
-                $this->tpl_vars[$tpl_var]->value[] = &$value;
             }
         }
 
