@@ -80,7 +80,6 @@ class StrictModeTest extends Smarty_TestCase
             array('{html_select_date}'),
             array('{html_select_time}'),
             array('{html_table loop="foo" rows=1}'),
-            array('{mailto address="basta@box.com"}'),
             array('{$foo|from_charset}'),
             array('{$foo|noprint}'),
             array('{$foo|to_charset}'),
