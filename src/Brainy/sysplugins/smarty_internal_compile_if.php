@@ -34,13 +34,7 @@ class Smarty_Internal_Compile_If extends Smarty_Internal_CompileBase
             $compiler->trigger_template_error("missing if condition", $compiler->lex->taglineno);
         }
 
-        if (is_array($parameter['if condition'])) {
-            $_output = "if (!isset(\$_smarty_tpl->tpl_vars[".$parameter['if condition']['var']."])) \$_smarty_tpl->tpl_vars[".$parameter['if condition']['var']."] = new Smarty_Variable(null);\n";
-            $_output .= "if (\$_smarty_tpl->tpl_vars[".$parameter['if condition']['var']."]->value = ".$parameter['if condition']['value'].") {\n";
-            return $_output;
-        } else {
-            return "if ({$parameter['if condition']}) {\n";
-        }
+        return "if ({$parameter['if condition']}) {\n";
     }
 
 }
@@ -92,56 +86,20 @@ class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase
 
         list($nesting) = $this->closeTag($compiler, array('if', 'elseif'));
 
-        if (!array_key_exists("if condition",$parameter)) {
+        if (!array_key_exists("if condition", $parameter)) {
             $compiler->trigger_template_error("missing elseif condition", $compiler->lex->taglineno);
         }
 
-        if (is_array($parameter['if condition'])) {
-            $condition_by_assign = true;
-        } else {
-            $condition_by_assign = false;
-        }
-
         if (empty($compiler->prefix_code)) {
-            if ($condition_by_assign) {
-                $this->openTag($compiler, 'elseif', array($nesting + 1));
-                if (is_array($parameter['if condition']['var'])) {
-                    $_output = "} else {\nif (!isset(\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var']['var'] . "]) || !is_array(\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var']['var'] . "]->value)) \$_smarty_tpl->createLocalArrayVariable(" . $parameter['if condition']['var']['var'] . ");\n";
-                    $_output .= "if (\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var']['var'] . "]->value" . $parameter['if condition']['var']['smarty_internal_index'] . " = " . $parameter['if condition']['value'] . ") {\n";
-                } else {
-                    $_output = "} else {\nif (!isset(\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var'] . "])) \$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var'] . "] = new Smarty_Variable(null);\n";
-                    $_output .= "if (\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var'] . "]->value = " . $parameter['if condition']['value'] . ") {\n";
-                }
-
-                return $_output;
-            } else {
-                $this->openTag($compiler, 'elseif', array($nesting));
-
-                return "} elseif ({$parameter['if condition']}) {\n";
-            }
+            $this->openTag($compiler, 'elseif', array($nesting));
+            return "} elseif ({$parameter['if condition']}) {\n";
         } else {
             $tmp = '';
             foreach ($compiler->prefix_code as $code)
             $tmp .= $code;
             $compiler->prefix_code = array();
             $this->openTag($compiler, 'elseif', array($nesting + 1));
-            if ($condition_by_assign) {
-                if (is_array($parameter['if condition']['var'])) {
-                    $_output = "} else {\n";
-                    $_output .= $tmp;
-                    $_output .= "if (!isset(\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var']['var'] . "]) || !is_array(\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var']['var'] . "]->value)) \$_smarty_tpl->createLocalArrayVariable(" . $parameter['if condition']['var']['var'] . ");\n";
-                    $_output .= "if (\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var']['var'] . "]->value" . $parameter['if condition']['var']['smarty_internal_index'] . " = " . $parameter['if condition']['value'] . ") {\n";
-                } else {
-                    $_output = "} else {\n";
-                    $_output .= $tmp;
-                    $_output .= "if (!isset(\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var'] . "])) \$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var'] . "] = new Smarty_Variable(null);\n";
-                    $_output .= "if (\$_smarty_tpl->tpl_vars[" . $parameter['if condition']['var'] . "]->value = " . $parameter['if condition']['value'] . ") {\n";
-                }
-
-                return $_output;
-            } else {
-                return "} else {\n{$tmp}\nif ({$parameter['if condition']}) {\n";
-            }
+            return "} else {\n{$tmp}\nif ({$parameter['if condition']}) {\n";
         }
     }
 
