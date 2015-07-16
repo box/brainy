@@ -124,18 +124,13 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             }
             throw new SmartyException("Unable to load template {$this->source->type} '{$this->source->name}'{$parent_resource}");
         }
-        if ($this->mustCompile === null) {
-            $this->mustCompile = (
-                !$this->source->uncompiled &&
+        return (!$this->source->uncompiled &&
                 ($this->smarty->force_compile ||
                     $this->source->recompiled ||
                     $this->compiled->timestamp === false ||
                     ($this->smarty->compile_check && $this->compiled->timestamp < $this->source->timestamp)
                     )
                 );
-        }
-
-        return $this->mustCompile;
     }
 
     /**
@@ -146,12 +141,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
     public function compileTemplateSource() {
         if (!$this->source->recompiled) {
             $this->properties['file_dependency'] = array();
-            if ($this->source->components) {
-                // for the extends resource the compiler will fill it
-                // uses real resource for file dependency
-                // $source = end($this->source->components);
-                // $this->properties['file_dependency'][$this->source->uid] = array($this->source->filepath, $this->source->timestamp, $source->type);
-            } else {
+            if (!$this->source->components) {
                 $this->properties['file_dependency'][$this->source->uid] = array($this->source->filepath, $this->source->timestamp, $this->source->type);
             }
         }
@@ -175,8 +165,9 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         if (!$this->source->recompiled && $this->compiler->write_compiled_code) {
             // write compiled template
             $_filepath = $this->compiled->filepath;
-            if ($_filepath === false)
+            if ($_filepath === false) {
                 throw new SmartyException('getCompiledFilepath() did not return a destination to save the compiled template to');
+            }
             Smarty_Internal_Write_File::writeFile($_filepath, $code, $this->smarty);
             $this->compiled->exists = true;
             $this->compiled->isCompiled = true;
@@ -373,7 +364,6 @@ PHPDOC;
                 }
             }
         }
-        $this->mustCompile = !$is_valid;
         // store data in reusable Smarty_Template_Compiled
         $this->compiled->_properties = $properties;
 
@@ -389,14 +379,15 @@ PHPDOC;
     public function createLocalArrayVariable($tpl_var, $scope = Smarty::SCOPE_LOCAL) {
         if (!isset($this->tpl_vars[$tpl_var])) {
             $this->tpl_vars[$tpl_var] = new Smarty_variable(array(), $scope);
-        } else {
-            $this->tpl_vars[$tpl_var] = clone $this->tpl_vars[$tpl_var];
-            if ($scope != Smarty::SCOPE_LOCAL) {
-                $this->tpl_vars[$tpl_var]->scope = $scope;
-            }
-            if (!(is_array($this->tpl_vars[$tpl_var]->value) || $this->tpl_vars[$tpl_var]->value instanceof ArrayAccess)) {
-                settype($this->tpl_vars[$tpl_var]->value, 'array');
-            }
+            return;
+        }
+
+        $this->tpl_vars[$tpl_var] = clone $this->tpl_vars[$tpl_var];
+        if ($scope != Smarty::SCOPE_LOCAL) {
+            $this->tpl_vars[$tpl_var]->scope = $scope;
+        }
+        if (!(is_array($this->tpl_vars[$tpl_var]->value) || $this->tpl_vars[$tpl_var]->value instanceof ArrayAccess)) {
+            settype($this->tpl_vars[$tpl_var]->value, 'array');
         }
     }
 

@@ -41,21 +41,6 @@ class ResourcePluginTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hello world', $this->smarty->fetch('db2a:test'));
     }
     /**
-     * test resource plugin rendering of a recompiling resource
-     */
-    public function testResourcePluginRecompiled() {
-        return;
-        $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
-        try {
-            $this->assertEquals('hello world', $this->smarty->fetch('db3:test'));
-        } catch (Exception $e) {
-            $this->assertContains('not return a destination', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for empty filepath has not been thrown.');
-    }
-    /**
      * test resource plugin non-existent compiled cache of a recompiling resource
      */
     public function testResourcePluginRecompiledCompiledFilepath() {

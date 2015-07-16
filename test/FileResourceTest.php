@@ -82,12 +82,12 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
         $expected = './compiled/'.sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl').'.file.helloworld.tpl.php';
         $this->assertEquals($expected, $this->relative($tpl->compiled->filepath));
     }
-
     public function testGetCompiledTimestampPrepare() {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         // create dummy compiled file
         file_put_contents($tpl->compiled->filepath, '<?php ?>');
         touch($tpl->compiled->filepath, $tpl->source->timestamp);
+        $this->assertTrue(file_exists($tpl->compiled->filepath));
     }
     public function testGetCompiledTimestamp() {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
@@ -121,6 +121,7 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
     public function testCompileTemplateFile() {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $tpl->compileTemplateSource();
+        $this->assertTrue($tpl->compiled !== null);
     }
 
     public function testCompiledTemplateFileExits() {
@@ -341,9 +342,7 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
             '.././relativity.tpl' => 'relativity',
         );
 
-        $this->smarty->setTemplateDir(array(
-            '..',
-        ));
+        $this->smarty->setTemplateDir(array('..'));
         chdir($dn . '/templates/relativity/theory/einstein/');
         $this->_relativeMap($map, $cwd);
     }
@@ -375,10 +374,7 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
         $this->_relativeMap($map, $cwd);
     }
 
-    /**
-    * final cleanup
-    */
-    public function testFinalCleanup() {
-        $this->smarty->clearCompiledTemplate();
-        }
+    public static function tearDownAfterClass() {
+        SmartyTests::$smarty->clearCompiledTemplate();
+    }
 }

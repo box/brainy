@@ -124,7 +124,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
             }
             if (!$_template->compiled->loaded) {
                 require $_template->compiled->filepath;
-                if ($_template->mustCompile) {
+                if ($_template->mustCompile()) {
                     // recompile and load again
                     $_template->compileTemplateSource();
                     require $_template->compiled->filepath;
@@ -257,10 +257,9 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
             throw new SmartyException("Plugin tag \"{$tag}\" already registered");
         } elseif (!is_callable($callback)) {
             throw new SmartyException("Plugin \"{$tag}\" not callable");
-        } else {
-            $this->smarty->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
         }
 
+        $this->smarty->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
         return $this;
     }
 
@@ -316,12 +315,11 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @throws SmartyException              if $callback is not callable
      */
     public function registerDefaultPluginHandler($callback) {
-        if (is_callable($callback)) {
-            $this->smarty->default_plugin_handler_func = $callback;
-        } else {
+        if (!is_callable($callback)) {
             throw new SmartyException("Default plugin handler '$callback' not callable");
         }
 
+        $this->smarty->default_plugin_handler_func = $callback;
         return $this;
     }
 
@@ -333,12 +331,11 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @throws SmartyException              if $callback is not callable
      */
     public function registerDefaultTemplateHandler($callback) {
-        if (is_callable($callback)) {
-            $this->smarty->default_template_handler_func = $callback;
-        } else {
+        if (!is_callable($callback)) {
             throw new SmartyException("Default template handler '$callback' not callable");
         }
 
+        $this->smarty->default_template_handler_func = $callback;
         return $this;
     }
 
@@ -350,12 +347,11 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @throws SmartyException              if $callback is not callable
      */
     public function registerDefaultConfigHandler($callback) {
-        if (is_callable($callback)) {
-            $this->smarty->default_config_handler_func = $callback;
-        } else {
+        if (!is_callable($callback)) {
             throw new SmartyException("Default config handler '$callback' not callable");
         }
 
+        $this->smarty->default_config_handler_func = $callback;
         return $this;
     }
 
@@ -400,14 +396,12 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @internal
      */
     public function _get_filter_name($function_name) {
-        if (is_array($function_name)) {
-            $_class_name = (is_object($function_name[0]) ?
-            get_class($function_name[0]) : $function_name[0]);
-
-            return $_class_name . '_' . $function_name[1];
-        } else {
+        if (!is_array($function_name)) {
             return $function_name;
         }
+
+        $_class_name = is_object($function_name[0]) ? get_class($function_name[0]) : $function_name[0];
+        return $_class_name . '_' . $function_name[1];
     }
 
     /**
@@ -415,22 +409,23 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      *
      * @param  string          $type filter type
      * @param  string          $name filter name
+     * @return bool
      * @throws SmartyException if filter could not be loaded
      */
     public function loadFilter($type, $name) {
         $_plugin = "smarty_{$type}filter_{$name}";
         $_filter_name = $_plugin;
-        if ($this->smarty->loadPlugin($_plugin)) {
-            if (class_exists($_plugin, false)) {
-                $_plugin = array($_plugin, 'execute');
-            }
-            if (is_callable($_plugin)) {
-                $this->smarty->registered_filters[$type][$_filter_name] = $_plugin;
-
-                return true;
-            }
+        if (!$this->smarty->loadPlugin($_plugin)) {
+            throw new SmartyException("{$type}filter \"{$name}\" not callable");
         }
-        throw new SmartyException("{$type}filter \"{$name}\" not callable");
+        if (class_exists($_plugin, false)) {
+            $_plugin = array($_plugin, 'execute');
+        }
+        if (is_callable($_plugin)) {
+            $this->smarty->registered_filters[$type][$_filter_name] = $_plugin;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -443,7 +438,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
     public function unloadFilter($type, $name) {
         $_filter_name = "smarty_{$type}filter_{$name}";
         if (isset($this->smarty->registered_filters[$type][$_filter_name])) {
-            unset ($this->smarty->registered_filters[$type][$_filter_name]);
+            unset($this->smarty->registered_filters[$type][$_filter_name]);
         }
 
         return $this;
@@ -500,21 +495,21 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
                 $_resolved_property_source[$property_name] = $_is_this;
             }
             if ($_is_this) {
-                if ($first3 == 'get')
-                return $this->$property_name;
-                else
-                return $this->$property_name = $args[0];
+                if ($first3 == 'get') {
+                    return $this->$property_name;
+                } else {
+                    return $this->$property_name = $args[0];
+                }
             } elseif ($_is_this === false) {
-                if ($first3 == 'get')
+                if ($first3 == 'get') {
                     return $this->smarty->$property_name;
-                else
+                } else {
                     return $this->smarty->$property_name = $args[0];
-            } else {
-                throw new SmartyException("property '$property_name' does not exist.");
-
-                return false;
+                }
             }
+            throw new SmartyException("property '$property_name' does not exist.");
         }
+
         if ($name == 'Smarty') {
             throw new SmartyException("PHP5 requires you to call __construct() instead of Smarty()");
         }

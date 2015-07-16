@@ -67,7 +67,9 @@ class StrictModeTest extends Smarty_TestCase
      * @dataProvider banned_constructs_provider
      */
     public function test_banned_constructs_are_allowed_outside_strict($source) {
-        $this->smarty->createTemplate('eval:' . $source)->compileTemplateSource();
+        $output = $this->smarty->createTemplate('eval:' . $source);
+        $output->compileTemplateSource();
+        $this->assertTrue($output->compiled !== null);
     }
 
     public function banned_plugin_provider() {
@@ -100,7 +102,8 @@ class StrictModeTest extends Smarty_TestCase
      * @dataProvider banned_plugin_provider
      */
     public function test_banned_plugins_are_allowed_outside_strict($source) {
-        $this->smarty->fetch('eval:' . $source);
+        $output = $this->smarty->fetch('eval:' . $source);
+        $this->assertTrue($output !== null);
     }
 
     /**
@@ -115,7 +118,8 @@ class StrictModeTest extends Smarty_TestCase
      * @expectedExceptionMessage html_image: missing
      */
     public function test_html_image_is_allowed_outside_strict() {
-        $this->smarty->fetch('eval:{html_image}');
+        $output = $this->smarty->fetch('eval:{html_image}');
+        $this->assertEmpty($output);
     }
 
     public function banned_special_construct_provider() {
@@ -146,6 +150,7 @@ class StrictModeTest extends Smarty_TestCase
      * @dataProvider banned_special_construct_provider
      */
     public function test_banned_special_constructs_are_allowed_outside_strict($source) {
-        $this->smarty->fetch('eval:' . $source);
+        $output = $this->smarty->fetch('eval:' . $source);
+        $this->assertTrue($output !== null);
     }
 }

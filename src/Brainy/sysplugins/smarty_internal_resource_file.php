@@ -47,7 +47,7 @@ class Smarty_Internal_Resource_File extends Smarty_Resource
      */
     public function populateTimestamp(Smarty_Template_Source $source) {
         $source->timestamp = @filemtime($source->filepath);
-        $source->exists = !!$source->timestamp;
+        $source->exists = (bool) $source->timestamp;
     }
 
     /**

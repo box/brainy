@@ -137,9 +137,9 @@ class Smarty_Internal_Config
      * @return boolean true if the file must be compiled
      */
     public function mustCompile() {
-        return $this->mustCompile === null ?
-            $this->mustCompile = ($this->smarty->force_compile || $this->getCompiledTimestamp () === false || $this->smarty->compile_check && $this->getCompiledTimestamp () < $this->source->timestamp):
-            $this->mustCompile;
+        return $this->smarty->force_compile ||
+            $this->getCompiledTimestamp () === false ||
+            $this->smarty->compile_check && $this->getCompiledTimestamp () < $this->source->timestamp;
     }
 
     /**
@@ -233,16 +233,19 @@ class Smarty_Internal_Config
             }
         }
         // scan sections
-        if (!empty($sections)) {
-            foreach ((array) $sections as $this_section) {
-                if (isset($_config_vars['sections'][$this_section])) {
-                    foreach ($_config_vars['sections'][$this_section]['vars'] as $variable => $value) {
-                        if ($this->smarty->config_overwrite || !isset($scope_ptr->config_vars[$variable])) {
-                            $scope_ptr->config_vars[$variable] = $value;
-                        } else {
-                            $scope_ptr->config_vars[$variable] = array_merge((array) $scope_ptr->config_vars[$variable], (array) $value);
-                        }
-                    }
+        if (empty($sections)) {
+            return;
+        }
+
+        foreach ((array) $sections as $this_section) {
+            if (!isset($_config_vars['sections'][$this_section])) {
+                continue;
+            }
+            foreach ($_config_vars['sections'][$this_section]['vars'] as $variable => $value) {
+                if ($this->smarty->config_overwrite || !isset($scope_ptr->config_vars[$variable])) {
+                    $scope_ptr->config_vars[$variable] = $value;
+                } else {
+                    $scope_ptr->config_vars[$variable] = array_merge((array) $scope_ptr->config_vars[$variable], (array) $value);
                 }
             }
         }
@@ -258,13 +261,16 @@ class Smarty_Internal_Config
     public function __set($property_name, $value) {
         switch ($property_name) {
             case 'source':
-            case 'compiled':
-                $this->$property_name = $value;
-
+                $this->source = $value;
                 return;
+            case 'compiled':
+                $this->compiled = $value;
+                return;
+
+            default:
+                throw new SmartyException("invalid config property '$property_name'.");
         }
 
-        throw new SmartyException("invalid config property '$property_name'.");
     }
 
     /**
@@ -279,17 +285,15 @@ class Smarty_Internal_Config
                 if (empty($this->config_resource)) {
                     throw new SmartyException("Unable to parse resource name \"{$this->config_resource}\"");
                 }
-                $this->source = Smarty_Resource::config($this);
-
-                return $this->source;
+                return $this->source = Smarty_Resource::config($this);
 
             case 'compiled':
-                $this->compiled = $this->source->getCompiled($this);
+                return $this->compiled = $this->source->getCompiled($this);
 
-                return $this->compiled;
+            default:
+                throw new SmartyException("config attribute '$property_name' does not exist.");
         }
 
-        throw new SmartyException("config attribute '$property_name' does not exist.");
     }
 
 }
