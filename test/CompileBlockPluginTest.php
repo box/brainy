@@ -15,7 +15,7 @@ class CompileBlockPluginTest extends PHPUnit_Framework_TestCase
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
-        $this->smarty->disableSecurity();
+        $this->smarty->security_policy = null;
     }
 
     /**

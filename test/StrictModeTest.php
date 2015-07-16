@@ -10,7 +10,7 @@ class StrictModeTest extends Smarty_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->smarty->disableSecurity();
+        $this->smarty->security_policy = null;
         Smarty::$assignment_compat = Smarty::ASSIGN_COMPAT;
         $this->smarty->error_reporting = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
     }

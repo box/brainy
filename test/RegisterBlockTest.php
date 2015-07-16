@@ -15,9 +15,8 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
-
-        $this->smarty->disableSecurity();
-        $this->smartyBC->disableSecurity();
+        $this->smarty->security_policy = null;
+        $this->smartyBC->security_policy = null;
     }
 
     /**

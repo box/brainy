@@ -15,7 +15,7 @@ class DefaultTemplateHandlerTest extends PHPUnit_Framework_TestCase
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
-        $this->smarty->disableSecurity();
+        $this->smarty->security_policy = null;
     }
 
     /**
@@ -44,15 +44,6 @@ class DefaultTemplateHandlerTest extends PHPUnit_Framework_TestCase
         }
         $this->fail('Exception for none callable function has not been raised.');
     }
-    /**
-    * test replacement by default template handler
-    */
-/**
-    public function testDefaultTemplateHandlerReplacement() {
-        $this->smarty->register->defaultTemplateHandler('my_template_handler');
-        $this->assertEquals("Recsource foo.tpl of type file not found", $this->smarty->fetch('foo.tpl'));
-    }
-*/
     public function testDefaultTemplateHandlerReplacementByTemplateFile() {
         $this->smarty->registerDefaultTemplateHandler('my_template_handler_file');
         $this->assertEquals("hello world", $this->smarty->fetch('foo.tpl'));

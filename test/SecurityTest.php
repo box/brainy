@@ -18,7 +18,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         $this->smarty->force_compile = true;
         $this->smartyBC->force_compile = true;
         $this->smarty->clearCompiledTemplate();
-        }
+    }
 
     /**
     * test that security is loaded
@@ -50,15 +50,6 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-    * test not trusted PHP function at disabled security
-    */
-    public function testDisabledTrustedPHPFunction() {
-        $this->smarty->security_policy->php_functions = array('null');
-        $this->smarty->disableSecurity();
-        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{count($foo)}'));
-    }
-
-    /**
     * test trusted modifier
     */
     public function testTrustedModifier() {
@@ -78,15 +69,6 @@ class SecurityTest extends PHPUnit_Framework_TestCase
             return;
         }
         $this->fail('Exception for not trusted modifier has not been raised.');
-    }
-
-    /**
-    * test not trusted modifier at disabled security
-    */
-    public function testDisabledTrustedModifier() {
-        $this->smarty->security_policy->php_modifiers = array('null');
-        $this->smarty->disableSecurity();
-        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|@count}'));
     }
 
     /**
@@ -200,14 +182,6 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception for not trusted directory has not been raised.');
     }
 
-    /**
-    * test disabled security for not trusted dir
-    */
-    public function testDisabledTrustedDirectory() {
-        $this->smarty->disableSecurity();
-        $this->assertEquals("hello world", $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}'));
-    }
-
     public function testChangedTrustedDirectory() {
         $this->smarty->security_policy->secure_dir = array(
             'test' . DIRECTORY_SEPARATOR . 'templates_2' . DIRECTORY_SEPARATOR,
@@ -221,14 +195,4 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("templates_3", $this->smarty->fetch('eval:{include file="test/templates_3/dirname.tpl"}'));
     }
 
-}
-
-class mysecuritystaticclass
-{
-    const STATIC_CONSTANT_VALUE = 3;
-    static $static_var = 5;
-
-    static function square($i) {
-        return $i*$i;
-    }
 }

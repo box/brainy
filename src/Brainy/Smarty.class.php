@@ -766,54 +766,58 @@ class Smarty extends Smarty_Internal_TemplateBase {
         $this->smarty = $this;
     }
 
-    /**
-     * <<magic>> Generic getter.
-     *
-     * Calls the appropriate getter function.
-     * Issues an E_USER_NOTICE if no valid getter is found.
-     *
-     * @param  string $name property name
-     * @return mixed
-     * @internal
-     */
-    public function __get($name) {
-        $allowed = array(
-            'template_dir' => 'getTemplateDir',
-            'config_dir' => 'getConfigDir',
-            'plugins_dir' => 'getPluginsDir',
-            'compile_dir' => 'getCompileDir',
-        );
 
-        if (isset($allowed[$name])) {
-            return $this->{$allowed[$name]}();
-        } else {
-            trigger_error('Undefined property: '. get_class($this) .'::$'. $name, E_USER_NOTICE);
+    /**
+     * @deprecated Use getTemplateDir and setTemplateDir instead
+     * @param string|string[]|null|void $value A value to set
+     * @return array|string|Smarty
+     */
+    public function template_dir($value=null)
+    {
+        if ($value !== null) {
+            $this->setTemplateDir($value);
+            return $this;
         }
+        return $this->getTemplateDir();
     }
-
     /**
-     * <<magic>> Generic setter.
-     *
-     * Calls the appropriate setter function.
-     * Issues an E_USER_NOTICE if no valid setter is found.
-     *
-     * @param string $name  property name
-     * @param mixed  $value parameter passed to setter
-     * @internal
+     * @deprecated Use getConfigDir and setConfigDir instead
+     * @param string|string[]|null|void $value A value to set
+     * @return array|string|Smarty
      */
-    public function __set($name, $value) {
-        $allowed = array(
-            'template_dir' => 'setTemplateDir',
-            'config_dir' => 'setConfigDir',
-            'plugins_dir' => 'setPluginsDir',
-            'compile_dir' => 'setCompileDir',
-        );
-
-        if (isset($allowed[$name])) {
-            $this->{$allowed[$name]}($value);
-        } else {
-            trigger_error('Undefined property: ' . get_class($this) . '::$' . $name, E_USER_NOTICE);
+    public function config_dir($value=null)
+    {
+        if ($value !== null) {
+            $this->setConfigDir($value);
+            return $this;
         }
+        return $this->getConfigDir();
+    }
+    /**
+     * @deprecated Use getPluginsDir and setPluginsDir instead
+     * @param string|string[]|null|void $value A value to set
+     * @return array|string|Smarty
+     */
+    public function plugins_dir($value=null)
+    {
+        if ($value !== null) {
+            $this->setPluginsDir($value);
+            return $this;
+        }
+        return $this->getPluginsDir();
+    }
+    /**
+     * @deprecated Use getCompileDir and setCompileDir instead
+     * @param string|string[]|null|void $value A value to set
+     * @return array|string|Smarty
+     */
+    public function compile_dir($value=null)
+    {
+        if ($value !== null) {
+            $this->setCompileDir($value);
+            return $this;
+        }
+        return $this->getCompileDir();
     }
 
     /**
@@ -837,24 +841,22 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * Returns a single or all global variables
      *
      * @param  object $smarty
-     * @param  string $varname variable name or null
+     * @param  string|null|void $varname variable name or null
      * @return mixed Variable value or array of variable values
      */
     public function getGlobal($varname = null) {
-        if (isset($varname)) {
-            if (isset(self::$global_tpl_vars[$varname])) {
-                return self::$global_tpl_vars[$varname]->value;
-            } else {
+        if ($varname) {
+            if (!isset(self::$global_tpl_vars[$varname])) {
                 return '';
             }
-        } else {
-            $_result = array();
-            foreach (self::$global_tpl_vars AS $key => $var) {
-                $_result[$key] = $var->value;
-            }
-
-            return $_result;
+            return self::$global_tpl_vars[$varname]->value;
         }
+        $_result = array();
+        foreach (self::$global_tpl_vars as $key => $var) {
+            $_result[$key] = $var->value;
+        }
+
+        return $_result;
     }
 
     /**
@@ -883,16 +885,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
         } else {
             $this->security_policy = new $security_class($this);
         }
-
-        return $this;
-    }
-
-    /**
-     * Disable the currently loaded security policy.
-     * @return Smarty The current Smarty instance for chaining
-     */
-    public function disableSecurity() {
-        $this->security_policy = null;
 
         return $this;
     }
