@@ -6,6 +6,8 @@
 * @author Uwe Tews
 */
 
+require_once 'helpers/Smarty_Data.php';
+
 /**
 * class for config variable tests
 */
@@ -222,7 +224,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     * test config vars on data object
     */
     public function testConfigTextData() {
-        $data = $this->smarty->createData();
+        $data = new Smarty_Data(null, $this->smarty);
         $data->configLoad('test.conf');
         $this->assertEquals("123bvc", $this->smarty->fetch('eval:{#text#}', $data));
     }
@@ -230,7 +232,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     * test getConfigVars on data object
     */
     public function testConfigGetSingleConfigVarData() {
-        $data = $this->smarty->createData();
+        $data = new Smarty_Data(null, $this->smarty);
         $data->configLoad('test.conf');
         $this->assertEquals("Welcome to Smarty!", $data->getConfigVars('title'));
     }
@@ -238,7 +240,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     * test getConfigVars return all variables on data object
     */
     public function testConfigGetAllConfigVarsData() {
-        $data = $this->smarty->createData();
+        $data = new Smarty_Data(null, $this->smarty);
         $data->configLoad('test.conf');
         $vars = $data->getConfigVars();
         $this->assertTrue(is_array($vars));
@@ -249,7 +251,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     * test clearConfig for single variable on data object
     */
     public function testConfigClearSingleConfigVarData() {
-        $data = $this->smarty->createData();
+        $data = new Smarty_Data(null, $this->smarty);
         $data->configLoad('test.conf');
         $data->clearConfig('title');
         $this->assertEquals("", $data->getConfigVars('title'));
@@ -259,7 +261,7 @@ class ConfigVarTest extends PHPUnit_Framework_TestCase
     * test clearConfig for all variables on data object
     */
     public function testConfigClearConfigAllData() {
-        $data = $this->smarty->createData();
+        $data = new Smarty_Data(null, $this->smarty);
         $data->configLoad('test.conf');
         $data->clearConfig();
         $vars = $data->getConfigVars();

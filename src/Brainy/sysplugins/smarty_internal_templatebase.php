@@ -229,19 +229,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
     }
 
     /**
-     * Returns a new data object.
-     *
-     * Data objects are used to create scopes for assigned variables. They can
-     * be used to have control which variables are seen by which templates.
-     *
-     * @param object|null $parent Optional link to a parent scope
-     * @return Smarty_Data data object
-     */
-    public function createData($parent = null) {
-        return new Smarty_Data($parent, $this);
-    }
-
-    /**
      * Registers plugin to be used in templates
      *
      * @param  string                       $type       plugin type

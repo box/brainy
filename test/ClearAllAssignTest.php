@@ -6,6 +6,8 @@
 * @author Uwe Tews
 */
 
+require_once 'helpers/Smarty_Data.php';
+
 /**
 * class for clearing all assigned variables tests
 */
