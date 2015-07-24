@@ -733,14 +733,14 @@ class Smarty_Template_Source
 
         $compiled = new Smarty_Template_Compiled($this);
         $this->handler->populateCompiledFilepath($compiled, $_template);
-        if ($compiled->filepath) {
+        $compiled->timestamp = false;
+
+        if ($compiled->filepath && file_exists($compiled->filepath)) {
             try {
                 $compiled->timestamp = filemtime($compiled->filepath);
-            } catch (Exception $e) {
-                $compiled->timestamp = false;
-            }
+            } catch (Exception $e) {}
         }
-        $compiled->exists = !!$compiled->timestamp;
+        $compiled->exists = (bool) $compiled->timestamp;
 
         // runtime cache
         Smarty_Resource::$compileds[$_cache_key] = $compiled;
