@@ -25,8 +25,6 @@ class Smarty_Internal_Write_File
      * @return boolean true
      */
     public static function writeFile($_filepath, $_contents, Smarty $smarty) {
-        $_error_reporting = error_reporting();
-        error_reporting($_error_reporting & ~E_NOTICE & ~E_WARNING);
         if ($smarty->_file_perms !== null) {
             $old_umask = umask(0);
         }
@@ -40,7 +38,6 @@ class Smarty_Internal_Write_File
         // write to tmp file, then move to overt file lock race condition
         $_tmp_file = $_dirpath . DIRECTORY_SEPARATOR . str_replace(array('.',','), '_', uniqid('wrt', true));
         if (!file_put_contents($_tmp_file, $_contents)) {
-            error_reporting($_error_reporting);
             throw new SmartyException("unable to write file {$_tmp_file}");
         }
 
@@ -72,7 +69,6 @@ class Smarty_Internal_Write_File
         }
 
         if (!$success) {
-            error_reporting($_error_reporting);
             throw new SmartyException("unable to write file {$_filepath}");
         }
 
@@ -81,7 +77,6 @@ class Smarty_Internal_Write_File
             chmod($_filepath, $smarty->_file_perms);
             umask($old_umask);
         }
-        error_reporting($_error_reporting);
 
         return true;
     }

@@ -95,7 +95,7 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
                     return;
                 }
 
-                return "@constant($modifier)";
+                return "(defined($modifier) ? constant($modifier) : $modifier)";
 
             case 'config':
                 return "\$_smarty_tpl->getConfigVariable($modifier)";

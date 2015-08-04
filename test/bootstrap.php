@@ -36,8 +36,7 @@ class SmartyTests
         $smarty->left_delimiter = '{';
         $smarty->right_delimiter = '}';
         $smarty->enableSecurity();
-        $smarty->error_reporting = null;
-        $smarty->error_unassigned = true;
+        $smarty->error_unassigned = false;
         $smarty->compile_id = null;
         $smarty->default_resource_type = 'file';
         $smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;
@@ -48,6 +47,34 @@ class SmartyTests
         self::_init(SmartyTests::$smartyBC);
         Smarty_Resource::$sources = array();
         Smarty_Resource::$compileds = array();
+
+        self::clearFiles();
+    }
+
+    /**
+     * clear $smarty->compile_dir
+     *
+     * @return void
+     */
+    protected static function clearFiles() {
+        $directory = realpath(self::$smarty->getCompileDir());
+
+        $di = new RecursiveDirectoryIterator($directory);
+        $it = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($it as $file) {
+            $_file = $file->__toString();
+
+            if (preg_match("#[\\\\/]\.#", $_file)) {
+                continue;
+            }
+
+            if ($file->isDir()) {
+                rmdir($_file);
+            } else {
+                unlink($_file);
+            }
+
+        }
     }
 }
 

@@ -26,9 +26,6 @@ class RegisteredResourceTest extends PHPUnit_Framework_TestCase
     public function testResourcePlugin() {
         $this->assertEquals('hello world', $this->smarty->fetch('rr:test'));
     }
-    public function testClearCompiledResourcePlugin() {
-        $this->assertEquals(1, $this->smarty->clearCompiledTemplate('rr:test'));
-    }
     /**
      * test resource plugin timesatmp
      */
@@ -55,7 +52,7 @@ class RegisteredResourceTest extends PHPUnit_Framework_TestCase
 /**
  * resource functions
  */
-function rr_get_template ($tpl_name, &$tpl_source, $smarty_obj) {
+function rr_get_template($tpl_name, &$tpl_source, $smarty_obj) {
     // populating $tpl_source
     $tpl_source = '{$x="hello world"}{$x}';
 

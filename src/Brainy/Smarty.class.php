@@ -555,23 +555,11 @@ class Smarty extends Smarty_Internal_TemplateBase {
     public $right_delimiter = "}";
 
     /**
-     * The name of the class to use for security.
-     *
-     * @var string
-     * @deprecated This will be removed to eliminate magic.
-     */
-    public $security_class = 'Smarty_Security';
-    /**
      * The Smarty_Security instance to use as a security policy.
      *
      * @var Smarty_Security
      */
     public $security_policy = null;
-    /**
-     * When set, this will be used as the default error reporting level.
-     * @var int|null
-     */
-    public $error_reporting = null;
     /**
      * Internal flag for getTags()
      * @var boolean
@@ -862,30 +850,18 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Loads security class and enables security
      *
-     * @param  string|Smarty_Security $security_class if a string is used, it must be class-name
-     * @return Smarty                 The current Smarty instance for chaining
-     * @throws SmartyException        when an invalid class name is provided
-     * @deprecated Passing a class name is deprecated.
+     * @param  Smarty_Security|null|void $security_class
+     * @return Smarty The current Smarty instance for chaining
+     * @throws SmartyException when an invalid class is provided
      */
-    public function enableSecurity($security_class = null) {
-        if ($security_class instanceof Smarty_Security) {
-            $this->security_policy = $security_class;
-
-            return $this;
-        } elseif (is_object($security_class)) {
-            throw new SmartyException("Class '" . get_class($security_class) . "' must extend Smarty_Security.");
+    public function enableSecurity($security_class=null) {
+        if ($security_class === null) {
+            $security_class = new Smarty_Security($this);
         }
-        if ($security_class == null) {
-            $security_class = $this->security_class;
+        if (!($security_class instanceof Smarty_Security)) {
+            throw new SmartyException('Unknown security object provided');
         }
-        if (!class_exists($security_class)) {
-            throw new SmartyException("Security class '$security_class' is not defined");
-        } elseif ($security_class !== 'Smarty_Security' && !is_subclass_of($security_class, 'Smarty_Security')) {
-            throw new SmartyException("Class '$security_class' must extend Smarty_Security.");
-        } else {
-            $this->security_policy = new $security_class($this);
-        }
-
+        $this->security_policy = $security_class;
         return $this;
     }
 

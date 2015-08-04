@@ -88,9 +88,7 @@ function smarty_function_html_image($params, $template) {
     }
 
     if (empty($options['file'])) {
-        trigger_error("html_image: missing 'file' parameter", E_USER_NOTICE);
-
-        return;
+        throw new Exception("html_image: missing 'file' parameter");
     }
 
     $filename = (string) $options['file'];

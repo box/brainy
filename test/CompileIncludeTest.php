@@ -119,6 +119,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
      * @expectedException SmartyCompilerException
      */
     public function testDynamicIncludesWithInlineShouldFail() {
+        // Uses `string` instead of `eval` so that we actually simulate compilation
         $this->smarty->fetch('string:{include file="foo{1+2}.tpl" inline}');
     }
     /**
@@ -126,6 +127,7 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
      */
     public function testDynamicIncludesWithMCIShouldFail() {
         $this->smarty->merge_compiled_includes = true;
+        // Uses `string` instead of `eval` so that we actually simulate compilation
         $this->smarty->fetch('string:{include file="foo{1+2}.tpl"}');
     }
 }

@@ -108,7 +108,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
         $var = new VarFilter();
 
         $this->smarty->registerFilter(Smarty::FILTER_VARIABLE, array($var, 'variablefilter'));
-        $tpl = $this->smarty->createTemplate('string:{$foo}');
+        $tpl = $this->smarty->createTemplate('eval:{$foo}');
         $tpl->assign('foo', 'bar');
         $this->assertEquals('var{$foo}bar', $this->smarty->fetch($tpl));
     }

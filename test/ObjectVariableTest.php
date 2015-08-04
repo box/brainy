@@ -22,7 +22,7 @@ class ObjectVariableTest extends PHPUnit_Framework_TestCase
     */
     public function testObjectVariableOutput() {
         $object = new VariableObject;
-        $tpl = $this->smarty->createTemplate('string:{$object->hello}');
+        $tpl = $this->smarty->createTemplate('eval:{$object->hello}');
         $tpl->assign('object', $object);
         $this->assertEquals('hello_world', $this->smarty->fetch($tpl));
     }
@@ -32,7 +32,7 @@ class ObjectVariableTest extends PHPUnit_Framework_TestCase
     public function testObjectVariableOutputVariableProperty() {
         $object = new VariableObject;
         $this->smarty->security_policy = null;
-        $tpl = $this->smarty->createTemplate('string:{$p=\'hello\'}{$object->$p}');
+        $tpl = $this->smarty->createTemplate('eval:{$p=\'hello\'}{$object->$p}');
         $tpl->assign('object', $object);
         $this->assertEquals('hello_world', $this->smarty->fetch($tpl));
     }
@@ -41,7 +41,7 @@ class ObjectVariableTest extends PHPUnit_Framework_TestCase
     */
     public function testObjectVariableOutputMethod() {
         $object = new VariableObject;
-        $tpl = $this->smarty->createTemplate('string:{$object->myhello()}');
+        $tpl = $this->smarty->createTemplate('eval:{$object->myhello()}');
         $tpl->assign('object', $object);
         $this->assertEquals('hello world', $this->smarty->fetch($tpl));
     }
@@ -51,7 +51,7 @@ class ObjectVariableTest extends PHPUnit_Framework_TestCase
     public function testObjectVariableOutputVariableMethod() {
         $object = new VariableObject;
         $this->smarty->security_policy = null;
-        $tpl = $this->smarty->createTemplate('string:{$p=\'myhello\'}{$object->$p()}');
+        $tpl = $this->smarty->createTemplate('eval:{$p=\'myhello\'}{$object->$p()}');
         $tpl->assign('object', $object);
         $this->assertEquals('hello world', $this->smarty->fetch($tpl));
     }

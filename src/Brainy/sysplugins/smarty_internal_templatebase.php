@@ -78,10 +78,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
         // dummy local smarty variable
         $_template->tpl_vars['smarty'] = new Smarty_Variable;
 
-        if (isset($this->smarty->error_reporting)) {
-            $_smarty_old_error_level = error_reporting($this->smarty->error_reporting);
-        }
-
         // must reset merge template date
         $_template->smarty->merged_templates_func = array();
         // get rendered template
@@ -173,9 +169,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
 
         if (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output'])) {
             $output = Smarty_Internal_Filter_Handler::runFilter('output', $output, $_template);
-        }
-        if (isset($this->error_reporting)) {
-            error_reporting($_smarty_old_error_level);
         }
 
         if ($merge_tpl_vars) {

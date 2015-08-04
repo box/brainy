@@ -64,14 +64,14 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
         $this->expectOutputString('it is unset');
         $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
         $this->smarty->assign('foo', array());
-        $this->smarty->display('string:{if !isset($foo.bar)}it is unset{/if}');
+        $this->smarty->display('eval:{if !isset($foo.bar)}it is unset{/if}');
     }
 
     public function testSafeIndexLookupsInLangConstructsPasses() {
         $this->expectOutputString('it is empty');
         $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
         $this->smarty->assign('foo', '');
-        $this->smarty->display('string:{if empty($foo)}it is empty{/if}');
+        $this->smarty->display('eval:{if empty($foo)}it is empty{/if}');
     }
 
     public function testSafeSuperglobalIndexLookupsPasses() {

@@ -17,7 +17,7 @@ class StrictModeTest extends Smarty_TestCase
 
     public function test_empty_strict_mode_file_passes() {
         $this->expectOutputString('');
-        $this->smarty->fetch('string:{* set strict *}');
+        $this->smarty->fetch('eval:{* set strict *}');
     }
 
     public function banned_constructs_provider() {
@@ -102,6 +102,7 @@ class StrictModeTest extends Smarty_TestCase
      * @dataProvider banned_plugin_provider
      */
     public function test_banned_plugins_are_allowed_outside_strict($source) {
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
         $output = $this->smarty->fetch('eval:' . $source);
         $this->assertTrue($output !== null);
     }
@@ -115,7 +116,8 @@ class StrictModeTest extends Smarty_TestCase
     }
 
     /**
-     * @expectedExceptionMessage html_image: missing
+     * @expectedException Exception
+     * @expectedExceptionMessage html_image
      */
     public function test_html_image_is_allowed_outside_strict() {
         $output = $this->smarty->fetch('eval:{html_image}');
@@ -150,7 +152,13 @@ class StrictModeTest extends Smarty_TestCase
      * @dataProvider banned_special_construct_provider
      */
     public function test_banned_special_constructs_are_allowed_outside_strict($source) {
+        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $_SESSION = array('foo' => 'bar');
+        $_COOKIE = array('foo' => 'bar');
         $output = $this->smarty->fetch('eval:' . $source);
         $this->assertTrue($output !== null);
+
+        unset($_SESSION);
+        unset($_COOKIE);
     }
 }

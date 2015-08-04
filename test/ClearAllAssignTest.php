@@ -49,7 +49,6 @@ class ClearAllAssignTest extends PHPUnit_Framework_TestCase
     * test clear all assign in template
     */
     public function testClearAllAssignInTemplate() {
-        $this->smarty->error_reporting = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->_tpl->clearAllAssign();
         $this->assertEquals('foobar', $this->smarty->fetch($this->_tpl));
     }
@@ -57,7 +56,6 @@ class ClearAllAssignTest extends PHPUnit_Framework_TestCase
     * test clear all assign in data
     */
     public function testClearAllAssignInData() {
-        $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->_data->clearAllAssign();
         $this->assertEquals('fooblar', $this->smarty->fetch($this->_tpl));
     }
@@ -65,12 +63,10 @@ class ClearAllAssignTest extends PHPUnit_Framework_TestCase
     * test clear all assign in Smarty object
     */
     public function testClearAllAssignInSmarty() {
-        $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->smarty->clearAllAssign();
         $this->assertEquals('barblar', $this->smarty->fetch($this->_tpl));
     }
     public function testSmarty2ClearAllAssignInSmarty() {
-        $this->smartyBC->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->smartyBC->clear_all_assign();
         $this->assertEquals('barblar', $this->smartyBC->fetch($this->_tplBC));
     }

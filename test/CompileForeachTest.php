@@ -37,8 +37,7 @@ class CompileForeachTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
     }
     public function testForeachElse() {
-        $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
-        $tpl = $this->smarty->createTemplate('string:{foreach item=x from=$foo}{$x}{foreachelse}else{/foreach}');
+        $tpl = $this->smarty->createTemplate('eval:{foreach item=x from=$foo}{$x}{foreachelse}else{/foreach}');
         $this->assertEquals("else", $this->smarty->fetch($tpl));
     }
     public function testForeachKey() {
@@ -105,7 +104,6 @@ class CompileForeachTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
     }
     public function testNewForeachElse() {
-        $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $tpl = $this->smarty->createTemplate('eval:{foreach $foo as $x}{$x}{foreachelse}else{/foreach}');
         $this->assertEquals("else", $this->smarty->fetch($tpl));
     }

@@ -89,17 +89,6 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
         touch($tpl->compiled->filepath, $tpl->source->timestamp);
         $this->assertTrue(file_exists($tpl->compiled->filepath));
     }
-    public function testGetCompiledTimestamp() {
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertTrue(is_integer($tpl->compiled->timestamp));
-        $this->assertEquals(10, strlen($tpl->compiled->timestamp));
-        $this->assertEquals($tpl->compiled->timestamp, $tpl->source->timestamp);
-    }
-
-    public function testMustCompileExisting() {
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertFalse($tpl->mustCompile());
-    }
 
     public function testMustCompileAtForceCompile() {
         $this->smarty->force_compile = true;
@@ -122,11 +111,6 @@ class FileResourceTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $tpl->compileTemplateSource();
         $this->assertTrue($tpl->compiled !== null);
-    }
-
-    public function testCompiledTemplateFileExits() {
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertTrue(file_exists($tpl->compiled->filepath));
     }
 
 

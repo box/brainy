@@ -61,10 +61,10 @@ class CompileAssignTest extends PHPUnit_Framework_TestCase
     * test assign tag shorthands
     */
     public function testAssignShort1() {
-        $this->assertEquals("1", $this->smarty->fetch('string:{assign foo  value=1}{$foo}'));
+        $this->assertEquals("1", $this->smarty->fetch('eval:{assign foo  value=1}{$foo}'));
     }
     public function testAssignShort2() {
-        $this->assertEquals("1", $this->smarty->fetch('string:{assign foo 1}{$foo}'));
+        $this->assertEquals("1", $this->smarty->fetch('eval:{assign foo 1}{$foo}'));
     }
     /**
     * test new style of assign tag
