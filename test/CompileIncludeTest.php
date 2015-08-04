@@ -113,4 +113,19 @@ class CompileIncludeTest extends PHPUnit_Framework_TestCase
         $content = $this->smarty->fetch('test_recursive_includes2.tpl');
         $this->assertContains("before 1 bar<br>\nbefore 3 bar<br>\nbefore 5 bar<br>\n\nafter 5 bar<br>\n\nafter 3 bar<br>\n\nafter 1 bar<br>", $content);
     }
+
+
+    /**
+     * @expectedException SmartyCompilerException
+     */
+    public function testDynamicIncludesWithInlineShouldFail() {
+        $this->smarty->fetch('string:{include file="foo{1+2}.tpl" inline}');
+    }
+    /**
+     * @expectedException SmartyCompilerException
+     */
+    public function testDynamicIncludesWithMCIShouldFail() {
+        $this->smarty->merge_compiled_includes = true;
+        $this->smarty->fetch('string:{include file="foo{1+2}.tpl"}');
+    }
 }

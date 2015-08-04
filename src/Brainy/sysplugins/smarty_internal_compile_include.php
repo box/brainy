@@ -83,21 +83,22 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
                                     $_attr['inline'] === true) &&
                                    !$compiler->template->source->recompiled;
 
-        if (isset($_attr['compile_id'])) {
-            $_compile_id = $_attr['compile_id'];
-        } else {
-            $_compile_id = '$_smarty_tpl->compile_id';
-        }
+
+        $_compile_id = isset($_attr['compile_id']) ? $_attr['compile_id'] : '$_smarty_tpl->compile_id';
 
         $has_compiled_template = false;
-        if ($merge_compiled_includes && $_attr['inline'] !== true) {
+        if ($merge_compiled_includes) {
             // variable template name ?
-            if ($compiler->has_variable_string || !((substr_count($include_file, '"') == 2 || substr_count($include_file, "'") == 2))
-                || substr_count($include_file, '(') != 0 || substr_count($include_file, '$_smarty_tpl->') != 0
-            ) {
-                $merge_compiled_includes = false;
+            if ($compiler->has_variable_string ||
+                ($include_file[0] !== '"' && $include_file[0] !== "'") ||
+                count(token_get_all($include_file)) > 1) {
+
                 if ($compiler->inheritance && $compiler->smarty->inheritance_merge_compiled_includes) {
-                    $compiler->trigger_template_error(' variable template file names not allow within {block} tags');
+                    $compiler->trigger_template_error('variable template file names not allow within {block} tags');
+                } elseif ($compiler->smarty->merge_compiled_includes) {
+                    $compiler->trigger_template_error('variable template file names not allowed when merge_compiled_includes is enabled');
+                } elseif ($_attr['inline']) {
+                    $compiler->trigger_template_error('variable template file names not allowed on {include} function with `inline`');
                 }
             }
             // variable compile_id?
@@ -107,17 +108,19 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
                 ) {
                     $merge_compiled_includes = false;
                     if ($compiler->inheritance && $compiler->smarty->inheritance_merge_compiled_includes) {
-                        $compiler->trigger_template_error(' variable compile_id not allow within {block} tags');
+                        $compiler->trigger_template_error('variable compile_id not allow within {block} tags');
                     }
                 }
             }
-        }
-        if ($merge_compiled_includes) {
+
+
             // we must observe different compile_id
             $uid = sha1($_compile_id);
-            $tpl_name = null;
             $_smarty_tpl = $compiler->template;
-            eval("\$tpl_name = $include_file;");
+            if ($include_file[0] === "'") {
+                $include_file = '"' . substr($include_file, 1, strlen($include_file) - 2) . '"';
+            }
+            $tpl_name = json_decode($include_file);
             if (!isset($compiler->smarty->merged_templates_func[$tpl_name][$uid])) {
                 $tpl = new $compiler->smarty->template_class ($tpl_name, $compiler->smarty, $compiler->template, $compiler->template->compile_id);
                 // save unique function name
@@ -149,21 +152,19 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
         }
         // delete {include} standard attributes
         unset($_attr['file'], $_attr['assign'], $_attr['compile_id'], $_attr['scope'], $_attr['inline']);
+
         // remaining attributes must be assigned as smarty variable
-        if (!empty($_attr)) {
-            if ($_parent_scope == Smarty::SCOPE_LOCAL) {
-                // create variables
-                foreach ($_attr as $key => $value) {
-                    $_pairs[] = "'$key'=>$value";
-                }
-                $_vars = 'array(' . join(',', $_pairs) . ')';
-                $_has_vars = true;
-            } else {
+        $_vars = 'array()';
+        $_has_vars = !empty($_attr);
+        if ($_has_vars) {
+            if ($_parent_scope !== Smarty::SCOPE_LOCAL) {
                 $compiler->trigger_template_error('variable passing not allowed in parent/global scope', $compiler->lex->taglineno);
             }
-        } else {
-            $_vars = 'array()';
-            $_has_vars = false;
+            // create variables
+            foreach ($_attr as $key => $value) {
+                $_pairs[] = "'$key'=>$value";
+            }
+            $_vars = 'array(' . join(',', $_pairs) . ')';
         }
         if ($has_compiled_template) {
             $_output = "/*  Call merged included template \"" . $tpl_name . "\" */\n";
