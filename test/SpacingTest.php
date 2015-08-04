@@ -18,8 +18,8 @@ class SpacingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-    * test variable output
-    */
+     * test variable output
+     */
     public function testVariableSpacing1() {
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", null, null, $this->smarty);
         $this->assertEquals("bar", $this->smarty->fetch($tpl));
@@ -34,8 +34,8 @@ class SpacingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-    * test variable text combinations
-    */
+     * test variable text combinations
+     */
     public function testVariableText1() {
         $tpl = $this->smarty->createTemplate("eval:A{\$foo}B", null, null, $this->smarty);
         $this->assertEquals("AbarB", $this->smarty->fetch($tpl));
@@ -58,8 +58,8 @@ class SpacingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-    * test tag text combinations
-    */
+     * test tag text combinations
+     */
     public function testTagText1() {
         $tpl = $this->smarty->createTemplate("eval:A{assign var=zoo value='blah'}B");
         $this->assertEquals("AB", $this->smarty->fetch($tpl));

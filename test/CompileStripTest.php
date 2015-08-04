@@ -24,6 +24,7 @@ class CompileStripTest extends PHPUnit_Framework_TestCase
             array("<input \n disabled\n\t checked>", '<input disabled checked>'),
             array("foo  ", 'foo '),
             array("foo>  ", 'foo>'),
+            array("foo   &nbsp;   bar", 'foo &nbsp; bar'),
         );
     }
 
