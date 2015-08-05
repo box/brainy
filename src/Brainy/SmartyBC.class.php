@@ -30,10 +30,8 @@
  * @package Brainy
  * @deprecated Use the Smarty class instead.
  */
-/**
- * @ignore
- */
-require_once(dirname(__FILE__) . '/Smarty.class.php');
+
+namespace \Box\Brainy;
 
 /**
  * Smarty Backward Compatibility Wrapper Class
@@ -314,27 +312,6 @@ class SmartyBC extends Smarty
     }
 
     /**
-     * Returns an array containing config variables
-     *
-     * @param  string $name
-     * @return array
-     */
-    public function get_config_vars($name=null) {
-        return $this->getConfigVars($name);
-    }
-
-    /**
-     * load configuration values
-     *
-     * @param string $file
-     * @param string $section
-     * @param string $scope
-     */
-    public function config_load($file, $section = null, $scope = 'global') {
-        $this->ConfigLoad($file, $section, $scope);
-    }
-
-    /**
      * return a reference to a registered object
      *
      * @param  string $name
@@ -342,15 +319,6 @@ class SmartyBC extends Smarty
      */
     public function get_registered_object($name) {
         return $this->getRegisteredObject($name);
-    }
-
-    /**
-     * clear configuration values
-     *
-     * @param string $var
-     */
-    public function clear_config($var = null) {
-        $this->clearConfig($var);
     }
 
     /**

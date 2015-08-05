@@ -31,10 +31,6 @@
         "phpunit/phpunit": "4.1.*"
     },
     "autoload": {
-        "classmap": [
-            "src/Brainy/Smarty.class.php",
-            "src/Brainy/SmartyBC.class.php",
-            "src/Brainy/sysplugins/smarty_security.php"
-        ]
+        "psr-4": {"Box\\": "src/"}
     }
 }

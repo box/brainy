@@ -1,5 +1,8 @@
 <?php
 
+namespace \Box\Brainy\Exceptions;
+
+
 /**
  * Smarty compiler exception class
  * @package Brainy

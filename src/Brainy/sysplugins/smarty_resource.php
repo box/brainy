@@ -94,15 +94,10 @@ abstract class Smarty_Resource
      *
      * @param  Smarty $smarty        Smarty instance
      * @param  string $resource_name resource_name to make unique
-     * @param  boolean $is_config    flag for config resource
      * @return string unique resource name
      */
-    protected function buildUniqueResourceName(Smarty $smarty, $resource_name, $is_config = false) {
-        if ($is_config) {
-            return get_class($this) . '#' . $smarty->joined_config_dir . '#' . $resource_name;
-        } else {
-            return get_class($this) . '#' . $smarty->joined_template_dir . '#' . $resource_name;
-        }
+    protected function buildUniqueResourceName(Smarty $smarty, $resource_name) {
+        return get_class($this) . '#' . $smarty->joined_template_dir . '#' . $resource_name;
     }
 
     /**
@@ -193,13 +188,8 @@ abstract class Smarty_Resource
      */
     protected function buildFilepath(Smarty_Template_Source $source, Smarty_Internal_Template $_template=null) {
         $file = $source->name;
-        if ($source instanceof Smarty_Config_Source) {
-            $_directories = $source->smarty->getConfigDir();
-            $_default_handler = $source->smarty->default_config_handler_func;
-        } else {
-            $_directories = $source->smarty->getTemplateDir();
-            $_default_handler = $source->smarty->default_template_handler_func;
-        }
+        $_directories = $source->smarty->getTemplateDir();
+        $_default_handler = $source->smarty->default_template_handler_func;
 
         // go relative to a given template?
         $_file_is_dotted = $file[0] == '.' && ($file[1] == '.' || $file[1] == '/' || $file[1] == "\\");
@@ -289,11 +279,7 @@ abstract class Smarty_Resource
         // no tpl file found
         if ($_default_handler) {
             if (!is_callable($_default_handler)) {
-                if ($source instanceof Smarty_Config_Source) {
-                    throw new SmartyException("Default config handler not callable");
-                } else {
-                    throw new SmartyException("Default template handler not callable");
-                }
+                throw new SmartyException("Default template handler not callable");
             }
             $_return = call_user_func_array($_default_handler,
                 array($source->type, $source->name, &$_content, &$_timestamp, $source->smarty));
@@ -417,17 +403,17 @@ abstract class Smarty_Resource
             }
         }
 
-        // TODO: try default_(template|config)_handler
+        // TODO: try default_template_handler
 
         // give up
         throw new SmartyException("Unkown resource type '{$type}'");
     }
 
     /**
-     * extract resource_type and resource_name from template_resource and config_resource
+     * extract resource_type and resource_name from template_resource
      *
      * @note "C:/foo.tpl" was forced to file resource up till Smarty 3.1.3 (including).
-     * @param  string $resource_name    template_resource or config_resource to parse
+     * @param  string $resource_name    template_resource to parse
      * @param  string $default_resource the default resource_type defined in $smarty
      * @param  string &$name            the parsed resource name
      * @param  string &$type            the parsed resource type
@@ -513,45 +499,6 @@ abstract class Smarty_Resource
         // create source
         $source = new Smarty_Template_Source($resource, $smarty, $template_resource, $type, $name, $unique_resource_name);
         $resource->populate($source, $_template);
-
-        // runtime cache
-        self::$sources[$_cache_key] = $source;
-
-        return $source;
-    }
-
-    /**
-     * initialize Config Source Object for given resource
-     *
-     * @param  Smarty_Internal_Config $_config config object
-     * @return Smarty_Config_Source   Source Object
-     */
-    public static function config(Smarty_Internal_Config $_config) {
-        static $_incompatible_resources = array('eval' => true, 'string' => true, 'extends' => true, 'php' => true);
-        $config_resource = $_config->config_resource;
-        $smarty = $_config->smarty;
-
-        // parse resource_name
-        self::parseResourceName($config_resource, $smarty->default_config_type, $name, $type);
-
-        // make sure configs are not loaded via anything smarty can't handle
-        if (isset($_incompatible_resources[$type])) {
-            throw new SmartyException ("Unable to use resource '{$type}' for config");
-        }
-
-        // load resource handler, identify unique resource name
-        $resource = Smarty_Resource::load($smarty, $type);
-        $unique_resource_name = $resource->buildUniqueResourceName($smarty, $name, true);
-
-        // check runtime cache
-        $_cache_key = 'config|' . $unique_resource_name;
-        if (isset(self::$sources[$_cache_key])) {
-            return self::$sources[$_cache_key];
-        }
-
-        // create source
-        $source = new Smarty_Config_Source($resource, $smarty, $config_resource, $type, $name, $unique_resource_name);
-        $resource->populate($source, null);
 
         // runtime cache
         self::$sources[$_cache_key] = $source;

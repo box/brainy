@@ -759,15 +759,6 @@ variableinternal(res)    ::= DOLLAR varvar(v) AT ID(p). {
     res = $this->compileVariable(v, p);
 }
 
-// config variable
-variableinternal(res)    ::= HATCH ID(i) HATCH. {
-    res = '$_smarty_tpl->getConfigVariable(\''. i .'\')';
-}
-
-variableinternal(res)    ::= HATCH variableinternal(v) HATCH. {
-    res = '$_smarty_tpl->getConfigVariable('. v .')';
-}
-
 indexdef(res)    ::= OPENB CLOSEB.  {
     res = '[]';
 }
@@ -902,14 +893,7 @@ function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
                 if (count($combined_params) == 0) {
                     $this->compiler->trigger_template_error('Illegal number of paramer in "isset()"');
                 }
-                if (strncasecmp($par, '$_smarty_tpl->getConfigVariable', strlen('$_smarty_tpl->getConfigVariable')) === 0) {
-                    $this->compiler->assert_is_not_strict('isset() is not allowed on config variables', $this);
-                    self::$prefix_number++;
-                    $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.str_replace(')',', false)',$par).";\n";
-                    $isset_par = '$_tmp'.self::$prefix_number;
-                } else {
-                    $isset_par=str_replace("')->value","',null,true,false)->value",$par);
-                }
+                $isset_par=str_replace("')->value","',null,true,false)->value",$par);
                 res = f . "(". $isset_par .")";
 
             } elseif (in_array($func_name, array('empty', 'reset', 'current', 'end', 'prev', 'next'))) {

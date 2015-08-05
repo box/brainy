@@ -13,9 +13,9 @@
  * @subpackage Security
  * @author Uwe Tews
  * @todo getter and setter instead of public properties would allow cultivating an internal cache properly
- * @todo current implementation of isTrustedResourceDir() assumes that Smarty::$template_dir and Smarty::$config_dir are immutable
+ * @todo current implementation of isTrustedResourceDir() assumes that Smarty::$template_dir are immutable
  * @todo the cache is killed every time either of the variables change. That means that two distinct Smarty objects with differing
- * @todo $template_dir or $config_dir should NOT share the same Smarty_Security instance as this would lead to (severe) performance penalty! how should this be handled?
+ * @todo $template_dir should NOT share the same Smarty_Security instance as this would lead to (severe) performance penalty! how should this be handled?
  */
 class Smarty_Security {
     /**
@@ -112,11 +112,6 @@ class Smarty_Security {
      * @internal
      */
     protected $_template_dir = null;
-    /**
-     * Cache for $config_dir lookups
-     * @internal
-     */
-    protected $_config_dir = null;
     /**
      * Cache for $secure_dir lookups
      * @internal
@@ -256,20 +251,16 @@ class Smarty_Security {
      */
     public function isTrustedResourceDir($filepath) {
         $_template = false;
-        $_config = false;
         $_secure = false;
 
         $_template_dir = $this->smarty->getTemplateDir();
-        $_config_dir = $this->smarty->getConfigDir();
 
         // check if index is outdated
         if ((!$this->_template_dir || $this->_template_dir !== $_template_dir)
-                || (!$this->_config_dir || $this->_config_dir !== $_config_dir)
                 || (!empty($this->secure_dir) && (!$this->_secure_dir || $this->_secure_dir !== $this->secure_dir))
         ) {
             $this->_resource_dir = array();
             $_template = true;
-            $_config = true;
             $_secure = !empty($this->secure_dir);
         }
 
@@ -277,15 +268,6 @@ class Smarty_Security {
         if ($_template) {
             $this->_template_dir = $_template_dir;
             foreach ($_template_dir as $directory) {
-                $directory = realpath($directory);
-                $this->_resource_dir[$directory] = true;
-            }
-        }
-
-        // rebuild config dir index
-        if ($_config) {
-            $this->_config_dir = $_config_dir;
-            foreach ($_config_dir as $directory) {
                 $directory = realpath($directory);
                 $this->_resource_dir[$directory] = true;
             }
@@ -340,16 +322,17 @@ class Smarty_Security {
      */
     public function isTrustedUri($uri) {
         $_uri = parse_url($uri);
-        if (!empty($_uri['scheme']) && !empty($_uri['host'])) {
-            $_uri = $_uri['scheme'] . '://' . $_uri['host'];
-            foreach ($this->trusted_uri as $pattern) {
-                if (preg_match($pattern, $_uri)) {
-                    return true;
-                }
-            }
+        if (empty($_uri['scheme']) || empty($_uri['host'])) {
+            throw new SmartyException("URI '{$uri}' not allowed by security setting");
         }
 
-        throw new SmartyException("URI '{$uri}' not allowed by security setting");
+        $_uri = $_uri['scheme'] . '://' . $_uri['host'];
+        foreach ($this->trusted_uri as $pattern) {
+            if (preg_match($pattern, $_uri)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

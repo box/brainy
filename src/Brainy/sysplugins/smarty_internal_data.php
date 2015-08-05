@@ -38,13 +38,6 @@ class Smarty_Internal_Data
      * @internal
      */
     public $parent = null;
-    /**
-     * configuration settings
-     *
-     * @var array
-     * @internal
-     */
-    public $config_vars = array();
 
     /**
      * Assigns $value to the variable in $var. If an associative array is
@@ -255,23 +248,6 @@ class Smarty_Internal_Data
     }
 
     /**
-     * Load config file data and assign it to the template.
-     *
-     * This works identically to the {config_load} function
-     *
-     * @param  string $config_file Path to the config file
-     * @param  string|string[]|null $sections Section name or array of section names
-     * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
-     */
-    public function configLoad($config_file, $sections = null) {
-        // load Config class
-        $config = new Smarty_Internal_Config($config_file, $this->smarty, $this);
-        $config->loadConfigVars($sections);
-
-        return $this;
-    }
-
-    /**
      * Return the contents of an assigned variable.
      *
      * @param  string  $variable       the name of the Smarty variable
@@ -305,77 +281,6 @@ class Smarty_Internal_Data
         }
 
         return new Undefined_Smarty_Variable;
-    }
-
-    /**
-     * gets  a config variable
-     *
-     * @param  string $variable the name of the config variable
-     * @return mixed  the value of the config variable
-     */
-    public function getConfigVariable($variable, $error_enable = true) {
-        $_ptr = $this;
-        while ($_ptr !== null) {
-            if (isset($_ptr->config_vars[$variable])) {
-                // found it, return it
-                return $_ptr->config_vars[$variable];
-            }
-            // not found, try at parent
-            $_ptr = $_ptr->parent;
-        }
-        if ($this->smarty->error_unassigned && $error_enable) {
-            trigger_error('Undefined variable "' . $variable . '"', E_USER_NOTICE);
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns a single or all config variables
-     *
-     * @param  string|null $varname Variable name or null (to retrieve all)
-     * @param  boolean $search_parents Whether to search parent scopes
-     * @return string variable value or or array of variables
-     */
-    public function getConfigVars($varname = null, $search_parents = true) {
-        $_ptr = $this;
-        $var_array = array();
-        while ($_ptr !== null) {
-            if (isset($varname)) {
-                if (isset($_ptr->config_vars[$varname])) {
-                    return $_ptr->config_vars[$varname];
-                }
-            } else {
-                $var_array = array_merge($_ptr->config_vars, $var_array);
-            }
-             // not found, try at parent
-            if ($search_parents) {
-                $_ptr = $_ptr->parent;
-            } else {
-                $_ptr = null;
-            }
-        }
-        if (isset($varname)) {
-            return '';
-        } else {
-            return $var_array;
-        }
-    }
-
-    /**
-     * Clears all loaded config variables.
-     *
-     * @param string|null $varname variable name or null
-     * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
-     */
-    public function clearConfig($varname = null) {
-        if (isset($varname)) {
-            unset($this->config_vars[$varname]);
-        } else {
-            $this->config_vars = array();
-        }
-
-        return $this;
     }
 
 }

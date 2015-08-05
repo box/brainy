@@ -29,6 +29,8 @@
  * @package Brainy
  */
 
+namespace \Box\Brainy;
+
 
 /**
  * set SMARTY_DIR to absolute path to Smarty library files.
@@ -52,21 +54,6 @@ if (!defined('SMARTY_MBSTRING')) {
     define('SMARTY_MBSTRING', function_exists('mb_split'));
 }
 
-/**
- * register the class autoloader
- */
-if (!defined('SMARTY_SPL_AUTOLOAD')) {
-    define('SMARTY_SPL_AUTOLOAD', 0);
-}
-
-if (SMARTY_SPL_AUTOLOAD && set_include_path(get_include_path() . PATH_SEPARATOR . SMARTY_SYSPLUGINS_DIR) !== false) {
-    $registeredAutoLoadFunctions = spl_autoload_functions();
-    if (!isset($registeredAutoLoadFunctions['spl_autoload'])) {
-        spl_autoload_register();
-    }
-} else {
-    spl_autoload_register('smartyAutoload');
-}
 
 if (!function_exists('smarty_safe_array_lookup')) {
 
@@ -77,14 +64,14 @@ if (!function_exists('smarty_safe_array_lookup')) {
      * @param int $safety
      * @return mixed
      * @throws InvalidArgumentException
-     * @see Smarty::$safe_lookups
+     * @see Brainy::$safe_lookups
      * @internal
      */
     function smarty_safe_array_lookup($arr, $key, $safety) {
         if (is_array($arr) && isset($arr[$key])) {
             return $arr[$key];
         }
-        if ($safety === Smarty::LOOKUP_SAFE_WARN) {
+        if ($safety === Brainy::LOOKUP_SAFE_WARN) {
             trigger_error('Could not find member "' . $key . '" in Brainy template.', E_USER_WARNING);
         }
         return '';
@@ -99,40 +86,31 @@ if (!function_exists('smarty_safe_var_lookup')) {
      * @param int $safety
      * @return mixed
      * @throws InvalidArgumentException
-     * @see Smarty::$safe_lookups
+     * @see Brainy::$safe_lookups
      * @internal
      */
     function smarty_safe_var_lookup($arr, $key, $safety) {
         if (isset($arr[$key])) {
             return $arr[$key];
         }
-        if ($safety === Smarty::LOOKUP_SAFE_WARN) {
+        if ($safety === Brainy::LOOKUP_SAFE_WARN) {
             trigger_error('Could not find variable "' . $key . '" in Brainy template.', E_USER_WARNING);
         }
         return $arr[$key] = new Smarty_Variable;
     }
 }
 
-/**
- * Load always needed external class files
- */
-require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_data.php';
-require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_templatebase.php';
-require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_template.php';
-require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_write_file.php';
-require_once SMARTY_SYSPLUGINS_DIR . 'smarty_resource.php';
-require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_resource_file.php';
 
 /**
  * This is the main Brainy class
  * @package Brainy
  */
-class Smarty extends Smarty_Internal_TemplateBase {
+class Brainy extends Smarty_Internal_TemplateBase {
     /**
      * The current version string for the current version of Brainy.
      * @var string
      */
-    const SMARTY_VERSION = 'Brainy-2.1.0';
+    const SMARTY_VERSION = 'Brainy-3.0.0';
 
     /**
      * Represents local scope.
@@ -159,20 +137,20 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Disables checking templates of compiled files to detect changes.
      * @var int
-     * @see Smarty::$compile_check Usage Information
+     * @see Brainy::$compile_check Usage Information
      */
     const COMPILECHECK_OFF = 0;
     /**
      * Enables checking templates of compiled files to detect changes.
      * @var int
-     * @see Smarty::$compile_check Usage Information
+     * @see Brainy::$compile_check Usage Information
      */
     const COMPILECHECK_ON = 1;
     /**
      * Enables checking templates of compiled files to detect changes when a
      * cache miss occurs.
      * @var int
-     * @see Smarty::$compile_check Usage Information
+     * @see Brainy::$compile_check Usage Information
      */
     const COMPILECHECK_CACHEMISS = 2;
 
@@ -180,29 +158,29 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Represents post-filtering
      * @var string
-     * @see Smarty::setAutoloadFilters() Usage in setAutoloadFilters
-     * @see Smarty::addAutoloadFilters() Usage in addAutoloadFilters
+     * @see Brainy::setAutoloadFilters() Usage in setAutoloadFilters
+     * @see Brainy::addAutoloadFilters() Usage in addAutoloadFilters
      */
     const FILTER_POST = 'post';
     /**
      * Represents pre-filtering
      * @var string
-     * @see Smarty::setAutoloadFilters() Usage in setAutoloadFilters
-     * @see Smarty::addAutoloadFilters() Usage in addAutoloadFilters
+     * @see Brainy::setAutoloadFilters() Usage in setAutoloadFilters
+     * @see Brainy::addAutoloadFilters() Usage in addAutoloadFilters
      */
     const FILTER_PRE = 'pre';
     /**
      * Represents output-filtering
      * @var string
-     * @see Smarty::setAutoloadFilters() Usage in setAutoloadFilters
-     * @see Smarty::addAutoloadFilters() Usage in addAutoloadFilters
+     * @see Brainy::setAutoloadFilters() Usage in setAutoloadFilters
+     * @see Brainy::addAutoloadFilters() Usage in addAutoloadFilters
      */
     const FILTER_OUTPUT = 'output';
     /**
      * Represents variable-filtering
      * @var string
-     * @see Smarty::setAutoloadFilters() Usage in setAutoloadFilters
-     * @see Smarty::addAutoloadFilters() Usage in addAutoloadFilters
+     * @see Brainy::setAutoloadFilters() Usage in setAutoloadFilters
+     * @see Brainy::addAutoloadFilters() Usage in addAutoloadFilters
      */
     const FILTER_VARIABLE = 'variable';
 
@@ -235,20 +213,20 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * When used, lookups will be unsafe (default Smarty 3 behavior)
      * @var int
-     * @see Smarty::$safe_lookups Usage Information
+     * @see Brainy::$safe_lookups Usage Information
      */
     const LOOKUP_UNSAFE = 0;
     /**
      * When used, lookups will be safe (default Smarty 2 behavior)
      * @var int
-     * @see Smarty::$safe_lookups Usage Information
+     * @see Brainy::$safe_lookups Usage Information
      */
     const LOOKUP_SAFE = 1;
     /**
      * When used, lookups will be safe and a warning will be raised using
      * trigger_error.
      * @var int
-     * @see Smarty::$safe_lookups Usage Information
+     * @see Brainy::$safe_lookups Usage Information
      */
     const LOOKUP_SAFE_WARN = 2;
 
@@ -257,14 +235,14 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * semantics. Assignments will preserve references to previously assigned
      * values.
      * @var int
-     * @see Smarty::$assignment_compat Usage Information
+     * @see Brainy::$assignment_compat Usage Information
      */
     const ASSIGN_COMPAT = 0;
     /**
      * When used, assignments will always use Smarty 3 semantics, regardless of
      * whether SmartyBC is used.
      * @var int
-     * @see Smarty::$assignment_compat Usage Information
+     * @see Brainy::$assignment_compat Usage Information
      */
     const ASSIGN_NO_COMPAT = 1;
 
@@ -310,29 +288,29 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * * The `{capture}` function (it uses `assign()`)
      *
      * @var int
-     * @uses Smarty::SCOPE_LOCAL
-     * @uses Smarty::SCOPE_PARENT
-     * @uses Smarty::SCOPE_ROOT
-     * @uses Smarty::SCOPE_GLOBAL
+     * @uses Brainy::SCOPE_LOCAL
+     * @uses Brainy::SCOPE_PARENT
+     * @uses Brainy::SCOPE_ROOT
+     * @uses Brainy::SCOPE_GLOBAL
      */
-    public static $default_assign_scope = Smarty::SCOPE_LOCAL;
+    public static $default_assign_scope = Brainy::SCOPE_LOCAL;
     /**
      * SmartyBC's usage will--by default--use Smarty 2's semantics for varaible
      * assignment. This means that if a variable is already defined, a clone of
      * the existing variable will be made to preserve references.
      *
-     * If this value is changed to `Smarty::ASSIGN_NO_COMPAT`, Smarty 3's
+     * If this value is changed to `Brainy::ASSIGN_NO_COMPAT`, Smarty 3's
      * assignment semantics will always be used regardless of whether SmartyBC
      * is used or not.
      *
      * This is considered at compile time and not at runtime.
      *
      * @var int
-     * @uses Smarty::ASSIGN_COMPAT
-     * @uses Smarty::ASSIGN_NO_COMPAT
+     * @uses Brainy::ASSIGN_COMPAT
+     * @uses Brainy::ASSIGN_NO_COMPAT
      * @see Smarty_Internal_Compile_Assign
      */
-    public static $assignment_compat = Smarty::ASSIGN_COMPAT;
+    public static $assignment_compat = Brainy::ASSIGN_COMPAT;
     /**
      * This member allows the enforcement of a modifier being applied to
      * expressions that are output. If one of the modifiers in the list is not
@@ -342,7 +320,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public static $enforce_expression_modifiers = array('escape', 'unsafe_noescape');
     /**
-     * When Smarty::$enforce_expression_modifiers is set and this member is set
+     * When Brainy::$enforce_expression_modifiers is set and this member is set
      * to true, even static values will require a modifier. For example:
      *
      *     {'foo'}
@@ -351,7 +329,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * true, it would.
      *
      * @var bool
-     * @uses Smarty::$enforce_expression_modifiers
+     * @uses Brainy::$enforce_expression_modifiers
      */
     public static $enforce_modifiers_on_static_expressions = false;
     /**
@@ -379,9 +357,9 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * Directory that templates are stored in. See the following
      * methods instead:
      *
-     * * Smarty::setTemplateDir()
-     * * Smarty::getTemplateDir()
-     * * Smarty::addTemplateDir()
+     * * Brainy::setTemplateDir()
+     * * Brainy::getTemplateDir()
+     * * Brainy::addTemplateDir()
      * @var array|null
      */
     private $template_dir = array();
@@ -393,20 +371,12 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public $joined_template_dir = null;
     /**
-     * joined config directory string used in cache keys
-     * @var string
-     * @internal
-     * @deprecated This should not be used, as it should be private.
-     */
-    public $joined_config_dir = null;
-    /**
      * Expects a function to use to fetch templates when it cannot be fetched
      * through the default means. The function should use the following
      * prototype:
      *
      * * string $resource_type
      * * string $resource_name
-     * * string &$config_content
      * * int &$modified_timestamp
      * * Smarty $smarty
      *
@@ -416,29 +386,12 @@ class Smarty extends Smarty_Internal_TemplateBase {
      */
     public $default_template_handler_func = null;
     /**
-     * Expects a function to use to fetch config when it cannot be fetched
-     * through the default means. The function should use the following
-     * prototype:
-     *
-     * * string $resource_type
-     * * string $resource_name
-     * * string &$template_content
-     * * int &$modified_timestamp
-     * * Smarty $smarty
-     *
-     * It is expected to return a string (a path to a file) or false if no
-     * config could be loaded.
-     * @var callable
-     */
-    public $default_config_handler_func = null;
-    /**
      * Expects a function to use to fetch plugins when it cannot be fetched
      * through the default means. The function should use the following
      * prototype:
      *
      * * string $resource_type
      * * string $resource_name
-     * * string &$config_content
      * * int &$modified_timestamp
      * * Smarty $smarty
      *
@@ -451,48 +404,38 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * Directory that compiled templates are stored in. See the following
      * methods instead:
      *
-     * * Smarty::setCompileDir()
-     * * Smarty::getCompileDir()
+     * * Brainy::setCompileDir()
+     * * Brainy::getCompileDir()
      * @var string|null
      */
     private $compile_dir = null;
     /**
      * Directory that plugins are stored in. See the following methods instead:
      *
-     * * Smarty::setPluginsDir()
-     * * Smarty::getPluginsDir()
-     * * Smarty::addPluginsDir()
+     * * Brainy::setPluginsDir()
+     * * Brainy::getPluginsDir()
+     * * Brainy::addPluginsDir()
      * @var string|array|null
      */
     private $plugins_dir = array();
     /**
-     * Directory that config files are stored in. See the following methods
-     * instead:
-     *
-     * * Smarty::setConfigDir()
-     * * Smarty::getConfigDir()
-     * * Smarty::addConfigDir()
-     * @var string|array|null
-     */
-    private $config_dir = array();
-    /**
      * When true, Brainy will never use the compiled versions of templates,
      * though compiled files will continue to be generated. This overrides
-     * `Smarty::$compile_check`. Do not use this in production.
+     * `Brainy::$compile_check`. Do not use this in production.
      * @var boolean
      */
     public $force_compile = false;
     /**
-     * When true or Smarty::COMPILECHECK_ON, templates and config are checked
+     * When true or Brainy::COMPILECHECK_ON, templates are checked
      * for changes. If changes exist, the template will be recompiled
      * regardless of whether it has been compiled or cached. Disabling this
-     * in production may yield performance improvements if templates and config
+     * in production may yield performance improvements if templates
      * do not change.
      * @var boolean|int
-     * @uses Smarty::COMPILECHECK_ON
-     * @uses Smarty::COMPILECHECK_OFF
+     * @uses Brainy::COMPILECHECK_ON
+     * @uses Brainy::COMPILECHECK_OFF
      */
-    public $compile_check = Smarty::COMPILECHECK_ON;
+    public $compile_check = Brainy::COMPILECHECK_ON;
     /**
      * When true, subdirectories will be created within compile directory.
      * This is useful for applications with very large numbers of
@@ -501,15 +444,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @var boolean
      */
     public $use_sub_dirs = false;
-    /**
-     * Controls the caching strategy.
-     *
-     * * If $compile_check is true, cached content will be regenerated when the templates or configs change.
-     * * If $force_compile is true, caching will be disabled.
-     *
-     * @var boolean|int
-     */
-    public $caching = false;
     /**
      * When true, included templates will be compiled into the templates that
      * they are included in. The {include} function has an attribute that
@@ -538,11 +472,11 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * when the member does not exist.
      *
      * @var int
-     * @uses Smarty::LOOKUP_UNSAFE
-     * @uses Smarty::LOOKUP_SAFE
-     * @uses Smarty::LOOKUP_SAFE_WARN
+     * @uses Brainy::LOOKUP_UNSAFE
+     * @uses Brainy::LOOKUP_SAFE
+     * @uses Brainy::LOOKUP_SAFE_WARN
      */
-    public $safe_lookups = Smarty::LOOKUP_UNSAFE;
+    public $safe_lookups = Brainy::LOOKUP_UNSAFE;
     /**
      * The left delimiter string
      * @var string
@@ -566,31 +500,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @internal
      */
     public $get_used_tags = false;
-
-    /**#@+
-     * config var settings
-     */
-
-    /**
-     * When true, repeated values in config files will overwrite previous
-     * config values with the same name.
-     * @var boolean
-     */
-    public $config_overwrite = true;
-    /**
-     * When true, config values of on/true/yes and off/false/no get converted
-     * to boolean values automatically rather than returning their string
-     * value.
-     * @var boolean
-     */
-    public $config_booleanize = true;
-    /**
-     * When true, hidden sections in config (sections whose names begin with
-     * a dot) will not be hidden.
-     * @var boolean
-     */
-    public $config_read_hidden = false;
-
 
     /**
      * When true, concurrent template compilation is disabled.
@@ -618,13 +527,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @internal
      */
     public $properties = array();
-    /**
-     * The type of resource to use to load config.
-     *
-     * Must be an element of Smarty::$cache_resource_types.
-     * @var string
-     */
-    public $default_config_type = 'file';
     /**
      * cached template objects
      * @var array
@@ -731,13 +633,12 @@ class Smarty extends Smarty_Internal_TemplateBase {
         // selfpointer needed by some other class methods
         $this->smarty = $this;
         if (is_callable('mb_internal_encoding')) {
-            mb_internal_encoding(Smarty::$_CHARSET);
+            mb_internal_encoding(Brainy::$_CHARSET);
         }
         // set default dirs
         $this->setTemplateDir('.' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR)
             ->setCompileDir('.' . DIRECTORY_SEPARATOR . 'compiled' . DIRECTORY_SEPARATOR)
-            ->setPluginsDir(SMARTY_PLUGINS_DIR)
-            ->setConfigDir('.' . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR);
+            ->setPluginsDir(SMARTY_PLUGINS_DIR);
     }
 
     /**
@@ -754,59 +655,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
         $this->smarty = $this;
     }
 
-
-    /**
-     * @deprecated Use getTemplateDir and setTemplateDir instead
-     * @param string|string[]|null|void $value A value to set
-     * @return array|string|Smarty
-     */
-    public function template_dir($value=null)
-    {
-        if ($value !== null) {
-            $this->setTemplateDir($value);
-            return $this;
-        }
-        return $this->getTemplateDir();
-    }
-    /**
-     * @deprecated Use getConfigDir and setConfigDir instead
-     * @param string|string[]|null|void $value A value to set
-     * @return array|string|Smarty
-     */
-    public function config_dir($value=null)
-    {
-        if ($value !== null) {
-            $this->setConfigDir($value);
-            return $this;
-        }
-        return $this->getConfigDir();
-    }
-    /**
-     * @deprecated Use getPluginsDir and setPluginsDir instead
-     * @param string|string[]|null|void $value A value to set
-     * @return array|string|Smarty
-     */
-    public function plugins_dir($value=null)
-    {
-        if ($value !== null) {
-            $this->setPluginsDir($value);
-            return $this;
-        }
-        return $this->getPluginsDir();
-    }
-    /**
-     * @deprecated Use getCompileDir and setCompileDir instead
-     * @param string|string[]|null|void $value A value to set
-     * @return array|string|Smarty
-     */
-    public function compile_dir($value=null)
-    {
-        if ($value !== null) {
-            $this->setCompileDir($value);
-            return $this;
-        }
-        return $this->getCompileDir();
-    }
 
     /**
      * Returns whether a template with the given name exists
@@ -854,7 +702,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @return Smarty The current Smarty instance for chaining
      * @throws SmartyException when an invalid class is provided
      */
-    public function enableSecurity($security_class=null) {
+    public function enableSecurity($security_class = null) {
         if ($security_class === null) {
             $security_class = new Smarty_Security($this);
         }
@@ -932,75 +780,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
         }
 
         return (array) $this->template_dir;
-    }
-
-    /**
-     * Set config directory
-     *
-     * @param string|string[] $config_dir directory(s) of configuration sources
-     * @return Smarty The current Smarty instance for chaining
-     */
-    public function setConfigDir($config_dir) {
-        $this->config_dir = array();
-        foreach ((array) $config_dir as $k => $v) {
-            $this->config_dir[$k] = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DIRECTORY_SEPARATOR;
-        }
-
-        $this->joined_config_dir = join(DIRECTORY_SEPARATOR, $this->config_dir);
-
-        return $this;
-    }
-
-    /**
-     * Add a directory to the list of directories where config files are stored.
-     *
-     * @param string|array $config_dir directory(s) of config sources
-     * @param string|null $key of the array element to assign the config dir to
-     * @return Smarty The current Smarty instance for chaining
-     */
-    public function addConfigDir($config_dir, $key = null) {
-        // make sure we're dealing with an array
-        $this->config_dir = (array) $this->config_dir;
-
-        if (is_array($config_dir)) {
-            foreach ($config_dir as $k => $v) {
-                $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DIRECTORY_SEPARATOR;
-                if (is_int($k)) {
-                    // indexes are not merged but appended
-                    $this->config_dir[] = $v;
-                } else {
-                    // string indexes are overridden
-                    $this->config_dir[$k] = $v;
-                }
-            }
-        } else {
-            $v = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($config_dir, '/\\')) . DIRECTORY_SEPARATOR;
-            if ($key !== null) {
-                // override directory at specified index
-                $this->config_dir[$key] = rtrim($v, '/\\') . DIRECTORY_SEPARATOR;
-            } else {
-                // append new directory
-                $this->config_dir[] = rtrim($v, '/\\') . DIRECTORY_SEPARATOR;
-            }
-        }
-
-        $this->joined_config_dir = join(DIRECTORY_SEPARATOR, $this->config_dir);
-
-        return $this;
-    }
-
-    /**
-     * Get config directory
-     *
-     * @param int|null $index of directory to get, null to get all
-     * @return array|string configuration directory
-     */
-    public function getConfigDir($index = null) {
-        if ($index !== null) {
-            return isset($this->config_dir[$index]) ? $this->config_dir[$index] : null;
-        }
-
-        return (array) $this->config_dir;
     }
 
     /**
@@ -1120,10 +899,10 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @param  array  $filters filters to load automatically
      * @param  string|null $type "pre", "output", … specify the filter type to set. Defaults to none treating $filters' keys as the appropriate types
      * @return Smarty current Smarty instance for chaining
-     * @see Smarty::FILTER_POST         Allows post filtering
-     * @see Smarty::FILTER_PRE          Allows pre filtering
-     * @see Smarty::FILTER_OUTPUT       Allows output filtering
-     * @see Smarty::FILTER_VARIABLE     Allows variable filtering
+     * @see Brainy::FILTER_POST         Allows post filtering
+     * @see Brainy::FILTER_PRE          Allows pre filtering
+     * @see Brainy::FILTER_OUTPUT       Allows output filtering
+     * @see Brainy::FILTER_VARIABLE     Allows variable filtering
      */
     public function setAutoloadFilters($filters, $type = null) {
         if ($type !== null) {
@@ -1180,7 +959,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * Creates a template object.
      *
      * This creates a template object which later can be rendered by the
-     * Smarty::display() or Smarty::fetch() method.
+     * Brainy::display() or Brainy::fetch() method.
      *
      * @param  string  $template   the resource handle of the template file
      * @param  mixed|void   $cache_id   cache id to be used with this template
@@ -1213,7 +992,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
                 $tpl->smarty = clone $tpl->smarty;
                 $tpl->parent = $parent;
                 $tpl->tpl_vars = array();
-                $tpl->config_vars = array();
             } else {
                 $tpl = new $this->template_class($template, clone $this, $parent, $compile_id);
             }
@@ -1223,7 +1001,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
                 $tpl = $this->template_objects[$_templateId];
                 $tpl->parent = $parent;
                 $tpl->tpl_vars = array();
-                $tpl->config_vars = array();
             } else {
                 $tpl = new $this->template_class($template, $this, $parent, $compile_id);
             }
@@ -1311,19 +1088,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
     }
 
     /**
-     * Compile all config files
-     *
-     * @param  string  $extension Optional file extension
-     * @param  bool    $force_compile Optional boolean that compiles all files instead of modified files
-     * @param  int     $time_limit Optional integer to specify a runtime limit in seconds for the compilation process
-     * @param  int     $max_errors Optional integer to set an error limit. If more errors occur, the function will abort
-     * @return integer number of config files recompiled
-     */
-    public function compileAllConfig($extension = '.conf', $force_compile = false, $time_limit = 0, $max_errors = null) {
-        return Smarty_Internal_Utility::compileAllConfig($extension, $force_compile, $time_limit, $max_errors, $this);
-    }
-
-    /**
      * Delete a compiled template file.
      *
      * This clears the compiled version of the specified template resource, or
@@ -1343,18 +1107,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
         return Smarty_Internal_Utility::clearCompiledTemplate($resource_name, $compile_id, $exp_time, $this);
     }
 
-
-    /**
-     * Return array of tag/attributes of all tags used by an template
-     *
-     * @param  object $template The template object
-     * @return array of tag/attributes
-     * @deprecated This method has never been fully supported.
-     */
-    public function getTags(Smarty_Internal_Template $template) {
-        return Smarty_Internal_Utility::getTags($template);
-    }
-
     /**
      * A stub function that is called whenever a template is included. This is
      * included to allow implementers to detect when a template was included by
@@ -1366,99 +1118,6 @@ class Smarty extends Smarty_Internal_TemplateBase {
 }
 
 // let PCRE (preg_*) treat strings as ISO-8859-1 if we're not dealing with UTF-8
-if (Smarty::$_CHARSET !== 'UTF-8') {
-    Smarty::$_UTF8_MODIFIER = '';
-}
-
-/**
- * Smarty exception class
- * @package Brainy
- */
-class SmartyException extends Exception
-{
-    /**
-     * Whether to HTML escape the contents of the exception.
-     * @var boolean
-     */
-    public static $escape = false;
-
-    /**
-     * @internal
-     */
-    public function __toString() {
-        return ' --> Smarty: ' . (self::$escape ? htmlentities($this->message) : $this->message)  . ' <-- ';
-    }
-}
-
-/**
- * Smarty compiler exception class
- * @package Brainy
- */
-class SmartyCompilerException extends SmartyException {
-    /**
-     * @internal
-     */
-    public function __toString() {
-        return ' --> Smarty Compiler: ' . $this->message . ' <-- ';
-    }
-    /**
-     * The line number of the template error
-     * @var int|null
-     */
-    public $line = null;
-    /**
-     * The template source snippet relating to the error
-     * @var string|null
-     */
-    public $source = null;
-    /**
-     * The raw text of the error message
-     * @var string|null
-     */
-    public $desc = null;
-    /**
-     * The resource identifier or template name
-     * @var string|null
-     */
-    public $template = null;
-}
-
-/**
- * Exception used to indicate a failure to properly wrap expressions with
- * a modifier.
- *
- * @package Brainy
- * @see Smarty::$enforce_expression_modifiers
- */
-class BrainyModifierEnforcementException extends SmartyCompilerException { }
-
-/**
- * Exception used to indicate a violation of Strict Mode.
- *
- * @package Brainy
- * @see Smarty::$strict_mode
- */
-class BrainyStrictModeException extends SmartyCompilerException { }
-
-
-
-/**
- * Autoloader
- * @internal
- */
-function smartyAutoload($class) {
-    $_class = strtolower($class);
-    static $_classes = array(
-        'smarty_config_source' => true,
-        'smarty_config_compiled' => true,
-        'smarty_security' => true,
-        'smarty_resource' => true,
-        'smarty_resource_custom' => true,
-        'smarty_resource_uncompiled' => true,
-        'smarty_resource_recompiled' => true,
-    );
-
-    if (!strncmp($_class, 'smarty_internal_', 16) || isset($_classes[$_class])) {
-        include SMARTY_SYSPLUGINS_DIR . $_class . '.php';
-    }
+if (Brainy::$_CHARSET !== 'UTF-8') {
+    Brainy::$_UTF8_MODIFIER = '';
 }

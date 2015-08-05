@@ -28,5 +28,5 @@ cache/
 *.out
 coverage/
 test/compiled
-vendor
+vendor/
 *.dat

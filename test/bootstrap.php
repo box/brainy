@@ -1,7 +1,11 @@
 <?php
 
-define('SMARTY_DIR', 'src/Brainy/');
-require_once SMARTY_DIR . 'SmartyBC.class.php';
+$loader = require __DIR__ . '/../vendor/autoload.php';
+$loader->add('Box\\Brainy\\Test\\', __DIR__);
+
+
+use \Box\Brainy\Brainy;
+
 
 class SmartyTests
 {
@@ -9,19 +13,19 @@ class SmartyTests
     public static $smartyBC = null;
 
     public static function _init($smarty) {
-        Smarty::$enforce_expression_modifiers = array();
+        Brainy::$enforce_expression_modifiers = array();
         $smarty->setTemplateDir(realpath('test' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR));
         $smarty->setCompileDir(realpath('test' . DIRECTORY_SEPARATOR . 'compiled' . DIRECTORY_SEPARATOR));
         $smarty->setPluginsDir(SMARTY_PLUGINS_DIR);
         $smarty->setConfigDir(realpath('test' . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR));
         $smarty->template_objects = array();
         $smarty->config_vars = array();
-        Smarty::$global_tpl_vars = array();
+        Brainy::$global_tpl_vars = array();
         $smarty->template_functions = array();
         $smarty->tpl_vars = array();
         $smarty->force_compile = false;
         $smarty->auto_literal = true;
-        Smarty::$_smarty_vars = array();
+        Brainy::$_smarty_vars = array();
         $smarty->registered_plugins = array();
         $smarty->default_plugin_handler_func = null;
         $smarty->default_modifiers = array();
@@ -39,7 +43,7 @@ class SmartyTests
         $smarty->error_unassigned = false;
         $smarty->compile_id = null;
         $smarty->default_resource_type = 'file';
-        $smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;
+        $smarty->safe_lookups = Brainy::LOOKUP_UNSAFE;
     }
 
     public static function init() {
@@ -94,7 +98,7 @@ class Smarty_TestCase extends PHPUnit_Framework_TestCase
     }
 }
 
-SmartyTests::$smarty = new Smarty();
+SmartyTests::$smarty = new Brainy();
 SmartyTests::$smartyBC = new SmartyBC();
 
 ini_set('date.timezone', 'UTC');

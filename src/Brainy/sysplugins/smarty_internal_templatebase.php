@@ -50,7 +50,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
         if ($merge_tpl_vars) {
             // save local variables
             $save_tpl_vars = $_template->tpl_vars;
-            $save_config_vars = $_template->config_vars;
             $ptr_array = array($_template);
             $ptr = $_template;
             while (isset($ptr->parent)) {
@@ -59,20 +58,15 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
             $ptr_array = array_reverse($ptr_array);
             $parent_ptr = reset($ptr_array);
             $tpl_vars = $parent_ptr->tpl_vars;
-            $config_vars = $parent_ptr->config_vars;
             while ($parent_ptr = next($ptr_array)) {
                 if (!empty($parent_ptr->tpl_vars)) {
                     $tpl_vars = array_merge($tpl_vars, $parent_ptr->tpl_vars);
-                }
-                if (!empty($parent_ptr->config_vars)) {
-                    $config_vars = array_merge($config_vars, $parent_ptr->config_vars);
                 }
             }
             if (!empty(Smarty::$global_tpl_vars)) {
                 $tpl_vars = array_merge(Smarty::$global_tpl_vars, $tpl_vars);
             }
             $_template->tpl_vars = $tpl_vars;
-            $_template->config_vars = $config_vars;
         }
 
         // dummy local smarty variable
@@ -174,7 +168,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
         if ($merge_tpl_vars) {
             // restore local variables
             $_template->tpl_vars = $save_tpl_vars;
-            $_template->config_vars =  $save_config_vars;
         }
 
         return $output;
@@ -316,22 +309,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
         }
 
         $this->smarty->default_template_handler_func = $callback;
-        return $this;
-    }
-
-    /**
-     * Registers a default template handler
-     *
-     * @param  callable                     $callback class/method name
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
-     * @throws SmartyException              if $callback is not callable
-     */
-    public function registerDefaultConfigHandler($callback) {
-        if (!is_callable($callback)) {
-            throw new SmartyException("Default config handler '$callback' not callable");
-        }
-
-        $this->smarty->default_config_handler_func = $callback;
         return $this;
     }
 

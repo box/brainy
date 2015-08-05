@@ -45,8 +45,9 @@
  * @version    CVS: $Id: Config.php,v 1.1 2006/07/18 00:53:10 cellog Exp $
  * @since      File available since Release 0.1.0
  */
+
 /**
-/** A configuration is a production rule of the grammar together with
+ * A configuration is a production rule of the grammar together with
  * a mark (dot) showing how much of that rule has been processed so far.
  *
  * Configurations also contain a follow-set which is a list of terminal

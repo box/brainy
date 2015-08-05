@@ -97,9 +97,6 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
 
                 return "(defined($modifier) ? constant($modifier) : $modifier)";
 
-            case 'config':
-                return "\$_smarty_tpl->getConfigVariable($modifier)";
-
             case 'ldelim':
                 $_ldelim = $compiler->smarty->left_delimiter;
                 return "'$_ldelim'";

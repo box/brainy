@@ -111,7 +111,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
     /**
      * Returns if the current template must be compiled by the Smarty compiler
      *
-     * It does compare the timestamps of template source and the compiled templates and checks the force compile configuration
+     * It does compare the timestamps of template source and the compiled templates
      *
      * @return boolean true if the template must be compiled
      */
@@ -212,7 +212,6 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         } else {
             $tpl->tpl_vars = &$scope_ptr->tpl_vars;
         }
-        $tpl->config_vars = $this->config_vars;
         if ($data) {
             // set up variable values
             foreach ($data as $_key => $_val) {
@@ -247,7 +246,6 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         } else {
             $tpl->tpl_vars = &$scope_ptr->tpl_vars;
         }
-        $tpl->config_vars = $this->config_vars;
         if (!empty($data)) {
             // set up variable values
             foreach ($data as $_key => $_val) {
