@@ -1,8 +1,7 @@
 <?php
-/**
- * Tests for strict mode
- * @author Matt Basta
- */
+
+namespace Box\Brainy\Tests;
+
 
 class StrictModeTest extends Smarty_TestCase
 {
@@ -11,7 +10,7 @@ class StrictModeTest extends Smarty_TestCase
     {
         parent::setUp();
         $this->smarty->security_policy = null;
-        Smarty::$assignment_compat = Smarty::ASSIGN_COMPAT;
+        \Box\Brainy\Brainy::$assignment_compat = \Box\Brainy\Brainy::ASSIGN_COMPAT;
         $this->smarty->error_reporting = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
     }
 
@@ -102,7 +101,7 @@ class StrictModeTest extends Smarty_TestCase
      * @dataProvider banned_plugin_provider
      */
     public function test_banned_plugins_are_allowed_outside_strict($source) {
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $output = $this->smarty->fetch('eval:' . $source);
         $this->assertTrue($output !== null);
     }
@@ -152,7 +151,7 @@ class StrictModeTest extends Smarty_TestCase
      * @dataProvider banned_special_construct_provider
      */
     public function test_banned_special_constructs_are_allowed_outside_strict($source) {
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $_SESSION = array('foo' => 'bar');
         $_COOKIE = array('foo' => 'bar');
         $output = $this->smarty->fetch('eval:' . $source);

@@ -4,25 +4,28 @@ ini_set('xdebug.max_nesting_level', 300);
 
 // Create Lexer
 require_once './LexerGenerator.php';
-$lex = new PHP_LexerGenerator('smarty_internal_templatelexer.plex');
-$contents = file_get_contents('smarty_internal_templatelexer.php');
+$lex = new PHP_LexerGenerator('Lexer.plex');
+$contents = file_get_contents('Lexer.php');
 $contents = str_replace(array('SMARTYldel', 'SMARTYrdel'), array('".$this->ldel."', '".$this->rdel."'),$contents);
-file_put_contents('smarty_internal_templatelexer.php', $contents);
+file_put_contents('Lexer.php', $contents);
 
 // Create Parser
-passthru("php ./ParserGenerator/cli.php smarty_internal_templateparser.y");
+passthru("php ./ParserGenerator/cli.php Parser.y");
 
-$contents = file_get_contents('smarty_internal_templateparser.php');
+$contents = file_get_contents('Parser.php');
 $contents = '<?php
 /**
  * Brainy Internal Plugin Templateparser
  *
  * This is the template parser.
- * It is generated from the smarty_internal_templateparser.y file
+ * It is generated from the Parser.y file
  * @package Brainy
  * @subpackage Compiler
  * @author Uwe Tews
  * @author Matt Basta
  */
+
+namespace Box\Brainy\Compiler;
+
 ' . substr($contents, 6);
-file_put_contents('smarty_internal_templateparser.php', $contents);
+file_put_contents('Parser.php', $contents);

@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for constants tests
-*/
-class ConstantsTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class ConstantsTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -24,14 +24,5 @@ class ConstantsTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate('eval:{$smarty.const.MYCONSTANTS}');
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
-/**
-    public function testConstants2() {
-        $tpl = $this->smarty->createTemplate('eval:{MYCONSTANTS}');
-        $this->assertEquals("hello world", $this->smarty->fetch($tpl));
-    }
-    public function testConstants3() {
-        $tpl = $this->smarty->createTemplate('eval:{$x=MYCONSTANTS}{$x}');
-        $this->assertEquals("hello world", $this->smarty->fetch($tpl));
-    }
-*/
+
 }

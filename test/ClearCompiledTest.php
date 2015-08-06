@@ -7,10 +7,10 @@
 * @author Rodney Rehm
 */
 
-/**
-* class for delete compiled template tests
-*/
-class ClearCompiledTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class ClearCompiledTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -18,35 +18,6 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         $this->smarty->addTemplateDir('test/templates_2/');
     }
 
-    // helpers
-    /**
-     * clear $smarty->compile_dir
-     *
-     * @return void
-     */
-    protected function clearFiles() {
-        $directory = realpath($this->smarty->getCompileDir());
-        if (!$directory) {
-            return;
-        }
-
-        $di = new RecursiveDirectoryIterator($directory);
-        $it = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
-        foreach ($it as $file) {
-            $_file = $file->__toString();
-
-            if (preg_match("#[\\\\/]\.#", $_file)) {
-                continue;
-            }
-
-            if ($file->isDir()) {
-                rmdir($_file);
-            } else {
-                unlink($_file);
-            }
-
-        }
-    }
     /**
      * list of compiled files
      * @var array
@@ -75,7 +46,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        Smarty_Resource::$sources = array();
+        \Box\Brainy\Resources\Resource::$sources = array();
         $this->smarty->template_objects = array();
 
         return $this->_files;
@@ -143,7 +114,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         return $files;
     }
 
-    // Smarty::clearCompiledTemplate(null, null, null)
+    // \Box\Brainy\Brainy::clearCompiledTemplate(null, null, null)
     public function testClearAll() {
         $this->runClearAll(false);
     }
@@ -162,7 +133,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         $this->clearFiles();
     }
 
-    // Smarty::clearCompiledTemplate($template, null, null)
+    // \Box\Brainy\Brainy::clearCompiledTemplate($template, null, null)
     public function testClearTemplate() {
         $this->runClearTemplate(false);
     }
@@ -205,7 +176,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         $this->clearFiles();
     }
 
-    // Smarty::clearCompiledTemplate(null, $cache_id, null)
+    // \Box\Brainy\Brainy::clearCompiledTemplate(null, $cache_id, null)
     public function testClearCompileid() {
         $this->runClearCompileid(false);
     }
@@ -247,7 +218,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         $this->clearFiles();
     }
 
-    // Smarty::clearCompiledTemplate(null, null, $expired)
+    // \Box\Brainy\Brainy::clearCompiledTemplate(null, null, $expired)
     public function testClearExpired() {
         $this->runClearExpired(false);
     }
@@ -267,7 +238,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         $this->clearFiles();
     }
 
-    // Smarty::clearCompiledTemplate($template, null, $expired)
+    // \Box\Brainy\Brainy::clearCompiledTemplate($template, null, $expired)
     public function testClearTemplateExpired() {
         $this->runClearTemplateExpired(false);
     }
@@ -292,7 +263,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         $this->clearFiles();
     }
 
-    // Smarty::clearCompiledTemplate($template, $cache_id, $expired)
+    // \Box\Brainy\Brainy::clearCompiledTemplate($template, $cache_id, $expired)
     public function testClearTemplateCacheidExpired() {
         $this->runClearTemplateCacheidExpired(false);
     }
@@ -317,7 +288,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         $this->clearFiles();
     }
 
-    // Smarty::clearCompiledTemplate(null, $cache_id, $expired)
+    // \Box\Brainy\Brainy::clearCompiledTemplate(null, $cache_id, $expired)
     public function testClearCacheidExpired() {
         $this->runClearCacheidExpired(false);
     }
@@ -342,7 +313,7 @@ class ClearCompiledTest extends PHPUnit_Framework_TestCase
         $this->clearFiles();
     }
 
-    // Smarty::clearCompiledTemplate($template, $cache_id, null)
+    // \Box\Brainy\Brainy::clearCompiledTemplate($template, $cache_id, null)
     public function testClearTemplateCacheid() {
         $this->runClearTemplateCacheid(false);
     }

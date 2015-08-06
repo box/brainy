@@ -8,6 +8,6 @@ namespace \Box\Brainy\Exceptions;
  * a modifier.
  *
  * @package Brainy
- * @see Smarty::$enforce_expression_modifiers
+ * @see Brainy::$enforce_expression_modifiers
  */
 class BrainyModifierEnforcementException extends SmartyCompilerException { }

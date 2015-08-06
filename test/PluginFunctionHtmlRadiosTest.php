@@ -6,12 +6,12 @@
 * @author Rodney Rehm
 */
 
-require_once(dirname(__FILE__) . '/helpers/_object_tostring.php');
+namespace Box\Brainy\Tests;
 
 /**
 * class for modifier tests
 */
-class PluginFunctionHtmlRadiosTest extends PHPUnit_Framework_TestCase
+class PluginFunctionHtmlRadiosTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -58,7 +58,7 @@ class PluginFunctionHtmlRadiosTest extends PHPUnit_Framework_TestCase
     }
 
     public function testIterator() {
-        if (count(array_values((array) new ArrayIterator(array('first')))) != 1) {
+        if (count(array_values((array) new \ArrayIterator(array('first')))) != 1) {
             $this->markTestSkipped('https://github.com/facebook/hhvm/issues/2214');
         }
 
@@ -71,7 +71,7 @@ class PluginFunctionHtmlRadiosTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate('eval:{html_radios name="id" values=$cust_ids output=$cust_names selected=$customer_id separator="<br />"}');
         $tpl->assign('customer_id', 1001);
         $tpl->assign('cust_ids', array(1000,1001,1002, 1003));
-        $tpl->assign('cust_names', new ArrayIterator(array(
+        $tpl->assign('cust_names', new \ArrayIterator(array(
             'Joe Schmoe',
             'Jack Smith',
             'Jane Johnson',

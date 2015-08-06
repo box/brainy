@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for single quoted string tests
-*/
-class SingleQuotedStringTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class SingleQuotedStringTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

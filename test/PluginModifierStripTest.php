@@ -6,10 +6,10 @@
 * @author Rodney Rehm
 */
 
-/**
-* class for modifier tests
-*/
-class PluginModifierStripTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class PluginModifierStripTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

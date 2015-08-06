@@ -6,10 +6,10 @@
  * @author Uwe Tews
  */
 
-/**
- * class for register->resource tests
- */
-class RegisteredResourceTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class RegisteredResourceTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

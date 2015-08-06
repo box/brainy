@@ -6,20 +6,16 @@
 * @author Uwe Tews
 */
 
-/**
-* class for escape_html property tests
-*/
-class AutoEscapeTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class AutoEscapeTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->escape_html = true;
     }
 
-    /**
-    * test escape_html property
-    */
     public function testAutoEscape() {
         $tpl = $this->smarty->createTemplate('eval:{$foo}');
         $tpl->assign('foo','<a@b.c>');

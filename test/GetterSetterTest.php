@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for generic getter/setter tests
-*/
-class GetterSetterTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class GetterSetterTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

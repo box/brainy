@@ -1,12 +1,12 @@
-all: smarty_internal_templatelexer.php smarty_internal_templateparser.php
-	cp smarty_internal_templatelexer.php ../../src/Brainy/sysplugins/smarty_internal_templatelexer.php
-	cp smarty_internal_templateparser.php ../../src/Brainy/sysplugins/smarty_internal_templateparser.php
+all: Lexer.php Parser.php
+	cp Lexer.php ../../src/Brainy/Compiler/Lexer.php
+	cp Parser.php ../../src/Brainy/Compiler/Parser.php
 
-smarty_internal_templatelexer.php: smarty_internal_templatelexer.plex
+Lexer.php: Lexer.plex
 	php Create_Template_Parser.php
 
-smarty_internal_templateparser.php: smarty_internal_templateparser.y
+Parser.php: Parser.y
 	php Create_Template_Parser.php
 
 clean:
-	rm -f smarty_internal_parser.out smarty_internal_parser.php
+	rm -f Parser.out Parser.php Lexer.php Lexer.out

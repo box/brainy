@@ -1,15 +1,15 @@
 <?php
 /**
-* Smarty PHPunit tests compilation of {for} tag
-*
-* @package PHPunit
-* @author Uwe Tews
-*/
+ * Smarty PHPunit tests compilation of {for} tag
+ *
+ * @package PHPunit
+ * @author Uwe Tews
+ */
 
-/**
-* class for {for} tag tests
-*/
-class CompileForTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileForTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

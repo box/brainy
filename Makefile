@@ -1,13 +1,16 @@
-all: parsers test
+all: parsers autoload test
+
+autoload:
+	composer dump-autoload
 
 parsers:
 	cd build/parsers; make all
 
-test: clean
+test: clean autoload
 	mkdir -p test/compiled
 	phpunit
 
-test-hhvm: clean
+test-hhvm: clean autoload
 	mkdir -p test/compiled
 	./phpunit-hhvm
 

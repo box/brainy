@@ -55,7 +55,7 @@ class Smarty_Internal_Compile_Extends extends Smarty_Internal_CompileBase
         }
         $tpl_name = json_decode($name);
         // create template object
-        $_template = new $compiler->smarty->template_class($tpl_name, $compiler->smarty, $compiler->template);
+        $_template = Template($tpl_name, $compiler->smarty, $compiler->template);
         // check for recursion
         $uid = $_template->source->uid;
         if (isset($compiler->extends_uid[$uid])) {

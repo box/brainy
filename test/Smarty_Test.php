@@ -1,8 +1,7 @@
 <?php
-/**
- * Tests for the Smarty class
- * @author Matt Basta
- */
+
+namespace Box\Brainy\Tests;
+
 
 class Smarty_Test extends Smarty_TestCase
 {
@@ -21,7 +20,7 @@ class Smarty_Test extends Smarty_TestCase
 }
 
 
-class ExtendedSmarty extends Smarty
+class ExtendedSmarty extends \Box\Brainy\Brainy
 {
     public $fetched = null;
 

@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for compiler tests
-*/
-class CompileErrorTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileErrorTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

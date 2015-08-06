@@ -34,11 +34,11 @@ function smarty_modifiercompiler_escape_helper($value) {
 function smarty_modifiercompiler_escape($params, $compiler) {
     try {
         $esc_type = isset($params[1]) ? smarty_modifiercompiler_escape_helper($params[1]) : 'html';
-        $char_set = isset($params[2]) && $params[2] !== 'null' ? $params[2] : '"' . Smarty::$_CHARSET . '"';
+        $char_set = isset($params[2]) && $params[2] !== 'null' ? $params[2] : '"' . Brainy::$_CHARSET . '"';
         $double_encode = isset($params[3]) ? $params[3] : 'true';
 
         if (!$char_set) {
-            $char_set = '"' . Smarty::$_CHARSET . '"';
+            $char_set = '"' . Brainy::$_CHARSET . '"';
         }
 
         switch ($esc_type) {

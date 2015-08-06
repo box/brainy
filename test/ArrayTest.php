@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for array tests
-*/
-class ArrayTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class ArrayTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

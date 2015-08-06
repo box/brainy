@@ -48,7 +48,7 @@ require_once(SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php');
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Rodney Rehm
  * @param array                    $params   parameters
- * @param Smarty_Internal_Template $template template object
+ * @param Template $template template object
  * @return string
  */
 function smarty_function_html_select_date($params, $template) {

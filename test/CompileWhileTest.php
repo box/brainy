@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for {while} tag tests
-*/
-class CompileWhileTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileWhileTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

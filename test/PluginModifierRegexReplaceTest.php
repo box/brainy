@@ -6,10 +6,10 @@
 * @author Rodney Rehm
 */
 
-/**
-* class for modifier tests
-*/
-class PluginModifierRegexReplaceTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class PluginModifierRegexReplaceTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -22,10 +22,10 @@ class PluginModifierRegexReplaceTest extends PHPUnit_Framework_TestCase
     }
 
     public function testDefaultWithoutMbstring() {
-        Smarty::$_MBSTRING = false;
+        \Box\Brainy\Brainy::$_MBSTRING = false;
         $tpl = $this->smarty->createTemplate('eval:{"Infertility unlikely to\nbe passed on, experts say."|regex_replace:"/[\r\t\n]/":" "}');
         $this->assertEquals("Infertility unlikely to be passed on, experts say.", $this->smarty->fetch($tpl));
-        Smarty::$_MBSTRING = true;
+        \Box\Brainy\Brainy::$_MBSTRING = true;
     }
 
     public function testUmlauts() {

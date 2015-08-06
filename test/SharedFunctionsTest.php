@@ -6,10 +6,10 @@
 * @author Rodney Rehm
 */
 
-/**
-* class for function tests
-*/
-class SharedFunctionsTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class SharedFunctionsTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for block plugin tests
-*/
-class CompileBlockPluginTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileBlockPluginTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -60,7 +60,7 @@ class CompileBlockPluginTest extends PHPUnit_Framework_TestCase
     * test block plugin function definition in script
     */
     public function testBlockPluginRegisteredFunction() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'blockplugintest', 'myblockplugintest');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'blockplugintest', 'myblockplugintest');
         $tpl = $this->smarty->createTemplate('eval:{blockplugintest}hello world{/blockplugintest}');
         $this->assertEquals('block test', $this->smarty->fetch($tpl));
     }

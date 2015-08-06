@@ -21,7 +21,7 @@ function smarty_modifiercompiler_to_charset($params, $compiler) {
 
     $compiler->assert_is_not_strict('to_charset is not allowed in strict mode');
 
-    if (!Smarty::$_MBSTRING) {
+    if (!Brainy::$_MBSTRING) {
         // FIXME: (rodneyrehm) shouldn't this throw an error?
         return $params[0];
     }
@@ -30,5 +30,5 @@ function smarty_modifiercompiler_to_charset($params, $compiler) {
         $params[1] = '"ISO-8859-1"';
     }
 
-    return 'mb_convert_encoding(' . $params[0] . ', ' . $params[1] . ', "' . addslashes(Smarty::$_CHARSET) . '")';
+    return 'mb_convert_encoding(' . $params[0] . ', ' . $params[1] . ', "' . addslashes(Brainy::$_CHARSET) . '")';
 }

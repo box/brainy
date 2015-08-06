@@ -6,10 +6,10 @@
  * @author Uwe Tews
  */
 
-/**
- * class for <?xml...> tests
- */
-class XmlTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class XmlTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

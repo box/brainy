@@ -31,7 +31,7 @@ class Smarty_Internal_Compile_Capture extends Smarty_Internal_CompileBase
      * @var array
      * @see Smarty_Internal_CompileBase
      */
-    public $optional_attributes = array('name', 'assign', 'append');
+    public $optional_attributes = array('name', 'assign');
 
     /**
      * Compiles code for the {capture} tag
@@ -46,9 +46,8 @@ class Smarty_Internal_Compile_Capture extends Smarty_Internal_CompileBase
 
         $name = isset($_attr['name']) ? $_attr['name'] : "'default'";
         $assign = isset($_attr['assign']) ? $_attr['assign'] : 'null';
-        $append = isset($_attr['append']) ? $_attr['append'] : 'null';
 
-        $compiler->_capture_stack[0][] = array($name, $assign, $append);
+        $compiler->_capture_stack[0][] = array($name, $assign);
         return "ob_start();\n";
     }
 
@@ -73,17 +72,14 @@ class Smarty_Internal_Compile_CaptureClose extends Smarty_Internal_CompileBase
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
-        list($name, $assign, $append) = array_pop($compiler->_capture_stack[0]);
+        list($name, $assign) = array_pop($compiler->_capture_stack[0]);
 
         $output = '';
 
         if (isset($assign)) {
             $output .= '$_smarty_tpl->assign(' . $assign . ', ob_get_contents());';
         }
-        if (isset($append)) {
-            $output .= '$_smarty_tpl->append(' . $append . ', ob_get_contents());';
-        }
-        $output .= 'Smarty::$_smarty_vars[\'capture\'][' . $name . '] = ob_get_clean();';
+        $output .= 'Brainy::$_smarty_vars[\'capture\'][' . $name . '] = ob_get_clean();';
 
         return $output;
     }

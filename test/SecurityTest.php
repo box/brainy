@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for security test
-*/
-class SecurityTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class SecurityTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

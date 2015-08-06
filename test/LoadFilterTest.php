@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for loadFilter method tests
-*/
-class LoadFilterTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class LoadFilterTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

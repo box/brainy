@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for {setfilter} tag tests
-*/
-class CompileSetfilterTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileSetfilterTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for assign tags tests
-*/
-class CompileAssignTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileAssignTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

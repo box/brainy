@@ -6,7 +6,10 @@
  * @author Matt Basta
  */
 
-class LookupSafetyTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class LookupSafetyTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -20,7 +23,7 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
      */
     public function testUnsafeLookupsThrowException() {
         $this->expectOutputString('');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
         $this->smarty->display('eval:{$does_not_exist}');
     }
 
@@ -29,7 +32,7 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
      */
     public function testUnsafeIndexLookupsThrowException() {
         $this->expectOutputString('');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
         $this->smarty->assign('foo', array());
         $this->smarty->display('eval:{$foo[0]}');
     }
@@ -39,7 +42,7 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
      */
     public function testUnsafeSuperglobalIndexLookupsThrowException() {
         $this->expectOutputString('');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_UNSAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
         $this->smarty->display('eval:{$smarty.request.this_should_never_exist}');
     }
 
@@ -49,34 +52,34 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
 
     public function testSafeLookupsDoNotThrowException() {
         $this->expectOutputString('');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smarty->display('eval:{$does_not_exist}');
     }
 
     public function testSafeIndexLookupsDoNotThrowException() {
         $this->expectOutputString('');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smarty->assign('foo', array());
         $this->smarty->display('eval:{$foo[0]}');
     }
 
     public function testSafeMemberLookupsInLangConstructsPasses() {
         $this->expectOutputString('it is unset');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smarty->assign('foo', array());
         $this->smarty->display('eval:{if !isset($foo.bar)}it is unset{/if}');
     }
 
     public function testSafeIndexLookupsInLangConstructsPasses() {
         $this->expectOutputString('it is empty');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smarty->assign('foo', '');
         $this->smarty->display('eval:{if empty($foo)}it is empty{/if}');
     }
 
     public function testSafeSuperglobalIndexLookupsPasses() {
         $this->expectOutputString('');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smarty->display('eval:{$smarty.request.this_should_never_exist}');
     }
 
@@ -89,7 +92,7 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
      */
     public function testSafeWarnLookupsThrowWarning() {
         $this->expectOutputString('');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE_WARN;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE_WARN;
         $this->smarty->display('eval:{$does_not_exist}');
     }
 
@@ -98,7 +101,7 @@ class LookupSafetyTest extends PHPUnit_Framework_TestCase
      */
     public function testSafeWarnIndexLookupsThrowWarning() {
         $this->expectOutputString('');
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE_WARN;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE_WARN;
         $this->smarty->assign('foo', array());
         $this->smarty->display('eval:{$foo[0]}');
     }

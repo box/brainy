@@ -6,17 +6,17 @@
 * @author Uwe Tews
 */
 
-/**
-* class for clearing assigned variables tests
-*/
-class ClearAssignTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class ClearAssignTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
-        $this->smartyBC->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
+        $this->smartyBC->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
 
         $this->smarty->assign('foo','foo');
         $this->smarty->assign('bar','bar');

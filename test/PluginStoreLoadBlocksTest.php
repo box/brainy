@@ -1,10 +1,7 @@
 <?php
-/**
- * Tests for the {store} and {load} blocks
- *
- * @package PHPunit
- * @author Matt Basta
- */
+
+namespace Box\Brainy\Tests;
+
 
 class PluginStoreLoadBlocksTest extends Smarty_TestCase
 {

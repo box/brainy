@@ -1,58 +1,33 @@
 <?php
-/**
-* Smarty PHPunit tests for tag attributes
-*
-* @package PHPunit
-* @author Uwe Tews
-*/
 
-/**
-* class for tag attribute tests
-*/
-class AttributeTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class AttributeTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
 
     /**
-    * test required attribute
-    */
+     * @expectedException Exception
+     * @expectedExceptionMessage missing "var" attribute
+     */
     public function testRequiredAttributeVar() {
-        try {
-            $this->smarty->fetch('eval:{assign value=1}');
-        } catch (Exception $e) {
-            $this->assertContains('missing "var" attribute', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for required attribute "var" has not been raised.');
+        $this->smarty->fetch('eval:{assign value=1}');
     }
+
     /**
-    * test unexpected attribute
-    */
+     * @expectedException Exception
+     * @expectedExceptionMessage unexpected "bar" attribute
+     */
     public function testUnexpectedAttribute() {
-        try {
-            $this->smarty->fetch('eval:{assign var=foo value=1 bar=2}');
-        } catch (Exception $e) {
-            $this->assertContains('unexpected "bar" attribute', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for unexpected attribute "bar" has not been raised.');
+        $this->smarty->fetch('eval:{assign var=foo value=1 bar=2}');
     }
+
     /**
-    * test too many shorthands
-    */
+     * @expectedException Exception
+     * @expectedExceptionMessage too many shorthand attributes
+     */
     public function testTooManyShorthands() {
-        try {
-            $this->smarty->fetch('eval:{assign foo 1 2}');
-        } catch (Exception $e) {
-            $this->assertContains('too many shorthand attributes', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for too many shorthand attributes has not been raised.');
+        $this->smarty->fetch('eval:{assign foo 1 2}');
     }
+
 }

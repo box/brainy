@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for block plugin tests
-*/
-class DefaultTemplateHandlerTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class DefaultTemplateHandlerTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

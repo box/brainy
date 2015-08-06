@@ -6,12 +6,12 @@
 * @author Uwe Tews
 */
 
-require_once 'helpers/Smarty_Data.php';
+namespace Box\Brainy\Tests;
 
-/**
-* class for clearing all assigned variables tests
-*/
-class ClearAllAssignTest extends PHPUnit_Framework_TestCase
+use Box\Brainy\Templates\TemplateData;
+
+
+class ClearAllAssignTest extends Smarty_TestCase
 {
     protected $_data = null;
     protected $_tpl = null;
@@ -22,17 +22,17 @@ class ClearAllAssignTest extends PHPUnit_Framework_TestCase
         $this->smarty = SmartyTests::$smarty;
         $this->smartyBC = SmartyTests::$smartyBC;
         SmartyTests::init();
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
-        $this->smartyBC->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
+        $this->smartyBC->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
 
         $this->smarty->assign('foo','foo');
-        $this->_data = new Smarty_Data($this->smarty);
+        $this->_data = new TemplateData($this->smarty);
         $this->_data->assign('bar','bar');
         $this->_tpl = $this->smarty->createTemplate('eval:{$foo}{$bar}{$blar}', null, null, $this->_data);
         $this->_tpl->assign('blar','blar');
 
         $this->smartyBC->assign('foo','foo');
-        $this->_dataBC = new Smarty_Data($this->smartyBC);
+        $this->_dataBC = new TemplateData($this->smartyBC);
         $this->_dataBC->assign('bar','bar');
         $this->_tplBC = $this->smartyBC->createTemplate('eval:{$foo}{$bar}{$blar}', null, null, $this->_dataBC);
         $this->_tplBC->assign('blar','blar');

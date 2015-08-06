@@ -36,7 +36,7 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
                 $compiler->assert_is_not_strict('{$smarty.section} is not allowed in strict mode');
                 return "\$_smarty_tpl->tpl_vars['smarty']->value['section'][$modifier]";
             case 'capture':
-                return "Smarty::\$_smarty_vars['capture'][$modifier]";
+                return "Brainy::\$_smarty_vars['capture'][$modifier]";
             case 'now':
                 return 'time()';
             case 'cookies':
@@ -64,7 +64,7 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
                     return;
                 }
                 $unsafe = '$_' . strtoupper($variable) . "[$modifier]";
-                if ($compiler->smarty->safe_lookups === Smarty::LOOKUP_UNSAFE) {
+                if ($compiler->smarty->safe_lookups === Brainy::LOOKUP_UNSAFE) {
                     return $unsafe;
                 } else {
                     return new BrainySafeLookupWrapper(
@@ -85,7 +85,7 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
                 return 'dirname($_smarty_tpl->source->filepath)';
 
             case 'version':
-                $_version = Smarty::SMARTY_VERSION;
+                $_version = Brainy::SMARTY_VERSION;
                 return "'$_version'";
 
             case 'const':

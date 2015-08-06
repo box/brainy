@@ -70,9 +70,9 @@ function smarty_modifier_debug_print_var($var, $depth = 0, $length = 40) {
 
         case 'string' :
             $results = strtr($var, $_replace);
-            if (Smarty::$_MBSTRING) {
-                if (mb_strlen($var, Smarty::$_CHARSET) > $length) {
-                    $results = mb_substr($var, 0, $length - 3, Smarty::$_CHARSET) . '...';
+            if (Brainy::$_MBSTRING) {
+                if (mb_strlen($var, Brainy::$_CHARSET) > $length) {
+                    $results = mb_substr($var, 0, $length - 3, Brainy::$_CHARSET) . '...';
                 }
             } else {
                 if (isset($var[$length])) {
@@ -86,9 +86,9 @@ function smarty_modifier_debug_print_var($var, $depth = 0, $length = 40) {
         case 'unknown type' :
         default :
             $results = strtr((string) $var, $_replace);
-            if (Smarty::$_MBSTRING) {
-                if (mb_strlen($results, Smarty::$_CHARSET) > $length) {
-                    $results = mb_substr($results, 0, $length - 3, Smarty::$_CHARSET) . '...';
+            if (Brainy::$_MBSTRING) {
+                if (mb_strlen($results, Brainy::$_CHARSET) > $length) {
+                    $results = mb_substr($results, 0, $length - 3, Brainy::$_CHARSET) . '...';
                 }
             } else {
                 if (strlen($results) > $length) {

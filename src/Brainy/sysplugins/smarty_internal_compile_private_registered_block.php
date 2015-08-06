@@ -39,10 +39,10 @@ class Smarty_Internal_Compile_Private_Registered_Block extends Smarty_Internal_C
             // opening tag of block plugin
             // check and get attributes
             $_attr = $this->getAttributes($compiler, $args);
-            if (isset($compiler->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$tag])) {
-               $tag_info = $compiler->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$tag];
+            if (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_BLOCK][$tag])) {
+               $tag_info = $compiler->smarty->registered_plugins[Brainy::PLUGIN_BLOCK][$tag];
             } else {
-               $tag_info = $compiler->default_handler_plugins[Smarty::PLUGIN_BLOCK][$tag];
+               $tag_info = $compiler->default_handler_plugins[Brainy::PLUGIN_BLOCK][$tag];
             }
             // convert attributes into parameter array string
             $_paramsArray = array();
@@ -71,10 +71,10 @@ class Smarty_Internal_Compile_Private_Registered_Block extends Smarty_Internal_C
             list($_params) = $this->closeTag($compiler, $base_tag);
             // This tag does create output
             $compiler->has_output = true;
-               if (isset($compiler->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$base_tag])) {
-                   $function = $compiler->smarty->registered_plugins[Smarty::PLUGIN_BLOCK][$base_tag][0];
+               if (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_BLOCK][$base_tag])) {
+                   $function = $compiler->smarty->registered_plugins[Brainy::PLUGIN_BLOCK][$base_tag][0];
                } else {
-                   $function = $compiler->default_handler_plugins[Smarty::PLUGIN_BLOCK][$base_tag][0];
+                   $function = $compiler->default_handler_plugins[Brainy::PLUGIN_BLOCK][$base_tag][0];
                }
             // compile code
             if (!isset($parameter['modifier_list'])) {

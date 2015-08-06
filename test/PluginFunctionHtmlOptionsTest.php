@@ -6,12 +6,12 @@
 * @author Rodney Rehm
 */
 
-require_once(dirname(__FILE__) . '/helpers/_object_tostring.php');
+namespace Box\Brainy\Tests;
 
 /**
 * class for modifier tests
 */
-class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
+class PluginFunctionHtmlOptionsTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -58,7 +58,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
     }
 
     public function testIterator() {
-        if (count(array_values((array) new ArrayIterator(array('first')))) != 1) {
+        if (count(array_values((array) new \ArrayIterator(array('first')))) != 1) {
             $this->markTestSkipped('https://github.com/facebook/hhvm/issues/2214');
         }
 
@@ -71,7 +71,7 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Framework_TestCase
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
         $tpl->assign('mySelect', 9904);
-        $tpl->assign('myOptions', new ArrayIterator(array(
+        $tpl->assign('myOptions', new \ArrayIterator(array(
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',

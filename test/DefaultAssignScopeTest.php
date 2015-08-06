@@ -6,14 +6,17 @@
 * @author Matt Basta
 */
 
-class DefaultAssignScopeTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class DefaultAssignScopeTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
     public function tearDown() {
-        Smarty::$default_assign_scope = Smarty::SCOPE_LOCAL;
+        \Box\Brainy\Brainy::$default_assign_scope = \Box\Brainy\Brainy::SCOPE_LOCAL;
     }
 
     public function testDefaultIsLocalScope() {
@@ -26,7 +29,7 @@ class DefaultAssignScopeTest extends PHPUnit_Framework_TestCase
     }
 
     public function testRootScopeGivesAccessToVars() {
-        Smarty::$default_assign_scope = Smarty::SCOPE_ROOT;
+        \Box\Brainy\Brainy::$default_assign_scope = \Box\Brainy\Brainy::SCOPE_ROOT;
         $this->smarty->fetch('eval:{assign var="foo" value="bar"}');
         $this->assertEquals(
             $this->smarty->getTemplateVars('foo'),
@@ -36,7 +39,7 @@ class DefaultAssignScopeTest extends PHPUnit_Framework_TestCase
     }
 
     public function testGlobalScopeGivesAccessToVars() {
-        Smarty::$default_assign_scope = Smarty::SCOPE_GLOBAL;
+        \Box\Brainy\Brainy::$default_assign_scope = \Box\Brainy\Brainy::SCOPE_GLOBAL;
         $this->smarty->fetch('eval:{assign var="foo" value="bar"}');
         $this->assertEquals(
             $this->smarty->getTemplateVars('foo'),
@@ -46,7 +49,7 @@ class DefaultAssignScopeTest extends PHPUnit_Framework_TestCase
     }
 
     public function testDefaultScopeCanBeOverridden() {
-        Smarty::$default_assign_scope = Smarty::SCOPE_GLOBAL;
+        \Box\Brainy\Brainy::$default_assign_scope = \Box\Brainy\Brainy::SCOPE_GLOBAL;
         $this->smarty->fetch('eval:{assign var="foo" value="bar" scope="local"}');
         $this->assertEquals(
             $this->smarty->getTemplateVars('foo'),
@@ -67,7 +70,7 @@ class DefaultAssignScopeTest extends PHPUnit_Framework_TestCase
     }
 
     public function testRootScopeGivesAccessToVarsForCapture() {
-        Smarty::$default_assign_scope = Smarty::SCOPE_ROOT;
+        \Box\Brainy\Brainy::$default_assign_scope = \Box\Brainy\Brainy::SCOPE_ROOT;
         $this->smarty->fetch('eval:{capture assign="foo"}captured{/capture}');
         $this->assertEquals(
             $this->smarty->getTemplateVars('foo'),

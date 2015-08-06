@@ -6,15 +6,15 @@
 * @author Uwe Tews
 */
 
-/**
-* class for {section} tag tests
-*/
-class CompileSectionTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileSectionTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
     }
 
     /**

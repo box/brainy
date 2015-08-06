@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for eval resource tests
-*/
-class EvalResourceTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class EvalResourceTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

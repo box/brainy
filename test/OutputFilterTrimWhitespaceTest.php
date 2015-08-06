@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for PHP resource tests
-*/
-class OutputFilterTrimWhitespaceTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class OutputFilterTrimWhitespaceTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

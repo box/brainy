@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for delimiter tests
-*/
-class DelimiterTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class DelimiterTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for function plugin tests
-*/
-class CompileFunctionPluginTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileFunctionPluginTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -35,7 +35,7 @@ class CompileFunctionPluginTest extends PHPUnit_Framework_TestCase
     * test function plugin function definition in script
     */
     public function testFunctionPluginRegisteredFunction() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_FUNCTION,'plugintest', 'myplugintest');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_FUNCTION,'plugintest', 'myplugintest');
         $tpl = $this->smarty->createTemplate('eval:{plugintest foo=bar}', $this->smarty);
         $this->assertEquals("plugin test called bar", $this->smarty->fetch($tpl));
     }

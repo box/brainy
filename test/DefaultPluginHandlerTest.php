@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for plugin handler tests
-*/
-class DefaultPluginHandlerTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class DefaultPluginHandlerTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -65,7 +65,7 @@ class DefaultPluginHandlerTest extends PHPUnit_Framework_TestCase
 
 function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cachable) {
     switch ($type) {
-        case Smarty::PLUGIN_FUNCTION:
+        case \Box\Brainy\Brainy::PLUGIN_FUNCTION:
             switch ($tag) {
                 case 'scriptfunction':
                     $script = 'test/scripts/script_function_tag.php';
@@ -85,7 +85,7 @@ function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cach
                 default:
                 return false;
             }
-        case Smarty::PLUGIN_COMPILER:
+        case \Box\Brainy\Brainy::PLUGIN_COMPILER:
             switch ($tag) {
                 case 'scriptcompilerfunction':
                     $script = 'test/scripts/script_compiler_function_tag.php';
@@ -95,7 +95,7 @@ function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cach
                 default:
                 return false;
             }
-        case Smarty::PLUGIN_BLOCK:
+        case \Box\Brainy\Brainy::PLUGIN_BLOCK:
             switch ($tag) {
                 case 'scriptblock':
                     $script = 'test/scripts/script_block_tag.php';
@@ -105,7 +105,7 @@ function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cach
                 default:
                 return false;
             }
-        case Smarty::PLUGIN_MODIFIER:
+        case \Box\Brainy\Brainy::PLUGIN_MODIFIER:
             switch ($tag) {
                 case 'scriptmodifier':
                     $script = 'test/scripts/script_modifier.php';

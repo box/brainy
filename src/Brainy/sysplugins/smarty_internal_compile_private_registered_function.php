@@ -39,10 +39,10 @@ class Smarty_Internal_Compile_Private_Registered_Function extends Smarty_Interna
         $compiler->has_output = true;
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
-        if (isset($compiler->smarty->registered_plugins[Smarty::PLUGIN_FUNCTION][$tag])) {
-           $tag_info = $compiler->smarty->registered_plugins[Smarty::PLUGIN_FUNCTION][$tag];
+        if (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_FUNCTION][$tag])) {
+           $tag_info = $compiler->smarty->registered_plugins[Brainy::PLUGIN_FUNCTION][$tag];
         } else {
-           $tag_info = $compiler->default_handler_plugins[Smarty::PLUGIN_FUNCTION][$tag];
+           $tag_info = $compiler->default_handler_plugins[Brainy::PLUGIN_FUNCTION][$tag];
         }
         // convert attributes into parameter array string
         $_paramsArray = array();
@@ -59,7 +59,7 @@ class Smarty_Internal_Compile_Private_Registered_Function extends Smarty_Interna
         if (!is_array($function)) {
             return "echo {$function}({$_params},\$_smarty_tpl);\n";
         } elseif (is_object($function[0])) {
-            return "echo \$_smarty_tpl->smarty->registered_plugins[Smarty::PLUGIN_FUNCTION]['{$tag}'][0][0]->{$function[1]}({$_params},\$_smarty_tpl);\n";
+            return "echo \$_smarty_tpl->smarty->registered_plugins[Brainy::PLUGIN_FUNCTION]['{$tag}'][0][0]->{$function[1]}({$_params},\$_smarty_tpl);\n";
         } else {
             return "echo {$function[0]}::{$function[1]}({$_params},\$_smarty_tpl);\n";
         }

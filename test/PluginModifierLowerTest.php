@@ -6,10 +6,10 @@
 * @author Rodney Rehm
 */
 
-/**
-* class for modifier tests
-*/
-class PluginModifierLowerTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class PluginModifierLowerTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -23,11 +23,11 @@ class PluginModifierLowerTest extends PHPUnit_Framework_TestCase
     }
 
     public function testDefaultWithoutMbstring() {
-        Smarty::$_MBSTRING = false;
+        \Box\Brainy\Brainy::$_MBSTRING = false;
         $result = "two convicts evade noose, jury hung.";
         $tpl = $this->smarty->createTemplate('eval:{"Two Convicts Evade Noose, Jury Hung."|lower}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
-        Smarty::$_MBSTRING = true;
+        \Box\Brainy\Brainy::$_MBSTRING = true;
     }
 
     public function testUmlauts() {
@@ -37,11 +37,11 @@ class PluginModifierLowerTest extends PHPUnit_Framework_TestCase
     }
 
     public function testUmlautsWithoutMbstring() {
-        Smarty::$_MBSTRING = false;
+        \Box\Brainy\Brainy::$_MBSTRING = false;
         $result = "two convicts eväde nööse, jury hung.";
         $tpl = $this->smarty->createTemplate('eval:{"Two Convicts Eväde NöÖse, Jury Hung."|lower}');
         $this->assertNotEquals($result, $this->smarty->fetch($tpl));
-        Smarty::$_MBSTRING = true;
+        \Box\Brainy\Brainy::$_MBSTRING = true;
     }
 
 }

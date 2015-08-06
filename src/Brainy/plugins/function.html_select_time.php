@@ -27,7 +27,7 @@ require_once(SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php');
  * @author Roberto Berto <roberto@berto.net>
  * @author Monte Ohrt <monte AT ohrt DOT com>
  * @param array                    $params   parameters
- * @param Smarty_Internal_Template $template template object
+ * @param Template $template template object
  * @return string
  * @uses smarty_make_timestamp()
  */

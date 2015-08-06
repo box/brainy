@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for assignGlobal method  and {assignGlobal} tag tests
-*/
-class AssignGlobalTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class AssignGlobalTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

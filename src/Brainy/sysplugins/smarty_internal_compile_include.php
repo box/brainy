@@ -65,15 +65,15 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
             $_assign = $_attr['assign'];
         }
 
-        $_parent_scope = Smarty::SCOPE_LOCAL;
+        $_parent_scope = Brainy::SCOPE_LOCAL;
         if (isset($_attr['scope'])) {
             $_attr['scope'] = trim($_attr['scope'], "'\"");
             if ($_attr['scope'] == 'parent') {
-                $_parent_scope = Smarty::SCOPE_PARENT;
+                $_parent_scope = Brainy::SCOPE_PARENT;
             } elseif ($_attr['scope'] == 'root') {
-                $_parent_scope = Smarty::SCOPE_ROOT;
+                $_parent_scope = Brainy::SCOPE_ROOT;
             } elseif ($_attr['scope'] == 'global') {
-                $_parent_scope = Smarty::SCOPE_GLOBAL;
+                $_parent_scope = Brainy::SCOPE_GLOBAL;
             }
         }
 
@@ -122,7 +122,7 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
             }
             $tpl_name = json_decode($include_file);
             if (!isset($compiler->smarty->merged_templates_func[$tpl_name][$uid])) {
-                $tpl = new $compiler->smarty->template_class ($tpl_name, $compiler->smarty, $compiler->template, $compiler->template->compile_id);
+                $tpl = new Template($tpl_name, $compiler->smarty, $compiler->template, $compiler->template->compile_id);
                 // save unique function name
                 $compiler->smarty->merged_templates_func[$tpl_name][$uid]['func'] = $tpl->properties['unifunc'] = 'content_' . str_replace(array('.',','), '_', uniqid('', true));
                 if ($compiler->inheritance) {
@@ -157,7 +157,7 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
         $_vars = 'array()';
         $_has_vars = !empty($_attr);
         if ($_has_vars) {
-            if ($_parent_scope !== Smarty::SCOPE_LOCAL) {
+            if ($_parent_scope !== Brainy::SCOPE_LOCAL) {
                 $compiler->trigger_template_error('variable passing not allowed in parent/global scope', $compiler->lex->taglineno);
             }
             // create variables

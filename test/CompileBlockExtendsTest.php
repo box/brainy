@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for block extends compiler tests
-*/
-class CompileBlockExtendsTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileBlockExtendsTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

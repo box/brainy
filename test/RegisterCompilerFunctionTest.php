@@ -6,10 +6,10 @@
  * @author Uwe Tews
  */
 
-/**
- * class for register->compilerFunction / unregister->compilerFunction methods tests
- */
-class RegisterCompilerFunctionTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class RegisterCompilerFunctionTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -20,7 +20,7 @@ class RegisterCompilerFunctionTest extends PHPUnit_Framework_TestCase
      * test register->compilerFunction method for function
      */
     public function testRegisterCompilerFunction() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'testcompilerfunction', 'mycompilerfunction');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction', 'mycompilerfunction');
         $this->assertEquals('mycompilerfunction', $this->smarty->registered_plugins['compiler']['testcompilerfunction'][0]);
         $this->assertEquals('hello world 1', $this->smarty->fetch('eval:{testcompilerfunction var=1}'));
     }
@@ -29,8 +29,8 @@ class RegisterCompilerFunctionTest extends PHPUnit_Framework_TestCase
      * test register->compilerFunction method for blocks
      */
     public function testRegisterCompilerFunctionBlock() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'foo', 'mycompilerfunctionopen');
-        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'fooclose', 'mycompilerfunctionclose');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'foo', 'mycompilerfunctionopen');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'fooclose', 'mycompilerfunctionclose');
         $result = $this->smarty->fetch('eval:{foo} hallo {/foo}');
         $this->assertEquals('open tag hallo close tag', $result);
     }
@@ -38,7 +38,7 @@ class RegisterCompilerFunctionTest extends PHPUnit_Framework_TestCase
      * test register->compilerFunction method for static class
      */
     public function testRegisterCompilerFunctionClass() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'testcompilerfunction', array('mycompilerfunctionclass', 'execute'));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction', array('mycompilerfunctionclass', 'execute'));
         $this->assertEquals('hello world 2', $this->smarty->fetch('eval:{testcompilerfunction var1=2}'));
     }
     /**
@@ -46,31 +46,31 @@ class RegisterCompilerFunctionTest extends PHPUnit_Framework_TestCase
      */
     public function testRegisterCompilerFunctionObject() {
         $obj = new mycompilerfunctionclass;
-        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'testcompilerfunction', array($obj, 'compile'));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction', array($obj, 'compile'));
         $this->assertEquals('hello world 3', $this->smarty->fetch('eval:{testcompilerfunction var2=3}'));
     }
     /**
      * test unregister->compilerFunction method
      */
     public function testUnregisterCompilerFunction() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'testcompilerfunction', 'mycompilerfunction');
-        $this->smarty->unregisterPlugin(Smarty::PLUGIN_COMPILER,'testcompilerfunction');
-        $this->assertFalse(isset($this->smarty->registered_plugins[Smarty::PLUGIN_COMPILER]['testcompilerfunction']));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction', 'mycompilerfunction');
+        $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction');
+        $this->assertFalse(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_COMPILER]['testcompilerfunction']));
     }
     /**
      * test unregister->compilerFunction method not registered
      */
     public function testUnregisterCompilerFunctionNotRegistered() {
-        $this->smarty->unregisterPlugin(Smarty::PLUGIN_COMPILER,'testcompilerfunction');
-        $this->assertFalse(isset($this->smarty->registered_plugins[Smarty::PLUGIN_COMPILER]['testcompilerfunction']));
+        $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction');
+        $this->assertFalse(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_COMPILER]['testcompilerfunction']));
     }
     /**
      * test unregister->compilerFunction method other registered
      */
     public function testUnregisterCompilerFunctionOtherRegistered() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testcompilerfunction', 'mycompilerfunction');
-        $this->smarty->unregisterPlugin(Smarty::PLUGIN_COMPILER,'testcompilerfunction');
-        $this->assertTrue(isset($this->smarty->registered_plugins[Smarty::PLUGIN_BLOCK]['testcompilerfunction']));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testcompilerfunction', 'mycompilerfunction');
+        $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction');
+        $this->assertTrue(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_BLOCK]['testcompilerfunction']));
     }
 }
 function mycompilerfunction($params, $smarty) {

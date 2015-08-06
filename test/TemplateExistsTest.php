@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for templateExists tests
-*/
-class TemplateExistsTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class TemplateExistsTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

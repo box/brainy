@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for file resource tests
-*/
-class FileResourceTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class FileResourceTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

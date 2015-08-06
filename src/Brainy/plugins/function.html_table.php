@@ -44,7 +44,7 @@
  * @link http://www.smarty.net/manual/en/language.function.html.table.php {html_table}
  *          (Smarty online manual)
  * @param array                    $params   parameters
- * @param Smarty_Internal_Template $template template object
+ * @param Template $template template object
  * @return string
  */
 function smarty_function_html_table($params, $template) {

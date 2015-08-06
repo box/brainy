@@ -6,18 +6,14 @@
  * @author Uwe Tews
  */
 
-/**
-* class for capture tags tests
-*/
-class CompileCaptureTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompileCaptureTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
     public function tearDown() {
-        Smarty::$assignment_compat = Smarty::ASSIGN_COMPAT;
-        Smarty::$enforce_expression_modifiers = [];
+        \Box\Brainy\Brainy::$assignment_compat = \Box\Brainy\Brainy::ASSIGN_COMPAT;
+        \Box\Brainy\Brainy::$enforce_expression_modifiers = [];
     }
 
     /**
@@ -71,7 +67,7 @@ class CompileCaptureTest extends PHPUnit_Framework_TestCase
      */
     public function testConditionalsInCapture($x, $result, $modifiers)
     {
-        Smarty::$enforce_expression_modifiers = $modifiers;
+        \Box\Brainy\Brainy::$enforce_expression_modifiers = $modifiers;
         $this->smarty->assign('x', $x);
         $this->assertEquals($result, $this->smarty->fetch('eval:{capture assign="foo"}{if $x && true}success{else}fail{/if}{/capture}<{$foo|escape}>'));
     }
@@ -81,7 +77,7 @@ class CompileCaptureTest extends PHPUnit_Framework_TestCase
      */
     public function testStripAroundCapture($x, $result, $modifiers)
     {
-        Smarty::$enforce_expression_modifiers = $modifiers;
+        \Box\Brainy\Brainy::$enforce_expression_modifiers = $modifiers;
         $this->smarty->assign('x', $x);
         $this->assertEquals($result, $this->smarty->fetch('eval:{strip}{capture assign="foo"}{if $x && true}success{else}fail{/if}{/capture}<{$foo|escape}>{/strip}'));
     }
@@ -91,7 +87,7 @@ class CompileCaptureTest extends PHPUnit_Framework_TestCase
      */
     public function testMultipleStripsAroundCapture($x, $result, $modifiers)
     {
-        Smarty::$enforce_expression_modifiers = $modifiers;
+        \Box\Brainy\Brainy::$enforce_expression_modifiers = $modifiers;
         $this->smarty->assign('x', $x);
         $this->assertEquals($result, $this->smarty->fetch('eval:{strip}{strip}{capture assign="foo"}{if $x && true}success{else}fail{/if}{/capture}<{$foo|escape}>{/strip}{/strip}'));
     }

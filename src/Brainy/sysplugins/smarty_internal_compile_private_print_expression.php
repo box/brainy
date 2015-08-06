@@ -78,23 +78,23 @@ class Smarty_Internal_Compile_Private_Print_Expression extends Smarty_Internal_C
             }
             // autoescape html
             if ($compiler->template->smarty->escape_html) {
-                $output = "htmlspecialchars({$output}, ENT_QUOTES, '" . addslashes(Smarty::$_CHARSET) . "')";
+                $output = "htmlspecialchars({$output}, ENT_QUOTES, '" . addslashes(Brainy::$_CHARSET) . "')";
             }
             // loop over registerd filters
-            if (!empty($compiler->template->smarty->registered_filters[Smarty::FILTER_VARIABLE])) {
-                foreach ($compiler->template->smarty->registered_filters[Smarty::FILTER_VARIABLE] as $key => $function) {
+            if (!empty($compiler->template->smarty->registered_filters[Brainy::FILTER_VARIABLE])) {
+                foreach ($compiler->template->smarty->registered_filters[Brainy::FILTER_VARIABLE] as $key => $function) {
                     if (!is_array($function)) {
                         $output = "{$function}({$output},\$_smarty_tpl)";
                     } elseif (is_object($function[0])) {
-                        $output = "\$_smarty_tpl->smarty->registered_filters[Smarty::FILTER_VARIABLE]['{$key}'][0]->{$function[1]}({$output},\$_smarty_tpl)";
+                        $output = "\$_smarty_tpl->smarty->registered_filters[Brainy::FILTER_VARIABLE]['{$key}'][0]->{$function[1]}({$output},\$_smarty_tpl)";
                     } else {
                         $output = "{$function[0]}::{$function[1]}({$output},\$_smarty_tpl)";
                     }
                 }
             }
             // auto loaded filters
-            if (isset($compiler->smarty->autoload_filters[Smarty::FILTER_VARIABLE])) {
-                foreach ((array) $compiler->template->smarty->autoload_filters[Smarty::FILTER_VARIABLE] as $name) {
+            if (isset($compiler->smarty->autoload_filters[Brainy::FILTER_VARIABLE])) {
+                foreach ((array) $compiler->template->smarty->autoload_filters[Brainy::FILTER_VARIABLE] as $name) {
                     $result = $this->compile_output_filter($compiler, $name, $output);
                     if ($result !== false) {
                         $output = $result;
@@ -129,8 +129,8 @@ class Smarty_Internal_Compile_Private_Print_Expression extends Smarty_Internal_C
         $plugin_name = "smarty_variablefilter_{$name}";
         $path = $compiler->smarty->loadPlugin($plugin_name, false);
         if ($path) {
-            $compiler->template->required_plugins['compiled'][$name][Smarty::FILTER_VARIABLE]['file'] = $path;
-            $compiler->template->required_plugins['compiled'][$name][Smarty::FILTER_VARIABLE]['function'] = $plugin_name;
+            $compiler->template->required_plugins['compiled'][$name][Brainy::FILTER_VARIABLE]['file'] = $path;
+            $compiler->template->required_plugins['compiled'][$name][Brainy::FILTER_VARIABLE]['function'] = $plugin_name;
         } else {
             // not found
             return false;

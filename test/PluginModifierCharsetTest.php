@@ -6,10 +6,10 @@
 * @author Rodney Rehm
 */
 
-/**
-* class for modifier tests
-*/
-class PluginModifierCharsetTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class PluginModifierCharsetTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -24,12 +24,12 @@ class PluginModifierCharsetTest extends PHPUnit_Framework_TestCase
     }
 
     public function testToLatin1WithoutMbstring() {
-        Smarty::$_MBSTRING = false;
+        \Box\Brainy\Brainy::$_MBSTRING = false;
         $encoded = "hällö wörld 2";
         $result = utf8_decode($encoded);
         $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|to_charset}');
         $this->assertEquals($encoded, $tpl->fetch());
-        Smarty::$_MBSTRING = true;
+        \Box\Brainy\Brainy::$_MBSTRING = true;
     }
 
     public function testFromLatin1() {
@@ -40,12 +40,12 @@ class PluginModifierCharsetTest extends PHPUnit_Framework_TestCase
     }
 
     public function testFromLatin1WithoutMbstring() {
-        Smarty::$_MBSTRING = false;
+        \Box\Brainy\Brainy::$_MBSTRING = false;
         $result = "hällö wörld 4";
         $encoded = utf8_decode($result);
         $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|from_charset}');
         $this->assertEquals($encoded, $tpl->fetch());
-        Smarty::$_MBSTRING = true;
+        \Box\Brainy\Brainy::$_MBSTRING = true;
     }
 
     public function testFromUtf32le() {
@@ -56,12 +56,12 @@ class PluginModifierCharsetTest extends PHPUnit_Framework_TestCase
     }
 
     public function testFromUtf32leWithoutMbstring() {
-        Smarty::$_MBSTRING = false;
+        \Box\Brainy\Brainy::$_MBSTRING = false;
         $result = "hällö wörld 6";
         $encoded = mb_convert_encoding($result, "UTF-32LE", "UTF-8");
         $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|from_charset:"UTF-32LE"}');
         $this->assertEquals($encoded, $tpl->fetch());
-        Smarty::$_MBSTRING = true;
+        \Box\Brainy\Brainy::$_MBSTRING = true;
     }
 
     public function testToUtf32le() {
@@ -72,11 +72,11 @@ class PluginModifierCharsetTest extends PHPUnit_Framework_TestCase
     }
 
     public function testToUtf32leWithoutMbstring() {
-        Smarty::$_MBSTRING = false;
+        \Box\Brainy\Brainy::$_MBSTRING = false;
         $encoded = "hällö wörld 8";
         $result = mb_convert_encoding($encoded, "UTF-32LE", "UTF-8");
         $tpl = $this->smarty->createTemplate('eval:{"' . $encoded . '"|to_charset:"UTF-32LE"}');
         $this->assertEquals($encoded, $tpl->fetch());
-        Smarty::$_MBSTRING = true;
+        \Box\Brainy\Brainy::$_MBSTRING = true;
     }
 }

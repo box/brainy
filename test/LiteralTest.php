@@ -4,10 +4,10 @@
  * @author Uwe Tews
  */
 
-/**
-* class for appendByRef tests
-*/
-class LiteralTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class LiteralTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

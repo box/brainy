@@ -31,6 +31,9 @@
         "phpunit/phpunit": "4.1.*"
     },
     "autoload": {
-        "psr-4": {"Box\\": "src/"}
+        "psr-4": {
+            "Box\\Brainy\\": "src/Brainy/",
+            "Box\\Brainy\\Tests\\": "test/"
+        }
     }
 }

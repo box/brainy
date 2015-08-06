@@ -6,17 +6,17 @@
 * @author Uwe Tews
 */
 
-require_once 'helpers/Smarty_Data.php';
+namespace Box\Brainy\Tests;
 
-/**
-* class for variable scope test
-*/
-class VariableScopeTest extends PHPUnit_Framework_TestCase
+use Box\Brainy\Templates\TemplateData;
+
+
+class VariableScopeTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-        $this->smarty->safe_lookups = Smarty::LOOKUP_SAFE;
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smarty->assign('foo', 'bar');
     }
 
@@ -40,20 +40,20 @@ class VariableScopeTest extends PHPUnit_Framework_TestCase
     * test root variable with data object chain
     */
     public function testVariableScope2() {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new TemplateData($this->smarty);
+        $data2 = new TemplateData($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", null, null, $data2);
         $this->assertEquals("bar", $this->smarty->fetch($tpl));
     }
     public function testVariableScope22() {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new TemplateData($this->smarty);
+        $data2 = new TemplateData($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", $data2);
         $this->assertEquals("bar", $this->smarty->fetch($tpl));
     }
     public function testVariableScope23() {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new TemplateData($this->smarty);
+        $data2 = new TemplateData($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", $data2);
         $this->assertEquals("bar", $tpl->fetch());
     }
@@ -62,16 +62,16 @@ class VariableScopeTest extends PHPUnit_Framework_TestCase
     * test overwrite variable with data object chain
     */
     public function testVariableScope3() {
-        $data1 = new Smarty_Data($this->smarty);
+        $data1 = new TemplateData($this->smarty);
         $data1->assign('foo','newvalue');
-        $data2 = new Smarty_Data($data1);
+        $data2 = new TemplateData($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", null, null, $data2);
         // must see the new value
         $this->assertEquals("newvalue", $this->smarty->fetch($tpl));
     }
     public function testVariableScope32() {
-        $data1 = new Smarty_Data($this->smarty);
-        $data2 = new Smarty_Data($data1);
+        $data1 = new TemplateData($this->smarty);
+        $data2 = new TemplateData($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", $data2);
         // must see the old value at root
         $this->assertEquals("bar", $this->smarty->fetch($tpl));

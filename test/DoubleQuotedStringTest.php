@@ -6,10 +6,10 @@
  * @author Uwe Tews
  */
 
-/**
- * class for double quoted string tests
- */
-class DoubleQuotedStringTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class DoubleQuotedStringTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

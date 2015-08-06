@@ -27,5 +27,5 @@ function smarty_modifiercompiler_strip($params, $compiler) {
         $params[1] = "' '";
     }
 
-    return "preg_replace('!\s+!" . Smarty::$_UTF8_MODIFIER . "', {$params[1]}, {$params[0]})";
+    return "preg_replace('!\s+!" . Brainy::$_UTF8_MODIFIER . "', {$params[1]}, {$params[0]})";
 }

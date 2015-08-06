@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for modifier tests
-*/
-class ModifierTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class ModifierTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -102,7 +102,7 @@ class ModifierTest extends PHPUnit_Framework_TestCase
     * test registered modifier function
     */
     public function testModifierRegisteredFunction() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier','testmodifier');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier','testmodifier');
         $tpl = $this->smarty->createTemplate('eval:{$foo|testmodifier}');
         $tpl->assign('foo', 2);
         $this->assertEquals("mymodifier function 2", $this->smarty->fetch($tpl));
@@ -111,7 +111,7 @@ class ModifierTest extends PHPUnit_Framework_TestCase
     * test registered modifier static class
     */
     public function testModifierRegisteredStaticClass() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier', array('testmodifierclass','staticcall'));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier', array('testmodifierclass','staticcall'));
         $tpl = $this->smarty->createTemplate('eval:{$foo|testmodifier}');
         $tpl->assign('foo', 1);
         $this->assertEquals("mymodifier static 1", $this->smarty->fetch($tpl));
@@ -121,7 +121,7 @@ class ModifierTest extends PHPUnit_Framework_TestCase
     */
     public function testModifierRegisteredMethodCall() {
         $obj= new testmodifierclass();
-        $this->smarty->registerPlugin(Smarty::PLUGIN_MODIFIER,'testmodifier', array($obj,'method'));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier', array($obj,'method'));
         $tpl = $this->smarty->createTemplate('eval:{$foo|testmodifier}');
         $tpl->assign('foo', 3);
         $this->assertEquals("mymodifier method 3", $this->smarty->fetch($tpl));

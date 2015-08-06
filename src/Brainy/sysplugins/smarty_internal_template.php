@@ -18,7 +18,7 @@
  * @property Smarty_Template_Source   $source
  * @property Smarty_Template_Compiled $compiled
  */
-class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
+class Template extends Smarty_Internal_TemplateBase
 {
     /**
      * $compile_id
@@ -90,7 +90,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
      *
      * @param string                   $template_resource template resource string
      * @param Smarty                   $smarty            Smarty instance
-     * @param Smarty_Internal_Template $_parent           back pointer to parent object with variables or null
+     * @param Template $_parent           back pointer to parent object with variables or null
      * @param mixed                    $_compile_id       compile id or null
      */
     public function __construct($template_resource, $smarty, $_parent = null, $_compile_id = null) {
@@ -101,7 +101,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         // Template resource
         $this->template_resource = $template_resource;
         // copy block data of template inheritance
-        if ($this->parent instanceof Smarty_Internal_Template) {
+        if ($this->parent instanceof Template) {
             $this->block_data = $this->parent->block_data;
         }
 
@@ -117,7 +117,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
      */
     public function mustCompile() {
         if (!$this->source->exists) {
-            if ($this->parent instanceof Smarty_Internal_Template) {
+            if ($this->parent instanceof Template) {
                 $parent_resource = " in '$this->parent->template_resource}'";
             } else {
                 $parent_resource = '';
@@ -197,16 +197,16 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             $tpl = clone $this->smarty->template_objects[$_templateId];
             $tpl->parent = $this;
         } else {
-            $tpl = new $this->smarty->template_class($template, $this->smarty, $this, $compile_id);
+            $tpl = new Template($template, $this->smarty, $this, $compile_id);
         }
         // get variables from calling scope
-        if ($parent_scope == Smarty::SCOPE_LOCAL) {
+        if ($parent_scope == Brainy::SCOPE_LOCAL) {
             $tpl->tpl_vars = $this->tpl_vars;
             $tpl->tpl_vars['smarty'] = clone $this->tpl_vars['smarty'];
-        } elseif ($parent_scope == Smarty::SCOPE_PARENT) {
+        } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
             $tpl->tpl_vars = &$this->tpl_vars;
-        } elseif ($parent_scope == Smarty::SCOPE_GLOBAL) {
-            $tpl->tpl_vars = &Smarty::$global_tpl_vars;
+        } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {
+            $tpl->tpl_vars = &Brainy::$global_tpl_vars;
         } elseif (($scope_ptr = $this->getScopePointer($parent_scope)) == null) {
             $tpl->tpl_vars = &$this->tpl_vars;
         } else {
@@ -232,15 +232,15 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
      * @returns string template content
      */
     public function setupInlineSubTemplate($template, $compile_id, $data, $parent_scope) {
-        $tpl = new $this->smarty->template_class($template, $this->smarty, $this, $compile_id);
+        $tpl = new Template($template, $this->smarty, $this, $compile_id);
         // get variables from calling scope
-        if ($parent_scope == Smarty::SCOPE_LOCAL) {
+        if ($parent_scope == Brainy::SCOPE_LOCAL) {
             $tpl->tpl_vars = $this->tpl_vars;
             $tpl->tpl_vars['smarty'] = clone $this->tpl_vars['smarty'];
-        } elseif ($parent_scope == Smarty::SCOPE_PARENT) {
+        } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
             $tpl->tpl_vars = &$this->tpl_vars;
-        } elseif ($parent_scope == Smarty::SCOPE_GLOBAL) {
-            $tpl->tpl_vars = &Smarty::$global_tpl_vars;
+        } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {
+            $tpl->tpl_vars = &Brainy::$global_tpl_vars;
         } elseif (($scope_ptr = $this->getScopePointer($parent_scope)) == null) {
             $tpl->tpl_vars = &$this->tpl_vars;
         } else {
@@ -289,7 +289,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             // remove compiled code of{function} definition
             unset($this->properties['function']);
         }
-        $this->properties['version'] = Smarty::SMARTY_VERSION;
+        $this->properties['version'] = Brainy::SMARTY_VERSION;
         if (!isset($this->properties['unifunc'])) {
             $this->properties['unifunc'] = 'content_' . str_replace(array('.',','), '_', uniqid('', true));
         }
@@ -338,9 +338,9 @@ PHPDOC;
         $this->properties['unifunc'] = $properties['unifunc'];
         // check file dependencies at compiled code
         $is_valid = true;
-        if ($this->properties['version'] != Smarty::SMARTY_VERSION) {
+        if ($this->properties['version'] != Brainy::SMARTY_VERSION) {
             $is_valid = false;
-        } elseif (((!$cache && $this->smarty->compile_check && empty($this->compiled->_properties) && !$this->compiled->isCompiled) || $cache && ($this->smarty->compile_check === true || $this->smarty->compile_check === Smarty::COMPILECHECK_ON)) && !empty($this->properties['file_dependency'])) {
+        } elseif (((!$cache && $this->smarty->compile_check && empty($this->compiled->_properties) && !$this->compiled->isCompiled) || $cache && ($this->smarty->compile_check === true || $this->smarty->compile_check === Brainy::COMPILECHECK_ON)) && !empty($this->properties['file_dependency'])) {
             foreach ($this->properties['file_dependency'] as $_file_to_check) {
                 if ($_file_to_check[2] == 'file' || $_file_to_check[2] == 'php') {
                     if ($this->source->filepath == $_file_to_check[0] && isset($this->source->timestamp)) {
@@ -353,7 +353,7 @@ PHPDOC;
                 } elseif ($_file_to_check[2] == 'string') {
                     continue;
                 } else {
-                    $source = Smarty_Resource::source(null, $this->smarty, $_file_to_check[0]);
+                    $source = \Box\Brainy\Resources\Resource::source(null, $this->smarty, $_file_to_check[0]);
                     $mtime = $source->timestamp;
                 }
                 if (!$mtime || $mtime > $_file_to_check[1]) {
@@ -374,14 +374,14 @@ PHPDOC;
      * @param string $tpl_var tempate variable name
      * @param int    $scope   scope of variable
      */
-    public function createLocalArrayVariable($tpl_var, $scope = Smarty::SCOPE_LOCAL) {
+    public function createLocalArrayVariable($tpl_var, $scope = Brainy::SCOPE_LOCAL) {
         if (!isset($this->tpl_vars[$tpl_var])) {
             $this->tpl_vars[$tpl_var] = new Smarty_variable(array(), $scope);
             return;
         }
 
         $this->tpl_vars[$tpl_var] = clone $this->tpl_vars[$tpl_var];
-        if ($scope != Smarty::SCOPE_LOCAL) {
+        if ($scope != Brainy::SCOPE_LOCAL) {
             $this->tpl_vars[$tpl_var]->scope = $scope;
         }
         if (!(is_array($this->tpl_vars[$tpl_var]->value) || $this->tpl_vars[$tpl_var]->value instanceof ArrayAccess)) {
@@ -396,17 +396,17 @@ PHPDOC;
      * @return array array of template variables
      */
     public function &getScope($scope) {
-        if ($scope == Smarty::SCOPE_PARENT && !empty($this->parent)) {
+        if ($scope == Brainy::SCOPE_PARENT && !empty($this->parent)) {
             return $this->parent->tpl_vars;
-        } elseif ($scope == Smarty::SCOPE_ROOT && !empty($this->parent)) {
+        } elseif ($scope == Brainy::SCOPE_ROOT && !empty($this->parent)) {
             $ptr = $this->parent;
             while (!empty($ptr->parent)) {
                 $ptr = $ptr->parent;
             }
 
             return $ptr->tpl_vars;
-        } elseif ($scope == Smarty::SCOPE_GLOBAL) {
-            return Smarty::$global_tpl_vars;
+        } elseif ($scope == Brainy::SCOPE_GLOBAL) {
+            return Brainy::$global_tpl_vars;
         }
         $null = null;
 
@@ -420,9 +420,9 @@ PHPDOC;
      * @return mixed object
      */
     public function getScopePointer($scope) {
-        if ($scope == Smarty::SCOPE_PARENT && !empty($this->parent)) {
+        if ($scope == Brainy::SCOPE_PARENT && !empty($this->parent)) {
             return $this->parent;
-        } elseif ($scope == Smarty::SCOPE_ROOT && !empty($this->parent)) {
+        } elseif ($scope == Brainy::SCOPE_ROOT && !empty($this->parent)) {
             $ptr = $this->parent;
             while (!empty($ptr->parent)) {
                 $ptr = $ptr->parent;
@@ -521,7 +521,7 @@ PHPDOC;
                 if (strlen($this->template_resource) == 0) {
                     throw new SmartyException('Missing template name');
                 }
-                $this->source = Smarty_Resource::source($this);
+                $this->source = \Box\Brainy\Resources\Resource::source($this);
                 // cache template object under a unique ID
                 // do not cache eval resources
                 if ($this->source->type != 'eval') {
@@ -541,8 +541,7 @@ PHPDOC;
                 return $this->compiled;
 
             case 'compiler':
-                $this->smarty->loadPlugin($this->source->compiler_class);
-                $this->compiler = new $this->source->compiler_class($this->source->template_lexer_class, $this->source->template_parser_class, $this->smarty);
+                $this->compiler = new \Box\Brainy\Compiler\TemplateCompiler($this->source->template_lexer_class, $this->source->template_parser_class, $this->smarty);
 
                 return $this->compiler;
 
@@ -563,7 +562,7 @@ PHPDOC;
      */
     public function assert_is_not_strict($reason)
     {
-        if (Smarty::$strict_mode || $this->strict_mode) {
+        if (Brainy::$strict_mode || $this->strict_mode) {
             throw new BrainyStrictModeException('Strict Mode: ' . $reason);
         }
     }

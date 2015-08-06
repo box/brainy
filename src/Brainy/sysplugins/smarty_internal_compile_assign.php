@@ -31,7 +31,7 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
         $this->shorttag_order = array('var', 'value');
         $this->optional_attributes = array('scope');
 
-        $_scope = Smarty::$default_assign_scope;
+        $_scope = Brainy::$default_assign_scope;
 
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
@@ -39,13 +39,13 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
         if (isset($_attr['scope'])) {
             $_attr['scope'] = trim($_attr['scope'], "'\"");
             if ($_attr['scope'] == 'local') {
-                $_scope = Smarty::SCOPE_LOCAL;
+                $_scope = Brainy::SCOPE_LOCAL;
             } elseif ($_attr['scope'] == 'parent') {
-                $_scope = Smarty::SCOPE_PARENT;
+                $_scope = Brainy::SCOPE_PARENT;
             } elseif ($_attr['scope'] == 'root') {
-                $_scope = Smarty::SCOPE_ROOT;
+                $_scope = Brainy::SCOPE_ROOT;
             } elseif ($_attr['scope'] == 'global') {
-                $_scope = Smarty::SCOPE_GLOBAL;
+                $_scope = Brainy::SCOPE_GLOBAL;
             } else {
                 $compiler->trigger_template_error('illegal value for "scope" attribute', $compiler->lex->taglineno);
             }
@@ -57,7 +57,7 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
             $output .= "\$_smarty_tpl->tpl_vars[$_attr[var]]->value$parameter[smarty_internal_index] = $_attr[value];\n";
         } else {
             // implement Smarty2's behaviour of variables assigned by reference
-            if ($compiler->template->smarty instanceof SmartyBC && Smarty::$assignment_compat === Smarty::ASSIGN_COMPAT) {
+            if ($compiler->template->smarty instanceof SmartyBC && Brainy::$assignment_compat === Brainy::ASSIGN_COMPAT) {
                 $output .= "if (isset(\$_smarty_tpl->tpl_vars[$_attr[var]])) {\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];\n";
                 $output .= "  \$_smarty_tpl->tpl_vars[$_attr[var]]->value = $_attr[value];\n";

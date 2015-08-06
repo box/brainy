@@ -25,14 +25,14 @@ function smarty_modifiercompiler_unescape($params, $compiler) {
         $params[1] = 'html';
     }
     if (!isset($params[2])) {
-        $params[2] = '\'' . addslashes(Smarty::$_CHARSET) . '\'';
+        $params[2] = '\'' . addslashes(Brainy::$_CHARSET) . '\'';
     } else {
         $params[2] = "'" . $params[2] . "'";
     }
 
     switch (trim($params[1], '"\'')) {
         case 'entity':
-            if (Smarty::$_MBSTRING) {
+            if (Brainy::$_MBSTRING) {
                 return 'mb_convert_encoding(' . $params[0] . ', ' . $params[2] . ', \'HTML-ENTITIES\')';
             }
 

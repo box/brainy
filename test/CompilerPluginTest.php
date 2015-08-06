@@ -6,10 +6,10 @@
 * @author Uwe Tews
 */
 
-/**
-* class for compiler plugin tests
-*/
-class CompilerPluginTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class CompilerPluginTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;

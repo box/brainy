@@ -1,6 +1,6 @@
 <?php
 
-class Smarty_Data extends Smarty_Internal_Data {
+class Smarty_Data extends \Box\Brainy\Templates\TemplateData {
     /**
      * Smarty object
      *

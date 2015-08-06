@@ -6,10 +6,10 @@
  * @author Uwe Tews
  */
 
-/**
- * class for register->block / unregister->block methods tests
- */
-class RegisterBlockTest extends PHPUnit_Framework_TestCase
+namespace Box\Brainy\Tests;
+
+
+class RegisterBlockTest extends Smarty_TestCase
 {
     public function setUp() {
         $this->smarty = SmartyTests::$smarty;
@@ -23,17 +23,17 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
      * test registerPlugin method for block function
      */
     public function testRegisterBlockFunction() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testblock', 'myblock');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock', 'myblock');
         $this->smarty->assign('value', 1);
         $this->assertEquals('function hello world 1 1 function hello world 1 2 function hello world 1 3 ', $this->smarty->fetch('eval:{testblock}hello world {$value}{/testblock}'));
     }
     public function testRegisterBlockFunctionModifier1() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testblock', 'myblock');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock', 'myblock');
         $this->smarty->assign('value', 1);
         $this->assertEquals(strtoupper('function hello world 1 1 function hello world 1 2 function hello world 1 3 '), $this->smarty->fetch('eval:{testblock}hello world {$value}{/testblock|strtoupper}'));
     }
     public function testRegisterBlockFunctionModifier2() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testblock', 'myblock');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock', 'myblock');
         $this->smarty->assign('value', 1);
         $this->assertEquals(strtoupper('function hello world 1 1 function hello world 1 2 function hello world 1 3 '), $this->smarty->fetch('eval:{testblock}hello world {$value}{/testblock|default:""|strtoupper}'));
     }
@@ -46,7 +46,7 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
      * test registerPlugin method for block class
      */
     public function testRegisterBlockClass() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testblock', array('myblockclass', 'static_method'));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock', array('myblockclass', 'static_method'));
         $this->smarty->assign('value', 2);
         $this->assertEquals('static hello world 2 1 static hello world 2 2 static hello world 2 3 ', $this->smarty->fetch('eval:{testblock}hello world {$value}{/testblock}'));
     }
@@ -60,7 +60,7 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
      */
     public function testRegisterBlockObject() {
         $myblock_object = new myblockclass;
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testblock', array($myblock_object, 'object_method'));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock', array($myblock_object, 'object_method'));
         $this->smarty->assign('value', 3);
         $this->assertEquals('object hello world 3 1 object hello world 3 2 object hello world 3 3 ', $this->smarty->fetch('eval:{testblock}hello world {$value}{/testblock}'));
     }
@@ -80,7 +80,7 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
         $this->smarty->assign('x', 1);
         $this->smarty->assign('y', 10);
         $this->smarty->assign('z', 100);
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testblock', 'myblockcache');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock', 'myblockcache');
         $this->assertEquals('1 10 100', $this->smarty->fetch('test_register_block.tpl'));
     }
     public function testRegisterBlockCaching3() {
@@ -89,7 +89,7 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
         $this->smarty->assign('x', 3);
         $this->smarty->assign('y', 30);
         $this->smarty->assign('z', 300);
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testblock', 'myblockcache', false);
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock', 'myblockcache', false);
         $this->assertEquals('3 30 300', $this->smarty->fetch('test_register_block.tpl'));
     }
     public function testRegisterBlockCaching1Wrapper() {
@@ -114,21 +114,21 @@ class RegisterBlockTest extends PHPUnit_Framework_TestCase
      * test unregister->block method
      */
     public function testUnregisterBlock() {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'testblock', 'myblock');
-        $this->smarty->unregisterPlugin(Smarty::PLUGIN_BLOCK,'testblock');
-        $this->assertFalse(isset($this->smarty->registered_plugins[Smarty::PLUGIN_BLOCK]['testblock']));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock', 'myblock');
+        $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock');
+        $this->assertFalse(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_BLOCK]['testblock']));
     }
     public function testUnregisterBlockWrapper() {
         $this->smartyBC->register_block('testblock', 'myblock');
         $this->smartyBC->unregister_block('testblock');
-        $this->assertFalse(isset($this->smartyBC->registered_plugins[Smarty::PLUGIN_BLOCK]['testblock']));
+        $this->assertFalse(isset($this->smartyBC->registered_plugins[\Box\Brainy\Brainy::PLUGIN_BLOCK]['testblock']));
     }
     /**
      * test unregister->block method not registered
      */
     public function testUnregisterBlockNotRegistered() {
-        $this->smarty->unregisterPlugin(Smarty::PLUGIN_BLOCK,'testblock');
-        $this->assertFalse(isset($this->smarty->registered_plugins[Smarty::PLUGIN_BLOCK]['testblock']));
+        $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testblock');
+        $this->assertFalse(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_BLOCK]['testblock']));
     }
 }
 function myblock($params, $content, &$smarty_tpl, &$repeat) {
