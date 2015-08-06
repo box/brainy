@@ -12,11 +12,11 @@ Please report any problems that you encounter.
 
 ## Why Brainy?
 
-- Brainy generates cleaner and faster code than Smarty by default.
+- Brainy generates clean and fast code by default.
 - Brainy has security defaults that align better with [best practices](http://www.phptherightway.com/#security).
-- Brainy removes features that are infrequently used and increase code bloat.
-- Brainy is safer than Smarty in that it removes support for features like
-  `eval` and injecting arbitrary PHP into a template. Brainy uses less PHP magic.
+- Brainy does not include features that are infrequently used and increase code bloat.
+
+Because Brainy is a fork of Smarty 3, it shares much of the same syntax and features while eliminating dangerous footguns and making it hard to write bad code.
 
 
 ## Getting Started
@@ -27,22 +27,10 @@ page on the wiki.
 
 ### Minimum Requirements
 
-- PHP 5.3.2 or higher
-- (optionally) HHVM 3.1.x or higher
+- PHP 5.4+ or HHVM 3.7+
+- `mbstring` PHP extension
 
-Unlike Smarty 3, PHP 5.2.x is not a supported platform. Use Brainy with old
-versions of PHP at your own risk.
-
-Note that HHVM support is currently experimental, though most common behaviors
-work as expected.
-
-
-### Differences from Smarty
-
-While Brainy will work as a drop-in replacement for Smarty in most
-applications, there are some differences that may make it difficult to switch.
-
-A complete list of differences is listed [on the wiki](https://github.com/box/brainy/wiki/Differences-from-Smarty).
+The `mbstring` extension is required in order to properly support Unicode in templates and user-provided content. Brainy 3 cannot be run in a mode that does not handle Unicode properly.
 
 
 ## Contributing to Brainy
@@ -63,12 +51,11 @@ If you're interested in helping out, pull requests for the following tasks will 
 
 - Convert all non-public methods to use camel case.
 - Add proper PHPDoc annotations to all functions and methods.
-- Remove magic and bad practices:
-  - `__call`, `__get`, etc.
+- Refactoring:
   - Eliminate dead code
   - `@` error suppression
+  - Increase code coverage
   - etc.
-- Remove workarounds for unsupported versions of PHP.
 - Help identify and resolve potential security issues, or find ways to help developers avoid security issues.
 - Performance optimization of generated code
 
