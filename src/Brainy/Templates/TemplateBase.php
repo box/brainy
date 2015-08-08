@@ -14,6 +14,12 @@ use Box\Brainy\Exceptions\SmartyException;
 abstract class TemplateBase extends TemplateData
 {
     /**
+     * Template resource
+     * @var string
+     */
+    public $template_resource = null;
+
+    /**
      * Renders and returns a template.
      *
      * This returns the template output instead of displaying it.
@@ -132,7 +138,7 @@ abstract class TemplateBase extends TemplateData
                 call_user_func($_template->properties['unifunc'], $_template);
                 // any unclosed {capture} tags ?
                 if (isset($_template->_capture_stack[0][0])) {
-                    $_template->capture_error();
+                    throw new SmartyException("Not matching {capture} open/close in \"{$this->template_resource}\"");
                 }
                 array_shift($_template->_capture_stack);
             } catch (Exception $e) {
@@ -158,7 +164,7 @@ abstract class TemplateBase extends TemplateData
         }
 
         if (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output'])) {
-            $output = Smarty_Internal_Filter_Handler::runFilter('output', $output, $_template);
+            $output = \Box\Brainy\Runtime\FilterHandler::runFilter('output', $output, $_template);
         }
 
         if ($merge_tpl_vars) {
@@ -271,40 +277,6 @@ abstract class TemplateBase extends TemplateData
             unset($this->smarty->registered_resources[$type]);
         }
 
-        return $this;
-    }
-
-    /**
-     * Registers a default plugin handler
-     *
-     * A default plugin handler gets called on undefined tags.
-     *
-     * @param  callable                     $callback class/method name
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
-     * @throws SmartyException              if $callback is not callable
-     */
-    public function registerDefaultPluginHandler($callback) {
-        if (!is_callable($callback)) {
-            throw new SmartyException("Default plugin handler '$callback' not callable");
-        }
-
-        $this->smarty->default_plugin_handler_func = $callback;
-        return $this;
-    }
-
-    /**
-     * Registers a default template handler
-     *
-     * @param  callable                     $callback class/method name
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
-     * @throws SmartyException              if $callback is not callable
-     */
-    public function registerDefaultTemplateHandler($callback) {
-        if (!is_callable($callback)) {
-            throw new SmartyException("Default template handler '$callback' not callable");
-        }
-
-        $this->smarty->default_template_handler_func = $callback;
         return $this;
     }
 

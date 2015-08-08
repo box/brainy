@@ -9,8 +9,10 @@
  * @author Uwe Tews
  */
 
+namespace Box\Brainy\sysplugins;
 
-class Smarty_Internal_Compile_Private_Function_Plugin extends Smarty_Internal_CompileBase
+
+class Smarty_Internal_Compile_Private_Function_Plugin extends \Box\Brainy\Compiler\CompileBase
 {
     /**
      * Attribute definition: Overwrites base class.

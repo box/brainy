@@ -15,20 +15,6 @@ namespace Box\Brainy\Compiler;
 class TemplateCompiler extends TemplateCompilerBase
 {
     /**
-     * Lexer class name
-     *
-     * @var string
-     */
-    public $lexer_class;
-
-    /**
-     * Parser class name
-     *
-     * @var string
-     */
-    public $parser_class;
-
-    /**
      * Lexer object
      *
      * @var object
@@ -57,17 +43,10 @@ class TemplateCompiler extends TemplateCompilerBase
     public $local_var = array();
 
     /**
-     * Initialize compiler
-     *
-     * @param string $lexer_class  class name
-     * @param string $parser_class class name
-     * @param Smarty $smarty       global instance
+     * @param \Box\Brainy\Brainy $smarty       global instance
      */
-    public function __construct($lexer_class, $parser_class, $smarty) {
+    public function __construct(\Box\Brainy\Brainy $smarty) {
         $this->smarty = $smarty;
-        // get required plugins
-        $this->lexer_class = $lexer_class;
-        $this->parser_class = $parser_class;
     }
 
     /**

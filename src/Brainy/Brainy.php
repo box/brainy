@@ -1,8 +1,5 @@
 <?php
 /**
- * Project:     Brainy
- * File:        Smarty.class.php
- *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -40,13 +37,6 @@ if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 }
 
-/**
- * set SMARTY_SYSPLUGINS_DIR to absolute path to Smarty internal plugins.
- * Sets SMARTY_SYSPLUGINS_DIR only if user application has not already defined it.
- */
-if (!defined('SMARTY_SYSPLUGINS_DIR')) {
-    define('SMARTY_SYSPLUGINS_DIR', SMARTY_DIR . 'sysplugins' . DIRECTORY_SEPARATOR);
-}
 if (!defined('SMARTY_PLUGINS_DIR')) {
     define('SMARTY_PLUGINS_DIR', SMARTY_DIR . 'plugins' . DIRECTORY_SEPARATOR);
 }
@@ -55,57 +45,8 @@ if (!defined('SMARTY_MBSTRING')) {
 }
 
 
-if (!function_exists('smarty_safe_array_lookup')) {
-
-    /**
-     * Performs a safe lookup of an array member with a safety value.
-     * @param mixed $arr
-     * @param string|int $key
-     * @param int $safety
-     * @return mixed
-     * @throws InvalidArgumentException
-     * @see Brainy::$safe_lookups
-     * @internal
-     */
-    function smarty_safe_array_lookup($arr, $key, $safety) {
-        if (is_array($arr) && isset($arr[$key])) {
-            return $arr[$key];
-        }
-        if ($safety === Brainy::LOOKUP_SAFE_WARN) {
-            trigger_error('Could not find member "' . $key . '" in Brainy template.', E_USER_WARNING);
-        }
-        return '';
-    }
-}
-
-if (!function_exists('smarty_safe_var_lookup')) {
-    /**
-     * Performs a safe lookup of a variable.
-     * @param array $arr
-     * @param string|int $key
-     * @param int $safety
-     * @return mixed
-     * @throws InvalidArgumentException
-     * @see Brainy::$safe_lookups
-     * @internal
-     */
-    function smarty_safe_var_lookup($arr, $key, $safety) {
-        if (isset($arr[$key])) {
-            return $arr[$key];
-        }
-        if ($safety === Brainy::LOOKUP_SAFE_WARN) {
-            trigger_error('Could not find variable "' . $key . '" in Brainy template.', E_USER_WARNING);
-        }
-        return $arr[$key] = new Smarty_Variable;
-    }
-}
-
-
-/**
- * This is the main Brainy class
- * @package Brainy
- */
-class Brainy extends Templates\TemplateBase {
+class Brainy extends Templates\TemplateBase
+{
     /**
      * The current version string for the current version of Brainy.
      * @var string
@@ -371,36 +312,6 @@ class Brainy extends Templates\TemplateBase {
      */
     public $joined_template_dir = null;
     /**
-     * Expects a function to use to fetch templates when it cannot be fetched
-     * through the default means. The function should use the following
-     * prototype:
-     *
-     * * string $resource_type
-     * * string $resource_name
-     * * int &$modified_timestamp
-     * * Smarty $smarty
-     *
-     * It is expected to return a string (a path to a file) or false if no
-     * template could be loaded.
-     * @var callable
-     */
-    public $default_template_handler_func = null;
-    /**
-     * Expects a function to use to fetch plugins when it cannot be fetched
-     * through the default means. The function should use the following
-     * prototype:
-     *
-     * * string $resource_type
-     * * string $resource_name
-     * * int &$modified_timestamp
-     * * Smarty $smarty
-     *
-     * It is expected to return a string (a path to a file) or false if no
-     *  plugin could be loaded.
-     * @var callable
-     */
-    public $default_plugin_handler_func = null;
-    /**
      * Directory that compiled templates are stored in. See the following
      * methods instead:
      *
@@ -494,12 +405,6 @@ class Brainy extends Templates\TemplateBase {
      * @var Security
      */
     public $security_policy = null;
-    /**
-     * Internal flag for getTags()
-     * @var boolean
-     * @internal
-     */
-    public $get_used_tags = false;
 
     /**
      * When true, concurrent template compilation is disabled.
@@ -1022,17 +927,6 @@ class Brainy extends Templates\TemplateBase {
             throw new SmartyException("plugin {$plugin_name} is not a valid name format");
 
             return false;
-        }
-        // if type is "internal", get plugin from sysplugins
-        if (strtolower($_name_parts[1]) == 'internal') {
-            $file = SMARTY_SYSPLUGINS_DIR . strtolower($plugin_name) . '.php';
-            if (file_exists($file)) {
-                require_once($file);
-
-                return $file;
-            } else {
-                return false;
-            }
         }
         // plugin filename is expected to be: [type].[name].php
         $_plugin_filename = "{$_name_parts[1]}.{$_name_parts[2]}.php";

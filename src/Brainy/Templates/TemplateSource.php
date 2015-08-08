@@ -73,19 +73,19 @@ class TemplateSource
 
     /**
      * Smarty instance
-     * @var Smarty
+     * @var \Box\Brainy\Brainy
      */
     public $smarty = null;
 
     /**
      * @param Resource $handler         Resource Handler this source object communicates with
-     * @param Smarty          $smarty          Smarty instance this source object belongs to
+     * @param \Box\Brainy\Brainy $smarty          Smarty instance this source object belongs to
      * @param string          $resource        full template_resource
      * @param string          $type            type of resource
      * @param string          $name            resource name
      * @param string          $unique_resource unqiue resource name
      */
-    public function __construct(Resource $handler, Smarty $smarty, $resource, $type, $name, $unique_resource) {
+    public function __construct(Resource $handler, \Box\Brainy\Brainy $smarty, $resource, $type, $name, $unique_resource) {
         $this->handler = $handler; // Note: prone to circular references
 
         $this->uncompiled = $this->handler instanceof \Box\Brainy\Resources\ResourceUncompiled;

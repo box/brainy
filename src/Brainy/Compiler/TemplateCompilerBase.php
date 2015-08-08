@@ -159,12 +159,6 @@ abstract class TemplateCompilerBase
     public $called_functions = array();
 
     /**
-     * flags for used modifier plugins
-     * @var array
-     */
-    public $modifier_plugins = array();
-
-    /**
      * type of already compiled modifier
      * @var array
      */
@@ -224,7 +218,7 @@ abstract class TemplateCompilerBase
                 if ($_content != '') {
                     // run prefilter if required
                     if ((isset($this->smarty->autoload_filters['pre']) || isset($this->smarty->registered_filters['pre'])) && !$this->suppressFilter) {
-                        $_content = Smarty_Internal_Filter_Handler::runFilter('pre', $_content, $template);
+                        $_content = \Box\Brainy\Runtime\FilterHandler::runFilter('pre', $_content, $template);
                     }
                     // call compiler
                     $_compiled_code = $this->doCompile($_content);
@@ -247,7 +241,7 @@ abstract class TemplateCompilerBase
         }
         // run postfilter if required on compiled template code
         if ((isset($this->smarty->autoload_filters['post']) || isset($this->smarty->registered_filters['post'])) && !$this->suppressFilter && $_compiled_code !== '') {
-            $_compiled_code = Smarty_Internal_Filter_Handler::runFilter('post', $_compiled_code, $template);
+            $_compiled_code = \Box\Brainy\Runtime\FilterHandler::runFilter('post', $_compiled_code, $template);
         }
         if ($this->suppressTemplatePropertyHeader) {
             $code = $_compiled_code . $merged_code;
@@ -276,10 +270,6 @@ abstract class TemplateCompilerBase
         // assume that tag does compile into code, but creates no HTML output
         $this->has_code = true;
         $this->has_output = false;
-        // log tag/attributes
-        if ($this->smarty->get_used_tags) {
-            $this->template->used_tags[] = array($tag, $args);
-        }
         // compile the smarty tag (required compile classes to compile the tag are autoloaded)
         $_output = $this->callTagCompiler($tag, $args, $parameter, $param2, $param3);
 
@@ -470,19 +460,19 @@ abstract class TemplateCompilerBase
         }
         // lazy load internal compiler plugin
         $class_name = 'Smarty_Internal_Compile_' . $tag;
-        // echo $class_name . "\n";
-        if ($this->smarty->loadPlugin($class_name, true)) {
-            // check if tag allowed by security
-            if (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this)) {
-                // use plugin if found
-                self::$_tag_objects[$tag] = new $class_name;
-                self::$_tag_objects[$tag]->template = $this->template;
-                // compile this tag
-                return self::$_tag_objects[$tag]->compile($args, $this, $param1, $param2, $param3);
-            }
+        if (!$this->smarty->loadPlugin($class_name, true)) {
+            return false;
         }
-        // no internal compile plugin for this tag
-        return false;
+
+        // check if tag allowed by security
+        if (isset($this->smarty->security_policy) && !$this->smarty->security_policy->isTrustedTag($tag, $this)) {
+            return false;
+        }
+        // use plugin if found
+        self::$_tag_objects[$tag] = new $class_name;
+        self::$_tag_objects[$tag]->template = $this->template;
+        // compile this tag
+        return self::$_tag_objects[$tag]->compile($args, $this, $param1, $param2, $param3);
     }
 
     /**
@@ -496,13 +486,9 @@ abstract class TemplateCompilerBase
         $function = null;
         if (isset($this->template->required_plugins['compiled'][$plugin_name][$plugin_type])) {
             $function = $this->template->required_plugins['compiled'][$plugin_name][$plugin_type]['function'];
-        }
-        if (isset($function)) {
-            if ($plugin_type == 'modifier') {
-                $this->modifier_plugins[$plugin_name] = true;
+            if (isset($function)) {
+                return $function;
             }
-
-            return $function;
         }
         // loop through plugin dirs and find the plugin
         $function = 'smarty_' . $plugin_type . '_' . $plugin_name;
@@ -523,45 +509,6 @@ abstract class TemplateCompilerBase
         if (is_callable($function)) {
             // plugin function is defined in the script
             return $function;
-        }
-
-        return false;
-    }
-
-    /**
-     * Check for plugins by default plugin handler
-     *
-     * @param  string $tag         name of tag
-     * @param  string $plugin_type type of plugin
-     * @return boolean true if found
-     */
-    public function getPluginFromDefaultHandler($tag, $plugin_type) {
-        $callback = null;
-        $script = null;
-        $cacheable = true;
-        $result = call_user_func_array(
-            $this->smarty->default_plugin_handler_func, array($tag, $plugin_type, $this->template, &$callback, &$script, &$cacheable)
-        );
-        if ($result) {
-            if ($script !== null) {
-                if (is_file($script)) {
-                    $this->template->required_plugins['compiled'][$tag][$plugin_type]['file'] = $script;
-                    $this->template->required_plugins['compiled'][$tag][$plugin_type]['function'] = $callback;
-                    include_once $script;
-                } else {
-                    $this->trigger_template_error("Default plugin handler: Returned script file \"{$script}\" for \"{$tag}\" not found");
-                }
-            }
-            if (!is_string($callback) && !(is_array($callback) && is_string($callback[0]) && is_string($callback[1]))) {
-                $this->trigger_template_error("Default plugin handler: Returned callback for \"{$tag}\" must be a static function name or array of class and function name");
-            }
-            if (is_callable($callback)) {
-                $this->default_handler_plugins[$plugin_type][$tag] = array($callback, true, array());
-
-                return true;
-            } else {
-                $this->trigger_template_error("Default plugin handler: Returned callback for \"{$tag}\" not callable");
-            }
         }
 
         return false;
@@ -695,7 +642,7 @@ abstract class TemplateCompilerBase
             }
             $modifier_attributes = array_slice($modifier, 1);
             foreach ($modifier_attributes as $attr) {
-                if (!($attr instanceof BrainyStaticWrapper)) {
+                if (!($attr instanceof StaticWrapper)) {
                     $static = false;
                 }
             }

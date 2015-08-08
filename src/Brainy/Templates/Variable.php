@@ -3,7 +3,8 @@
 namespace Box\Brainy\Templates;
 
 
-class Variable {
+class Variable
+{
     /**
      * @var mixed
      */

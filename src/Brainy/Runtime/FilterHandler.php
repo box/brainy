@@ -9,14 +9,12 @@
  * @author Uwe Tews
  */
 
-/**
- * Class for filter processing
- *
- * @package Brainy
- * @subpackage PluginsInternal
- * @internal
- */
-class Smarty_Internal_Filter_Handler
+namespace Box\Brainy\Runtime;
+
+use \Box\Brainy\Exceptions\SmartyException;
+
+
+class FilterHandler
 {
     /**
      * Run filters over content

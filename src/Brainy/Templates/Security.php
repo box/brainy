@@ -16,7 +16,8 @@ namespace Box\Brainy\Templates;
  * @todo the cache is killed every time either of the variables change. That means that two distinct Smarty objects with differing
  * @todo $template_dir should NOT share the same Security instance as this would lead to (severe) performance penalty! how should this be handled?
  */
-class Security {
+class Security
+{
     /**
      * This is the list of template directories that are considered secure.
      * $template_dir is in this list implicitly.

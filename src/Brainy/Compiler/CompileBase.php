@@ -54,7 +54,7 @@ abstract class CompileBase
         $_indexed_attr = array();
         // loop over attributes
         foreach ($attributes as $key => $mixed) {
-            if ($mixed instanceof BrainyStaticWrapper) {
+            if ($mixed instanceof StaticWrapper) {
                 $mixed = (string) $mixed;
             }
             // shorthand ?
@@ -95,7 +95,7 @@ abstract class CompileBase
                 } else {
                     reset($mixed);
                     $intermediate = $mixed[key($mixed)];
-                    if ($intermediate instanceof BrainyStaticWrapper) {
+                    if ($intermediate instanceof StaticWrapper) {
                         $intermediate = (string) $intermediate;
                     }
                     $_indexed_attr[key($mixed)] = $intermediate;
@@ -150,28 +150,27 @@ abstract class CompileBase
      * @return mixed        any type the opening tag's name or saved data
      */
     public function closeTag($compiler, $expectedTag) {
-        if (count($compiler->_tag_stack) > 0) {
-            // get stacked info
-            list($_openTag, $_data) = array_pop($compiler->_tag_stack);
-            // open tag must match with the expected ones
-            if (in_array($_openTag, (array) $expectedTag)) {
-                if (is_null($_data)) {
-                    // return opening tag
-                    return $_openTag;
-                } else {
-                    // return restored data
-                    return $_data;
-                }
-            }
+        if (count($compiler->_tag_stack) === 0) {
+            // wrong nesting of tags
+            $compiler->trigger_template_error("unexpected closing tag", $compiler->lex->taglineno);
+        }
+
+        // get stacked info
+        list($_openTag, $_data) = array_pop($compiler->_tag_stack);
+        // open tag must match with the expected ones
+        if (!in_array($_openTag, (array) $expectedTag)) {
             // wrong nesting of tags
             $compiler->trigger_template_error("unclosed {$compiler->smarty->left_delimiter}" . $_openTag . "{$compiler->smarty->right_delimiter} tag");
-
             return;
         }
-        // wrong nesting of tags
-        $compiler->trigger_template_error("unexpected closing tag", $compiler->lex->taglineno);
 
-        return;
+        if (is_null($_data)) {
+            // return opening tag
+            return $_openTag;
+        } else {
+            // return restored data
+            return $_data;
+        }
     }
 
 }

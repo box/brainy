@@ -19,7 +19,7 @@
  */
 function smarty_function_escape_special_chars($string) {
     if (!is_array($string)) {
-        $string = htmlspecialchars($string, ENT_COMPAT, Brainy::$_CHARSET, false);
+        $string = htmlspecialchars($string, ENT_COMPAT, 'UTF-8', false);
     }
 
     return $string;

@@ -170,7 +170,6 @@ abstract class Resource
     protected function buildFilepath(TemplateSource $source, Template $_template=null) {
         $file = $source->name;
         $_directories = $source->smarty->getTemplateDir();
-        $_default_handler = $source->smarty->default_template_handler_func;
 
         // go relative to a given template?
         $_file_is_dotted = $file[0] == '.' && ($file[1] == '.' || $file[1] == '/' || $file[1] == "\\");
@@ -255,27 +254,6 @@ abstract class Resource
         // try absolute filepath
         if ($this->fileExists($source, $file)) {
             return $file;
-        }
-
-        // no tpl file found
-        if ($_default_handler) {
-            if (!is_callable($_default_handler)) {
-                throw new SmartyException("Default template handler not callable");
-            }
-            $_return = call_user_func_array($_default_handler,
-                array($source->type, $source->name, &$_content, &$_timestamp, $source->smarty));
-            if (is_string($_return)) {
-                $source->timestamp = $this->getFileTime($_return);
-                $source->exists = !!$source->timestamp;
-
-                return $_return;
-            } elseif ($_return === true) {
-                $source->content = $_content;
-                $source->timestamp = $_timestamp;
-                $source->exists = true;
-
-                return $_filepath;
-            }
         }
 
         // give up

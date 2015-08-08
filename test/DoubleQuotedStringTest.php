@@ -42,26 +42,6 @@ class DoubleQuotedStringTest extends Smarty_TestCase
         $this->assertEquals('Hello blahbuh World', $this->smarty->fetch($tpl));
     }
     /**
-     * test smartytag in double quoted strings
-     */
-    public function testSmartytagInDoubleQuotedString1() {
-        $tpl = $this->smarty->createTemplate('eval:{$foo="Hello {counter start=1} World"}{$foo}', null, null, $this->smarty);
-        $this->assertEquals('Hello 1 World', $this->smarty->fetch($tpl));
-    }
-    public function testSmartytagInDoubleQuotedString2() {
-        $tpl = $this->smarty->createTemplate('eval:{$foo="Hello {counter start=1}{counter} World"}{$foo}', null, null, $this->smarty);
-        $this->assertEquals('Hello 12 World', $this->smarty->fetch($tpl));
-    }
-    /**
-     * test block smartytag in double quoted strings
-     */
-    public function testSmartyBlockTagInDoubleQuotedString1() {
-        $this->smarty->assign('x', 1);
-        $this->smarty->assign('y', 1);
-        $this->smarty->assign('z', true);
-        $this->assertEquals('Hello 1 World', $this->smarty->fetch('eval:{"Hello{if $z} {$x} {else}{$y}{/if}World"}'));
-    }
-    /**
      * test vars in delimiter in double quoted strings
      */
     public function testVarsDelimiterInDoubleQuotedString() {
@@ -82,13 +62,6 @@ class DoubleQuotedStringTest extends Smarty_TestCase
     public function testSingleQuotesInDoubleQuotedString() {
         $tpl = $this->smarty->createTemplate('eval:{$foo="Hello \'World\'"}{$foo}', null, null, $this->smarty);
         $this->assertEquals("Hello 'World'", $this->smarty->fetch($tpl));
-    }
-    /**
-     * test single quote tags in double quoted strings
-     */
-    public function testSingleQuoteTagsInDoubleQuotedString() {
-        $tpl = $this->smarty->createTemplate('eval:{$foo="Hello {\'World\'} Test"}{$foo}', null, null, $this->smarty);
-        $this->assertEquals("Hello World Test", $this->smarty->fetch($tpl));
     }
     /**
      * test empty double quoted strings

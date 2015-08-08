@@ -40,18 +40,6 @@ class Tag extends ParseTree
     }
 
     /**
-     * Return complied code that loads the evaluated outout of buffer content into a temporary variable
-     *
-     * @return string template code
-     */
-    public function assign_to_var() {
-        $var = sprintf('$_tmp%d', ++\Box\Brainy\Compiler\Parser::$prefix_number);
-        $this->parser->compiler->prefix_code[] = sprintf('ob_start();%s%s=ob_get_clean();', $this->data, $var);
-
-        return $var;
-    }
-
-    /**
      * @return bool
      */
     public function can_combine_inline_data() {

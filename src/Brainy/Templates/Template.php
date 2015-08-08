@@ -20,11 +20,6 @@ class Template extends TemplateBase
      */
     public $compile_id = null;
     /**
-     * Template resource
-     * @var string
-     */
-    public $template_resource = null;
-    /**
      * flag if compiled template is invalid and must be (re)compiled
      * @var bool
      */
@@ -55,11 +50,6 @@ class Template extends TemplateBase
      * @var array
      */
     public $variable_filters = array();
-    /**
-     * optional log of tag/attributes
-     * @var array
-     */
-    public $used_tags = array();
     /**
      * internal flag to allow relative path in child template blocks
      * @var bool
@@ -162,7 +152,7 @@ class Template extends TemplateBase
             if ($_filepath === false) {
                 throw new SmartyException('getCompiledFilepath() did not return a destination to save the compiled template to');
             }
-            Smarty_Internal_Write_File::writeFile($_filepath, $code, $this->smarty);
+            self::writeFile($_filepath, $code, $this->smarty);
             $this->compiled->exists = true;
             $this->compiled->isCompiled = true;
         }
@@ -209,7 +199,7 @@ class Template extends TemplateBase
         if ($data) {
             // set up variable values
             foreach ($data as $_key => $_val) {
-                $tpl->tpl_vars[$_key] = new Smarty_variable($_val);
+                $tpl->tpl_vars[$_key] = new Variable($_val);
             }
         }
 
@@ -243,7 +233,7 @@ class Template extends TemplateBase
         if (!empty($data)) {
             // set up variable values
             foreach ($data as $_key => $_val) {
-                $tpl->tpl_vars[$_key] = new Smarty_variable($_val);
+                $tpl->tpl_vars[$_key] = new Variable($_val);
             }
         }
 
@@ -294,7 +284,7 @@ class Template extends TemplateBase
             // Output a proper PHPDoc for Augmented Types users.
             $output .= <<<'PHPDOC'
 /**
- * @param Smarty_Internal_TemplateBase $_smarty_tpl The smarty template instance
+ * @param \Box\Brainy\Templates\TemplateBase $_smarty_tpl The smarty template instance
  * @return void
  */
 PHPDOC;
@@ -370,7 +360,7 @@ PHPDOC;
      */
     public function createLocalArrayVariable($tpl_var, $scope = Brainy::SCOPE_LOCAL) {
         if (!isset($this->tpl_vars[$tpl_var])) {
-            $this->tpl_vars[$tpl_var] = new Smarty_variable(array(), $scope);
+            $this->tpl_vars[$tpl_var] = new Variable(array(), $scope);
             return;
         }
 
@@ -431,23 +421,25 @@ PHPDOC;
     /**
      * [util function] counts an array, arrayaccess/traversable or PDOStatement object
      *
+     * @todo This is used only by the {foreach} construct. Move this to the Runtime namespace.
+     *
      * @param  mixed $value
      * @return int   the count for arrays and objects that implement countable, 1 for other objects that don't, and 0 for empty elements
      */
     public function _count($value) {
-        if (is_array($value) === true || $value instanceof Countable) {
+        if (is_array($value) === true || $value instanceof \Countable) {
             return count($value);
-        } elseif ($value instanceof IteratorAggregate) {
+        } elseif ($value instanceof \IteratorAggregate) {
             // Note: getIterator() returns a Traversable, not an Iterator
             // thus rewind() and valid() methods may not be present
             return iterator_count($value->getIterator());
-        } elseif ($value instanceof Iterator) {
+        } elseif ($value instanceof \Iterator) {
             return iterator_count($value);
-        } elseif ($value instanceof PDOStatement) {
+        } elseif ($value instanceof \PDOStatement) {
             return $value->rowCount();
-        } elseif ($value instanceof Traversable) {
+        } elseif ($value instanceof \Traversable) {
             return iterator_count($value);
-        } elseif ($value instanceof ArrayAccess) {
+        } elseif ($value instanceof \ArrayAccess) {
             if ($value->offsetExists(0)) {
                 return 1;
             }
@@ -455,25 +447,6 @@ PHPDOC;
             return count($value);
         }
 
-        return 0;
-    }
-
-    /**
-     * runtime error not matching capture tags
-     *
-     */
-    public function capture_error() {
-        throw new SmartyException("Not matching {capture} open/close in \"{$this->template_resource}\"");
-    }
-
-    /**
-    * Empty cache for this template
-    *
-    * @param integer $exp_time      expiration time
-    * @return integer number of cache files deleted
-    * @deprecated no-op
-    */
-    public function clearCache($exp_time=null) {
         return 0;
     }
 
@@ -535,7 +508,7 @@ PHPDOC;
                 return $this->compiled;
 
             case 'compiler':
-                $this->compiler = new \Box\Brainy\Compiler\TemplateCompiler($this->source->template_lexer_class, $this->source->template_parser_class, $this->smarty);
+                $this->compiler = new \Box\Brainy\Compiler\TemplateCompiler($this->smarty);
 
                 return $this->compiler;
 
@@ -559,6 +532,71 @@ PHPDOC;
         if (Brainy::$strict_mode || $this->strict_mode) {
             throw new BrainyStrictModeException('Strict Mode: ' . $reason);
         }
+    }
+
+    /**
+     * Writes file in a safe way to disk
+     *
+     * @param  string  $_filepath complete filepath
+     * @param  string  $_contents file content
+     * @param  Smarty  $smarty    smarty instance
+     * @return boolean true
+     */
+    public static function writeFile($_filepath, $_contents, Smarty $smarty) {
+        if ($smarty->_file_perms !== null) {
+            $old_umask = umask(0);
+        }
+
+        $_dirpath = dirname($_filepath);
+        // if subdirs, create dir structure
+        if ($_dirpath !== '.' && !file_exists($_dirpath)) {
+            mkdir($_dirpath, $smarty->_dir_perms === null ? 0777 : $smarty->_dir_perms, true);
+        }
+
+        // write to tmp file, then move to overt file lock race condition
+        $_tmp_file = $_dirpath . DIRECTORY_SEPARATOR . str_replace(array('.',','), '_', uniqid('wrt', true));
+        if (!file_put_contents($_tmp_file, $_contents)) {
+            throw new SmartyException("unable to write file {$_tmp_file}");
+        }
+
+        /*
+         * Windows' rename() fails if the destination exists,
+         * Linux' rename() properly handles the overwrite.
+         * Simply unlink()ing a file might cause other processes
+         * currently reading that file to fail, but linux' rename()
+         * seems to be smart enough to handle that for us.
+         */
+        try {
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                // remove original file
+                unlink($_filepath);
+                // rename tmp file
+                $success = rename($_tmp_file, $_filepath);
+            } else {
+                // rename tmp file
+                $success = rename($_tmp_file, $_filepath);
+                if (!$success) {
+                    // remove original file
+                    unlink($_filepath);
+                    // rename tmp file
+                    $success = rename($_tmp_file, $_filepath);
+                }
+            }
+        } catch(Exception $e) {
+            $success = false;
+        }
+
+        if (!$success) {
+            throw new SmartyException("unable to write file {$_filepath}");
+        }
+
+        if ($smarty->_file_perms !== null) {
+            // set file permissions
+            chmod($_filepath, $smarty->_file_perms);
+            umask($old_umask);
+        }
+
+        return true;
     }
 
 }

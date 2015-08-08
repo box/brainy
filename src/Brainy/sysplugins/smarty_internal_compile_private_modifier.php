@@ -35,7 +35,7 @@ class Smarty_Internal_Compile_Private_Modifier extends Smarty_Internal_CompileBa
             $modifier = $single_modifier[0];
             $single_modifier[0] = $output;
             for ($i = 0; $i < count($single_modifier); $i++) {
-                if ($single_modifier[$i] instanceof BrainyStaticWrapper) {
+                if ($single_modifier[$i] instanceof StaticWrapper) {
                     $single_modifier[$i] = (string) $single_modifier[$i];
                 }
             }
@@ -44,7 +44,7 @@ class Smarty_Internal_Compile_Private_Modifier extends Smarty_Internal_CompileBa
             if (isset($compiler->known_modifier_type[$modifier])) {
                 $modifier_types = array($compiler->known_modifier_type[$modifier]);
             } else {
-                $modifier_types = array(1, 2, 3, 4, 5, 6);
+                $modifier_types = array(1, 2, 3, 4, 5);
             }
             foreach ($modifier_types as $type) {
                 switch ($type) {
@@ -52,15 +52,7 @@ class Smarty_Internal_Compile_Private_Modifier extends Smarty_Internal_CompileBa
                         // registered modifier
                         if (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][$modifier])) {
                             $function = $compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][$modifier][0];
-                            if (!is_array($function)) {
-                                $output = "{$function}({$params})";
-                            } else {
-                                if (is_object($function[0])) {
-                                    $output = '$_smarty_tpl->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][\'' . $modifier . '\'][0][0]->' . $function[1] . '(' . $params . ')';
-                                } else {
-                                    $output = $function[0] . '::' . $function[1] . '(' . $params . ')';
-                                }
-                            }
+                            $output = "{$function}({$params})";
                             $compiler->known_modifier_type[$modifier] = $type;
                             break 2;
                         }
@@ -107,30 +99,6 @@ class Smarty_Internal_Compile_Private_Modifier extends Smarty_Internal_CompileBa
                             break 2;
                         }
                         break;
-                    case 6:
-                        // default plugin handler
-                        if (isset($compiler->default_handler_plugins[Brainy::PLUGIN_MODIFIER][$modifier]) || (is_callable($compiler->smarty->default_plugin_handler_func) && $compiler->getPluginFromDefaultHandler($modifier, Brainy::PLUGIN_MODIFIER))) {
-                            $function = $compiler->default_handler_plugins[Brainy::PLUGIN_MODIFIER][$modifier][0];
-                            // check if modifier allowed
-                            if (!is_object($compiler->smarty->security_policy) || $compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
-                                if (!is_array($function)) {
-                                    $output = "{$function}({$params})";
-                                } else {
-                                    if (is_object($function[0])) {
-                                        $output = '$_smarty_tpl->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][\'' . $modifier . '\'][0][0]->' . $function[1] . '(' . $params . ')';
-                                    } else {
-                                        $output = $function[0] . '::' . $function[1] . '(' . $params . ')';
-                                    }
-                                }
-                            }
-                            if (isset($compiler->template->required_plugins['compiled'][$modifier][Brainy::PLUGIN_MODIFIER]['file'])) {
-                                // was a plugin
-                                $compiler->known_modifier_type[$modifier] = 4;
-                            } else {
-                                $compiler->known_modifier_type[$modifier] = $type;
-                            }
-                            break 2;
-                        }
                 }
             }
             if (!isset($compiler->known_modifier_type[$modifier])) {

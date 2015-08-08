@@ -98,7 +98,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
             $this->openTag($compiler, 'block', $save);
             // set flag for {block} tag
             $compiler->inheritance = true;
-            $compiler->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBLOCK);
+            $compiler->lex->yypushstate(\Box\Brainy\Compiler\Lexer::CHILDBLOCK);
             $compiler->has_code = false;
             return;
         }
@@ -128,7 +128,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
                 Smarty_Internal_Compile_Block::$block_data[$name1]['source'] .= $compiler->template->block_data[$name1]['source'];
                 Smarty_Internal_Compile_Block::$block_data[$name1]['child'] = true;
             }
-            $compiler->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBLOCK);
+            $compiler->lex->yypushstate(\Box\Brainy\Compiler\Lexer::CHILDBLOCK);
             $compiler->has_code = false;
             return;
         }
@@ -209,11 +209,11 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
         if ($_name == null) {
             $compiler->trigger_template_error(' tag {$smarty.block.parent} used outside {block} tags ', $compiler->lex->taglineno);
         }
-        if (empty(Smarty_Internal_Compile_Block::$nested_block_names)) {
+        if (empty(self::$nested_block_names)) {
             $compiler->trigger_template_error(' illegal {$smarty.block.parent} in parent template ', $compiler->lex->taglineno);
         }
-        Smarty_Internal_Compile_Block::$block_data[Smarty_Internal_Compile_Block::$nested_block_names[0]]['source'] .= Smarty_Internal_Compile_Block::parent;
-        $compiler->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBLOCK);
+        self::$block_data[self::$nested_block_names[0]]['source'] .= self::parent;
+        $compiler->lex->yypushstate(\Box\Brainy\Compiler\Lexer::CHILDBLOCK);
         $compiler->has_code = false;
         return;
     }
@@ -225,7 +225,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
      * @return ''
      */
     static function blockSource($compiler, $source) {
-        Smarty_Internal_Compile_Block::$block_data[Smarty_Internal_Compile_Block::$nested_block_names[0]]['source'] .= $source;
+        self::$block_data[self::$nested_block_names[0]]['source'] .= $source;
     }
 
 }
@@ -276,7 +276,7 @@ class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase
                     }
                 }
                 unset(Smarty_Internal_Compile_Block::$block_data[$name1]);
-                $compiler->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBLOCK);
+                $compiler->lex->yypushstate(\Box\Brainy\Compiler\Lexer::CHILDBLOCK);
             } else {
                 if (isset($compiler->template->block_data[$name1]) || !$saved_data[0]['hide']) {
                     if (isset($compiler->template->block_data[$name1]) && !isset(Smarty_Internal_Compile_Block::$block_data[$name1]['child'])) {
@@ -300,7 +300,7 @@ class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase
                     }
                 }
                 unset(Smarty_Internal_Compile_Block::$block_data[$name1]);
-                $compiler->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBODY);
+                $compiler->lex->yypushstate(\Box\Brainy\Compiler\Lexer::CHILDBODY);
             }
             $compiler->has_code = false;
             return '';
@@ -358,7 +358,7 @@ class Smarty_Internal_Compile_Private_Child_Block extends Smarty_Internal_Compil
             $compiler->template->template_resource = trim($_attr['resource'], "'");
         }
         // source object
-        unset ($compiler->template->source);
+        unset($compiler->template->source);
         $exists = $compiler->template->source->exists;
 
         $save = array($_attr);
@@ -382,8 +382,6 @@ class Smarty_Internal_Compile_Private_Child_Block extends Smarty_Internal_Compil
  */
 class Smarty_Internal_Compile_Private_Child_Blockclose extends Smarty_Internal_CompileBase
 {
-
-
     /**
      * Compiles code for the {/private_child_block} tag
      *

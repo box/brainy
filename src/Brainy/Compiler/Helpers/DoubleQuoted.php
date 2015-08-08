@@ -60,13 +60,8 @@ class DoubleQuoted extends ParseTree
             if ($code !== "") {
                 $code .= ".";
             }
-            if ($subtree instanceof Tag) {
-                $more_php = $subtree->assign_to_var();
-            } else {
-                $more_php = $subtree->to_smarty_php();
-            }
 
-            $code .= $more_php;
+            $code .= $subtree->to_smarty_php();
 
             if (!$subtree instanceof DoubleQuotedContent) {
                 $this->parser->compiler->has_variable_string = true;

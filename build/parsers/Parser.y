@@ -36,7 +36,6 @@
         $this->smarty = $this->compiler->smarty;
         $this->template = $this->compiler->template;
         $this->compiler->has_variable_string = false;
-        $this->compiler->prefix_code = array();
         $this->security = isset($this->smarty->security_policy);
         $this->block_nesting_level = 0;
         $this->current_buffer = $this->root_buffer = new Helpers\TemplateBuffer($this);
@@ -83,7 +82,7 @@
     /**
      * @param string $variable The name of the variable to look up
      * @param string|void $value The member of the SmartyVariable to access
-     * @return string|BrainySafeLookupWrapper
+     * @return string|Wrappers\SafeLookupWrapper
      */
     public function compileVariable($variable, $value = 'value')
     {
@@ -91,14 +90,14 @@
         if ($this->safe_lookups === 0) { // Unsafe lookups
             return $unsafe;
         }
-        $safe = 'smarty_safe_var_lookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')->' . $value;
-        return new BrainySafeLookupWrapper($unsafe, $safe);
+        $safe = '\Box\Brainy\Runtime\Lookups::safeVarLookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')->' . $value;
+        return new Wrappers\SafeLookupWrapper($unsafe, $safe);
     }
 
     /**
      * @param string $base
      * @param string $variable
-     * @return string|BrainySafeLookupWrapper
+     * @return string|Wrappers\SafeLookupWrapper
      */
     public function compileSafeLookupWithBase($base, $variable)
     {
@@ -106,8 +105,8 @@
         if ($this->safe_lookups === 0) { // Unsafe lookups
             return $unsafe;
         }
-        $safe = 'smarty_safe_array_lookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')';
-        return new BrainySafeLookupWrapper($unsafe, $safe);
+        $safe = '\Box\Brainy\Runtime\Lookups::safeArrayLookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')';
+        return new Wrappers\SafeLookupWrapper($unsafe, $safe);
     }
 }
 
@@ -171,8 +170,7 @@ template ::= .
 // Smarty tag
 template_element(res) ::= smartytag(st) RDEL. {
     if ($this->compiler->has_code) {
-        $tmp =''; foreach ($this->compiler->prefix_code as $code) {$tmp.=$code;} $this->compiler->prefix_code=array();
-        res = new Helpers\Tag($this, $tmp.st);
+        res = new Helpers\Tag($this, st);
     } else {
         res = null;
     }
@@ -250,43 +248,63 @@ literal_element(res) ::= LITERAL(l). {
 
                   // output with optional attributes
 smartytag(res)   ::= LDEL value(e). {
-    $this->compiler->assert_no_enforced_modifiers(e instanceof BrainyStaticWrapper);
-    if (e instanceof BrainyStaticWrapper) {
+    $this->compiler->assert_no_enforced_modifiers(e instanceof Wrappers\StaticWrapper);
+    if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
-    res = $this->compiler->compileTag('private_print_expression',array(),array('value'=>e));
+    res = Constructs\ConstructPrintExpression::compileOpen(
+        $this->compiler,
+        array('value' => e),
+        array()
+    );
 }
 
 smartytag(res)   ::= LDEL value(e) modifierlist(l) attributes(a). {
-    $this->compiler->assert_expected_modifier(l, e instanceof BrainyStaticWrapper);
-    if (e instanceof BrainyStaticWrapper) {
+    $this->compiler->assert_expected_modifier(l, e instanceof Wrappers\StaticWrapper);
+    if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
-    res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e, 'modifierlist'=>l));
+    res = Constructs\ConstructPrintExpression::compileOpen(
+        $this->compiler,
+        array('value' => e, 'modifierlist' => l),
+        a
+    );
 }
 
 smartytag(res)   ::= LDEL value(e) attributes(a). {
-    $this->compiler->assert_no_enforced_modifiers(e instanceof BrainyStaticWrapper);
-    if (e instanceof BrainyStaticWrapper) {
+    $this->compiler->assert_no_enforced_modifiers(e instanceof Wrappers\StaticWrapper);
+    if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
-    res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e));
+    res = Constructs\ConstructPrintExpression::compileOpen(
+        $this->compiler,
+        array('value' => e),
+        a
+    );
 }
 
 smartytag(res)   ::= LDEL expr(e) modifierlist(l) attributes(a). {
-    $this->compiler->assert_expected_modifier(l, e instanceof BrainyStaticWrapper);
-    if (e instanceof BrainyStaticWrapper) {
+    $this->compiler->assert_expected_modifier(l, e instanceof Wrappers\StaticWrapper);
+    if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
-    res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e, 'modifierlist'=>l));
+    res = Constructs\ConstructPrintExpression::compileOpen(
+        $this->compiler,
+        array('value' => e, 'modifierlist' => l),
+        a
+    );
 }
 
 smartytag(res)   ::= LDEL expr(e) attributes(a). {
-    $this->compiler->assert_no_enforced_modifiers(e instanceof BrainyStaticWrapper);
-    if (e instanceof BrainyStaticWrapper) {
+    $this->compiler->assert_no_enforced_modifiers(e instanceof Wrappers\StaticWrapper);
+    if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
-    res = $this->compiler->compileTag('private_print_expression',a,array('value'=>e));
+    res = Constructs\ConstructPrintExpression::compileOpen(
+        $this->compiler,
+        array('value' => e),
+        a
+    );
 }
 
 //
@@ -297,48 +315,109 @@ smartytag(res)   ::= LDEL variable(vi) EQUAL expr(e). {
 }
 
 smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL value(e). {
-    res = $this->compiler->compileTag('assign',array(array('value'=>e),array('var'=>"'".i."'")));
+    res = Constructs\ConstructAssign::compileOpen(
+        $this->compiler,
+        array('value' => e, 'var' => "'" . i . "'"),
+        null
+    );
 }
 
 smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e). {
-    res = $this->compiler->compileTag('assign',array(array('value'=>e),array('var'=>"'".i."'")));
+    res = Constructs\ConstructAssign::compileOpen(
+        $this->compiler,
+        array('value' => e, 'var' => "'" . i . "'"),
+        null
+    );
 }
 
 smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e) attributes(a). {
     $this->compiler->assert_is_not_strict('Passing attributes in an assignment without using {assign} is not supported in strict mode', $this);
-    res = $this->compiler->compileTag('assign',array_merge(array(array('value'=>e),array('var'=>"'".i."'")),a));
+    res = Constructs\ConstructAssign::compileOpen(
+        $this->compiler,
+        array('value' => e, 'var' => "'" . i . "'"),
+        a
+    );
 }
 
-                  // tag with optional Smarty2 style attributes
+// tag with optional Smarty2 style attributes
 smartytag(res)   ::= LDEL ID(i) attributes(a). {
     res = $this->compiler->compileTag(i,a);
 }
 
 smartytag(res)   ::= LDEL ID(i). {
-    res = $this->compiler->compileTag(i,array());
+    switch (i) {
+        case 'forelse':
+            res = Constructs\ConstructForElse::compileOpen($this->compiler, null, null);
+            break;
+        case 'else':
+            res = Constructs\ConstructElse::compileOpen($this->compiler, null, null);
+            break;
+        case 'ldelim':
+            res = 'echo ' . var_export($this->compiler->smarty->left_delimiter) . ";\n";
+            break;
+        case 'rdelim':
+            res = 'echo ' . var_export($this->compiler->smarty->right_delimiter) . ";\n";
+            break;
+        default:
+            res = $this->compiler->compileTag(i,array());
+    }
 }
 
                   // tag with modifier and optional Smarty2 style attributes
 smartytag(res)   ::= LDEL ID(i) modifierlist(l)attributes(a). {
     res = "ob_start();\n".$this->compiler->compileTag(i,a).'echo ';
-    res .= $this->compiler->compileTag('private_modifier',array(),array('modifierlist'=>l,'value'=>'ob_get_clean()')) . ";\n";
+    res .= Constructs\ConstructModifier::compileOpen($compiler, array(
+        'value' => 'ob_get_clean()',
+        'modifierlist' => l,
+    ));
 }
 
 
                   // {if}, {elseif} and {while} tag
 smartytag(res)   ::= LDELIF(i) expr(ie). {
-    $tag = trim(substr(i,$this->lex->ldel_length));
-    res = $this->compiler->compileTag(($tag == 'else if')? 'elseif' : $tag,array(),array('if condition'=>ie));
+    $tag = trim(substr(i, $this->lex->ldel_length));
+    switch ($tag) {
+        case 'if':
+            res = Constructs\ConstructIf::compileOpen($this->compiler, array('cond' => ie), null);
+            break;
+        case 'elseif':
+            res = Constructs\ConstructElseIf::compileOpen($this->compiler, array('cond' => ie), null);
+            break;
+        case 'while':
+            res = Constructs\ConstructWhile::compileOpen($this->compiler, array('cond' => ie), null);
+            break;
+    }
 }
 
 smartytag(res)   ::= LDELIF(i) expr(ie) attributes(a). {
-    $tag = trim(substr(i,$this->lex->ldel_length));
-    res = $this->compiler->compileTag(($tag == 'else if')? 'elseif' : $tag,a,array('if condition'=>ie));
+    $tag = trim(substr(i, $this->lex->ldel_length));
+    switch ($tag) {
+        case 'if':
+            res = Constructs\ConstructIf::compileOpen($this->compiler, array('cond' => ie), a);
+            break;
+        case 'elseif':
+            res = Constructs\ConstructElseIf::compileOpen($this->compiler, array('cond' => ie), a);
+            break;
+        case 'while':
+            res = Constructs\ConstructWhile::compileOpen($this->compiler, array('cond' => ie), a);
+            break;
+    }
 }
 
-                  // {for} tag
 smartytag(res)   ::= LDELFOR statements(st) SEMICOLON optspace expr(ie) SEMICOLON optspace DOLLAR varvar(v2) foraction(e2) attributes(a). {
-    res = $this->compiler->compileTag('for',array_merge(a,array(array('start'=>st),array('ifexp'=>ie),array('var'=>v2),array('step'=>e2))),1);
+    res = Constructs\ConstructFor::compileOpen(
+        $this->compiler,
+        array_merge(
+            a,
+            array(
+                array('start' => st),
+                array('ifexp' => ie),
+                array('var' => v2),
+                array('step' => e2)
+            )
+        ),
+        null
+    );
 }
 
 foraction(res)   ::= EQUAL expr(e). {
@@ -350,33 +429,77 @@ foraction(res)   ::= INCDEC(e). {
 }
 
 smartytag(res)   ::= LDELFOR statement(st) TO expr(v) attributes(a). {
-    res = $this->compiler->compileTag('for',array_merge(a,array(array('start'=>st),array('to'=>v))),0);
+    res = Constructs\ConstructFor::compileOpen(
+        $this->compiler,
+        array_merge(
+            a,
+            array(array('start' => st), array('to' => v))
+        ),
+        null
+    );
 }
 
 smartytag(res)   ::= LDELFOR statement(st) TO expr(v) STEP expr(v2) attributes(a). {
-    res = $this->compiler->compileTag('for',array_merge(a,array(array('start'=>st),array('to'=>v),array('step'=>v2))),0);
+    res = Constructs\ConstructFor::compileOpen(
+        $this->compiler,
+        array_merge(
+            a,
+            array(array('start' => st), array('to' => v), array('step' => v2))
+        ),
+        null
+    );
 }
 
                   // {foreach} tag
 smartytag(res)   ::= LDELFOREACH attributes(a). {
-    res = $this->compiler->compileTag('foreach',a);
+    res = Constructs\ConstructForEach::compileOpen($this->compiler, a, null);
 }
 
                   // {foreach $array as $var} tag
 smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v0) attributes(a). {
-    res = $this->compiler->compileTag('foreach',array_merge(a,array(array('from'=>v1),array('item'=>v0))));
+    res = Constructs\ConstructForEach::compileOpen(
+        $this->compiler,
+        array_merge(a, array(array('from' => v1), array('item' => v0))),
+        null
+    );
 }
 
 smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v2) APTR DOLLAR varvar(v0) attributes(a). {
-    res = $this->compiler->compileTag('foreach',array_merge(a,array(array('from'=>v1),array('item'=>v0),array('key'=>v2))));
+    res = Constructs\ConstructForEach::compileOpen(
+        $this->compiler,
+        array_merge(
+            a,
+            array(
+                array('from' => v1),
+                array('item' => v0),
+                array('key' => v2),
+            )
+        ),
+        null
+    );
 }
 
 smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a). {
-    res = $this->compiler->compileTag('foreach',array_merge(a,array(array('from'=>e),array('item'=>v0))));
+    res = Constructs\ConstructForEach::compileOpen(
+        $this->compiler,
+        array_merge(a, array(array('from' => v1), array('item' => v0))),
+        null
+    );
 }
 
 smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR varvar(v0) attributes(a). {
-    res = $this->compiler->compileTag('foreach',array_merge(a,array(array('from'=>e),array('item'=>v0),array('key'=>v1))));
+    res = Constructs\ConstructForEach::compileOpen(
+        $this->compiler,
+        array_merge(
+            a,
+            array(
+                array('from' => v1),
+                array('item' => v0),
+                array('key' => v2),
+            )
+        ),
+        null
+    );
 }
 
                   // {setfilter}
@@ -403,11 +526,23 @@ smartytag(res)   ::= LDEL SMARTYBLOCKCHILDPARENT(i). {
 
                   // end of block tag  {/....}
 smartytag(res)   ::= LDELSLASH ID(i). {
-    res = $this->compiler->compileTag(i.'close',array());
+    switch (i) {
+        case 'for':
+            res = Constructs\ConstructFor::compileClose($this->compiler, null, null);
+            break;
+        default:
+            res = $this->compiler->compileTag(i.'close',array());
+    }
 }
 
 smartytag(res)   ::= LDELSLASH ID(i) modifierlist(l). {
-    res = $this->compiler->compileTag(i.'close',array(),array('modifier_list'=>l));
+    switch (i) {
+        case 'for':
+            res = Constructs\ConstructFor::compileClose($this->compiler, null, null);
+            break;
+        default:
+            res = $this->compiler->compileTag(i.'close',array(),array('modifier_list'=>l));
+    }
 }
 
 //
@@ -510,16 +645,16 @@ expr(res)        ::= ternary(v). {
 
                   // arithmetic expression
 expr(res)        ::= expr(e) MATH(m) value(v). {
-    res = BrainyStaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
+    res = Wrappers\StaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
 }
 
 expr(res)        ::= expr(e) UNIMATH(m) value(v). {
-    res = BrainyStaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
+    res = Wrappers\StaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
 }
 
                   // bit operation
 expr(res)        ::= expr(e) ANDSYM(m) value(v). {
-    res = BrainyStaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
+    res = Wrappers\StaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
 }
 
                   // array
@@ -529,84 +664,75 @@ expr(res)       ::= array(a). {
 
                   // modifier
 expr(res)        ::= expr(e) modifierlist(l). {
-    res = $this->compiler->compileTag('private_modifier',array(),array('value'=>e,'modifierlist'=>l));
+    res = Constructs\ConstructModifier::compileOpen($compiler, array(
+        'value' => e,
+        'modifierlist' => l,
+    ));
 }
 
 // if expression
                     // simple expression
 expr(res)        ::= expr(e1) ifcond(c) expr(e2). {
-    res = new BrainyStaticWrapper(e1.c.e2);
+    res = new Wrappers\StaticWrapper(e1.c.e2);
 }
 
 expr(res)        ::= expr(e1) ISIN array(a).  {
-    res = new BrainyStaticWrapper('in_array('.e1.','.a.')');
+    res = new Wrappers\StaticWrapper('in_array('.e1.','.a.')');
 }
 
 expr(res)        ::= expr(e1) ISIN value(v).  {
-    res = new BrainyStaticWrapper('in_array('.e1.',(array)'.v.')');
+    res = new Wrappers\StaticWrapper('in_array('.e1.',(array)'.v.')');
 }
 
 expr(res)        ::= expr(e1) lop(o) expr(e2).  {
-    res = new BrainyStaticWrapper(e1.o.e2);
+    res = new Wrappers\StaticWrapper(e1.o.e2);
 }
 
 expr(res)        ::= expr(e1) ISDIVBY expr(e2). {
-    res = new BrainyStaticWrapper('!('.e1.' % '.e2.')');
+    res = new Wrappers\StaticWrapper('!('.e1.' % '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTDIVBY expr(e2).  {
     $this->compiler->assert_is_not_strict('`is not div by` is not supported in strict mode', $this);
-    res = new BrainyStaticWrapper('('.e1.' % '.e2.')');
+    res = new Wrappers\StaticWrapper('('.e1.' % '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISEVEN. {
-    res = new BrainyStaticWrapper('!(1 & '.e1.')');
+    res = new Wrappers\StaticWrapper('!(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTEVEN.  {
     $this->compiler->assert_is_not_strict('`is not even` is not supported in strict mode', $this);
-    res = new BrainyStaticWrapper('(1 & '.e1.')');
+    res = new Wrappers\StaticWrapper('(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISEVENBY expr(e2).  {
     $this->compiler->assert_is_not_strict('`is even by` is not supported in strict mode', $this);
-    res = new BrainyStaticWrapper('!(1 & '.e1.' / '.e2.')');
+    res = new Wrappers\StaticWrapper('!(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTEVENBY expr(e2). {
     $this->compiler->assert_is_not_strict('`is not even by` is not supported in strict mode', $this);
-    res = new BrainyStaticWrapper('(1 & '.e1.' / '.e2.')');
+    res = new Wrappers\StaticWrapper('(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISODD.  {
-    res = new BrainyStaticWrapper('(1 & '.e1.')');
+    res = new Wrappers\StaticWrapper('(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTODD. {
     $this->compiler->assert_is_not_strict('`is not odd` is not supported in strict mode', $this);
-    res = new BrainyStaticWrapper('!(1 & '.e1.')');
+    res = new Wrappers\StaticWrapper('!(1 & '.e1.')');
 }
 
 expr(res)        ::= expr(e1) ISODDBY expr(e2). {
     $this->compiler->assert_is_not_strict('`is odd by` is not supported in strict mode', $this);
-    res = new BrainyStaticWrapper('(1 & '.e1.' / '.e2.')');
+    res = new Wrappers\StaticWrapper('(1 & '.e1.' / '.e2.')');
 }
 
 expr(res)        ::= expr(e1) ISNOTODDBY expr(e2).  {
     $this->compiler->assert_is_not_strict('`is not odd by` is not supported in strict mode', $this);
-    res = new BrainyStaticWrapper('!(1 & '.e1.' / '.e2.')');
-}
-
-expr(res)        ::= value(v1) INSTANCEOF(i) ID(id). {
-    $this->compiler->assert_is_not_strict('`instanceof` is not supported in strict mode', $this);
-    res = new BrainyStaticWrapper(v1.i.id);
-}
-
-expr(res)        ::= value(v1) INSTANCEOF(i) value(v2). {
-    $this->compiler->assert_is_not_strict('`instanceof` is not supported in strict mode', $this);
-    self::$prefix_number++;
-    $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.v2.";\n";
-    res = new BrainyStaticWrapper(v1.i.'$_tmp'.self::$prefix_number);
+    res = new Wrappers\StaticWrapper('!(1 & '.e1.' / '.e2.')');
 }
 
 //
@@ -627,12 +753,12 @@ value(res)       ::= variable(v). {
 
                   // +/- value
 value(res)        ::= UNIMATH(m) value(v). {
-    res = BrainyStaticWrapper::static_concat(m, v);
+    res = Wrappers\StaticWrapper::static_concat(m, v);
 }
 
                   // logical negation
 value(res)       ::= NOT value(v). {
-    res = BrainyStaticWrapper::static_concat('!', v);
+    res = Wrappers\StaticWrapper::static_concat('!', v);
 }
 
 value(res)       ::= TYPECAST(t) value(v). {
@@ -645,31 +771,31 @@ value(res)       ::= variable(v) INCDEC(o). {
 
 // numeric
 value(res)       ::= INTEGER(n). {
-    res = new BrainyStaticWrapper(n);
+    res = new Wrappers\StaticWrapper(n);
 }
 
 value(res)       ::= INTEGER(n1) DOT INTEGER(n2). {
-    res = new BrainyStaticWrapper(n1.'.'.n2);
+    res = new Wrappers\StaticWrapper(n1.'.'.n2);
 }
 
 value(res)       ::= INTEGER(n1) DOT. {
-    res = new BrainyStaticWrapper(n1.'.');
+    res = new Wrappers\StaticWrapper(n1.'.');
 }
 
 value(res)       ::= DOT INTEGER(n1). {
-    res = new BrainyStaticWrapper('.'.n1);
+    res = new Wrappers\StaticWrapper('.'.n1);
 }
 
                  // ID, true, false, null
 value(res)       ::= ID(id). {
     if (preg_match('~^true$~i', id)) {
-        res = new BrainyStaticWrapper('true');
+        res = new Wrappers\StaticWrapper('true');
     } elseif (preg_match('~^false$~i', id)) {
-        res = new BrainyStaticWrapper('false');
+        res = new Wrappers\StaticWrapper('false');
     } elseif (preg_match('~^null$~i', id)) {
-        res = new BrainyStaticWrapper('null');
+        res = new Wrappers\StaticWrapper('null');
     } else {
-        res = new BrainyStaticWrapper(var_export(id, true));
+        res = new Wrappers\StaticWrapper(var_export(id, true));
     }
 }
 
@@ -680,29 +806,30 @@ value(res)       ::= function(f). {
 
                   // expression
 value(res)       ::= OPENP expr(e) CLOSEP. {
-    res = BrainyStaticWrapper::static_if_all("(". e .")", array(e));
+    res = Wrappers\StaticWrapper::static_if_all("(". e .")", array(e));
 }
 
                   // singele quoted string
 value(res)       ::= SINGLEQUOTESTRING(t). {
-    res = new BrainyStaticWrapper(t);
+    res = new Wrappers\StaticWrapper(t);
 }
 
                   // double quoted string
 value(res)       ::= doublequoted_with_quotes(s). {
-    res = new BrainyStaticWrapper(s);
+    res = new Wrappers\StaticWrapper(s);
 }
 
 
                   // Smarty tag
 value(res)       ::= smartytag(st) RDEL. {
-    self::$prefix_number++;
-    $this->compiler->prefix_code[] = 'ob_start();'.st.'$_tmp'.self::$prefix_number.'=ob_get_clean();';
-    res = '$_tmp'.self::$prefix_number;
+    res = 'array(ob_start(),' . st . ', ob_get_clean())[2]';
 }
 
 value(res)       ::= value(v) modifierlist(l). {
-    res = $this->compiler->compileTag('private_modifier',array(),array('value'=>v,'modifierlist'=>l));
+    res = Constructs\ConstructModifier::compileOpen($compiler, array(
+        'value' => v,
+        'modifierlist' => l,
+    ));
 }
 
 
@@ -720,11 +847,7 @@ variablebase(res)  ::= DOLLAR varvar(v). {
 }
 
 variableinternal(res)  ::= variableinternal(a1) indexdef(a2). {
-    if (a2 === '[]') {
-        res = a1 . a2;
-    } else {
-        res = $this->compileSafeLookupWithBase(a1, a2);
-    }
+    res = $this->compileSafeLookupWithBase(a1, a2);
 }
 
 // FIXME: This is a hack to make $smarty.config.foo work. :(
@@ -740,8 +863,6 @@ variableinternal(res)  ::= variablebase(base) indexdef(a) indexdef(b). {
 variableinternal(res)  ::= variablebase(base) indexdef(a). {
     if (base == '\'smarty\'') {
         res = $this->compiler->compileTag('private_special_variable', array(), a);
-    } elseif (a === '[]') {
-        res = $this->compileVariable(base) . a;
     } else {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
     }
@@ -757,10 +878,6 @@ variableinternal(res)  ::= variableinternal(a1) objectelement(a2). {
 // variable with property
 variableinternal(res)    ::= DOLLAR varvar(v) AT ID(p). {
     res = $this->compileVariable(v, p);
-}
-
-indexdef(res)    ::= OPENB CLOSEB.  {
-    res = '[]';
 }
 
 // single index definition
@@ -881,7 +998,7 @@ function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
             $is_language_construct = $func_name === 'isset' || $func_name === 'empty';
             $combined_params = array();
             foreach (p as $param) {
-                if ($is_language_construct && $param instanceof BrainySafeLookupWrapper) {
+                if ($is_language_construct && $param instanceof Wrappers\SafeLookupWrapper) {
                     $combined_params[] = $param->getUnsafe();
                     continue;
                 }
@@ -927,15 +1044,6 @@ method(res)     ::= ID(f) OPENP params(p) CLOSEP. {
         $this->compiler->trigger_template_error(self::Err1);
     }
     res = f . "(". implode(',',p) .")";
-}
-
-method(res)     ::= DOLLAR ID(f) OPENP params(p) CLOSEP.  {
-    if ($this->security) {
-        $this->compiler->trigger_template_error(self::Err2);
-    }
-    self::$prefix_number++;
-    $this->compiler->prefix_code[] = '$_tmp'.self::$prefix_number.'='.$this->compileVariable("'".f."'").';';
-    res = '$_tmp'.self::$prefix_number.'('. implode(',',p) .')';
 }
 
 // function/method parameter
@@ -1110,10 +1218,6 @@ doublequotedcontent(res)           ::=  LDEL variable(v) RDEL. {
 
 doublequotedcontent(res)           ::=  LDEL expr(e) RDEL. {
     res = new Helpers\Code($this, '(string)('.e.')');
-}
-
-doublequotedcontent(res)     ::=  smartytag(st) RDEL. {
-    res = new Helpers\Tag($this, st);
 }
 
 doublequotedcontent(res)           ::=  TEXT(o). {

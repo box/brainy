@@ -23,7 +23,6 @@ class SmartyTests
         $smarty->auto_literal = true;
         \Box\Brainy\Brainy::$_smarty_vars = array();
         $smarty->registered_plugins = array();
-        $smarty->default_plugin_handler_func = null;
         $smarty->default_modifiers = array();
         $smarty->registered_filters = array();
         $smarty->autoload_filters = array();

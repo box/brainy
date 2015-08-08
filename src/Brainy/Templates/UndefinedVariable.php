@@ -3,7 +3,8 @@
 namespace Box\Brainy\Templates;
 
 
-class UndefinedVariable {
+class UndefinedVariable
+{
 
     /**
      * @param  string $name

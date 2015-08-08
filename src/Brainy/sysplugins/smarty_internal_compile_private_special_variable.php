@@ -67,9 +67,9 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
                 if ($compiler->smarty->safe_lookups === Brainy::LOOKUP_UNSAFE) {
                     return $unsafe;
                 } else {
-                    return new BrainySafeLookupWrapper(
+                    return new SafeLookupWrapper(
                         $unsafe,
-                        'smarty_safe_array_lookup($_' . strtoupper($variable) . ', ' . $modifier . ', ' . $compiler->smarty->safe_lookups . ')'
+                        '\Box\Brainy\Runtime\Lookups::safeArrayLookup($_' . strtoupper($variable) . ', ' . $modifier . ', ' . $compiler->smarty->safe_lookups . ')'
                     );
                 }
 
