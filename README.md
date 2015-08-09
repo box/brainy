@@ -1,4 +1,7 @@
+[![Latest Stable Version](https://poser.pugx.org/box/brainy/v/stable)](https://packagist.org/packages/box/brainy)
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
+[![Total Downloads](https://poser.pugx.org/box/brainy/downloads)](https://packagist.org/packages/box/brainy)
+[![License](https://poser.pugx.org/box/brainy/license)](https://packagist.org/packages/box/brainy)
 
 ![Brainy](logo.png "Brainy")
 # Brainy
