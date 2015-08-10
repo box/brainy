@@ -505,14 +505,6 @@ smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR 
     );
 }
 
-                  // {setfilter}
-smartytag(res)   ::= LDELSETFILTER ID(m) modparameters(p). {
-    res = $this->compiler->compileTag('setfilter',array(),array('modifier_list'=>array(array_merge(array(m),p))));
-}
-
-smartytag(res)   ::= LDELSETFILTER ID(m) modparameters(p) modifierlist(l). {
-    res = $this->compiler->compileTag('setfilter',array(),array('modifier_list'=>array_merge(array(array_merge(array(m),p)),l)));
-}
 
                   // {$smarty.block.child} or {$smarty.block.parent}
 smartytag(res)   ::= LDEL SMARTYBLOCKCHILDPARENT(i). {

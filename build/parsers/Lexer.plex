@@ -165,7 +165,6 @@ class Lexer
  if = /(if|elseif|else if|while)\s+/
  for = /for\s+/
  foreach = /foreach(?![^\s])/
- setfilter = /setfilter\s+/
  not = /!\s*|not\s+/
  land = /\s*\&\&\s*|\s*and\s+/
  lor = /\s*\|\|\s*|\s*or\s+/
@@ -230,15 +229,6 @@ class Lexer
       $this->token = Parser::TP_TEXT;
    } else {
       $this->token = Parser::TP_LDELFOREACH;
-      $this->yypushstate(self::SMARTY);
-      $this->taglineno = $this->line;
-   }
- }
- ldel setfilter {
-   if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
-      $this->token = Parser::TP_TEXT;
-   } else {
-      $this->token = Parser::TP_LDELSETFILTER;
       $this->yypushstate(self::SMARTY);
       $this->taglineno = $this->line;
    }

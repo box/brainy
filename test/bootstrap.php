@@ -24,8 +24,6 @@ class SmartyTests
         \Box\Brainy\Brainy::$_smarty_vars = array();
         $smarty->registered_plugins = array();
         $smarty->default_modifiers = array();
-        $smarty->registered_filters = array();
-        $smarty->autoload_filters = array();
         $smarty->escape_html = false;
         $smarty->use_sub_dirs = false;
         $smarty->security_policy = null;

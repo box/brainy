@@ -155,11 +155,9 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
         $_tpl = new Template('string:' . $compiler->template->block_data[$_name]['source'], $compiler->smarty, $compiler->template, $compiler->template->compile_id);
 
         $_tpl->tpl_vars = $compiler->template->tpl_vars;
-        $_tpl->variable_filters = $compiler->template->variable_filters;
         $_tpl->allow_relative_path = true;
         $_tpl->compiler->inheritance = true;
         $_tpl->compiler->suppressHeader = true;
-        $_tpl->compiler->suppressFilter = true;
         $_tpl->compiler->suppressTemplatePropertyHeader = true;
         $_tpl->compiler->suppressMergedTemplates = true;
         if (strpos($compiler->template->block_data[$_name]['source'], self::parent) !== false) {
@@ -174,7 +172,6 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
         $compiler->template->properties['file_dependency'] = array_merge($compiler->template->properties['file_dependency'], $_tpl->properties['file_dependency']);
         $compiler->template->properties['function'] = array_merge($compiler->template->properties['function'], $_tpl->properties['function']);
         $compiler->merged_templates = array_merge($compiler->merged_templates, $_tpl->compiler->merged_templates);
-        $compiler->template->variable_filters = $_tpl->variable_filters;
         foreach ($_tpl->required_plugins as $key => $tmp1) {
             $code = $key;
             foreach ($tmp1 as $name => $tmp) {

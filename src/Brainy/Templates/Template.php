@@ -30,8 +30,7 @@ class Template extends TemplateBase
      * special compiled template properties
      * @var array
      */
-    public $properties = array('file_dependency' => array(),
-        'function' => array());
+    public $properties = array('file_dependency' => array(), 'function' => array());
     /**
      * required plugins
      * @var array
@@ -47,11 +46,6 @@ class Template extends TemplateBase
      * @var array
      */
     public $block_data = array();
-    /**
-     * variable filters
-     * @var array
-     */
-    public $variable_filters = array();
     /**
      * internal flag to allow relative path in child template blocks
      * @var bool
@@ -474,12 +468,10 @@ PHPDOC;
 
             case 'compiled':
                 $this->compiled = $this->source->getCompiled($this);
-
                 return $this->compiled;
 
             case 'compiler':
                 $this->compiler = new \Box\Brainy\Compiler\TemplateCompiler($this->smarty);
-
                 return $this->compiler;
 
             // FIXME: routing of template -> smarty attributes

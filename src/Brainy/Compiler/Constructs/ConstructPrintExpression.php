@@ -37,16 +37,6 @@ class ConstructPrintExpression extends BaseConstruct
             ));
         }
 
-        if (!isset($args['nofilter']) && !isset($params['nofilter'])) {
-            if (!empty($compiler->template->smarty->registered_filters[Brainy::FILTER_VARIABLE])) {
-                $output = self::applyRegisteredFilters($output, $compiler->template->smarty->registered_filters[Brainy::FILTER_VARIABLE]);
-            }
-            if (!empty($compiler->template->smarty->autoload_filters[Brainy::FILTER_VARIABLE])) {
-                $output = self::applyAutoloadFilters($output, (array) $compiler->template->smarty->autoload_filters[Brainy::FILTER_VARIABLE], $compiler);
-            }
-            $output = self::applyVariableFilters($output, $compiler->template->variable_filters, $compiler);
-        }
-
         // autoescape html
         if ($compiler->template->smarty->escape_html) {
             $output = "htmlspecialchars({$output}, ENT_QUOTES, 'UTF-8')";
@@ -74,73 +64,6 @@ class ConstructPrintExpression extends BaseConstruct
             }
         }
         $compiler->default_modifier_list = $modifierlist;
-    }
-
-    /**
-     * Applies an array of registered filters to the output
-     * @param  string $output
-     * @param  array $filters The array of filters
-     * @return string
-     */
-    private static function applyRegisteredFilters($output, $filters)
-    {
-        foreach ($filters as $key => $func) {
-            $output = "$function($output, \$_smarty_tpl)";
-        }
-        return $output;
-    }
-
-    /**
-     * Applies an array of autoload filters to the output
-     * @param  string $output
-     * @param  array $filters The array of filters
-     * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler
-     * @return string
-     */
-    private static function applyAutoloadFilters($output, $filters, $compiler)
-    {
-        foreach ($filters as $name) {
-            $funcName = "smarty_variablefilter_{$name}";
-            $path = $compiler->smarty->loadPlugin($funcName, false);
-            if (!$path) {
-                throw new \Box\Brainy\Exceptions\SmartyCompilerException('Could not find filter "' . $name . '"');
-            }
-            $compiler->template->required_plugins['compiled'][$name][Brainy::FILTER_VARIABLE]['file'] = $path;
-            $compiler->template->required_plugins['compiled'][$name][Brainy::FILTER_VARIABLE]['function'] = $funcName;
-
-            $output = "{$funcName}({$output}, \$_smarty_tpl)";
-        }
-        return $output;
-    }
-
-    /**
-     * Applies an array of registered filters to the output
-     * @param  string $output
-     * @param  array $filters The array of filters
-     * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler
-     * @return string
-     */
-    private static function applyVariableFilters($output, $filters, $compiler)
-    {
-        foreach ($filters as $filter) {
-            if (count($filter) === 1) {
-                $funcName = "smarty_variablefilter_{$name}";
-                $path = $compiler->smarty->loadPlugin($funcName, false);
-                if (!$path) {
-                    throw new \Box\Brainy\Exceptions\SmartyCompilerException('Could not find filter "' . $name . '"');
-                }
-                $compiler->template->required_plugins['compiled'][$name][Brainy::FILTER_VARIABLE]['file'] = $path;
-                $compiler->template->required_plugins['compiled'][$name][Brainy::FILTER_VARIABLE]['function'] = $funcName;
-
-                $output = "{$funcName}({$output}, \$_smarty_tpl)";
-            } else {
-                $output = ConstructModifier::compileOpen($compiler, array(
-                    'value' => $output,
-                    'modifierlist' => array($filter),
-                ));
-            }
-        }
-        return $output;
     }
 
 }

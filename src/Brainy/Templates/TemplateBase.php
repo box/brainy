@@ -163,10 +163,6 @@ abstract class TemplateBase extends TemplateData
             }
         }
 
-        if (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output'])) {
-            $output = \Box\Brainy\Runtime\FilterHandler::runFilter('output', $output, $_template);
-        }
-
         if ($merge_tpl_vars) {
             // restore local variables
             $_template->tpl_vars = $save_tpl_vars;
@@ -198,25 +194,6 @@ abstract class TemplateBase extends TemplateData
     }
 
     /**
-     * Returns whether the template is cached.
-     *
-     * Note that calling this method will load the template into memory.
-     * Subsequent calls to fetch() or display() will not reload the template
-     * file. Calling clearCache() may also have no effect if this method has
-     * returned true.
-     *
-     * @param  string|object $template   the resource handle of the template file or template object
-     * @param  mixed         $cache_id   cache id to be used with this template
-     * @param  mixed         $compile_id compile id to be used with this template
-     * @return boolean       The template's cache status
-     * @deprecated This method is a source of confusion, as it is based on the in-memory template.
-     * @deprecated Caching in Brainy should be transparent. There should be no logic around it.
-     */
-    public function isCached($template = null, $cache_id = null, $compile_id = null) {
-        return false;
-    }
-
-    /**
      * Registers plugin to be used in templates
      *
      * @param  string                       $type       plugin type
@@ -224,7 +201,7 @@ abstract class TemplateBase extends TemplateData
      * @param  callable                     $callback   PHP callback to register
      * @param  boolean                      $cacheable  if true (default) this fuction is cachable
      * @param  array|null                   $cache_attr caching attributes if any
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
+     * @return TemplateBase Self-reference to facilitate chaining
      * @throws SmartyException              when the plugin tag is invalid
      */
     public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null) {
@@ -243,7 +220,7 @@ abstract class TemplateBase extends TemplateData
      *
      * @param  string                       $type of plugin
      * @param  string                       $tag  name of plugin
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
+     * @return TemplateBase Self-reference to facilitate chaining
      */
     public function unregisterPlugin($type, $tag) {
         if (isset($this->smarty->registered_plugins[$type][$tag])) {
@@ -258,7 +235,7 @@ abstract class TemplateBase extends TemplateData
      *
      * @param  string                       $type     name of resource type
      * @param  \Box\Brainy\Resources\Resource|\Box\Brainy\Resources\Resource[] $callback Instance of \Box\Brainy\Resources\Resource, or array of callbacks to handle resource (deprecated)
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
+     * @return TemplateBase Self-reference to facilitate chaining
      */
     public function registerResource($type, $callback) {
         $this->smarty->registered_resources[$type] = $callback instanceof \Box\Brainy\Resources\Resource ? $callback : array($callback, false);
@@ -270,100 +247,11 @@ abstract class TemplateBase extends TemplateData
      * Unregisters a resource
      *
      * @param  string                       $type name of resource type
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
+     * @return TemplateBase Self-reference to facilitate chaining
      */
     public function unregisterResource($type) {
         if (isset($this->smarty->registered_resources[$type])) {
             unset($this->smarty->registered_resources[$type]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Registers a filter function
-     *
-     * @param  string                       $type     filter type
-     * @param  callback                     $callback
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
-     * @uses Brainy::FILTER_POST
-     * @uses Brainy::FILTER_PRE
-     * @uses Brainy::FILTER_OUTPUT
-     * @uses Brainy::FILTER_VARIABLE
-     */
-    public function registerFilter($type, $callback) {
-        $this->smarty->registered_filters[$type][$this->_get_filter_name($callback)] = $callback;
-
-        return $this;
-    }
-
-    /**
-     * Unregisters a filter function
-     *
-     * @param  string                       $type     filter type
-     * @param  callback                     $callback
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
-     */
-    public function unregisterFilter($type, $callback) {
-        $name = $this->_get_filter_name($callback);
-        if (isset($this->smarty->registered_filters[$type][$name])) {
-            unset($this->smarty->registered_filters[$type][$name]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Return internal filter name
-     *
-     * @param  callback $function_name
-     * @return string   internal filter name
-     * @internal
-     */
-    public function _get_filter_name($function_name) {
-        if (!is_array($function_name)) {
-            return $function_name;
-        }
-
-        $_class_name = is_object($function_name[0]) ? get_class($function_name[0]) : $function_name[0];
-        return $_class_name . '_' . $function_name[1];
-    }
-
-    /**
-     * Load a filter of specified type and name
-     *
-     * @param  string          $type filter type
-     * @param  string          $name filter name
-     * @return bool
-     * @throws SmartyException if filter could not be loaded
-     */
-    public function loadFilter($type, $name) {
-        $_plugin = "smarty_{$type}filter_{$name}";
-        $_filter_name = $_plugin;
-        if (!$this->smarty->loadPlugin($_plugin)) {
-            throw new SmartyException("{$type}filter \"{$name}\" not callable");
-        }
-        if (class_exists($_plugin, false)) {
-            $_plugin = array($_plugin, 'execute');
-        }
-        if (is_callable($_plugin)) {
-            $this->smarty->registered_filters[$type][$_filter_name] = $_plugin;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * unload a filter of specified type and name
-     *
-     * @param  string                       $type filter type
-     * @param  string                       $name filter name
-     * @return Smarty_Internal_TemplateBase Self-reference to facilitate chaining
-     */
-    public function unloadFilter($type, $name) {
-        $_filter_name = "smarty_{$type}filter_{$name}";
-        if (isset($this->smarty->registered_filters[$type][$_filter_name])) {
-            unset($this->smarty->registered_filters[$type][$_filter_name]);
         }
 
         return $this;

@@ -144,9 +144,9 @@ class ModifierTest extends Smarty_TestCase
     */
     public function testDefaultModifier() {
         $this->smarty->default_modifiers = array('escape');
-        $tpl = $this->smarty->createTemplate('eval:{$foo}{$foo nofilter}');
+        $tpl = $this->smarty->createTemplate('eval:{$foo}');
         $tpl->assign('foo','<bar>');
-        $this->assertEquals('&lt;bar&gt;<bar>', $this->smarty->fetch($tpl));
+        $this->assertEquals('&lt;bar&gt;', $this->smarty->fetch($tpl));
     }
 
 }

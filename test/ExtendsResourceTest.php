@@ -39,8 +39,3 @@ class ExtendsResourceTest extends Smarty_TestCase
     }
 
 }
-
-function prefilterextends($input) {
-    return preg_replace('/{extends .*}/', '', $input);
-}
-

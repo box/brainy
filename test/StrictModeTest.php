@@ -48,8 +48,6 @@ class StrictModeTest extends Smarty_TestCase
             array('{if $x is not even by $y}{/if}'),
             array('{if $x is not odd}{/if}'),
             array('{if $x is not odd by $y}{/if}'),
-            array('{if $x instanceof $y}{/if}'),
-            array('{if $x instanceof Foo}{/if}'),
         );
     }
 
@@ -134,7 +132,6 @@ class StrictModeTest extends Smarty_TestCase
             array('{$smarty.post.foo}'),
             array('{$smarty.env.foo}'),
             array('{$smarty.template_object->compile_id}'),
-            array('{$smarty.const.FOO}'),
         );
     }
 

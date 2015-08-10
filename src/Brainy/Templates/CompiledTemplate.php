@@ -40,7 +40,7 @@ class CompiledTemplate
 
     /**
      * Source Object
-     * @var Smarty_Template_Source
+     * @var TemplateSource
      */
     public $source = null;
 
@@ -55,9 +55,9 @@ class CompiledTemplate
     /**
      * create Compiled Object container
      *
-     * @param Smarty_Template_Source $source source object this compiled object belongs to
+     * @param TemplateSource $source source object this compiled object belongs to
      */
-    public function __construct(Source $source) {
+    public function __construct(TemplateSource $source) {
         $this->source = $source;
     }
 

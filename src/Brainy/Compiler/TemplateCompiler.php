@@ -71,14 +71,10 @@ class TemplateCompiler extends TemplateCompilerBase
         }
 
         // get tokens from lexer and parse them
-        while ($this->lex->yylex() && !$this->abort_and_recompile) {
+        while ($this->lex->yylex()) {
             $this->parser->doParse($this->lex->token, $this->lex->value);
         }
 
-        if ($this->abort_and_recompile) {
-            // exit here on abort
-            return false;
-        }
         // finish parsing process
         $this->parser->doParse(0, 0);
         if ($mbEncoding) {

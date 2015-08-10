@@ -97,35 +97,6 @@ class Brainy extends Templates\TemplateBase
 
 
     /**
-     * Represents post-filtering
-     * @var string
-     * @see Brainy::setAutoloadFilters() Usage in setAutoloadFilters
-     * @see Brainy::addAutoloadFilters() Usage in addAutoloadFilters
-     */
-    const FILTER_POST = 'post';
-    /**
-     * Represents pre-filtering
-     * @var string
-     * @see Brainy::setAutoloadFilters() Usage in setAutoloadFilters
-     * @see Brainy::addAutoloadFilters() Usage in addAutoloadFilters
-     */
-    const FILTER_PRE = 'pre';
-    /**
-     * Represents output-filtering
-     * @var string
-     * @see Brainy::setAutoloadFilters() Usage in setAutoloadFilters
-     * @see Brainy::addAutoloadFilters() Usage in addAutoloadFilters
-     */
-    const FILTER_OUTPUT = 'output';
-    /**
-     * Represents variable-filtering
-     * @var string
-     * @see Brainy::setAutoloadFilters() Usage in setAutoloadFilters
-     * @see Brainy::addAutoloadFilters() Usage in addAutoloadFilters
-     */
-    const FILTER_VARIABLE = 'variable';
-
-    /**
      * Represents a function plugin
      * @var string
      */
@@ -450,12 +421,6 @@ class Brainy extends Templates\TemplateBase
      */
     public $plugin_search_order = array('function', 'block', 'compiler', 'class');
     /**
-     * registered filters
-     * @var array
-     * @internal
-     */
-    public $registered_filters = array();
-    /**
      * registered resources
      * @var array
      * @internal
@@ -468,12 +433,6 @@ class Brainy extends Templates\TemplateBase
      */
     public $_resource_handlers = array();
     /**
-     * autoload filter
-     * @var array
-     * @internal
-     */
-    public $autoload_filters = array();
-    /**
      * default modifier
      * @var array
      */
@@ -484,8 +443,6 @@ class Brainy extends Templates\TemplateBase
      * ```
      * htmlspecialchars({$variable}, ENT_QUOTES, 'UTF-8')
      * ```
-     *
-     * Variables may use the {$variable nofilter} syntax to prevent this behavior.
      * @var boolean
      */
     public $escape_html = false;
@@ -787,68 +744,6 @@ class Brainy extends Templates\TemplateBase
         return $this->default_modifiers;
     }
 
-
-    /**
-     * Set autoload filters
-     *
-     * @param  array  $filters filters to load automatically
-     * @param  string|null $type "pre", "output", … specify the filter type to set. Defaults to none treating $filters' keys as the appropriate types
-     * @return Brainy current Smarty instance for chaining
-     * @see Brainy::FILTER_POST         Allows post filtering
-     * @see Brainy::FILTER_PRE          Allows pre filtering
-     * @see Brainy::FILTER_OUTPUT       Allows output filtering
-     * @see Brainy::FILTER_VARIABLE     Allows variable filtering
-     */
-    public function setAutoloadFilters($filters, $type = null) {
-        if ($type !== null) {
-            $this->autoload_filters[$type] = (array) $filters;
-        } else {
-            $this->autoload_filters = (array) $filters;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add autoload filters
-     *
-     * @param  array  $filters filters to load automatically
-     * @param  string $type    "pre", "output", … specify the filter type to set. Defaults to none treating $filters' keys as the appropriate types
-     * @return Brainy current Smarty instance for chaining
-     */
-    public function addAutoloadFilters($filters, $type=null) {
-        if ($type !== null) {
-            if (!empty($this->autoload_filters[$type])) {
-                $this->autoload_filters[$type] = array_merge($this->autoload_filters[$type], (array) $filters);
-            } else {
-                $this->autoload_filters[$type] = (array) $filters;
-            }
-        } else {
-            foreach ((array) $filters as $key => $value) {
-                if (!empty($this->autoload_filters[$key])) {
-                    $this->autoload_filters[$key] = array_merge($this->autoload_filters[$key], (array) $value);
-                } else {
-                    $this->autoload_filters[$key] = (array) $value;
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get autoload filters
-     *
-     * @param  string $type type of filter to get autoloads for. Defaults to all autoload filters
-     * @return array  array( 'type1' => array( 'filter1', 'filter2', … ) ) or array( 'filter1', 'filter2', …) if $type was specified
-     */
-    public function getAutoloadFilters($type=null) {
-        if ($type !== null) {
-            return isset($this->autoload_filters[$type]) ? $this->autoload_filters[$type] : array();
-        }
-
-        return $this->autoload_filters;
-    }
 
     /**
      * Creates a template object.

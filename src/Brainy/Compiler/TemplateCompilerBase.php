@@ -136,11 +136,6 @@ abstract class TemplateCompilerBase
      */
     public $suppressTemplatePropertyHeader = false;
 
-    /**
-     * suppress pre and post filter
-     * @var bool
-     */
-    public $suppressFilter = false;
 
     /**
      * flag if compiled template file shall we written
@@ -211,21 +206,13 @@ abstract class TemplateCompilerBase
             }
             $loop++;
             $this->inheritance_child = (bool) $no_sources;
-            do {
-                $_compiled_code = '';
-                // flag for aborting current and start recompile
-                $this->abort_and_recompile = false;
-                // get template source
-                $_content = $this->template->source->content;
-                if ($_content != '') {
-                    // run prefilter if required
-                    if ((isset($this->smarty->autoload_filters['pre']) || isset($this->smarty->registered_filters['pre'])) && !$this->suppressFilter) {
-                        $_content = \Box\Brainy\Runtime\FilterHandler::runFilter('pre', $_content, $template);
-                    }
-                    // call compiler
-                    $_compiled_code = $this->doCompile($_content);
-                }
-            } while ($this->abort_and_recompile);
+            $_compiled_code = '';
+            // get template source
+            $_content = $this->template->source->content;
+            if ($_content != '') {
+                // call compiler
+                $_compiled_code = $this->doCompile($_content);
+            }
         }
 
         // restore source
@@ -240,10 +227,6 @@ abstract class TemplateCompilerBase
             foreach ($this->merged_templates as $code) {
                 $merged_code .= $code;
             }
-        }
-        // run postfilter if required on compiled template code
-        if ((isset($this->smarty->autoload_filters['post']) || isset($this->smarty->registered_filters['post'])) && !$this->suppressFilter && $_compiled_code !== '') {
-            $_compiled_code = \Box\Brainy\Runtime\FilterHandler::runFilter('post', $_compiled_code, $template);
         }
         if ($this->suppressTemplatePropertyHeader) {
             $code = $_compiled_code . $merged_code;
