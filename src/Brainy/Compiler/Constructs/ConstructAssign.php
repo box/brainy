@@ -15,7 +15,7 @@ class ConstructAssign extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         $var = self::getRequiredArg($args, 'var');
         $value = self::getRequiredArg($args, 'value');

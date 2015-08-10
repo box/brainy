@@ -29,11 +29,10 @@ function smarty_modifiercompiler_wordwrap($params, $compiler) {
         $params[3] = 'false';
     }
     $function = 'wordwrap';
-    if (Brainy::$_MBSTRING) {
-        $compiler->template->required_plugins['compiled']['wordwrap']['modifier']['file'] = SMARTY_PLUGINS_DIR .'shared.mb_wordwrap.php';
-        $compiler->template->required_plugins['compiled']['wordwrap']['modifier']['function'] = 'smarty_mb_wordwrap';
-        $function = 'smarty_mb_wordwrap';
-    }
+
+    $compiler->template->required_plugins['compiled']['wordwrap']['modifier']['file'] = SMARTY_PLUGINS_DIR .'shared.mb_wordwrap.php';
+    $compiler->template->required_plugins['compiled']['wordwrap']['modifier']['function'] = 'smarty_mb_wordwrap';
+    $function = 'smarty_mb_wordwrap';
 
     return $function . '(' . $params[0] . ',' . $params[1] . ',' . $params[2] . ',' . $params[3] . ')';
 }

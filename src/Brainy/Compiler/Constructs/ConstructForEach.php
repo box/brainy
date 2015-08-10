@@ -13,7 +13,7 @@ class ConstructForEach extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         $from = self::getRequiredArg($args, 'from');
         $item = self::getRequiredArg($args, 'item');
@@ -23,6 +23,7 @@ class ConstructForEach extends BaseConstruct
 
         $usages = self::getUsages($compiler, $name);
 
+
         $output = "if (!empty($from)) {\n";
         $output .= "\$_smarty_tpl->tpl_vars[$item] = new \\Box\\Brainy\\Templates\\ForEachSpecialVariable();\n";
         if ($name) {
@@ -30,9 +31,40 @@ class ConstructForEach extends BaseConstruct
         }
         if ($key) {
             $output .= "\$_smarty_tpl->tpl_vars[$key] = new \\Box\\Brainy\\Templates\\Variable();\n";
+            $keyVar = "\$_smarty_tpl->tpl_vars[$key]->value";
+        } else {
+            $keyVar = "\$_smarty_tpl->tpl_vars[$item]->key";
         }
 
-        $output .= "foreach ($from as \$_smarty_tpl->tpl_vars[$key]->value => \$_smarty_tpl->tpl_vars[$item]->value) {\n";
+        $output .= "\$_smarty_tpl->tpl_vars[$item]->setSource($from);\n";
+
+        if ($usages['total']) {
+            $output .= "\$_smarty_tpl->tpl_vars[$item]->setCount();\n";
+        }
+        if ($usages['iteration']) {
+            $output .= "\$_smarty_tpl->tpl_vars[$item]->iteration = 0;\n";
+        }
+        if ($usages['index']) {
+            $output .= "\$_smarty_tpl->tpl_vars[$item]->index = -1;\n";
+        }
+        if ($usages['show']) {
+            $output .= "\$_smarty_tpl->tpl_vars[$item]->show = \$_smarty_tpl->tpl_vars[$item]->total > 0;\n";
+        }
+
+        $output .= "foreach (\$_smarty_tpl->tpl_vars[$item]->source as $keyVar => \$_smarty_tpl->tpl_vars[$item]->value) {\n";
+
+        if ($usages['iteration']) {
+            $output .= "\$_smarty_tpl->tpl_vars[$item]->iteration++;\n";
+        }
+        if ($usages['index']) {
+            $output .= "\$_smarty_tpl->tpl_vars[$item]->index++;\n";
+        }
+        if ($usages['first']) {
+            $output .= "\$_smarty_tpl->tpl_vars[$item]->first = \$_smarty_tpl->tpl_vars[$item]->index === 0;\n";
+        }
+        if ($usages['last']) {
+            $output .= "\$_smarty_tpl->tpl_vars[$item]->last = \$_smarty_tpl->tpl_vars[$item]->index === \$_smarty_tpl->tpl_vars[$item]->total;\n";
+        }
 
         self::openTag($compiler, 'foreach');
 
@@ -46,7 +78,7 @@ class ConstructForEach extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         list($openTag) = self::closeTag($compiler, array('foreach', 'foreachelse'));
 

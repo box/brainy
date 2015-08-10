@@ -10,6 +10,7 @@
 namespace Box\Brainy\Resources;
 
 use \Box\Brainy\Brainy;
+use \Box\Brainy\Templates\CompiledTemplate;
 use \Box\Brainy\Templates\Template;
 use \Box\Brainy\Templates\TemplateSource;
 
@@ -22,7 +23,7 @@ abstract class Resource
      */
     public static $sources = array();
     /**
-     * cache for Smarty_Template_Compiled instances
+     * cache for CompiledTemplate instances
      * @var array
      */
     public static $compileds = array();
@@ -73,21 +74,21 @@ abstract class Resource
     /**
      * modify resource_name according to resource handlers specifications
      *
-     * @param  Smarty $smarty        Smarty instance
+     * @param  Brainy $smarty        Smarty instance
      * @param  string $resource_name resource_name to make unique
      * @return string unique resource name
      */
-    protected function buildUniqueResourceName(Smarty $smarty, $resource_name) {
+    protected function buildUniqueResourceName($smarty, $resource_name) {
         return get_class($this) . '#' . $smarty->joined_template_dir . '#' . $resource_name;
     }
 
     /**
      * populate Compiled Object with compiled filepath
      *
-     * @param Smarty_Template_Compiled $compiled  compiled object
+     * @param CompiledTemplate $compiled  compiled object
      * @param Template $_template template object
      */
-    public function populateCompiledFilepath(Smarty_Template_Compiled $compiled, Template $_template) {
+    public function populateCompiledFilepath(CompiledTemplate $compiled, Template $_template) {
         $_compile_id = isset($_template->compile_id) ? preg_replace('![^\w\|]+!', '_', $_template->compile_id) : null;
         $_filepath = $compiled->source->uid;
         // if use_sub_dirs, break file into directories

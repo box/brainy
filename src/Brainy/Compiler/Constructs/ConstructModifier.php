@@ -29,7 +29,7 @@ class ConstructModifier extends BaseConstruct
             $params = implode(', ', $rawModifier);
 
             if (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][$modifier])) {
-                $output = "$function({$params})"
+                $output = "$function({$params})";
                 continue;
 
             } elseif (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIERCOMPILER][$modifier][0])) {
@@ -59,7 +59,7 @@ class ConstructModifier extends BaseConstruct
                 if (!is_object($compiler->smarty->security_policy) ||
                     $compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
 
-                    $output = "$function({$params})"
+                    $output = "$function({$params})";
                     continue;
                 }
                 $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
@@ -69,7 +69,7 @@ class ConstructModifier extends BaseConstruct
                 if (!is_object($compiler->smarty->security_policy) ||
                     $compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
 
-                    $output = "$modifier({$params})"
+                    $output = "$modifier({$params})";
                     continue;
                 }
                 $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');

@@ -1,26 +1,19 @@
 <?php
 // compiler.test.php
-class smarty_compiler_test extends Smarty_Internal_CompileBase
+class smarty_compiler_test extends \Box\Brainy\Compiler\Constructs\BaseConstruct
 {
-    public function compile($args, $compiler) {
-        $this->required_attributes = array('data');
+    public static function compileOpen($compiler, $args, $params)
+    {
+        self::getRequiredArg($args, 'data');
 
-        $_attr = $this->getAttributes($compiler, $args);
-
-        $this->openTag($compiler, 'test');
+        self::openTag($compiler, 'test');
 
         return "echo 'test output';\n";
     }
 
-}
-
-// compiler.testclose.php
-class smarty_compiler_testclose extends Smarty_Internal_CompileBase
-{
-    public function compile($args, $compiler) {
-
-        $this->closeTag($compiler, 'test');
-
+    public static function compileClose($compiler, $args, $params)
+    {
+        self::closeTag($compiler, 'test');
         return '';
     }
 

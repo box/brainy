@@ -20,11 +20,7 @@
  */
 function smarty_modifiercompiler_count_characters($params, $compiler) {
     if (!isset($params[1]) || $params[1] != 'true') {
-        return 'preg_match_all(\'/[^\s]/' . Brainy::$_UTF8_MODIFIER . '\',' . $params[0] . ', $tmp)';
+        return 'preg_match_all(\'/[^\s]/' . \Box\Brainy\Brainy::$_UTF8_MODIFIER . '\',' . $params[0] . ', $tmp)';
     }
-    if (Brainy::$_MBSTRING) {
-        return 'mb_strlen(' . $params[0] . ', \'' . addslashes(Brainy::$_CHARSET) . '\')';
-    }
-    // no MBString fallback
-    return 'strlen(' . $params[0] . ')';
+    return 'mb_strlen(' . $params[0] . ', \'UTF-8\')';
 }

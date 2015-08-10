@@ -14,12 +14,10 @@ class ConstructPrintExpression extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
-        $output = $this->getRequiredArg($args, 'value');
-        $modifiers = $this->getOptionalArg($args, 'modifierlist', array());
-
-        $attributes = $this->getAttributes($compiler, $params);
+        $output = self::getRequiredArg($args, 'value');
+        $modifiers = self::getOptionalArg($args, 'modifierlist', array());
 
         if (!empty($modifiers)) {
             $output = ConstructModifier::compileOpen($compiler, array(
@@ -39,9 +37,13 @@ class ConstructPrintExpression extends BaseConstruct
             ));
         }
 
-        if (!$attributes['nofilter']) {
-            $output = self::applyRegisteredFilters($output, $compiler->template->smarty->registered_filters[Brainy::FILTER_VARIABLE]);
-            $output = self::applyAutoloadFilters($output, (array) $compiler->template->smarty->autoload_filters[Brainy::FILTER_VARIABLE], $compiler);
+        if (!isset($args['nofilter']) && !isset($params['nofilter'])) {
+            if (!empty($compiler->template->smarty->registered_filters[Brainy::FILTER_VARIABLE])) {
+                $output = self::applyRegisteredFilters($output, $compiler->template->smarty->registered_filters[Brainy::FILTER_VARIABLE]);
+            }
+            if (!empty($compiler->template->smarty->autoload_filters[Brainy::FILTER_VARIABLE])) {
+                $output = self::applyAutoloadFilters($output, (array) $compiler->template->smarty->autoload_filters[Brainy::FILTER_VARIABLE], $compiler);
+            }
             $output = self::applyVariableFilters($output, $compiler->template->variable_filters, $compiler);
         }
 

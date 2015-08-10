@@ -5,7 +5,7 @@ namespace Box\Brainy\Compiler\Constructs;
 use \Box\Brainy\Brainy;
 
 
-class ConstructForElse extends BaseConstruct
+class ConstructForEachElse extends BaseConstruct
 {
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
@@ -15,10 +15,9 @@ class ConstructForElse extends BaseConstruct
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
     {
-        self::closeTag($compiler, array('for'));
-        self::openTag($compiler, 'forelse', array('forelse'));
+        self::closeTag($compiler, array('foreach'));
+        self::openTag($compiler, 'foreachelse', array('foreachelse'));
 
         return "}\n} else {\n";
     }
-
 }

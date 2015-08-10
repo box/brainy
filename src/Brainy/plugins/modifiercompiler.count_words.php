@@ -19,11 +19,7 @@
  * @return string with compiled code
 */
 function smarty_modifiercompiler_count_words($params, $compiler) {
-    if (Brainy::$_MBSTRING) {
-        // return 'preg_match_all(\'#[\w\pL]+#' . Brainy::$_UTF8_MODIFIER . '\', ' . $params[0] . ', $tmp)';
-        // expression taken from http://de.php.net/manual/en/function.str-word-count.php#85592
-        return 'preg_match_all(\'/\p{L}[\p{L}\p{Mn}\p{Pd}\\\'\x{2019}]*/' . Brainy::$_UTF8_MODIFIER . '\', ' . $params[0] . ', $tmp)';
-    }
-    // no MBString fallback
-    return 'str_word_count(' . $params[0] . ')';
+    // return 'preg_match_all(\'#[\w\pL]+#' . Brainy::$_UTF8_MODIFIER . '\', ' . $params[0] . ', $tmp)';
+    // expression taken from http://de.php.net/manual/en/function.str-word-count.php#85592
+    return 'preg_match_all(\'/\p{L}[\p{L}\p{Mn}\p{Pd}\\\'\x{2019}]*/' . \Box\Brainy\Brainy::$_UTF8_MODIFIER . '\', ' . $params[0] . ', $tmp)';
 }

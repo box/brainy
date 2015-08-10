@@ -346,6 +346,9 @@ smartytag(res)   ::= LDEL ID(i) attributes(a). {
 
 smartytag(res)   ::= LDEL ID(i). {
     switch (i) {
+        case 'foreachelse':
+            res = Constructs\ConstructForEachElse::compileOpen($this->compiler, null, null);
+            break;
         case 'forelse':
             res = Constructs\ConstructForElse::compileOpen($this->compiler, null, null);
             break;
@@ -530,6 +533,9 @@ smartytag(res)   ::= LDELSLASH ID(i). {
         case 'for':
             res = Constructs\ConstructFor::compileClose($this->compiler, null, null);
             break;
+        case 'foreach':
+            res = Constructs\ConstructForEach::compileClose($this->compiler, null, null);
+            break;
         default:
             res = $this->compiler->compileTag(i.'close',array());
     }
@@ -539,6 +545,9 @@ smartytag(res)   ::= LDELSLASH ID(i) modifierlist(l). {
     switch (i) {
         case 'for':
             res = Constructs\ConstructFor::compileClose($this->compiler, null, null);
+            break;
+        case 'foreach':
+            res = Constructs\ConstructForEach::compileClose($this->compiler, null, null);
             break;
         default:
             res = $this->compiler->compileTag(i.'close',array(),array('modifier_list'=>l));

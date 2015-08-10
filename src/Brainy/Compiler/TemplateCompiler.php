@@ -61,7 +61,7 @@ class TemplateCompiler extends TemplateCompilerBase
         $this->parser = new Parser($this->lex, $this);
         if ($this->inheritance_child) {
             // start state on child templates
-            $this->lex->yypushstate(Smarty_Internal_Templatelexer::CHILDBODY);
+            $this->lex->yypushstate(Lexer::CHILDBODY);
         }
         if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {
             $mbEncoding = mb_internal_encoding();

@@ -15,7 +15,7 @@ abstract class BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen($compiler, array $args, array $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         throw new \BadMethodCallException('Not implemented!');
     }
@@ -27,7 +27,7 @@ abstract class BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileClose($compiler, array $args, array $params)
+    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         throw new \BadMethodCallException('Not implemented!');
     }
@@ -40,10 +40,16 @@ abstract class BaseConstruct
      */
     public static function getRequiredArg(array $args, $name)
     {
-        if (!$args || !isset($args[$name])) {
-            throw new SmartyCompilerException('Expected argument "' . $name . '" but it was not found.');
+        if (isset($args[$name])) {
+            return $args[$name];
         }
-        return $args[$name];
+        foreach ($args as $arg) {
+            if (!isset($arg[$name])) {
+                continue;
+            }
+            return $arg[$name];
+        }
+        throw new SmartyCompilerException('Expected argument "' . $name . '" but it was not found.');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace \Box\Brainy\Exceptions;
+namespace Box\Brainy\Exceptions;
 
 
 /**

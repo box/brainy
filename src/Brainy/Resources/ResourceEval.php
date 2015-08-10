@@ -47,7 +47,7 @@ class ResourceEval extends ResourceRecompiled
      * @param  string $resource_name resource_name to make unique
      * @return string unique resource name
      */
-    protected function buildUniqueResourceName(\Box\Brainy\Brainy $brainy, $resource_name) {
+    protected function buildUniqueResourceName($brainy, $resource_name) {
         return get_class($this) . '#' . $resource_name;
     }
 

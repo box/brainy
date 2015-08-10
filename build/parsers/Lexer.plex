@@ -54,7 +54,6 @@ class Lexer
         'SEMICOLON' => ';',
         'COLON'   => ':',
         'AT'    => '@',
-        'HATCH'   => '#',
         'QUOTE'   => '"',
         'VERT'    => '|',
         'DOT'     => '.',
@@ -125,7 +124,6 @@ class Lexer
  comma = /\s*\,\s*/
  colon = /\s*\:\s*/
  at = /@/
- hatch = /#/
  semicolon = /\s*\;/
  equal = /\s*=\s*/
  space = /\s+/
@@ -168,7 +166,6 @@ class Lexer
  for = /for\s+/
  foreach = /foreach(?![^\s])/
  setfilter = /setfilter\s+/
- instanceof = /\s+instanceof\s+/
  not = /!\s*|not\s+/
  land = /\s*\&\&\s*|\s*and\s+/
  lor = /\s*\|\|\s*|\s*or\s+/
@@ -319,9 +316,6 @@ class Lexer
  step {
    $this->token = Parser::TP_STEP;
  }
- instanceof {
-   $this->token = Parser::TP_INSTANCEOF;
- }
  identity{
    $this->token = Parser::TP_IDENTITY;
  }
@@ -428,9 +422,6 @@ class Lexer
  }
  at {
    $this->token = Parser::TP_AT;
- }
- hatch {
-   $this->token = Parser::TP_HATCH;
  }
  attr {
    // resolve conflicts with shorttag and right_delimiter starting with '='

@@ -19,9 +19,5 @@
  * @return string with compiled code
  */
 function smarty_modifiercompiler_upper($params, $compiler) {
-    if (Brainy::$_MBSTRING) {
-        return 'mb_strtoupper(' . $params[0] . ', \'' . addslashes(Brainy::$_CHARSET) . '\')' ;
-    }
-    // no MBString fallback
-    return 'strtoupper(' . $params[0] . ')';
+    return 'mb_strtoupper(' . $params[0] . ', \'UTF-8\')';
 }

@@ -12,7 +12,9 @@
 
 namespace Box\Brainy\Compiler;
 
-use Box\Brainy\Brainy;
+use \Box\Brainy\Brainy;
+use \Box\Brainy\Exceptions\SmartyCompilerException;
+use \Box\Brainy\Templates\Template;
 
 
 abstract class TemplateCompilerBase
@@ -551,7 +553,7 @@ abstract class TemplateCompilerBase
      * @param  string|void $exception_class The name of the exception class to raise
      * @throws SmartyCompilerException when an unexpected token is found
      */
-    public function trigger_template_error($args = null, $line = null, $exception_class = 'SmartyCompilerException') {
+    public function trigger_template_error($args = null, $line = null, $exception_class = '\Box\Brainy\Exceptions\SmartyCompilerException') {
         // get template source line which has error
         if (!isset($line)) {
             $line = $this->lex->line;
@@ -598,7 +600,7 @@ abstract class TemplateCompilerBase
             'Modifier Enforcement: All expressions must be suffixed with one of the following modifiers: ' .
             implode(',', Brainy::$enforce_expression_modifiers),
             null,
-            'BrainyModifierEnforcementException'
+            '\Box\Brainy\Exceptions\BrainyModifierEnforcementException'
         );
     }
 
@@ -667,7 +669,7 @@ abstract class TemplateCompilerBase
     public function assert_is_not_strict($reason, $template = null)
     {
         if (Brainy::$strict_mode || $template && $template->isStrictMode()) {
-            $this->trigger_template_error('Strict Mode: ' . $reason, null, 'BrainyStrictModeException');
+            $this->trigger_template_error('Strict Mode: ' . $reason, null, '\Box\Brainy\Exceptions\BrainyStrictModeException');
         }
     }
 

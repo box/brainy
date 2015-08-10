@@ -34,19 +34,11 @@ function smarty_modifiercompiler_escape_helper($value) {
 function smarty_modifiercompiler_escape($params, $compiler) {
     try {
         $esc_type = isset($params[1]) ? smarty_modifiercompiler_escape_helper($params[1]) : 'html';
-        $char_set = isset($params[2]) && $params[2] !== 'null' ? $params[2] : '"' . Brainy::$_CHARSET . '"';
         $double_encode = isset($params[3]) ? $params[3] : 'true';
-
-        if (!$char_set) {
-            $char_set = '"' . Brainy::$_CHARSET . '"';
-        }
 
         switch ($esc_type) {
             case 'html':
-                return 'htmlspecialchars('
-                    . $params[0] .', ENT_QUOTES, '
-                    . $char_set . ', '
-                    . $double_encode . ')';
+                return 'htmlspecialchars(' . $params[0] .', ENT_QUOTES, \'UTF-8\', ' . $double_encode . ')';
 
             case 'url':
                 return 'rawurlencode(' . $params[0] . ')';
@@ -63,7 +55,7 @@ function smarty_modifiercompiler_escape($params, $compiler) {
                 return 'strtr(' . $params[0] . ', array("\\\\" => "\\\\\\\\", "\'" => "\\\\\'", "\"" => "\\\\\"", "\\r" => "\\\\r", "\\n" => "\\\n", "</" => "<\/" ))';
 
         }
-    } catch (SmartyException $e) {
+    } catch (\Box\Brainy\Exceptions\SmartyException $e) {
         // pass through to regular plugin fallback
     }
 

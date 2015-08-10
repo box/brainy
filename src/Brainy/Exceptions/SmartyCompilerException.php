@@ -1,13 +1,10 @@
 <?php
 
-namespace \Box\Brainy\Exceptions;
+namespace Box\Brainy\Exceptions;
 
 
-/**
- * Smarty compiler exception class
- * @package Brainy
- */
-class SmartyCompilerException extends SmartyException {
+class SmartyCompilerException extends SmartyException
+{
     /**
      * @internal
      */

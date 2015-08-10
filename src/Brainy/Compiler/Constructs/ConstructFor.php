@@ -38,10 +38,10 @@ class ConstructFor extends BaseConstruct
 
         $output = '';
         foreach ($start as $stmt) {
-            $output .= "\$_smarty_tpl->tpl_vars[$stmt['var']] = new \\Box\\Brainy\\Templates\\Variable($stmt['value']);\n";
+            $output .= "\$_smarty_tpl->tpl_vars[{$stmt['var']}] = new \\Box\\Brainy\\Templates\\Variable({$stmt['value']});\n";
         }
         $output .= "if ($ifexp) {\n";
-        $output .= "  for (\$_foo=true; $ifexp; \$_smarty_tpl->tpl_vars[$var]->value{$step}) {\n";
+        $output .= "  for (\$_foo=true; {$ifexp}; \$_smarty_tpl->tpl_vars[{$var}]->value{$step}) {\n";
 
         self::openTag($compiler, 'for');
 
