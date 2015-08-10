@@ -22,40 +22,16 @@ class PluginModifierCountWordsTest extends Smarty_TestCase
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testDefaultWithoutMbstring() {
-        \Box\Brainy\Brainy::$_MBSTRING = false;
-        $result = "7";
-        $tpl = $this->smarty->createTemplate('eval:{"Dealers Will Hear Car Talk at Noon."|count_words}');
-        $this->assertEquals($result, $this->smarty->fetch($tpl));
-        \Box\Brainy\Brainy::$_MBSTRING = true;
-    }
-
     public function testDashes() {
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Smalltime-Dealers Will Hear Car Talk at Noon."|count_words}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
 
-    public function testDashesWithoutMbstring() {
-        \Box\Brainy\Brainy::$_MBSTRING = false;
-        $result = "7";
-        $tpl = $this->smarty->createTemplate('eval:{"Smalltime-Dealers Will Hear Car Talk at Noon."|count_words}');
-        $this->assertEquals($result, $this->smarty->fetch($tpl));
-        \Box\Brainy\Brainy::$_MBSTRING = true;
-    }
-
     public function testUmlauts() {
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Dealers Will Hear Cär Talk at Nöön."|count_words}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
-    }
-
-    public function testUmlautsWithoutMbstring() {
-        \Box\Brainy\Brainy::$_MBSTRING = false;
-        $result = "7";
-        $tpl = $this->smarty->createTemplate('eval:{"Dealers Will Hear Cär Talk at Nöön."|count_words}');
-        $this->assertNotEquals($result, $this->smarty->fetch($tpl));
-        \Box\Brainy\Brainy::$_MBSTRING = true;
     }
 
 }

@@ -27,11 +27,11 @@ if (!function_exists('smarty_mb_wordwrap')) {
         $_previous = false;
 
         foreach ($tokens as $_token) {
-            $token_length = mb_strlen($_token, Brainy::$_CHARSET);
+            $token_length = mb_strlen($_token, 'UTF-8');
             $_tokens = array($_token);
             if ($token_length > $width) {
                 // remove last space
-                $t = mb_substr($t, 0, -1, Brainy::$_CHARSET);
+                $t = mb_substr($t, 0, -1, 'UTF-8');
                 $_previous = false;
                 $length = 0;
 
@@ -44,13 +44,13 @@ if (!function_exists('smarty_mb_wordwrap')) {
 
             foreach ($_tokens as $token) {
                 $_space = !!preg_match('!^\s$!S' . Brainy::$_UTF8_MODIFIER, $token);
-                $token_length = mb_strlen($token, Brainy::$_CHARSET);
+                $token_length = mb_strlen($token, 'UTF-8');
                 $length += $token_length;
 
                 if ($length > $width) {
                     // remove space before inserted break
                     if ($_previous && $token_length < $width) {
-                        $t = mb_substr($t, 0, -1, Brainy::$_CHARSET);
+                        $t = mb_substr($t, 0, -1, 'UTF-8');
                     }
 
                     // add the break before the token

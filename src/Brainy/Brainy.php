@@ -40,9 +40,6 @@ if (!defined('SMARTY_DIR')) {
 if (!defined('SMARTY_PLUGINS_DIR')) {
     define('SMARTY_PLUGINS_DIR', SMARTY_DIR . 'plugins' . DIRECTORY_SEPARATOR);
 }
-if (!defined('SMARTY_MBSTRING')) {
-    define('SMARTY_MBSTRING', function_exists('mb_split'));
-}
 
 
 class Brainy extends Templates\TemplateBase
@@ -165,17 +162,6 @@ class Brainy extends Templates\TemplateBase
      */
     public static $global_tpl_vars = array();
 
-    /**
-     * Flag denoting if Multibyte String functions are available
-     * @internal
-     */
-    public static $_MBSTRING = SMARTY_MBSTRING;
-    /**
-     * The character set to adhere to (e.g. "UTF-8")
-     * @internal
-     * @deprecated The charset should be assumed to be UTF-8.
-     */
-    public static $_CHARSET = 'UTF-8';
     /**
      * The date format to be used internally
      * (accepts date() and strftime())

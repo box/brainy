@@ -21,13 +21,6 @@ class PluginModifierRegexReplaceTest extends Smarty_TestCase
         $this->assertEquals("Infertility unlikely to be passed on, experts say.", $this->smarty->fetch($tpl));
     }
 
-    public function testDefaultWithoutMbstring() {
-        \Box\Brainy\Brainy::$_MBSTRING = false;
-        $tpl = $this->smarty->createTemplate('eval:{"Infertility unlikely to\nbe passed on, experts say."|regex_replace:"/[\r\t\n]/":" "}');
-        $this->assertEquals("Infertility unlikely to be passed on, experts say.", $this->smarty->fetch($tpl));
-        \Box\Brainy\Brainy::$_MBSTRING = true;
-    }
-
     public function testUmlauts() {
         $tpl = $this->smarty->createTemplate('eval:{"Infertility unlikely tö\näe passed on, experts say."|regex_replace:"/[\r\t\n]/u":" "}');
         $this->assertEquals("Infertility unlikely tö äe passed on, experts say.", $this->smarty->fetch($tpl));

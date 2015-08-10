@@ -77,10 +77,7 @@ class StrictModeTest extends Smarty_TestCase
             array('{html_select_date}'),
             array('{html_select_time}'),
             array('{html_table loop="foo" rows=1}'),
-            array('{$foo|from_charset}'),
             array('{$foo|noprint}'),
-            array('{$foo|to_charset}'),
-            array('{$foo|unescape}'),
             array('{append var="foo" value="bar"}'),
         );
     }

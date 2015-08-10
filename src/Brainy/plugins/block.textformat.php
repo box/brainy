@@ -101,12 +101,8 @@ function smarty_block_textformat($params, $content, $template, &$repeat) {
             $_paragraph = str_repeat($indent_char, $indent_first) . $_paragraph;
         }
         // wordwrap sentences
-        if (Brainy::$_MBSTRING) {
-            require_once(SMARTY_PLUGINS_DIR . 'shared.mb_wordwrap.php');
-            $_paragraph = smarty_mb_wordwrap($_paragraph, $wrap - $indent, $wrap_char, $wrap_cut);
-        } else {
-            $_paragraph = wordwrap($_paragraph, $wrap - $indent, $wrap_char, $wrap_cut);
-        }
+        require_once(SMARTY_PLUGINS_DIR . 'shared.mb_wordwrap.php');
+        $_paragraph = smarty_mb_wordwrap($_paragraph, $wrap - $indent, $wrap_char, $wrap_cut);
         // indent lines
         if ($indent > 0) {
             $_paragraph = preg_replace('!^!m', str_repeat($indent_char, $indent), $_paragraph);

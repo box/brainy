@@ -744,56 +744,7 @@ static public $yy_action = array(
      * but it does not parse, the type of the token is changed to ID and
      * the parse is retried before an error is thrown.
      */
-    public static $yyFallback = array(
-    );
-    /**
-     * Turn parser tracing on by giving a stream to which to write the trace
-     * and a prompt to preface each trace message.  Tracing is turned off
-     * by making either argument NULL
-     *
-     * Inputs:
-     *
-     * - A stream resource to which trace output should be written.
-     *   If NULL, then tracing is turned off.
-     * - A prefix string written at the beginning of every
-     *   line of trace output.  If NULL, then tracing is
-     *   turned off.
-     *
-     * Outputs:
-     *
-     * - None.
-     * @param resource
-     * @param string
-     */
-    public static function Trace($TraceFILE, $zTracePrompt)
-    {
-        if (!$TraceFILE) {
-            $zTracePrompt = 0;
-        } elseif (!$zTracePrompt) {
-            $TraceFILE = 0;
-        }
-        $this->yyTraceFILE = $TraceFILE;
-        $this->yyTracePrompt = $zTracePrompt;
-    }
-
-    /**
-     * Output debug information to output (php://output stream)
-     */
-    public static function PrintTrace()
-    {
-        $this->yyTraceFILE = fopen('php://output', 'w');
-        $this->yyTracePrompt = '';
-    }
-
-    /**
-     * @var resource|0
-     */
-    public $yyTraceFILE;
-    /**
-     * String to prepend to debug output
-     * @var string|0
-     */
-    public $yyTracePrompt;
+    public static $yyFallback = array();
     /**
      * @var int
      */
@@ -921,11 +872,6 @@ static public $yy_action = array(
             return;
         }
         $yytos = array_pop($this->yystack);
-        if ($this->yyTraceFILE && $this->yyidx >= 0) {
-            fwrite($this->yyTraceFILE,
-                $this->yyTracePrompt . 'Popping ' . self::$yyTokenName[$yytos->major] .
-                    "\n");
-        }
         $yymajor = $yytos->major;
         self::yy_destructor($yymajor, $yytos->minor);
         $this->yyidx--;
@@ -941,9 +887,6 @@ static public $yy_action = array(
     {
         while ($this->yyidx >= 0) {
             $this->yy_pop_parser_stack();
-        }
-        if (is_resource($this->yyTraceFILE)) {
-            fclose($this->yyTraceFILE);
         }
     }
 
@@ -1133,11 +1076,6 @@ static public $yy_action = array(
               self::$yy_lookahead[$i] != $iLookAhead) {
             if (count(self::$yyFallback) && $iLookAhead < count(self::$yyFallback)
                    && ($iFallback = self::$yyFallback[$iLookAhead]) != 0) {
-                if ($this->yyTraceFILE) {
-                    fwrite($this->yyTraceFILE, $this->yyTracePrompt . "FALLBACK " .
-                        self::$yyTokenName[$iLookAhead] . " => " .
-                        self::$yyTokenName[$iFallback] . "\n");
-                }
 
                 return $this->yy_find_shift_action($iFallback);
             }
@@ -1192,9 +1130,6 @@ static public $yy_action = array(
         $this->yyidx++;
         if ($this->yyidx >= self::YYSTACKDEPTH) {
             $this->yyidx--;
-            if ($this->yyTraceFILE) {
-                fprintf($this->yyTraceFILE, "%sStack Overflow!\n", $this->yyTracePrompt);
-            }
             while ($this->yyidx >= 0) {
                 $this->yy_pop_parser_stack();
             }
@@ -1208,16 +1143,6 @@ static public $yy_action = array(
         $yytos->major = $yyMajor;
         $yytos->minor = $yypMinor;
         array_push($this->yystack, $yytos);
-        if ($this->yyTraceFILE && $this->yyidx > 0) {
-            fprintf($this->yyTraceFILE, "%sShift %d\n", $this->yyTracePrompt,
-                $yyNewState);
-            fprintf($this->yyTraceFILE, "%sStack:", $this->yyTracePrompt);
-            for ($i = 1; $i <= $this->yyidx; $i++) {
-                fprintf($this->yyTraceFILE, " %s",
-                    self::$yyTokenName[$this->yystack[$i]->major]);
-            }
-            fwrite($this->yyTraceFILE,"\n");
-        }
     }
 
     /**
@@ -1335,34 +1260,19 @@ static public $yy_action = array(
 
     public function yypushstate($state)
     {
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState push %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
         array_push($this->_yy_stack, $this->_yy_state);
         $this->_yy_state = $state;
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
     }
 
     public function yypopstate()
     {
-       if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState pop %s\n", $this->yyTracePrompt,  isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
        $this->_yy_state = array_pop($this->_yy_stack);
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
 
     }
 
     public function yybegin($state)
     {
        $this->_yy_state = $state;
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState set %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
     }
 
 ');
@@ -1388,34 +1298,19 @@ static public $yy_action = array(
 
     public function yypushstate($state)
     {
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState push %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
         array_push($this->_yy_stack, $this->_yy_state);
         $this->_yy_state = $state;
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
     }
 
     public function yypopstate()
     {
-       if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState pop %s\n", $this->yyTracePrompt,  isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
        $this->_yy_state = array_pop($this->_yy_stack);
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
 
     }
 
     public function yybegin($state)
     {
        $this->_yy_state = $state;
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState set %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
     }
 
 ');
@@ -1447,34 +1342,19 @@ static public $yy_action = array(
 
     public function yypushstate($state)
     {
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState push %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
         array_push($this->_yy_stack, $this->_yy_state);
         $this->_yy_state = $state;
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
     }
 
     public function yypopstate()
     {
-       if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState pop %s\n", $this->yyTracePrompt,  isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
        $this->_yy_state = array_pop($this->_yy_stack);
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
 
     }
 
     public function yybegin($state)
     {
        $this->_yy_state = $state;
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState set %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
     }
 
 ');
@@ -1503,34 +1383,19 @@ static public $yy_action = array(
 
     public function yypushstate($state)
     {
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState push %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
         array_push($this->_yy_stack, $this->_yy_state);
         $this->_yy_state = $state;
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
     }
 
     public function yypopstate()
     {
-       if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState pop %s\n", $this->yyTracePrompt,  isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
        $this->_yy_state = array_pop($this->_yy_stack);
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
 
     }
 
     public function yybegin($state)
     {
        $this->_yy_state = $state;
-        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState set %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
-        }
     }
 
 ');
@@ -1869,12 +1734,6 @@ static public $yy_action = array(
         //PHP_LexerGenerator_ParseryyStackEntry $yymsp;            /* The top of the parser's stack */
         //int $yysize;                     /* Amount to pop the stack */
         $yymsp = $this->yystack[$this->yyidx];
-        if ($this->yyTraceFILE && $yyruleno >= 0
-              && $yyruleno < count(self::$yyRuleName)) {
-            fprintf($this->yyTraceFILE, "%sReduce (%d) [%s].\n",
-                $this->yyTracePrompt, $yyruleno,
-                self::$yyRuleName[$yyruleno]);
-        }
 
         $this->_retvalue = $yy_lefthand_side = null;
         if (array_key_exists($yyruleno, self::$yyReduceMap)) {
@@ -1896,7 +1755,7 @@ static public $yy_action = array(
             ** one element off the stack, then we can push the new element back
             ** onto the stack here, and skip the stack overflow test in yy_shift().
             ** That gives a significant speed improvement. */
-            if (!$this->yyTraceFILE && $yysize) {
+            if ($yysize) {
                 $this->yyidx++;
                 $x = new PHP_LexerGenerator_ParseryyStackEntry;
                 $x->stateno = $yyact;
@@ -1918,9 +1777,6 @@ static public $yy_action = array(
      */
     public function yy_parse_failed()
     {
-        if ($this->yyTraceFILE) {
-            fprintf($this->yyTraceFILE, "%sFail!\n", $this->yyTracePrompt);
-        }
         while ($this->yyidx >= 0) {
             $this->yy_pop_parser_stack();
         }
@@ -1959,9 +1815,7 @@ static public $yy_action = array(
      */
     public function yy_accept()
     {
-        if ($this->yyTraceFILE) {
-            fprintf($this->yyTraceFILE, "%sAccept!\n", $this->yyTracePrompt);
-        } while ($this->yyidx >= 0) {
+        while ($this->yyidx >= 0) {
             $stack = $this->yy_pop_parser_stack();
         }
         /* Here code is inserted which will be executed whenever the
@@ -1997,10 +1851,6 @@ static public $yy_action = array(
         }
         $yyendofinput = ($yymajor==0);
 
-        if ($this->yyTraceFILE) {
-            fprintf($this->yyTraceFILE, "%sInput %s\n",
-                $this->yyTracePrompt, self::$yyTokenName[$yymajor]);
-        }
 
         do {
             $yyact = $this->yy_find_shift_action($yymajor);
@@ -2020,10 +1870,6 @@ static public $yy_action = array(
             } elseif ($yyact < self::YYNSTATE + self::YYNRULE) {
                 $this->yy_reduce($yyact - self::YYNSTATE);
             } elseif ($yyact == self::YY_ERROR_ACTION) {
-                if ($this->yyTraceFILE) {
-                    fprintf($this->yyTraceFILE, "%sSyntax Error!\n",
-                        $this->yyTracePrompt);
-                }
                 if (self::YYERRORSYMBOL) {
                     /* A syntax error has occurred.
                     ** The response to an error depends upon whether or not the
@@ -2049,10 +1895,6 @@ static public $yy_action = array(
                     }
                     $yymx = $this->yystack[$this->yyidx]->major;
                     if ($yymx == self::YYERRORSYMBOL || $yyerrorhit) {
-                        if ($this->yyTraceFILE) {
-                            fprintf($this->yyTraceFILE, "%sDiscard input token %s\n",
-                                $this->yyTracePrompt, self::$yyTokenName[$yymajor]);
-                        }
                         $this->yy_destructor($yymajor, $yytokenvalue);
                         $yymajor = self::YYNOCODE;
                     } else {

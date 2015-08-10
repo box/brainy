@@ -70,14 +70,8 @@ function smarty_modifier_debug_print_var($var, $depth = 0, $length = 40) {
 
         case 'string' :
             $results = strtr($var, $_replace);
-            if (Brainy::$_MBSTRING) {
-                if (mb_strlen($var, Brainy::$_CHARSET) > $length) {
-                    $results = mb_substr($var, 0, $length - 3, Brainy::$_CHARSET) . '...';
-                }
-            } else {
-                if (isset($var[$length])) {
-                    $results = substr($var, 0, $length - 3) . '...';
-                }
+            if (mb_strlen($var, 'UTF-8') > $length) {
+                $results = mb_substr($var, 0, $length - 3, 'UTF-8') . '...';
             }
 
             $results = htmlspecialchars('"' . $results . '"');
@@ -86,14 +80,8 @@ function smarty_modifier_debug_print_var($var, $depth = 0, $length = 40) {
         case 'unknown type' :
         default :
             $results = strtr((string) $var, $_replace);
-            if (Brainy::$_MBSTRING) {
-                if (mb_strlen($results, Brainy::$_CHARSET) > $length) {
-                    $results = mb_substr($results, 0, $length - 3, Brainy::$_CHARSET) . '...';
-                }
-            } else {
-                if (strlen($results) > $length) {
-                    $results = substr($results, 0, $length - 3) . '...';
-                }
+            if (mb_strlen($results, 'UTF-8') > $length) {
+                $results = mb_substr($results, 0, $length - 3, 'UTF-8') . '...';
             }
 
             $results = htmlspecialchars($results);

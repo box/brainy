@@ -28,33 +28,16 @@ function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_wo
     if ($length == 0)
         return '';
 
-    if (Brainy::$_MBSTRING) {
-        if (mb_strlen($string, Brainy::$_CHARSET) > $length) {
-            $length -= min($length, mb_strlen($etc, Brainy::$_CHARSET));
-            if (!$break_words && !$middle) {
-                $string = preg_replace('/\s+?(\S+)?$/' . Brainy::$_UTF8_MODIFIER, '', mb_substr($string, 0, $length + 1, Brainy::$_CHARSET));
-            }
-            if (!$middle) {
-                return mb_substr($string, 0, $length, Brainy::$_CHARSET) . $etc;
-            }
-
-            return mb_substr($string, 0, $length / 2, Brainy::$_CHARSET) . $etc . mb_substr($string, - $length / 2, $length, Brainy::$_CHARSET);
-        }
-
-        return $string;
-    }
-
-    // no MBString fallback
-    if (isset($string[$length])) {
-        $length -= min($length, strlen($etc));
+    if (mb_strlen($string, 'UTF-8') > $length) {
+        $length -= min($length, mb_strlen($etc, 'UTF-8'));
         if (!$break_words && !$middle) {
-            $string = preg_replace('/\s+?(\S+)?$/', '', substr($string, 0, $length + 1));
+            $string = preg_replace('/\s+?(\S+)?$/' . Brainy::$_UTF8_MODIFIER, '', mb_substr($string, 0, $length + 1, 'UTF-8'));
         }
         if (!$middle) {
-            return substr($string, 0, $length) . $etc;
+            return mb_substr($string, 0, $length, 'UTF-8') . $etc;
         }
 
-        return substr($string, 0, $length / 2) . $etc . substr($string, - $length / 2);
+        return mb_substr($string, 0, $length / 2, 'UTF-8') . $etc . mb_substr($string, - $length / 2, $length, 'UTF-8');
     }
 
     return $string;

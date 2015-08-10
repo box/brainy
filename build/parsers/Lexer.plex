@@ -21,8 +21,6 @@ class Lexer
     public $taglineno;
     public $state = 1;
     private $heredoc_id_stack = array();
-    public $yyTraceFILE;
-    public $yyTracePrompt;
     public $state_name = array (1 => 'TEXT', 2 => 'SMARTY', 3 => 'LITERAL', 4 => 'DOUBLEQUOTEDSTRING', 5 => 'CHILDBODY');
     public $smarty_token_names = array (   // Text for parser error messages
         'IDENTITY'  => '===',
@@ -85,12 +83,6 @@ class Lexer
         $this->smarty_token_names['LDEL'] =  $this->smarty->left_delimiter;
         $this->smarty_token_names['RDEL'] =  $this->smarty->right_delimiter;
         $this->mbstring_overload = ini_get('mbstring.func_overload') & 2;
-    }
-
-    public function PrintTrace()
-    {
-        $this->yyTraceFILE = fopen('php://output', 'w');
-        $this->yyTracePrompt = '<br>';
     }
 
  /*!lex2php

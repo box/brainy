@@ -147,7 +147,6 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
         }
         // undefined child?
         if (!isset($compiler->template->block_data[$_name]['source'])) {
-            $compiler->popTrace();
             return '';
         }
         // flag that child is already compile by {$smarty.block.child} inclusion
@@ -360,9 +359,6 @@ class Smarty_Internal_Compile_Private_Child_Block extends Smarty_Internal_Compil
 
         $save = array($_attr);
 
-        // set trace back to child block
-        $compiler->pushTrace(trim($_attr['uid'], "\"'"), $_attr['line'] - $compiler->lex->line);
-
         $this->openTag($compiler, 'private_child_block', $save);
 
         $compiler->has_code = false;
@@ -391,9 +387,6 @@ class Smarty_Internal_Compile_Private_Child_Blockclose extends Smarty_Internal_C
         $_attr = $this->getAttributes($compiler, $args);
 
         $saved_data = $this->closeTag($compiler, array('private_child_block'));
-
-        // end of child block
-        $compiler->popTrace();
 
         $compiler->has_code = false;
 

@@ -142,7 +142,7 @@ class Template extends TemplateBase
             throw $e;
         }
         // compiling succeded
-        if (!$this->source->recompiled && $this->compiler->write_compiled_code) {
+        if (!$this->source->recompiled) {
             // write compiled template
             $_filepath = $this->compiled->filepath;
             if ($_filepath === false) {

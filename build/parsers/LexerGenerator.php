@@ -317,9 +317,6 @@ class PHP_LexerGenerator
                 strlen($info['basename']) - strlen($info['extension'])) . 'php';
         }
         $this->_parser = new PHP_LexerGenerator_Parser($this->outfile, $this->_lex);
-        if ($this -> debug) {
-            $this->_parser->PrintTrace();
-        }
         while ($this->_lex->advance($this->_parser)) {
             $this->_parser->doParse($this->_lex->token, $this->_lex->value);
         }
