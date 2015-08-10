@@ -21,7 +21,6 @@ class SmartyTests
         $smarty->tpl_vars = array();
         $smarty->force_compile = false;
         $smarty->auto_literal = true;
-        \Box\Brainy\Brainy::$_smarty_vars = array();
         $smarty->registered_plugins = array();
         $smarty->default_modifiers = array();
         $smarty->escape_html = false;
@@ -32,7 +31,6 @@ class SmartyTests
         $smarty->enableSecurity();
         $smarty->error_unassigned = false;
         $smarty->compile_id = null;
-        $smarty->default_resource_type = 'file';
         $smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
     }
 

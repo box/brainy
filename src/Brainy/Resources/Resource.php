@@ -304,27 +304,17 @@ abstract class Resource
      * @return Resource Resource Handler
      */
     public static function load(Brainy $smarty, $type) {
-        // try smarty's cache
-        if (isset($smarty->_resource_handlers[$type])) {
-            return $smarty->_resource_handlers[$type];
-        }
-
         // try registered resource
         if (isset($smarty->registered_resources[$type])) {
             if ($smarty->registered_resources[$type] instanceof Resource) {
-                $smarty->_resource_handlers[$type] = $smarty->registered_resources[$type];
                 // note registered to smarty is not kept unique!
-                return $smarty->_resource_handlers[$type];
+                return $smarty->registered_resources[$type];
             }
 
             if (!isset(self::$resources['registered'])) {
                 self::$resources['registered'] = new ResourceRegistered();
             }
-            if (!isset($smarty->_resource_handlers[$type])) {
-                $smarty->_resource_handlers[$type] = self::$resources['registered'];
-            }
-
-            return $smarty->_resource_handlers[$type];
+            return self::$resources['registered'];
         }
 
         // try sysplugins dir
@@ -334,15 +324,15 @@ abstract class Resource
                 self::$resources[$type] = new $_resource_class();
             }
 
-            return $smarty->_resource_handlers[$type] = self::$resources[$type];
+            return self::$resources[$type];
         }
 
         if (isset(self::$resources[$type])) {
-            return $smarty->_resource_handlers[$type] = self::$resources[$type];
+            return self::$resources[$type];
         }
 
         self::$resources[$type] = new $type();
-        return $smarty->_resource_handlers[$type] = self::$resources[$type];
+        return self::$resources[$type];
     }
 
     /**
@@ -375,7 +365,7 @@ abstract class Resource
      * @return string unique resource name
      */
     public static function getUniqueTemplateName($template, $template_resource) {
-        self::parseResourceName($template_resource, $template->smarty->default_resource_type, $name, $type);
+        self::parseResourceName($template_resource, 'file', $name, $type);
         // TODO: optimize for Smarty's internal resource types
         $resource = self::load($template->smarty, $type);
         // go relative to a given template?
@@ -403,7 +393,7 @@ abstract class Resource
         }
 
         // parse resource_name, load resource handler, identify unique resource name
-        self::parseResourceName($template_resource, $smarty->default_resource_type, $name, $type);
+        self::parseResourceName($template_resource, 'file', $name, $type);
         $resource = self::load($smarty, $type);
         // go relative to a given template?
         $_file_is_dotted = isset($name[0]) && $name[0] == '.' && ($name[1] == '.' || $name[1] == '/' || $name[1] == "\\");

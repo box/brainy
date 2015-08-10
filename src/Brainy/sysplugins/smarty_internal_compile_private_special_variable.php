@@ -33,7 +33,7 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
             case 'foreach':
                 return "\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][$modifier]";
             case 'capture':
-                return "Brainy::\$_smarty_vars['capture'][$modifier]";
+                return "\$_smarty_tpl->tpl_vars['smarty']->value['capture'][$modifier]";
             case 'now':
                 return 'time()';
             case 'cookies':

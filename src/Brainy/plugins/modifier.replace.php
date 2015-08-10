@@ -20,8 +20,32 @@
  * @param string $replace replacement text
  * @return string
  */
-function smarty_modifier_replace($string, $search, $replace) {
-    require_once(SMARTY_PLUGINS_DIR . 'shared.mb_str_replace.php');
+function smarty_modifier_replace($subject, $search, $replace) {
+    if (!is_array($search) && is_array($replace)) {
+        return false;
+    }
+    if (is_array($subject)) {
+        // call mb_replace for each single string in $subject
+        foreach ($subject as &$string) {
+            $string = &smarty_modifier_replace($string, $search, $replace);
+        }
+    } elseif (is_array($search)) {
+        if (!is_array($replace)) {
+            foreach ($search as &$string) {
+                $subject = smarty_modifier_replace($subject, $string, $replace);
+            }
+        } else {
+            $n = max(count($search), count($replace));
+            while ($n--) {
+                $subject = smarty_modifier_replace($subject, current($search), current($replace));
+                next($search);
+                next($replace);
+            }
+        }
+    } else {
+        $parts = mb_split(preg_quote($search), $subject);
+        $subject = implode($replace, $parts);
+    }
 
-    return smarty_mb_str_replace($search, $replace, $string);
+    return $subject;
 }

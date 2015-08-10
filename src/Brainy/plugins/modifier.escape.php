@@ -47,49 +47,11 @@ function smarty_modifier_escape($string, $esc_type = 'html', $char_set = 'UTF-8'
 
             return $return;
 
-        case 'hexentity':
-            $return = '';
-            require_once(SMARTY_PLUGINS_DIR . 'shared.mb_unicode.php');
-            $return = '';
-            foreach (smarty_mb_to_unicode($string, 'UTF-8') as $unicode) {
-                $return .= '&#x' . strtoupper(dechex($unicode)) . ';';
-            }
-
-            return $return;
-
-        case 'decentity':
-            require_once(SMARTY_PLUGINS_DIR . 'shared.mb_unicode.php');
-            $return = '';
-            foreach (smarty_mb_to_unicode($string, 'UTF-8') as $unicode) {
-                $return .= '&#' . $unicode . ';';
-            }
-
-            return $return;
-
         case 'javascript':
             // escape quotes and backslashes, newlines, etc.
             return strtr($string, array('\\' => '\\\\', "'" => "\\'", '"' => '\\"', "\r" => '\\r', "\n" => '\\n', '</' => '<\/'));
 
-        case 'mail':
-            require_once(SMARTY_PLUGINS_DIR . 'shared.mb_str_replace.php');
-
-            return smarty_mb_str_replace(array('@', '.'), array(' [AT] ', ' [DOT] '), $string);
-
-        case 'nonstd':
-            // escape non-standard chars, such as ms document quotes
-            $return = '';
-            require_once(SMARTY_PLUGINS_DIR . 'shared.mb_unicode.php');
-            foreach (smarty_mb_to_unicode($string, 'UTF-8') as $unicode) {
-                if ($unicode >= 126) {
-                    $return .= '&#' . $unicode . ';';
-                } else {
-                    $return .= chr($unicode);
-                }
-            }
-
-            return $return;
-
         default:
-            return $string;
+            throw new Exception('Unrecognized escape option "' . $esc_type . '"');
     }
 }

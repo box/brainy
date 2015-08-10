@@ -21,7 +21,7 @@ if (!function_exists('smarty_mb_wordwrap')) {
      */
     function smarty_mb_wordwrap($str, $width=75, $break="\n", $cut=false) {
         // break words into tokens using white space as a delimiter
-        $tokens = preg_split('!(\s)!S' . Brainy::$_UTF8_MODIFIER, $str, -1, PREG_SPLIT_NO_EMPTY + PREG_SPLIT_DELIM_CAPTURE);
+        $tokens = preg_split('!(\s)!Su', $str, -1, PREG_SPLIT_NO_EMPTY + PREG_SPLIT_DELIM_CAPTURE);
         $length = 0;
         $t = '';
         $_previous = false;
@@ -36,14 +36,14 @@ if (!function_exists('smarty_mb_wordwrap')) {
                 $length = 0;
 
                 if ($cut) {
-                    $_tokens = preg_split('!(.{' . $width . '})!S' . Brainy::$_UTF8_MODIFIER, $_token, -1, PREG_SPLIT_NO_EMPTY + PREG_SPLIT_DELIM_CAPTURE);
+                    $_tokens = preg_split('!(.{' . $width . '})!Su', $_token, -1, PREG_SPLIT_NO_EMPTY + PREG_SPLIT_DELIM_CAPTURE);
                     // broken words go on a new line
                     $t .= $break;
                 }
             }
 
             foreach ($_tokens as $token) {
-                $_space = !!preg_match('!^\s$!S' . Brainy::$_UTF8_MODIFIER, $token);
+                $_space = !!preg_match('!^\s$!Su', $token);
                 $token_length = mb_strlen($token, 'UTF-8');
                 $length += $token_length;
 

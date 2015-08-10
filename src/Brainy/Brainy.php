@@ -168,11 +168,6 @@ class Brainy extends Templates\TemplateBase
      * @internal
      */
     public static $_DATE_FORMAT = '%b %e, %Y';
-    /**
-     * Flag denoting if PCRE should run in UTF-8 mode
-     * @internal
-     */
-    public static $_UTF8_MODIFIER = 'u';
 
     /**
      * Sets the default assignment location for a variable. By default,
@@ -377,13 +372,6 @@ class Brainy extends Templates\TemplateBase
      */
     public $template_functions = array();
     /**
-     * resource type used if none given
-     *
-     * Must be an valid key of $registered_resources.
-     * @var string
-     */
-    public $default_resource_type = 'file';
-    /**
      * internal config properties
      * @var array
      * @internal
@@ -413,12 +401,6 @@ class Brainy extends Templates\TemplateBase
      */
     public $registered_resources = array();
     /**
-     * resource handler cache
-     * @var array
-     * @internal
-     */
-    public $_resource_handlers = array();
-    /**
      * default modifier
      * @var array
      */
@@ -432,12 +414,6 @@ class Brainy extends Templates\TemplateBase
      * @var boolean
      */
     public $escape_html = false;
-    /**
-     * global internal smarty vars
-     * @var array
-     * @internal
-     */
-    public static $_smarty_vars = array();
     /**
      * default file permissions
      * @var int

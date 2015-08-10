@@ -1,10 +1,4 @@
 <?php
-/**
- * Smarty plugin
- *
- * @package Brainy
- * @subpackage PluginsModifierCompiler
- */
 
 /**
  * Smarty wordwrap modifier plugin
@@ -28,7 +22,6 @@ function smarty_modifiercompiler_wordwrap($params, $compiler) {
     if (!isset($params[3])) {
         $params[3] = 'false';
     }
-    $function = 'wordwrap';
 
     $compiler->template->required_plugins['compiled']['wordwrap']['modifier']['file'] = SMARTY_PLUGINS_DIR .'shared.mb_wordwrap.php';
     $compiler->template->required_plugins['compiled']['wordwrap']['modifier']['function'] = 'smarty_mb_wordwrap';

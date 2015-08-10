@@ -188,7 +188,7 @@ function smarty_function_html_radios_output($options, $value, $output) {
 
     if (!empty($options['labels'])) {
         if ($options['label_ids']) {
-            $_id = smarty_function_escape_special_chars(preg_replace('![^\w\-\.]!' . Brainy::$_UTF8_MODIFIER, '_', $options['name'] . '_' . $value));
+            $_id = smarty_function_escape_special_chars(preg_replace('![^\w\-\.]!u', '_', $options['name'] . '_' . $value));
             $_output .= '<label for="' . $_id . '">';
         } else {
             $_output .= '<label>';

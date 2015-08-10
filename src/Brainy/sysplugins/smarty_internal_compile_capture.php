@@ -79,7 +79,8 @@ class Smarty_Internal_Compile_CaptureClose extends Smarty_Internal_CompileBase
         if (isset($assign)) {
             $output .= '$_smarty_tpl->assign(' . $assign . ', ob_get_contents());';
         }
-        $output .= 'Brainy::$_smarty_vars[\'capture\'][' . $name . '] = ob_get_clean();';
+        $output .= 'if (!array_key_exists(\'capture\', $_smarty_tpl->tpl_vars[\'smarty\']->value)) $_smarty_tpl->tpl_vars[\'smarty\']->value[\'capture\'] = array(); ';
+        $output .= '$_smarty_tpl->tpl_vars[\'smarty\']->value[\'capture\'][' . $name . '] = ob_get_clean();';
 
         return $output;
     }

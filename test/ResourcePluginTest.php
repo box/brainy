@@ -65,25 +65,4 @@ class ResourcePluginTest extends Smarty_TestCase
         $expected = "templates\ntemplates";
         $this->assertEquals($expected, $this->smarty->fetch('extendsall:extendsall2.tpl'));
     }
-
-    public function testSharing() {
-        $smarty = new \Box\Brainy\Brainy();
-        $smarty->_resource_handlers = array();
-        $_smarty = clone $smarty;
-        $smarty->fetch('eval:foo');
-        $_smarty->fetch('eval:foo');
-
-        $this->assertTrue($smarty->_resource_handlers['eval'] === $_smarty->_resource_handlers['eval']);
-    }
-
-    public function testExplicit() {
-        $smarty = new \Box\Brainy\Brainy();
-        $smarty->_resource_handlers = array();
-        $_smarty = clone $smarty;
-        $smarty->fetch('eval:foo');
-        $_smarty->registerResource('eval', new \Box\Brainy\Resources\ResourceEval());
-        $_smarty->fetch('eval:foo');
-
-        $this->assertFalse($smarty->_resource_handlers['eval'] === $_smarty->_resource_handlers['eval']);
-    }
 }

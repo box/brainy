@@ -22,10 +22,11 @@
  * @return string with compiled code
  */
 
-function smarty_modifiercompiler_strip($params, $compiler) {
+function smarty_modifiercompiler_strip($params, $compiler)
+{
     if (!isset($params[1])) {
         $params[1] = "' '";
     }
 
-    return "preg_replace('!\s+!" . \Box\Brainy\Brainy::$_UTF8_MODIFIER . "', {$params[1]}, {$params[0]})";
+    return "preg_replace('!\s+!u" . "', {$params[1]}, {$params[0]})";
 }

@@ -1,10 +1,4 @@
 <?php
-/**
- * Smarty plugin
- *
- * @package Brainy
- * @subpackage PluginsModifierCompiler
- */
 
 /**
  * Pass-through plugin to mark content as already sanitized.
@@ -12,6 +6,7 @@
  * @param array $params parameters
  * @return string with compiled code
  */
-function smarty_modifiercompiler_unsafe_noescape($params, $compiler) {
+function smarty_modifiercompiler_unsafe_noescape($params, $compiler)
+{
     return $params[0];
 }

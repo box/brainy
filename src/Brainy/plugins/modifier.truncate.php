@@ -31,7 +31,7 @@ function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_wo
     if (mb_strlen($string, 'UTF-8') > $length) {
         $length -= min($length, mb_strlen($etc, 'UTF-8'));
         if (!$break_words && !$middle) {
-            $string = preg_replace('/\s+?(\S+)?$/' . Brainy::$_UTF8_MODIFIER, '', mb_substr($string, 0, $length + 1, 'UTF-8'));
+            $string = preg_replace('/\s+?(\S+)?$/u', '', mb_substr($string, 0, $length + 1, 'UTF-8'));
         }
         if (!$middle) {
             return mb_substr($string, 0, $length, 'UTF-8') . $etc;

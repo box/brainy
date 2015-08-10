@@ -80,7 +80,7 @@ class BatchUtil
                         echo ' is up to date';
                         flush();
                     }
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     echo 'Error: ', $e->getMessage(), "<br><br>";
                     $_error_count++;
                 }

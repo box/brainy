@@ -18,9 +18,5 @@
  * @return string
  */
 function smarty_function_escape_special_chars($string) {
-    if (!is_array($string)) {
-        $string = htmlspecialchars($string, ENT_COMPAT, 'UTF-8', false);
-    }
-
-    return $string;
+    return htmlspecialchars($string, ENT_COMPAT, 'UTF-8', false);
 }

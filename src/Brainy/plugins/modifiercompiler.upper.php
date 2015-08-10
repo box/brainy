@@ -1,10 +1,4 @@
 <?php
-/**
- * Smarty plugin
- *
- * @package Brainy
- * @subpackage PluginsModifierCompiler
- */
 
 /**
  * Smarty upper modifier plugin
