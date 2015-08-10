@@ -32,9 +32,6 @@ class Smarty_Internal_Compile_Private_Special_Variable extends Smarty_Internal_C
         switch ($variable) {
             case 'foreach':
                 return "\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][$modifier]";
-            case 'section':
-                $compiler->assert_is_not_strict('{$smarty.section} is not allowed in strict mode');
-                return "\$_smarty_tpl->tpl_vars['smarty']->value['section'][$modifier]";
             case 'capture':
                 return "Brainy::\$_smarty_vars['capture'][$modifier]";
             case 'now':

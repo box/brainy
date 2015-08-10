@@ -906,17 +906,6 @@ indexdef(res)   ::= DOT LDEL expr(e) RDEL. {
     res = e;
 }
 
-// section tag index
-indexdef(res)   ::= OPENB ID(i) CLOSEB. {
-    $this->compiler->assert_is_not_strict('Section tags are not supported in strict mode', $this);
-    res = $this->compiler->compileTag('private_special_variable', array(), '\'section\'', '\'' . i . '\'') . '[\'index\']';
-}
-
-indexdef(res)   ::= OPENB ID(i) DOT ID(i2) CLOSEB. {
-    $this->compiler->assert_is_not_strict('Section tags are not supported in strict mode', $this);
-    res = $this->compiler->compileTag('private_special_variable', array(), '\'section\'', '\'' . i . '\']') . '[\''.i2.'\']';
-}
-
 // PHP style index
 indexdef(res)   ::= OPENB expr(e) CLOSEB. {
     res = e;

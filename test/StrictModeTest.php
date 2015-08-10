@@ -27,7 +27,6 @@ class StrictModeTest extends Smarty_TestCase
             array('{$foo.$bar}'), // Variable variable indices
             array('{$foo.$bar@zap}'), // Variable variable indices
             array('{$foo.{$bar}}'), // Dot notation with variable subscript
-            array('{$foo.{section_name}}'), // Section tag syntax
             array('{$foo=${$bar}}'), // Variable variable non-base lookups
             array('{$foo->$foo}'), // Variable variable methods
             array('{$foo->{$x+$y}}'), // Expression methods
@@ -123,7 +122,6 @@ class StrictModeTest extends Smarty_TestCase
 
     public function banned_special_construct_provider() {
         return array(
-            array('{$smarty.section.foo.bar}'),
             array('{$smarty.cookies.foo}'),
             array('{$smarty.request.foo}'),
             array('{$smarty.session.foo}'),

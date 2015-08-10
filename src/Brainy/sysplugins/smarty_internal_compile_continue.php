@@ -41,7 +41,7 @@ class Smarty_Internal_Compile_Continue extends Smarty_Internal_CompileBase
      * @return string compiled code
      */
     public function compile($args, $compiler, $parameter) {
-        static $_is_loopy = array('for' => true, 'foreach' => true, 'while' => true, 'section' => true);
+        static $_is_loopy = array('for' => true, 'foreach' => true, 'while' => true);
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
