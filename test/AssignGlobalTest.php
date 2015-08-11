@@ -9,13 +9,8 @@
 namespace Box\Brainy\Tests;
 
 
-class AssignGlobalTest extends \PHPUnit_Framework_TestCase
+class AssignGlobalTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     /**
     * test  assignGlobal and getGlobal
     */

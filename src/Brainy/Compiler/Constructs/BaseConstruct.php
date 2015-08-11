@@ -43,8 +43,9 @@ abstract class BaseConstruct
         if (isset($args[$name])) {
             return $args[$name];
         }
+
         foreach ($args as $arg) {
-            if (!isset($arg[$name])) {
+            if (!is_array($arg) || !isset($arg[$name])) {
                 continue;
             }
             return $arg[$name];
@@ -61,10 +62,10 @@ abstract class BaseConstruct
      */
     public static function getOptionalArg(array $args, $name, $default = null)
     {
-        if (!$args || !isset($args[$name])) {
-            return $default;
+        if (isset($args[$name])) {
+            return $args[$name];
         }
-        return $args[$name];
+        return $default;
     }
 
     /**

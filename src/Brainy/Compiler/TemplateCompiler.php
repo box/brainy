@@ -283,6 +283,7 @@ class TemplateCompiler
         $this->has_code = true;
         $this->has_output = false;
 
+        $_output = false;
         if (isset($this->smarty->template_functions[$tag])) {
             // template defined by {template} tag
             $args['_attr']['name'] = "'" . $tag . "'";

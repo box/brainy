@@ -170,7 +170,7 @@ template ::= .
 // Smarty tag
 template_element(res) ::= smartytag(st) RDEL. {
     if ($this->compiler->has_code) {
-        res = new Helpers\Tag($this, st);
+        res = new Helpers\Tag($this, (string) st);
     } else {
         res = null;
     }
@@ -252,6 +252,7 @@ smartytag(res)   ::= LDEL value(e). {
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
+    $this->compiler->has_code = true;
     res = Constructs\ConstructPrintExpression::compileOpen(
         $this->compiler,
         array('value' => e),
@@ -264,6 +265,7 @@ smartytag(res)   ::= LDEL value(e) modifierlist(l) attributes(a). {
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
+    $this->compiler->has_code = true;
     res = Constructs\ConstructPrintExpression::compileOpen(
         $this->compiler,
         array('value' => e, 'modifierlist' => l),
@@ -276,6 +278,7 @@ smartytag(res)   ::= LDEL value(e) attributes(a). {
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
+    $this->compiler->has_code = true;
     res = Constructs\ConstructPrintExpression::compileOpen(
         $this->compiler,
         array('value' => e),
@@ -288,6 +291,7 @@ smartytag(res)   ::= LDEL expr(e) modifierlist(l) attributes(a). {
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
+    $this->compiler->has_code = true;
     res = Constructs\ConstructPrintExpression::compileOpen(
         $this->compiler,
         array('value' => e, 'modifierlist' => l),
@@ -300,6 +304,7 @@ smartytag(res)   ::= LDEL expr(e) attributes(a). {
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
+    $this->compiler->has_code = true;
     res = Constructs\ConstructPrintExpression::compileOpen(
         $this->compiler,
         array('value' => e),
@@ -315,6 +320,7 @@ smartytag(res)   ::= LDEL variable(vi) EQUAL expr(e). {
 }
 
 smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL value(e). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructAssign::compileOpen(
         $this->compiler,
         array('value' => e, 'var' => "'" . i . "'"),
@@ -323,6 +329,7 @@ smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL value(e). {
 }
 
 smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructAssign::compileOpen(
         $this->compiler,
         array('value' => e, 'var' => "'" . i . "'"),
@@ -330,21 +337,20 @@ smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e). {
     );
 }
 
-smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e) attributes(a). {
-    $this->compiler->assert_is_not_strict('Passing attributes in an assignment without using {assign} is not supported in strict mode', $this);
-    res = Constructs\ConstructAssign::compileOpen(
-        $this->compiler,
-        array('value' => e, 'var' => "'" . i . "'"),
-        a
-    );
-}
-
 // tag with optional Smarty2 style attributes
 smartytag(res)   ::= LDEL ID(i) attributes(a). {
-    res = $this->compiler->compileTag(i,a);
+    $this->compiler->has_code = true;
+    switch (i) {
+        case 'assign':
+            res = Constructs\ConstructAssign::compileOpen($this->compiler, a, null);
+            break;
+        default:
+            res = $this->compiler->compileTag(i, a);
+    }
 }
 
 smartytag(res)   ::= LDEL ID(i). {
+    $this->compiler->has_code = true;
     switch (i) {
         case 'foreachelse':
             res = Constructs\ConstructForEachElse::compileOpen($this->compiler, null, null);
@@ -369,6 +375,7 @@ smartytag(res)   ::= LDEL ID(i). {
                   // tag with modifier and optional Smarty2 style attributes
 smartytag(res)   ::= LDEL ID(i) modifierlist(l)attributes(a). {
     res = "ob_start();\n".$this->compiler->compileTag(i,a).'echo ';
+    $this->compiler->has_code = true;
     res .= Constructs\ConstructModifier::compileOpen($compiler, array(
         'value' => 'ob_get_clean()',
         'modifierlist' => l,
@@ -379,6 +386,7 @@ smartytag(res)   ::= LDEL ID(i) modifierlist(l)attributes(a). {
                   // {if}, {elseif} and {while} tag
 smartytag(res)   ::= LDELIF(i) expr(ie). {
     $tag = trim(substr(i, $this->lex->ldel_length));
+    $this->compiler->has_code = true;
     switch ($tag) {
         case 'if':
             res = Constructs\ConstructIf::compileOpen($this->compiler, array('cond' => ie), null);
@@ -394,6 +402,7 @@ smartytag(res)   ::= LDELIF(i) expr(ie). {
 
 smartytag(res)   ::= LDELIF(i) expr(ie) attributes(a). {
     $tag = trim(substr(i, $this->lex->ldel_length));
+    $this->compiler->has_code = true;
     switch ($tag) {
         case 'if':
             res = Constructs\ConstructIf::compileOpen($this->compiler, array('cond' => ie), a);
@@ -408,6 +417,7 @@ smartytag(res)   ::= LDELIF(i) expr(ie) attributes(a). {
 }
 
 smartytag(res)   ::= LDELFOR statements(st) SEMICOLON optspace expr(ie) SEMICOLON optspace DOLLAR varvar(v2) foraction(e2) attributes(a). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructFor::compileOpen(
         $this->compiler,
         array_merge(
@@ -432,6 +442,7 @@ foraction(res)   ::= INCDEC(e). {
 }
 
 smartytag(res)   ::= LDELFOR statement(st) TO expr(v) attributes(a). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructFor::compileOpen(
         $this->compiler,
         array_merge(
@@ -443,6 +454,7 @@ smartytag(res)   ::= LDELFOR statement(st) TO expr(v) attributes(a). {
 }
 
 smartytag(res)   ::= LDELFOR statement(st) TO expr(v) STEP expr(v2) attributes(a). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructFor::compileOpen(
         $this->compiler,
         array_merge(
@@ -455,11 +467,13 @@ smartytag(res)   ::= LDELFOR statement(st) TO expr(v) STEP expr(v2) attributes(a
 
                   // {foreach} tag
 smartytag(res)   ::= LDELFOREACH attributes(a). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen($this->compiler, a, null);
 }
 
                   // {foreach $array as $var} tag
 smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v0) attributes(a). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
         array_merge(a, array(array('from' => v1), array('item' => v0))),
@@ -468,6 +482,7 @@ smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v0) attributes
 }
 
 smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v2) APTR DOLLAR varvar(v0) attributes(a). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
         array_merge(
@@ -483,6 +498,7 @@ smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v2) APTR DOLLA
 }
 
 smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
         array_merge(a, array(array('from' => v1), array('item' => v0))),
@@ -491,6 +507,7 @@ smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a
 }
 
 smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR varvar(v0) attributes(a). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
         array_merge(
@@ -665,6 +682,7 @@ expr(res)       ::= array(a). {
 
                   // modifier
 expr(res)        ::= expr(e) modifierlist(l). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructModifier::compileOpen($compiler, array(
         'value' => e,
         'modifierlist' => l,
@@ -827,6 +845,7 @@ value(res)       ::= smartytag(st) RDEL. {
 }
 
 value(res)       ::= value(v) modifierlist(l). {
+    $this->compiler->has_code = true;
     res = Constructs\ConstructModifier::compileOpen($compiler, array(
         'value' => v,
         'modifierlist' => l,
