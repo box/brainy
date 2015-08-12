@@ -2433,7 +2433,7 @@ static public $yy_action = array(
     function yy_r118(){
     $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
-        $this->compiler->trigger_template_error (self::Err2);
+        $this->compiler->trigger_template_error(self::Err2);
     }
     $this->_retvalue = '->{'.$this->compileVariable($this->yystack[$this->yyidx + 0]->minor).'}';
     }
@@ -2442,7 +2442,7 @@ static public $yy_action = array(
     function yy_r119(){
     $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
-        $this->compiler->trigger_template_error (self::Err2);
+        $this->compiler->trigger_template_error(self::Err2);
     }
     $this->_retvalue = '->{'.$this->yystack[$this->yyidx + -1]->minor.'}';
     }
@@ -2451,7 +2451,7 @@ static public $yy_action = array(
     function yy_r120(){
     $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
-        $this->compiler->trigger_template_error (self::Err2);
+        $this->compiler->trigger_template_error(self::Err2);
     }
     $this->_retvalue = '->{\''.$this->yystack[$this->yyidx + -3]->minor.'\'.'.$this->yystack[$this->yyidx + -1]->minor.'}';
     }

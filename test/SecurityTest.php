@@ -63,7 +63,7 @@ class SecurityTest extends Smarty_TestCase
         $this->smarty->security_policy->php_modifiers = array('null');
         try {
             $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|@count}');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertContains(htmlentities("modifier 'count' not allowed by security setting"), $e->getMessage());
 
             return;
@@ -80,18 +80,23 @@ class SecurityTest extends Smarty_TestCase
     }
 
     /**
-    * test not allowed tag
-    */
+     * test not allowed tag
+     * @expectedException \Exception
+     * @expectedExceptionMessage 'cycle' not allowed
+     */
     public function testNotAllowedTags2() {
         $this->smarty->security_policy->allowed_tags = array('counter');
-        try {
-            $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
-        } catch (Exception $e) {
-            $this->assertContains(htmlentities("tag 'cycle' not allowed by security setting"), $e->getMessage());
+        $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
+    }
 
-            return;
-        }
-        $this->fail('Exception for not allowed tag has not been raised.');
+    /**
+     * test not allowed tag
+     * @expectedException \Exception
+     * @expectedExceptionMessage 'cycle' not allowed
+     */
+    public function testNotAllowedTags2() {
+        $this->smarty->security_policy->allowed_tags = array('counter');
+        $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
     }
 
     /**
@@ -101,7 +106,7 @@ class SecurityTest extends Smarty_TestCase
         $this->smarty->security_policy->disabled_tags = array('cycle');
         try {
             $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertContains(htmlentities("tag 'cycle' disabled by security setting"), $e->getMessage());
 
             return;
@@ -128,7 +133,7 @@ class SecurityTest extends Smarty_TestCase
         $this->smarty->security_policy->allowed_modifiers = array('upper');
         try {
             $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertContains(htmlentities("modifier 'lower' not allowed by security setting"), $e->getMessage());
 
             return;
@@ -143,7 +148,7 @@ class SecurityTest extends Smarty_TestCase
         $this->smarty->security_policy->disabled_modifiers = array('lower');
         try {
             $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertContains(htmlentities("modifier 'lower' disabled by security setting"), $e->getMessage());
 
             return;
@@ -174,7 +179,7 @@ class SecurityTest extends Smarty_TestCase
         $this->smarty->security_policy->secure_dir = array('test' . DIRECTORY_SEPARATOR . 'templates_3' . DIRECTORY_SEPARATOR);
         try {
             $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertContains("/test/templates_2/hello.tpl' not allowed by security setting", str_replace('\\','/',$e->getMessage()));
 
             return;

@@ -997,7 +997,7 @@ objectelement(res)::= PTR ID(i). {
 objectelement(res)::= PTR DOLLAR varvar(v). {
     $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
-        $this->compiler->trigger_template_error (self::Err2);
+        $this->compiler->trigger_template_error(self::Err2);
     }
     res = '->{'.$this->compileVariable(v).'}';
 }
@@ -1005,7 +1005,7 @@ objectelement(res)::= PTR DOLLAR varvar(v). {
 objectelement(res)::= PTR LDEL expr(e) RDEL. {
     $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
-        $this->compiler->trigger_template_error (self::Err2);
+        $this->compiler->trigger_template_error(self::Err2);
     }
     res = '->{'.e.'}';
 }
@@ -1013,7 +1013,7 @@ objectelement(res)::= PTR LDEL expr(e) RDEL. {
 objectelement(res)::= PTR ID(ii) LDEL expr(e) RDEL. {
     $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
-        $this->compiler->trigger_template_error (self::Err2);
+        $this->compiler->trigger_template_error(self::Err2);
     }
     res = '->{\''.ii.'\'.'.e.'}';
 }

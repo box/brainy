@@ -30,7 +30,6 @@ class StrictModeTest extends Smarty_TestCase
             array('{$foo->$foo}'), // Variable variable methods
             array('{$foo->{$x+$y}}'), // Expression methods
             array('{$foo->bar{$x+$y}}'), // Expression methods
-            array('{if isset(#foo#)}{/if}'), // Isset on config variable
             array('{$foo|@json_encode}'), // @modifiers
             array('{if $x XOR $y}{/if}'), // XOR operator
             // Banned functions
