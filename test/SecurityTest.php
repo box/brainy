@@ -90,16 +90,6 @@ class SecurityTest extends Smarty_TestCase
     }
 
     /**
-     * test not allowed tag
-     * @expectedException \Exception
-     * @expectedExceptionMessage 'cycle' not allowed
-     */
-    public function testNotAllowedTags2() {
-        $this->smarty->security_policy->allowed_tags = array('counter');
-        $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
-    }
-
-    /**
     * test disabled tag
     */
     public function testDisabledTags() {

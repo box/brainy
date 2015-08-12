@@ -572,7 +572,7 @@ class TemplateCompiler
             $this->trigger_template_error('Strict Mode: ' . $reason, null, '\Box\Brainy\Exceptions\BrainyStrictModeException');
         }
         if ($this->parser && $this->parser->isStrictMode()) {
-            $this->trigger_template_error('Strict Mode: ' . $reason, null, 'BrainyStrictModeException');
+            $this->trigger_template_error('Strict Mode: ' . $reason, null, '\Box\Brainy\Exceptions\BrainyStrictModeException');
         }
     }
 
