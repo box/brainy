@@ -25,6 +25,8 @@ class CompileStripTest extends PHPUnit_Framework_TestCase
             array("foo  ", 'foo '),
             array("foo>  ", 'foo>'),
             array("foo   &nbsp;   bar", 'foo &nbsp; bar'),
+            array("Hey <b>there</b>", 'Hey <b>there</b>'),
+            array("<div>\n    {* foo *}\n    {'bar'}", '<div> bar'),
         );
     }
 
