@@ -51,8 +51,10 @@
      */
     protected static function stripString($string) {
         // Replaces whitespace followed by a `<` with null.
-        // `     \n     <foo>` -> `<foo>`
-        $string = preg_replace('/\s+(?=<)/ims', '', $string);
+        // `     \n     </foo>` -> `</foo>`
+        $string = preg_replace('/\s+(?=<\/)/ims', '', $string);
+        // `     \n     <foo>` -> ` <foo>`
+        $string = preg_replace('/\s+(?=<)/ims', ' ', $string);
         // Replaces `>` followed by whitespace with `>`
         // `<div>\n  foo` -> `<div>foo`
         $string = preg_replace('/>\s+(?=\S)/ims', '>', $string);
