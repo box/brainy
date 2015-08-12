@@ -42,7 +42,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
      * @var array
      * @see Smarty_Internal_CompileBase
      */
-    public $option_flags = array('hide', 'append', 'prepend');
+    public $option_flags = array();
 
     /**
      * Attribute definition: Overwrites base class.
@@ -50,7 +50,7 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
      * @var array
      * @see Smarty_Internal_CompileBase
      */
-    public $optional_attributes = array('internal_file', 'internal_uid', 'internal_line');
+    public $optional_attributes = array();
     /**
      * nested child block names
      *
@@ -85,7 +85,6 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
             } else {
                 self::$block_data[$_name] = array(
                     'source' => '',
-                    'mode' => 'replace',
                 );
             }
             // build {block} for child block
@@ -161,10 +160,6 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
         $_tpl->compiler->suppressMergedTemplates = true;
         if (strpos($compiler->template->block_data[$_name]['source'], self::parent) !== false) {
             $_output = str_replace(self::parent, trim($compiler->parser->current_buffer->to_inline_data()), $_tpl->compiler->compileTemplate($_tpl));
-        } elseif ($compiler->template->block_data[$_name]['mode'] == 'prepend') {
-            $_output = $_tpl->compiler->compileTemplate($_tpl) . $compiler->parser->current_buffer->to_smarty_php();
-        } elseif ($compiler->template->block_data[$_name]['mode'] == 'append') {
-            $_output = $compiler->parser->current_buffer->to_smarty_php() . $_tpl->compiler->compileTemplate($_tpl);
         } elseif (!empty($compiler->template->block_data[$_name])) {
             $_output = $_tpl->compiler->compileTemplate($_tpl);
         }
@@ -258,42 +253,21 @@ class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase
             array_shift(Smarty_Internal_Compile_Block::$nested_block_names);
             if (!empty(Smarty_Internal_Compile_Block::$nested_block_names)) {
                 $name2 = Smarty_Internal_Compile_Block::$nested_block_names[0];
-                if (isset($compiler->template->block_data[$name1]) || !$saved_data[0]['hide']) {
-                    if (isset(Smarty_Internal_Compile_Block::$block_data[$name1]['child']) || !isset($compiler->template->block_data[$name1])) {
-                        Smarty_Internal_Compile_Block::$block_data[$name2]['source'] .= Smarty_Internal_Compile_Block::$block_data[$name1]['source'];
-                    } else {
-                        if ($compiler->template->block_data[$name1]['mode'] == 'append') {
-                            Smarty_Internal_Compile_Block::$block_data[$name2]['source'] .= Smarty_Internal_Compile_Block::$block_data[$name1]['source'] . $compiler->template->block_data[$name1]['source'];
-                        } elseif ($compiler->template->block_data[$name1]['mode'] == 'prepend') {
-                            Smarty_Internal_Compile_Block::$block_data[$name2]['source'] .= $compiler->template->block_data[$name1]['source'] . Smarty_Internal_Compile_Block::$block_data[$name1]['source'];
-                        } else {
-                            Smarty_Internal_Compile_Block::$block_data[$name2]['source'] .= $compiler->template->block_data[$name1]['source'];
-                        }
-                    }
+                if (isset(Smarty_Internal_Compile_Block::$block_data[$name1]['child']) || !isset($compiler->template->block_data[$name1])) {
+                    Smarty_Internal_Compile_Block::$block_data[$name2]['source'] .= Smarty_Internal_Compile_Block::$block_data[$name1]['source'];
+                } else {
+                    Smarty_Internal_Compile_Block::$block_data[$name2]['source'] .= $compiler->template->block_data[$name1]['source'];
                 }
                 unset(Smarty_Internal_Compile_Block::$block_data[$name1]);
                 $compiler->lex->yypushstate(\Box\Brainy\Compiler\Lexer::CHILDBLOCK);
             } else {
-                if (isset($compiler->template->block_data[$name1]) || !$saved_data[0]['hide']) {
-                    if (isset($compiler->template->block_data[$name1]) && !isset(Smarty_Internal_Compile_Block::$block_data[$name1]['child'])) {
-                        if (strpos($compiler->template->block_data[$name1]['source'], Smarty_Internal_Compile_Block::parent) !== false) {
-                            $compiler->template->block_data[$name1]['source'] =
-                                str_replace(Smarty_Internal_Compile_Block::parent, Smarty_Internal_Compile_Block::$block_data[$name1]['source'], $compiler->template->block_data[$name1]['source']);
-                        } elseif ($compiler->template->block_data[$name1]['mode'] == 'prepend') {
-                            $compiler->template->block_data[$name1]['source'] .= Smarty_Internal_Compile_Block::$block_data[$name1]['source'];
-                        } elseif ($compiler->template->block_data[$name1]['mode'] == 'append') {
-                            $compiler->template->block_data[$name1]['source'] = Smarty_Internal_Compile_Block::$block_data[$name1]['source'] . $compiler->template->block_data[$name1]['source'];
-                        }
-                    } else {
-                        $compiler->template->block_data[$name1]['source'] = Smarty_Internal_Compile_Block::$block_data[$name1]['source'];
+                if (isset($compiler->template->block_data[$name1]) && !isset(Smarty_Internal_Compile_Block::$block_data[$name1]['child'])) {
+                    if (strpos($compiler->template->block_data[$name1]['source'], Smarty_Internal_Compile_Block::parent) !== false) {
+                        $compiler->template->block_data[$name1]['source'] =
+                            str_replace(Smarty_Internal_Compile_Block::parent, Smarty_Internal_Compile_Block::$block_data[$name1]['source'], $compiler->template->block_data[$name1]['source']);
                     }
-                    $compiler->template->block_data[$name1]['mode'] = 'replace';
-                    if ($saved_data[0]['append']) {
-                        $compiler->template->block_data[$name1]['mode'] = 'append';
-                    }
-                    if ($saved_data[0]['prepend']) {
-                        $compiler->template->block_data[$name1]['mode'] = 'prepend';
-                    }
+                } else {
+                    $compiler->template->block_data[$name1]['source'] = Smarty_Internal_Compile_Block::$block_data[$name1]['source'];
                 }
                 unset(Smarty_Internal_Compile_Block::$block_data[$name1]);
                 $compiler->lex->yypushstate(\Box\Brainy\Compiler\Lexer::CHILDBODY);
@@ -304,11 +278,7 @@ class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase
         if (isset($compiler->template->block_data[$_name]) && !isset($compiler->template->block_data[$_name]['compiled'])) {
             $_output = Smarty_Internal_Compile_Block::compileChildBlock($compiler, $_name);
         } else {
-            if ($saved_data[0]['hide'] && !isset($compiler->template->block_data[$_name]['source'])) {
-                $_output = '';
-            } else {
-                $_output = $compiler->parser->current_buffer->to_smarty_php();
-            }
+            $_output = $compiler->parser->current_buffer->to_smarty_php();
         }
         unset($compiler->template->block_data[$_name]['compiled']);
         // reset flags

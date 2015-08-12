@@ -13,7 +13,7 @@ class ConstructModifier extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         $output = self::getRequiredArg($args, 'value');
         $modifierlist = self::getRequiredArg($args, 'modifierlist');
@@ -59,7 +59,7 @@ class ConstructModifier extends BaseConstruct
                 if (!is_object($compiler->smarty->security_policy) ||
                     $compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
 
-                    $output = "$function({$params})";
+                    $output = "$func({$params})";
                     continue;
                 }
                 $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');

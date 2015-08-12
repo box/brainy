@@ -43,14 +43,13 @@ abstract class BaseConstruct
         if (isset($args[$name])) {
             return $args[$name];
         }
-
         foreach ($args as $arg) {
             if (!is_array($arg) || !isset($arg[$name])) {
                 continue;
             }
             return $arg[$name];
         }
-        throw new SmartyCompilerException('Expected argument "' . $name . '" but it was not found.');
+        throw new SmartyCompilerException('Expected argument not found; missing "' . $name . '" attribute.');
     }
 
     /**
@@ -64,6 +63,12 @@ abstract class BaseConstruct
     {
         if (isset($args[$name])) {
             return $args[$name];
+        }
+        foreach ($args as $arg) {
+            if (!is_array($arg) || !isset($arg[$name])) {
+                continue;
+            }
+            return $arg[$name];
         }
         return $default;
     }

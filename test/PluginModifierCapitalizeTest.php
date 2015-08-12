@@ -31,13 +31,6 @@ class PluginModifierCapitalizeTest extends Smarty_TestCase
         $this->assertEquals("Next X-Men Film, X3, Delayed. Ümlauts Äre Cööl.", $this->smarty->fetch($tpl));
     }
 
-    public function testDigitsWithoutMbstring() {
-        \Box\Brainy\Brainy::$_MBSTRING = false;
-        $tpl = $this->smarty->createTemplate('eval:{"next x-men fiLm, x3, delayed."|capitalize:true}');
-        $this->assertEquals("Next X-Men FiLm, X3, Delayed.", $this->smarty->fetch($tpl));
-        \Box\Brainy\Brainy::$_MBSTRING = true;
-    }
-
     public function testQuotes() {
         $tpl = $this->smarty->createTemplate('eval:{"next x-men fiLm, x3, \"delayed. umlauts\" foo."|capitalize}');
         $this->assertEquals("Next X-Men FiLm, x3, \"Delayed. Umlauts\" Foo.", $this->smarty->fetch($tpl));

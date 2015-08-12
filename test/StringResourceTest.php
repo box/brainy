@@ -99,14 +99,4 @@ class StringResourceTest extends Smarty_TestCase
         $tpl = $this->smarty->createTemplate('string:hello world');
         $this->assertEquals('hello world', $tpl->fetch());
     }
-
-    public function testUrlencodeTemplate() {
-        $tpl = $this->smarty->createTemplate('string:urlencode:%7B%22foobar%22%7Cescape%7D');
-        $this->assertEquals('foobar', $tpl->fetch());
-    }
-
-    public function testBase64Template() {
-        $tpl = $this->smarty->createTemplate('string:base64:eyJmb29iYXIifGVzY2FwZX0=');
-        $this->assertEquals('foobar', $tpl->fetch());
-    }
 }

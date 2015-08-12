@@ -12,27 +12,20 @@ namespace Box\Brainy\Tests;
 class CompileBlockExtendsTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->setTemplateDir(array('test/templates/compileblockextends/','test/templates/'));
     }
 
     /**
-    * clear folders
-    */
-    public function clear() {
-        $this->smarty->clearCompiledTemplate();
-   }
-    /**
-    * test block default outout
-    */
+     * test block default outout
+     */
     public function testBlockDefault_000_1() {
         $result = $this->smarty->fetch('eval:{block name=test}-- block default --{/block}');
         $this->assertEquals('-- block default --', $result);
     }
 
     public function testBlockDefault_000_2() {
-        $this->smarty->assign ('foo', 'another');
+        $this->smarty->assign('foo', 'another');
         $result = $this->smarty->fetch('eval:{block name=test}-- {$foo} block default --{/block}');
         $this->assertEquals('-- another block default --', $result);
     }

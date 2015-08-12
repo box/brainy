@@ -32,8 +32,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Box\\Brainy\\": "src/Brainy/",
-            "Box\\Brainy\\Tests\\": "test/"
+            "Box\\Brainy\\Tests\\": "test/",
+            "Box\\Brainy\\": "src/Brainy/"
         }
     }
 }

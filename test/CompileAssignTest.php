@@ -11,14 +11,9 @@ namespace Box\Brainy\Tests;
 
 class CompileAssignTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     /**
-    * test old style of assign tag
-    */
+     * test old style of assign tag
+     */
     public function testAssignOld1() {
         $this->assertEquals("1", $this->smarty->fetch('eval:{assign var=foo   value=1}{$foo}'));
         $this->assertEquals("1", $this->smarty->fetch('eval:{assign var = foo   value= 1}{$foo}'));
@@ -58,15 +53,6 @@ class CompileAssignTest extends Smarty_TestCase
         $this->assertEquals("a9b8c7d6", $this->smarty->fetch($tpl));
     }
     /**
-    * test assign tag shorthands
-    */
-    public function testAssignShort1() {
-        $this->assertEquals("1", $this->smarty->fetch('eval:{assign foo  value=1}{$foo}'));
-    }
-    public function testAssignShort2() {
-        $this->assertEquals("1", $this->smarty->fetch('eval:{assign foo 1}{$foo}'));
-    }
-    /**
     * test new style of assign tag
     */
     public function testAssignNew1() {
@@ -103,7 +89,7 @@ class CompileAssignTest extends Smarty_TestCase
     }
 
     /**
-     * @expectedException SmartyCompilerException
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
      */
     public function testInvalidScope() {
         $this->smarty->fetch('eval:{assign var=foo scope="foo"}');

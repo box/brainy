@@ -21,7 +21,6 @@ class StrictModeTest extends Smarty_TestCase
 
     public function banned_constructs_provider() {
         return array(
-            array('{$foo="bar" scope="global"}'), // Passing attributes in shorthand assignments
             array('{${$foo}="bar"}'), // Variable variable assignment
             array('{${$foo}}'), // Variable variable lookups
             array('{$foo.$bar}'), // Variable variable indices
@@ -52,7 +51,7 @@ class StrictModeTest extends Smarty_TestCase
 
     /**
      * @dataProvider banned_constructs_provider
-     * @expectedException BrainyStrictModeException
+     * @expectedException \Box\Brainy\Exceptions\BrainyStrictModeException
      * @expectedExceptionMessage Strict Mode:
      */
     public function test_banned_constructs_are_not_allowed($source) {
@@ -78,13 +77,12 @@ class StrictModeTest extends Smarty_TestCase
             array('{html_select_time}'),
             array('{html_table loop="foo" rows=1}'),
             array('{$foo|noprint}'),
-            array('{append var="foo" value="bar"}'),
         );
     }
 
     /**
      * @dataProvider banned_plugin_provider
-     * @expectedException BrainyStrictModeException
+     * @expectedException \Box\Brainy\Exceptions\BrainyStrictModeException
      * @expectedExceptionMessage Strict Mode:
      */
     public function test_banned_plugins_are_not_allowed($source) {
@@ -101,7 +99,7 @@ class StrictModeTest extends Smarty_TestCase
     }
 
     /**
-     * @expectedException BrainyStrictModeException
+     * @expectedException \Box\Brainy\Exceptions\BrainyStrictModeException
      * @expectedExceptionMessage Strict Mode:
      */
     public function test_html_image_is_not_allowed() {
@@ -109,47 +107,11 @@ class StrictModeTest extends Smarty_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage html_image
      */
     public function test_html_image_is_allowed_outside_strict() {
         $output = $this->smarty->fetch('eval:{html_image}');
         $this->assertEmpty($output);
-    }
-
-    public function banned_special_construct_provider() {
-        return array(
-            array('{$smarty.cookies.foo}'),
-            array('{$smarty.request.foo}'),
-            array('{$smarty.session.foo}'),
-            array('{$smarty.server.foo}'),
-            array('{$smarty.get.foo}'),
-            array('{$smarty.post.foo}'),
-            array('{$smarty.env.foo}'),
-            array('{$smarty.template_object->compile_id}'),
-        );
-    }
-
-    /**
-     * @dataProvider banned_special_construct_provider
-     * @expectedException BrainyStrictModeException
-     * @expectedExceptionMessage Strict Mode:
-     */
-    public function test_banned_special_constructs_are_not_allowed($source) {
-        $this->smarty->fetch('eval:{* set strict *}' . $source);
-    }
-
-    /**
-     * @dataProvider banned_special_construct_provider
-     */
-    public function test_banned_special_constructs_are_allowed_outside_strict($source) {
-        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
-        $_SESSION = array('foo' => 'bar');
-        $_COOKIE = array('foo' => 'bar');
-        $output = $this->smarty->fetch('eval:' . $source);
-        $this->assertTrue($output !== null);
-
-        unset($_SESSION);
-        unset($_COOKIE);
     }
 }

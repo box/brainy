@@ -72,11 +72,16 @@ class SmartyTests
 
 class Smarty_TestCase extends \PHPUnit_Framework_TestCase
 {
+    public $smarty = null;
+    public $smartyBC = null;
+
     public function setUp()
     {
-        $this->smarty = SmartyTests::$smarty;
+        $this->smarty = &SmartyTests::$smarty;
+        $this->smartyBC = &SmartyTests::$smartyBC;
         SmartyTests::init();
         $this->smarty->escape_html = true;
+        $this->smartyBC->escape_html = true;
         parent::setUp();
     }
 

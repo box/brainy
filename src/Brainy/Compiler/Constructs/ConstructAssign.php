@@ -19,18 +19,23 @@ class ConstructAssign extends BaseConstruct
     {
         $var = self::getRequiredArg($args, 'var');
         $value = self::getRequiredArg($args, 'value');
-        $scopeRaw = self::getOptionalArg($args, 'scope', Brainy::$default_assign_scope);
 
-        if ($scopeRaw == 'local') {
-            $scope = Brainy::SCOPE_LOCAL;
-        } elseif ($scopeRaw == 'parent') {
-            $scope = Brainy::SCOPE_PARENT;
-        } elseif ($scopeRaw == 'root') {
-            $scope = Brainy::SCOPE_ROOT;
-        } elseif ($scopeRaw == 'global') {
-            $scope = Brainy::SCOPE_GLOBAL;
-        } else {
-            $compiler->trigger_template_error('illegal value for "scope" attribute', $compiler->lex->taglineno);
+        $scopeRaw = self::getOptionalArg($args, 'scope', self::getDefaultScope());
+        switch (\Box\Brainy\Compiler\Decompile::decompileString($scopeRaw)) {
+            case 'local':
+                $scope = Brainy::SCOPE_LOCAL;
+                break;
+            case 'parent':
+                $scope = Brainy::SCOPE_PARENT;
+                break;
+            case 'root':
+                $scope = Brainy::SCOPE_ROOT;
+                break;
+            case 'global':
+                $scope = Brainy::SCOPE_GLOBAL;
+                break;
+            default:
+                $compiler->trigger_template_error('illegal value for "scope" attribute: ' . $scopeRaw, $compiler->lex->taglineno);
         }
 
         // implement Smarty2's behaviour of variables assigned by reference
@@ -45,4 +50,22 @@ class ConstructAssign extends BaseConstruct
         }
         return $output;
     }
+
+    /**
+     * @return string
+     */
+    private static function getDefaultScope()
+    {
+        switch (Brainy::$default_assign_scope) {
+            case Brainy::SCOPE_LOCAL:
+                return '"local"';
+            case Brainy::SCOPE_PARENT:
+                return '"parent"';
+            case Brainy::SCOPE_ROOT:
+                return '"root"';
+            case Brainy::SCOPE_GLOBAL:
+                return '"global"';
+        }
+    }
+
 }

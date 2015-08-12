@@ -8,8 +8,6 @@
 
 namespace Box\Brainy\Tests;
 
-use Box\Brainy\Templates\TemplateData;
-
 
 class ClearAllAssignTest extends Smarty_TestCase
 {
@@ -19,29 +17,27 @@ class ClearAllAssignTest extends Smarty_TestCase
     protected $_tplBC = null;
 
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        $this->smartyBC = SmartyTests::$smartyBC;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smartyBC->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
 
-        $this->smarty->assign('foo','foo');
-        $this->_data = new TemplateData($this->smarty);
-        $this->_data->assign('bar','bar');
+        $this->smarty->assign('foo', 'foo');
+        $this->_data = new Helpers\Data($this->smarty);
+        $this->_data->assign('bar', 'bar');
         $this->_tpl = $this->smarty->createTemplate('eval:{$foo}{$bar}{$blar}', null, null, $this->_data);
-        $this->_tpl->assign('blar','blar');
+        $this->_tpl->assign('blar', 'blar');
 
-        $this->smartyBC->assign('foo','foo');
-        $this->_dataBC = new TemplateData($this->smartyBC);
-        $this->_dataBC->assign('bar','bar');
+        $this->smartyBC->assign('foo', 'foo');
+        $this->_dataBC = new Helpers\Data($this->smartyBC);
+        $this->_dataBC->assign('bar', 'bar');
         $this->_tplBC = $this->smartyBC->createTemplate('eval:{$foo}{$bar}{$blar}', null, null, $this->_dataBC);
-        $this->_tplBC->assign('blar','blar');
+        $this->_tplBC->assign('blar', 'blar');
     }
 
     /**
     * test all variables accessable
     */
-    public function testAllVariablesAccessable() {
+    public function testAllVariablesAccessible() {
         $this->assertEquals('foobarblar', $this->smarty->fetch($this->_tpl));
     }
 

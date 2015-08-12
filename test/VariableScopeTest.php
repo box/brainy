@@ -8,8 +8,6 @@
 
 namespace Box\Brainy\Tests;
 
-use Box\Brainy\Templates\TemplateData;
-
 
 class VariableScopeTest extends Smarty_TestCase
 {
@@ -40,20 +38,20 @@ class VariableScopeTest extends Smarty_TestCase
     * test root variable with data object chain
     */
     public function testVariableScope2() {
-        $data1 = new TemplateData($this->smarty);
-        $data2 = new TemplateData($data1);
+        $data1 = new Helpers\Data($this->smarty);
+        $data2 = new Helpers\Data($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", null, null, $data2);
         $this->assertEquals("bar", $this->smarty->fetch($tpl));
     }
     public function testVariableScope22() {
-        $data1 = new TemplateData($this->smarty);
-        $data2 = new TemplateData($data1);
+        $data1 = new Helpers\Data($this->smarty);
+        $data2 = new Helpers\Data($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", $data2);
         $this->assertEquals("bar", $this->smarty->fetch($tpl));
     }
     public function testVariableScope23() {
-        $data1 = new TemplateData($this->smarty);
-        $data2 = new TemplateData($data1);
+        $data1 = new Helpers\Data($this->smarty);
+        $data2 = new Helpers\Data($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", $data2);
         $this->assertEquals("bar", $tpl->fetch());
     }
@@ -62,16 +60,16 @@ class VariableScopeTest extends Smarty_TestCase
     * test overwrite variable with data object chain
     */
     public function testVariableScope3() {
-        $data1 = new TemplateData($this->smarty);
+        $data1 = new Helpers\Data($this->smarty);
         $data1->assign('foo','newvalue');
-        $data2 = new TemplateData($data1);
+        $data2 = new Helpers\Data($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", null, null, $data2);
         // must see the new value
         $this->assertEquals("newvalue", $this->smarty->fetch($tpl));
     }
     public function testVariableScope32() {
-        $data1 = new TemplateData($this->smarty);
-        $data2 = new TemplateData($data1);
+        $data1 = new Helpers\Data($this->smarty);
+        $data2 = new Helpers\Data($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", $data2);
         // must see the old value at root
         $this->assertEquals("bar", $this->smarty->fetch($tpl));

@@ -4,21 +4,6 @@
  * @subpackage PluginsModifierCompiler
  */
 
-
-/**
- * Parameter decode helper, since parameters are unparsed
- *
- * @author Matt Basta
- * @param string $value The unparsed parameter
- * @return mixed
- */
-function smarty_modifiercompiler_escape_helper($value) {
-    if ($value[0] === "'" && $value[strlen($value) - 1] === "'") {
-        $value = '"' . substr($value, 1, -1) . '"';
-    }
-    return json_decode($value);
-}
-
 /**
  * Smarty escape modifier plugin
  *
@@ -33,7 +18,7 @@ function smarty_modifiercompiler_escape_helper($value) {
  */
 function smarty_modifiercompiler_escape($params, $compiler) {
     try {
-        $esc_type = isset($params[1]) ? smarty_modifiercompiler_escape_helper($params[1]) : 'html';
+        $esc_type = isset($params[1]) ? \Box\Brainy\Compiler\Decompile::decompileString($params[1]) : 'html';
         $double_encode = isset($params[3]) ? $params[3] : 'true';
 
         switch ($esc_type) {

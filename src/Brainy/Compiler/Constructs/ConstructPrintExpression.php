@@ -23,7 +23,7 @@ class ConstructPrintExpression extends BaseConstruct
             $output = ConstructModifier::compileOpen($compiler, array(
                 'value' => $output,
                 'modifierlist' => $modifiers,
-            ));
+            ), null);
         }
 
         // default modifier
@@ -34,7 +34,7 @@ class ConstructPrintExpression extends BaseConstruct
             $output = ConstructModifier::compileOpen($compiler, array(
                 'value' => $output,
                 'modifierlist' => $compiler->default_modifier_list,
-            ));
+            ), null);
         }
 
         // autoescape html

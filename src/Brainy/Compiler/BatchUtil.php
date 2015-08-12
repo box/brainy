@@ -45,7 +45,8 @@ class BatchUtil
      * @param  \Box\Brainy\Brainy  $smarty        \Box\Brainy\Brainy instance
      * @return integer number of template files compiled
      */
-    public static function compileAllTemplates($extension, $force_compile, $time_limit, $max_errors, \Box\Brainy\Brainy $smarty) {
+    public static function compileAllTemplates($extension, $force_compile, $time_limit, $max_errors, \Box\Brainy\Brainy $smarty)
+    {
         // switch off time limit
         if (function_exists('set_time_limit')) {
             @set_time_limit($time_limit);
@@ -107,12 +108,13 @@ class BatchUtil
      * @param  \Box\Brainy\Brainy  $smarty        \Box\Brainy\Brainy instance
      * @return integer number of template files deleted
      */
-    public static function clearCompiledTemplate($resource_name, $compile_id, $exp_time, \Box\Brainy\Brainy $smarty) {
+    public static function clearCompiledTemplate($resource_name, $compile_id, $exp_time, \Box\Brainy\Brainy $smarty)
+    {
         $_compile_dir = realpath($smarty->getCompileDir()).'/';
         $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
         $_dir_sep = $smarty->use_sub_dirs ? '/' : '^';
         if (isset($resource_name)) {
-            $tpl = new Template($resource_name, $smarty);
+            $tpl = new \Box\Brainy\Templates\Template($resource_name, $smarty);
 
             // remove from template cache
             $tpl->source; // have the template registered before unset()
@@ -140,7 +142,7 @@ class BatchUtil
         $_count = 0;
         try {
             $_compileDirs = new \RecursiveDirectoryIterator($_dir);
-        } catch (Exception $e) {
+        } catch (\UnexpectedValueException $e) {
             // NOTE: UnexpectedValueException thrown for PHP >= 5.3
             return 0;
         }

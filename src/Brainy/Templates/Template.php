@@ -504,7 +504,7 @@ PHPDOC;
      * @param  Smarty  $smarty    smarty instance
      * @return boolean true
      */
-    public static function writeFile($_filepath, $_contents, Smarty $smarty) {
+    public static function writeFile($_filepath, $_contents, Brainy $smarty) {
         if ($smarty->_file_perms !== null) {
             $old_umask = umask(0);
         }

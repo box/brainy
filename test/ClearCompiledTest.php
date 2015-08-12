@@ -13,8 +13,7 @@ namespace Box\Brainy\Tests;
 class ClearCompiledTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->addTemplateDir('test/templates_2/');
     }
 
@@ -98,8 +97,8 @@ class ClearCompiledTest extends Smarty_TestCase
         $directory_length = strlen($directory);
         $files = array();
 
-        $di = new RecursiveDirectoryIterator($directory);
-        $it = new RecursiveIteratorIterator($di);
+        $di = new \RecursiveDirectoryIterator($directory);
+        $it = new \RecursiveIteratorIterator($di);
         foreach ($it as $file) {
             $_file = $file->__toString();
             // skip anything with a /. in it.

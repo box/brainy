@@ -1,6 +1,10 @@
 <?php
 
-class Smarty_Data extends \Box\Brainy\Templates\TemplateData {
+namespace Box\Brainy\Tests\Helpers;
+
+
+class Data extends \Box\Brainy\Templates\TemplateData
+{
     /**
      * Smarty object
      *

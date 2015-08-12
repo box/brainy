@@ -210,11 +210,11 @@ template_element ::= STRIPOFF(d). {
 }
                       // process source of inheritance child block
 template_element ::= BLOCKSOURCE(s). {
-    if ($this->strip) {
-        SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, self::stripString(s));
-    } else {
-        SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, s);
-    }
+    // if ($this->strip) {
+    //     SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, self::stripString(s));
+    // } else {
+    //     SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, s);
+    // }
 }
 
 literal(res) ::= LITERALSTART LITERALEND. {
@@ -362,10 +362,10 @@ smartytag(res)   ::= LDEL ID(i). {
             res = Constructs\ConstructElse::compileOpen($this->compiler, null, null);
             break;
         case 'ldelim':
-            res = 'echo ' . var_export($this->compiler->smarty->left_delimiter) . ";\n";
+            res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->left_delimiter));
             break;
         case 'rdelim':
-            res = 'echo ' . var_export($this->compiler->smarty->right_delimiter) . ";\n";
+            res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->right_delimiter));
             break;
         default:
             res = $this->compiler->compileTag(i,array());
@@ -376,10 +376,10 @@ smartytag(res)   ::= LDEL ID(i). {
 smartytag(res)   ::= LDEL ID(i) modifierlist(l)attributes(a). {
     res = "ob_start();\n".$this->compiler->compileTag(i,a).'echo ';
     $this->compiler->has_code = true;
-    res .= Constructs\ConstructModifier::compileOpen($compiler, array(
+    res .= Constructs\ConstructModifier::compileOpen($this->compiler, array(
         'value' => 'ob_get_clean()',
         'modifierlist' => l,
-    ));
+    ), null);
 }
 
 
@@ -528,10 +528,10 @@ smartytag(res)   ::= LDEL SMARTYBLOCKCHILDPARENT(i). {
     $j = strrpos(i,'.');
     if (i[$j+1] == 'c') {
         // {$smarty.block.child}
-        res = SMARTY_INTERNAL_COMPILE_BLOCK::compileChildBlock($this->compiler);
+        // res = SMARTY_INTERNAL_COMPILE_BLOCK::compileChildBlock($this->compiler);
     } else {
         // {$smarty.block.parent}
-        res = SMARTY_INTERNAL_COMPILE_BLOCK::compileParentBlock($this->compiler);
+        // res = SMARTY_INTERNAL_COMPILE_BLOCK::compileParentBlock($this->compiler);
     }
 }
 
@@ -683,10 +683,10 @@ expr(res)       ::= array(a). {
                   // modifier
 expr(res)        ::= expr(e) modifierlist(l). {
     $this->compiler->has_code = true;
-    res = Constructs\ConstructModifier::compileOpen($compiler, array(
+    res = Constructs\ConstructModifier::compileOpen($this->compiler, array(
         'value' => e,
         'modifierlist' => l,
-    ));
+    ), null);
 }
 
 // if expression
@@ -846,10 +846,10 @@ value(res)       ::= smartytag(st) RDEL. {
 
 value(res)       ::= value(v) modifierlist(l). {
     $this->compiler->has_code = true;
-    res = Constructs\ConstructModifier::compileOpen($compiler, array(
+    res = Constructs\ConstructModifier::compileOpen($this->compiler, array(
         'value' => v,
         'modifierlist' => l,
-    ));
+    ), null);
 }
 
 
@@ -873,7 +873,16 @@ variableinternal(res)  ::= variableinternal(a1) indexdef(a2). {
 // FIXME: This is a hack to make $smarty.config.foo work. :(
 variableinternal(res)  ::= variablebase(base) indexdef(a) indexdef(b). {
     if (base == '\'smarty\'') {
-        res = $this->compiler->compileTag('private_special_variable', array(), a, b);
+        switch (Decompile::decompileString(a)) {
+            case 'foreach':
+                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][" . b . "]");
+                break;
+            case 'capture':
+                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['capture'][" . b . "]");
+                break;
+            default:
+                $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
+        }
     } else {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
         res = $this->compileSafeLookupWithBase(res, b);
@@ -882,7 +891,26 @@ variableinternal(res)  ::= variablebase(base) indexdef(a) indexdef(b). {
 
 variableinternal(res)  ::= variablebase(base) indexdef(a). {
     if (base == '\'smarty\'') {
-        res = $this->compiler->compileTag('private_special_variable', array(), a);
+        switch (Decompile::decompileString(a)) {
+            case 'now':
+                res = new Wrappers\StaticWrapper('time()');
+                break;
+            case 'template':
+                res = new Wrappers\StaticWrapper('basename($_smarty_tpl->source->filepath)');
+                break;
+            case 'version':
+                res = new Wrappers\StaticWrapper(var_export(\Box\Brainy\Brainy::SMARTY_VERSION));
+                break;
+            case 'ldelim':
+                res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->left_delimiter));
+                break;
+            case 'rdelim':
+                res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->right_delimiter));
+                break;
+            default:
+                $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
+        }
+
     } else {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
     }
