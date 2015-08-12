@@ -61,10 +61,11 @@ class Parser#line 16 "Parser.php"
      */
     protected static function stripString($string) {
         // Replaces whitespace followed by a `<` with null.
-        // `     \n     <foo>` -> `<foo>`
-        // `     \n     &nbsp;` -> `&nbsp;`
-        $string = preg_replace('/\s+(?=<)/ims', '', $string);
-        $string = preg_replace('/\s+(?=&)/ims', ' ', $string);
+        // `     \n     </foo>` -> `</foo>`
+        $string = preg_replace('/\s+(?=<\/)/ims', '', $string);
+        // `     \n     <foo>` -> ` <foo>`
+        // `     \n     &nbsp;` -> ` &nbsp;`
+        $string = preg_replace('/\s+(?=[<&])/ims', ' ', $string);
         // Replaces `>` followed by whitespace with `>`
         // `<div>\n  foo` -> `<div>foo`
         $string = preg_replace('/>\s+(?=\S)/ims', '>', $string);
@@ -119,7 +120,7 @@ class Parser#line 16 "Parser.php"
         $safe = '\Box\Brainy\Runtime\Lookups::safeArrayLookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')';
         return new Wrappers\SafeLookupWrapper($unsafe, $safe);
     }
-#line 112 "Parser.php"
+#line 113 "Parser.php"
 
     const TP_VERT                           =  1;
     const TP_COLON                          =  2;
@@ -1381,11 +1382,11 @@ static public $yy_action = array(
             while ($this->yyidx >= 0) {
                 $this->yy_pop_parser_stack();
             }
-#line 127 "Parser.y"
+#line 128 "Parser.y"
 
     $this->internalError = true;
     $this->compiler->trigger_template_error("Stack overflow in template parser");
-#line 1381 "Parser.php"
+#line 1382 "Parser.php"
 
             return;
         }
@@ -1728,30 +1729,30 @@ static public $yy_action = array(
         160 => 160,
         161 => 161,
     );
-#line 136 "Parser.y"
+#line 137 "Parser.y"
     function yy_r0(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->root_buffer->to_smarty_php();
     }
-#line 1728 "Parser.php"
-#line 140 "Parser.y"
+#line 1729 "Parser.php"
+#line 141 "Parser.y"
     function yy_r1(){
     $this->strict_mode = true;
     $this->_retvalue = "/* strict mode */\n\$_smarty_tpl->strict_mode = true;\n";
     }
-#line 1734 "Parser.php"
-#line 144 "Parser.y"
+#line 1735 "Parser.php"
+#line 145 "Parser.y"
     function yy_r2(){
     $this->_retvalue = '';
     }
-#line 1739 "Parser.php"
-#line 150 "Parser.y"
+#line 1740 "Parser.php"
+#line 151 "Parser.y"
     function yy_r3(){
     if ($this->yystack[$this->yyidx + 0]->minor !== null) {
         $this->current_buffer->append_subtree($this->yystack[$this->yyidx + 0]->minor);
     }
     }
-#line 1746 "Parser.php"
-#line 167 "Parser.y"
+#line 1747 "Parser.php"
+#line 168 "Parser.y"
     function yy_r6(){
     if ($this->compiler->has_code) {
         $this->_retvalue = new Helpers\Tag($this, (string) $this->yystack[$this->yyidx + -1]->minor);
@@ -1761,18 +1762,18 @@ static public $yy_action = array(
     $this->compiler->has_variable_string = false;
     $this->block_nesting_level = count($this->compiler->_tag_stack);
     }
-#line 1757 "Parser.php"
-#line 178 "Parser.y"
+#line 1758 "Parser.php"
+#line 179 "Parser.y"
     function yy_r7(){
     $this->_retvalue = null;
     }
-#line 1762 "Parser.php"
-#line 183 "Parser.y"
+#line 1763 "Parser.php"
+#line 184 "Parser.y"
     function yy_r8(){
     $this->_retvalue = new Helpers\Text($this, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 1767 "Parser.php"
-#line 188 "Parser.y"
+#line 1768 "Parser.php"
+#line 189 "Parser.y"
     function yy_r9(){
     if ($this->strip) {
         $this->_retvalue = new Helpers\Text($this, self::stripString($this->yystack[$this->yyidx + 0]->minor));
@@ -1780,21 +1781,21 @@ static public $yy_action = array(
         $this->_retvalue = new Helpers\Text($this, $this->yystack[$this->yyidx + 0]->minor);
     }
     }
-#line 1776 "Parser.php"
-#line 197 "Parser.y"
+#line 1777 "Parser.php"
+#line 198 "Parser.y"
     function yy_r10(){
     $this->strip++;
     }
-#line 1781 "Parser.php"
-#line 201 "Parser.y"
+#line 1782 "Parser.php"
+#line 202 "Parser.y"
     function yy_r11(){
     if (!$this->strip) {
         $this->compiler->trigger_template_error('Unbalanced {strip} tags');
     }
     $this->strip--;
     }
-#line 1789 "Parser.php"
-#line 208 "Parser.y"
+#line 1790 "Parser.php"
+#line 209 "Parser.y"
     function yy_r12(){
     // if ($this->strip) {
     //     SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, self::stripString($this->yystack[$this->yyidx + 0]->minor));
@@ -1802,23 +1803,23 @@ static public $yy_action = array(
     //     SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, $this->yystack[$this->yyidx + 0]->minor);
     // }
     }
-#line 1798 "Parser.php"
-#line 220 "Parser.y"
+#line 1799 "Parser.php"
+#line 221 "Parser.y"
     function yy_r14(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
-#line 1803 "Parser.php"
-#line 224 "Parser.y"
+#line 1804 "Parser.php"
+#line 225 "Parser.y"
     function yy_r15(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1808 "Parser.php"
-#line 232 "Parser.y"
+#line 1809 "Parser.php"
+#line 233 "Parser.y"
     function yy_r17(){
     $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1813 "Parser.php"
-#line 246 "Parser.y"
+#line 1814 "Parser.php"
+#line 247 "Parser.y"
     function yy_r19(){
     $this->compiler->assert_no_enforced_modifiers($this->yystack[$this->yyidx + 0]->minor instanceof Wrappers\StaticWrapper);
     if ($this->yystack[$this->yyidx + 0]->minor instanceof Wrappers\StaticWrapper) {
@@ -1831,8 +1832,8 @@ static public $yy_action = array(
         array()
     );
     }
-#line 1827 "Parser.php"
-#line 259 "Parser.y"
+#line 1828 "Parser.php"
+#line 260 "Parser.y"
     function yy_r20(){
     $this->compiler->assert_expected_modifier($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + -2]->minor instanceof Wrappers\StaticWrapper);
     if ($this->yystack[$this->yyidx + -2]->minor instanceof Wrappers\StaticWrapper) {
@@ -1845,8 +1846,8 @@ static public $yy_action = array(
         $this->yystack[$this->yyidx + 0]->minor
     );
     }
-#line 1841 "Parser.php"
-#line 272 "Parser.y"
+#line 1842 "Parser.php"
+#line 273 "Parser.y"
     function yy_r21(){
     $this->compiler->assert_no_enforced_modifiers($this->yystack[$this->yyidx + -1]->minor instanceof Wrappers\StaticWrapper);
     if ($this->yystack[$this->yyidx + -1]->minor instanceof Wrappers\StaticWrapper) {
@@ -1859,13 +1860,13 @@ static public $yy_action = array(
         $this->yystack[$this->yyidx + 0]->minor
     );
     }
-#line 1855 "Parser.php"
-#line 314 "Parser.y"
+#line 1856 "Parser.php"
+#line 315 "Parser.y"
     function yy_r24(){
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . ' = (' . $this->yystack[$this->yyidx + 0]->minor . ');';
     }
-#line 1860 "Parser.php"
-#line 318 "Parser.y"
+#line 1861 "Parser.php"
+#line 319 "Parser.y"
     function yy_r25(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructAssign::compileOpen(
@@ -1874,8 +1875,8 @@ static public $yy_action = array(
         null
     );
     }
-#line 1870 "Parser.php"
-#line 337 "Parser.y"
+#line 1871 "Parser.php"
+#line 338 "Parser.y"
     function yy_r27(){
     $this->compiler->has_code = true;
     switch ($this->yystack[$this->yyidx + -1]->minor) {
@@ -1886,8 +1887,8 @@ static public $yy_action = array(
             $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor);
     }
     }
-#line 1882 "Parser.php"
-#line 348 "Parser.y"
+#line 1883 "Parser.php"
+#line 349 "Parser.y"
     function yy_r28(){
     $this->compiler->has_code = true;
     switch ($this->yystack[$this->yyidx + 0]->minor) {
@@ -1910,8 +1911,8 @@ static public $yy_action = array(
             $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + 0]->minor,array());
     }
     }
-#line 1906 "Parser.php"
-#line 372 "Parser.y"
+#line 1907 "Parser.php"
+#line 373 "Parser.y"
     function yy_r29(){
     $this->_retvalue = "ob_start();\n".$this->compiler->compileTag($this->yystack[$this->yyidx + -2]->minor,$this->yystack[$this->yyidx + 0]->minor).'echo ';
     $this->compiler->has_code = true;
@@ -1920,8 +1921,8 @@ static public $yy_action = array(
         'modifierlist' => $this->yystack[$this->yyidx + -1]->minor,
     ), null);
     }
-#line 1916 "Parser.php"
-#line 383 "Parser.y"
+#line 1917 "Parser.php"
+#line 384 "Parser.y"
     function yy_r30(){
     $tag = trim(substr($this->yystack[$this->yyidx + -1]->minor, $this->lex->ldel_length));
     $this->compiler->has_code = true;
@@ -1937,8 +1938,8 @@ static public $yy_action = array(
             break;
     }
     }
-#line 1933 "Parser.php"
-#line 399 "Parser.y"
+#line 1934 "Parser.php"
+#line 400 "Parser.y"
     function yy_r31(){
     $tag = trim(substr($this->yystack[$this->yyidx + -2]->minor, $this->lex->ldel_length));
     $this->compiler->has_code = true;
@@ -1954,8 +1955,8 @@ static public $yy_action = array(
             break;
     }
     }
-#line 1950 "Parser.php"
-#line 415 "Parser.y"
+#line 1951 "Parser.php"
+#line 416 "Parser.y"
     function yy_r32(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructFor::compileOpen(
@@ -1972,13 +1973,13 @@ static public $yy_action = array(
         null
     );
     }
-#line 1968 "Parser.php"
-#line 432 "Parser.y"
+#line 1969 "Parser.php"
+#line 433 "Parser.y"
     function yy_r33(){
     $this->_retvalue = '='.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1973 "Parser.php"
-#line 440 "Parser.y"
+#line 1974 "Parser.php"
+#line 441 "Parser.y"
     function yy_r35(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructFor::compileOpen(
@@ -1990,8 +1991,8 @@ static public $yy_action = array(
         null
     );
     }
-#line 1986 "Parser.php"
-#line 452 "Parser.y"
+#line 1987 "Parser.php"
+#line 453 "Parser.y"
     function yy_r36(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructFor::compileOpen(
@@ -2003,14 +2004,14 @@ static public $yy_action = array(
         null
     );
     }
-#line 1999 "Parser.php"
-#line 465 "Parser.y"
+#line 2000 "Parser.php"
+#line 466 "Parser.y"
     function yy_r37(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructForEach::compileOpen($this->compiler, $this->yystack[$this->yyidx + 0]->minor, null);
     }
-#line 2005 "Parser.php"
-#line 471 "Parser.y"
+#line 2006 "Parser.php"
+#line 472 "Parser.y"
     function yy_r38(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructForEach::compileOpen(
@@ -2019,8 +2020,8 @@ static public $yy_action = array(
         null
     );
     }
-#line 2015 "Parser.php"
-#line 480 "Parser.y"
+#line 2016 "Parser.php"
+#line 481 "Parser.y"
     function yy_r39(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructForEach::compileOpen(
@@ -2036,8 +2037,8 @@ static public $yy_action = array(
         null
     );
     }
-#line 2032 "Parser.php"
-#line 496 "Parser.y"
+#line 2033 "Parser.php"
+#line 497 "Parser.y"
     function yy_r40(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructForEach::compileOpen(
@@ -2046,8 +2047,8 @@ static public $yy_action = array(
         null
     );
     }
-#line 2042 "Parser.php"
-#line 505 "Parser.y"
+#line 2043 "Parser.php"
+#line 506 "Parser.y"
     function yy_r41(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructForEach::compileOpen(
@@ -2063,8 +2064,8 @@ static public $yy_action = array(
         null
     );
     }
-#line 2059 "Parser.php"
-#line 523 "Parser.y"
+#line 2060 "Parser.php"
+#line 524 "Parser.y"
     function yy_r42(){
     $j = strrpos($this->yystack[$this->yyidx + 0]->minor,'.');
     if ($this->yystack[$this->yyidx + 0]->minor[$j+1] == 'c') {
@@ -2075,8 +2076,8 @@ static public $yy_action = array(
         // $this->_retvalue = SMARTY_INTERNAL_COMPILE_BLOCK::compileParentBlock($this->compiler);
     }
     }
-#line 2071 "Parser.php"
-#line 536 "Parser.y"
+#line 2072 "Parser.php"
+#line 537 "Parser.y"
     function yy_r43(){
     switch ($this->yystack[$this->yyidx + 0]->minor) {
         case 'for':
@@ -2089,8 +2090,8 @@ static public $yy_action = array(
             $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + 0]->minor.'close',array());
     }
     }
-#line 2085 "Parser.php"
-#line 549 "Parser.y"
+#line 2086 "Parser.php"
+#line 550 "Parser.y"
     function yy_r44(){
     switch ($this->yystack[$this->yyidx + -1]->minor) {
         case 'for':
@@ -2103,24 +2104,24 @@ static public $yy_action = array(
             $this->_retvalue = $this->compiler->compileTag($this->yystack[$this->yyidx + -1]->minor.'close',array(),array('modifier_list'=>$this->yystack[$this->yyidx + 0]->minor));
     }
     }
-#line 2099 "Parser.php"
-#line 566 "Parser.y"
+#line 2100 "Parser.php"
+#line 567 "Parser.y"
     function yy_r45(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     $this->_retvalue[] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2105 "Parser.php"
-#line 572 "Parser.y"
+#line 2106 "Parser.php"
+#line 573 "Parser.y"
     function yy_r46(){
     $this->_retvalue = array($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2110 "Parser.php"
-#line 577 "Parser.y"
+#line 2111 "Parser.php"
+#line 578 "Parser.y"
     function yy_r47(){
     $this->_retvalue = array();
     }
-#line 2115 "Parser.php"
-#line 582 "Parser.y"
+#line 2116 "Parser.php"
+#line 583 "Parser.y"
     function yy_r48(){
     if (preg_match('~^true$~i', $this->yystack[$this->yyidx + 0]->minor)) {
         $this->_retvalue = array($this->yystack[$this->yyidx + -2]->minor=>'true');
@@ -2132,45 +2133,45 @@ static public $yy_action = array(
         $this->_retvalue = array($this->yystack[$this->yyidx + -2]->minor=>"'".$this->yystack[$this->yyidx + 0]->minor."'");
     }
     }
-#line 2128 "Parser.php"
-#line 594 "Parser.y"
+#line 2129 "Parser.php"
+#line 595 "Parser.y"
     function yy_r49(){
     $this->_retvalue = array(trim($this->yystack[$this->yyidx + -1]->minor," =\n\r\t")=>$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2133 "Parser.php"
-#line 602 "Parser.y"
+#line 2134 "Parser.php"
+#line 603 "Parser.y"
     function yy_r51(){
     $this->_retvalue = "'".$this->yystack[$this->yyidx + 0]->minor."'";
     }
-#line 2138 "Parser.php"
-#line 614 "Parser.y"
+#line 2139 "Parser.php"
+#line 615 "Parser.y"
     function yy_r54(){
     $this->_retvalue = array($this->yystack[$this->yyidx + -2]->minor=>$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2143 "Parser.php"
-#line 627 "Parser.y"
+#line 2144 "Parser.php"
+#line 628 "Parser.y"
     function yy_r56(){
     $this->yystack[$this->yyidx + -2]->minor[]=$this->yystack[$this->yyidx + 0]->minor;
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor;
     }
-#line 2149 "Parser.php"
-#line 632 "Parser.y"
+#line 2150 "Parser.php"
+#line 633 "Parser.y"
     function yy_r57(){
     $this->compiler->assert_is_not_strict('Variable variable assignment is not supported in strict mode', $this);
     $this->_retvalue = array('var' => $this->yystack[$this->yyidx + -2]->minor, 'value'=>$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2155 "Parser.php"
-#line 637 "Parser.y"
+#line 2156 "Parser.php"
+#line 638 "Parser.y"
     function yy_r58(){
     $this->_retvalue = array('var' => $this->yystack[$this->yyidx + -2]->minor, 'value'=>$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2160 "Parser.php"
-#line 661 "Parser.y"
+#line 2161 "Parser.php"
+#line 662 "Parser.y"
     function yy_r62(){
     $this->_retvalue = Wrappers\StaticWrapper::static_if_all($this->yystack[$this->yyidx + -2]->minor . trim($this->yystack[$this->yyidx + -1]->minor) . $this->yystack[$this->yyidx + 0]->minor, array($this->yystack[$this->yyidx + -2]->minor, $this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2165 "Parser.php"
-#line 680 "Parser.y"
+#line 2166 "Parser.php"
+#line 681 "Parser.y"
     function yy_r66(){
     $this->compiler->has_code = true;
     $this->_retvalue = Constructs\ConstructModifier::compileOpen($this->compiler, array(
@@ -2178,120 +2179,120 @@ static public $yy_action = array(
         'modifierlist' => $this->yystack[$this->yyidx + 0]->minor,
     ), null);
     }
-#line 2174 "Parser.php"
-#line 690 "Parser.y"
+#line 2175 "Parser.php"
+#line 691 "Parser.y"
     function yy_r67(){
     $this->_retvalue = new Wrappers\StaticWrapper($this->yystack[$this->yyidx + -2]->minor.$this->yystack[$this->yyidx + -1]->minor.$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2179 "Parser.php"
-#line 694 "Parser.y"
+#line 2180 "Parser.php"
+#line 695 "Parser.y"
     function yy_r68(){
     $this->_retvalue = new Wrappers\StaticWrapper('in_array('.$this->yystack[$this->yyidx + -2]->minor.','.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2184 "Parser.php"
-#line 698 "Parser.y"
+#line 2185 "Parser.php"
+#line 699 "Parser.y"
     function yy_r69(){
     $this->_retvalue = new Wrappers\StaticWrapper('in_array('.$this->yystack[$this->yyidx + -2]->minor.',(array)'.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2189 "Parser.php"
-#line 706 "Parser.y"
+#line 2190 "Parser.php"
+#line 707 "Parser.y"
     function yy_r71(){
     $this->_retvalue = new Wrappers\StaticWrapper('!('.$this->yystack[$this->yyidx + -2]->minor.' % '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2194 "Parser.php"
-#line 710 "Parser.y"
+#line 2195 "Parser.php"
+#line 711 "Parser.y"
     function yy_r72(){
     $this->compiler->assert_is_not_strict('`is not div by` is not supported in strict mode', $this);
     $this->_retvalue = new Wrappers\StaticWrapper('('.$this->yystack[$this->yyidx + -2]->minor.' % '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2200 "Parser.php"
-#line 715 "Parser.y"
+#line 2201 "Parser.php"
+#line 716 "Parser.y"
     function yy_r73(){
     $this->_retvalue = new Wrappers\StaticWrapper('!(1 & '.$this->yystack[$this->yyidx + -1]->minor.')');
     }
-#line 2205 "Parser.php"
-#line 719 "Parser.y"
+#line 2206 "Parser.php"
+#line 720 "Parser.y"
     function yy_r74(){
     $this->compiler->assert_is_not_strict('`is not even` is not supported in strict mode', $this);
     $this->_retvalue = new Wrappers\StaticWrapper('(1 & '.$this->yystack[$this->yyidx + -1]->minor.')');
     }
-#line 2211 "Parser.php"
-#line 724 "Parser.y"
+#line 2212 "Parser.php"
+#line 725 "Parser.y"
     function yy_r75(){
     $this->compiler->assert_is_not_strict('`is even by` is not supported in strict mode', $this);
     $this->_retvalue = new Wrappers\StaticWrapper('!(1 & '.$this->yystack[$this->yyidx + -2]->minor.' / '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2217 "Parser.php"
-#line 729 "Parser.y"
+#line 2218 "Parser.php"
+#line 730 "Parser.y"
     function yy_r76(){
     $this->compiler->assert_is_not_strict('`is not even by` is not supported in strict mode', $this);
     $this->_retvalue = new Wrappers\StaticWrapper('(1 & '.$this->yystack[$this->yyidx + -2]->minor.' / '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2223 "Parser.php"
-#line 734 "Parser.y"
+#line 2224 "Parser.php"
+#line 735 "Parser.y"
     function yy_r77(){
     $this->_retvalue = new Wrappers\StaticWrapper('(1 & '.$this->yystack[$this->yyidx + -1]->minor.')');
     }
-#line 2228 "Parser.php"
-#line 738 "Parser.y"
+#line 2229 "Parser.php"
+#line 739 "Parser.y"
     function yy_r78(){
     $this->compiler->assert_is_not_strict('`is not odd` is not supported in strict mode', $this);
     $this->_retvalue = new Wrappers\StaticWrapper('!(1 & '.$this->yystack[$this->yyidx + -1]->minor.')');
     }
-#line 2234 "Parser.php"
-#line 743 "Parser.y"
+#line 2235 "Parser.php"
+#line 744 "Parser.y"
     function yy_r79(){
     $this->compiler->assert_is_not_strict('`is odd by` is not supported in strict mode', $this);
     $this->_retvalue = new Wrappers\StaticWrapper('(1 & '.$this->yystack[$this->yyidx + -2]->minor.' / '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2240 "Parser.php"
-#line 748 "Parser.y"
+#line 2241 "Parser.php"
+#line 749 "Parser.y"
     function yy_r80(){
     $this->compiler->assert_is_not_strict('`is not odd by` is not supported in strict mode', $this);
     $this->_retvalue = new Wrappers\StaticWrapper('!(1 & '.$this->yystack[$this->yyidx + -2]->minor.' / '.$this->yystack[$this->yyidx + 0]->minor.')');
     }
-#line 2246 "Parser.php"
-#line 756 "Parser.y"
+#line 2247 "Parser.php"
+#line 757 "Parser.y"
     function yy_r81(){
     $this->_retvalue = $this->yystack[$this->yyidx + -6]->minor.' ? '. $this->compileVariable("'".$this->yystack[$this->yyidx + -2]->minor."'") . ' : '.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2251 "Parser.php"
-#line 760 "Parser.y"
+#line 2252 "Parser.php"
+#line 761 "Parser.y"
     function yy_r82(){
     $this->_retvalue = $this->yystack[$this->yyidx + -5]->minor.' ? '.$this->yystack[$this->yyidx + -2]->minor.' : '.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2256 "Parser.php"
-#line 770 "Parser.y"
+#line 2257 "Parser.php"
+#line 771 "Parser.y"
     function yy_r84(){
     $this->_retvalue = Wrappers\StaticWrapper::static_concat($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2261 "Parser.php"
-#line 775 "Parser.y"
+#line 2262 "Parser.php"
+#line 776 "Parser.y"
     function yy_r85(){
     $this->_retvalue = Wrappers\StaticWrapper::static_concat('!', $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2266 "Parser.php"
-#line 788 "Parser.y"
+#line 2267 "Parser.php"
+#line 789 "Parser.y"
     function yy_r88(){
     $this->_retvalue = new Wrappers\StaticWrapper($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2271 "Parser.php"
-#line 792 "Parser.y"
+#line 2272 "Parser.php"
+#line 793 "Parser.y"
     function yy_r89(){
     $this->_retvalue = new Wrappers\StaticWrapper($this->yystack[$this->yyidx + -2]->minor.'.'.$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2276 "Parser.php"
-#line 796 "Parser.y"
+#line 2277 "Parser.php"
+#line 797 "Parser.y"
     function yy_r90(){
     $this->_retvalue = new Wrappers\StaticWrapper($this->yystack[$this->yyidx + -1]->minor.'.');
     }
-#line 2281 "Parser.php"
-#line 800 "Parser.y"
+#line 2282 "Parser.php"
+#line 801 "Parser.y"
     function yy_r91(){
     $this->_retvalue = new Wrappers\StaticWrapper('.'.$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2286 "Parser.php"
-#line 805 "Parser.y"
+#line 2287 "Parser.php"
+#line 806 "Parser.y"
     function yy_r92(){
     if (preg_match('~^true$~i', $this->yystack[$this->yyidx + 0]->minor)) {
         $this->_retvalue = new Wrappers\StaticWrapper('true');
@@ -2303,23 +2304,23 @@ static public $yy_action = array(
         $this->_retvalue = new Wrappers\StaticWrapper(var_export($this->yystack[$this->yyidx + 0]->minor, true));
     }
     }
-#line 2299 "Parser.php"
-#line 823 "Parser.y"
+#line 2300 "Parser.php"
+#line 824 "Parser.y"
     function yy_r94(){
     $this->_retvalue = Wrappers\StaticWrapper::static_if_all("(". $this->yystack[$this->yyidx + -1]->minor .")", array($this->yystack[$this->yyidx + -1]->minor));
     }
-#line 2304 "Parser.php"
-#line 839 "Parser.y"
+#line 2305 "Parser.php"
+#line 840 "Parser.y"
     function yy_r97(){
     $this->_retvalue = 'array(ob_start(),' . $this->yystack[$this->yyidx + -1]->minor . ', ob_get_clean())[2]';
     }
-#line 2309 "Parser.php"
-#line 864 "Parser.y"
+#line 2310 "Parser.php"
+#line 865 "Parser.y"
     function yy_r101(){
     $this->_retvalue = $this->compileSafeLookupWithBase($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2314 "Parser.php"
-#line 869 "Parser.y"
+#line 2315 "Parser.php"
+#line 870 "Parser.y"
     function yy_r102(){
     if ($this->yystack[$this->yyidx + -2]->minor == '\'smarty\'') {
         switch (Decompile::decompileString($this->yystack[$this->yyidx + -1]->minor)) {
@@ -2337,8 +2338,8 @@ static public $yy_action = array(
         $this->_retvalue = $this->compileSafeLookupWithBase($this->_retvalue, $this->yystack[$this->yyidx + 0]->minor);
     }
     }
-#line 2333 "Parser.php"
-#line 887 "Parser.y"
+#line 2334 "Parser.php"
+#line 888 "Parser.y"
     function yy_r103(){
     if ($this->yystack[$this->yyidx + -1]->minor == '\'smarty\'') {
         switch (Decompile::decompileString($this->yystack[$this->yyidx + 0]->minor)) {
@@ -2365,65 +2366,65 @@ static public $yy_action = array(
         $this->_retvalue = $this->compileSafeLookupWithBase($this->compileVariable($this->yystack[$this->yyidx + -1]->minor), $this->yystack[$this->yyidx + 0]->minor);
     }
     }
-#line 2361 "Parser.php"
-#line 914 "Parser.y"
+#line 2362 "Parser.php"
+#line 915 "Parser.y"
     function yy_r104(){
     $this->_retvalue = $this->compileVariable($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2366 "Parser.php"
-#line 922 "Parser.y"
+#line 2367 "Parser.php"
+#line 923 "Parser.y"
     function yy_r106(){
     $this->_retvalue = $this->compileVariable($this->yystack[$this->yyidx + -2]->minor, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2371 "Parser.php"
-#line 928 "Parser.y"
+#line 2372 "Parser.php"
+#line 929 "Parser.y"
     function yy_r107(){
     $this->compiler->assert_is_not_strict('Variable indicies with dot syntax is not supported in strict mode', $this);
     $this->_retvalue = $this->compileVariable($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2377 "Parser.php"
-#line 933 "Parser.y"
+#line 2378 "Parser.php"
+#line 934 "Parser.y"
     function yy_r108(){
     $this->compiler->assert_is_not_strict('Variable indicies with dot syntax is not supported in strict mode', $this);
     $this->_retvalue = $this->compileVariable($this->yystack[$this->yyidx + -2]->minor).'->'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2383 "Parser.php"
-#line 938 "Parser.y"
+#line 2384 "Parser.php"
+#line 939 "Parser.y"
     function yy_r109(){
     $this->_retvalue = "'". $this->yystack[$this->yyidx + 0]->minor ."'";
     }
-#line 2388 "Parser.php"
-#line 946 "Parser.y"
+#line 2389 "Parser.php"
+#line 947 "Parser.y"
     function yy_r111(){
     $this->compiler->assert_is_not_strict('Dot syntax with expressions is not supported in strict mode', $this);
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
-#line 2394 "Parser.php"
-#line 964 "Parser.y"
+#line 2395 "Parser.php"
+#line 965 "Parser.y"
     function yy_r114(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor.'.'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2399 "Parser.php"
-#line 969 "Parser.y"
+#line 2400 "Parser.php"
+#line 970 "Parser.y"
     function yy_r115(){
     $this->_retvalue = '\''.$this->yystack[$this->yyidx + 0]->minor.'\'';
     }
-#line 2404 "Parser.php"
-#line 974 "Parser.y"
+#line 2405 "Parser.php"
+#line 975 "Parser.y"
     function yy_r116(){
     $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     $this->_retvalue = '('.$this->yystack[$this->yyidx + -1]->minor.')';
     }
-#line 2410 "Parser.php"
-#line 984 "Parser.y"
+#line 2411 "Parser.php"
+#line 985 "Parser.y"
     function yy_r117(){
     if ($this->security && substr($this->yystack[$this->yyidx + 0]->minor, 0, 1) == '_') {
         $this->compiler->trigger_template_error(self::Err1);
     }
     $this->_retvalue = '->'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2418 "Parser.php"
-#line 991 "Parser.y"
+#line 2419 "Parser.php"
+#line 992 "Parser.y"
     function yy_r118(){
     $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
@@ -2431,8 +2432,8 @@ static public $yy_action = array(
     }
     $this->_retvalue = '->{'.$this->compileVariable($this->yystack[$this->yyidx + 0]->minor).'}';
     }
-#line 2427 "Parser.php"
-#line 999 "Parser.y"
+#line 2428 "Parser.php"
+#line 1000 "Parser.y"
     function yy_r119(){
     $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
@@ -2440,8 +2441,8 @@ static public $yy_action = array(
     }
     $this->_retvalue = '->{'.$this->yystack[$this->yyidx + -1]->minor.'}';
     }
-#line 2436 "Parser.php"
-#line 1007 "Parser.y"
+#line 2437 "Parser.php"
+#line 1008 "Parser.y"
     function yy_r120(){
     $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
     if ($this->security) {
@@ -2449,13 +2450,13 @@ static public $yy_action = array(
     }
     $this->_retvalue = '->{\''.$this->yystack[$this->yyidx + -3]->minor.'\'.'.$this->yystack[$this->yyidx + -1]->minor.'}';
     }
-#line 2445 "Parser.php"
-#line 1016 "Parser.y"
+#line 2446 "Parser.php"
+#line 1017 "Parser.y"
     function yy_r121(){
     $this->_retvalue = '->'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2450 "Parser.php"
-#line 1024 "Parser.y"
+#line 2451 "Parser.php"
+#line 1025 "Parser.y"
     function yy_r122(){
     if (!$this->security || $this->smarty->security_policy->isTrustedPhpFunction($this->yystack[$this->yyidx + -3]->minor, $this->compiler)) {
         if (strcasecmp($this->yystack[$this->yyidx + -3]->minor, 'isset') === 0 || strcasecmp($this->yystack[$this->yyidx + -3]->minor, 'empty') === 0 || strcasecmp($this->yystack[$this->yyidx + -3]->minor, 'array') === 0 || is_callable($this->yystack[$this->yyidx + -3]->minor)) {
@@ -2501,173 +2502,173 @@ static public $yy_action = array(
         }
     }
     }
-#line 2497 "Parser.php"
-#line 1073 "Parser.y"
+#line 2498 "Parser.php"
+#line 1074 "Parser.y"
     function yy_r123(){
     if ($this->security && substr($this->yystack[$this->yyidx + -3]->minor,0,1) == '_') {
         $this->compiler->trigger_template_error(self::Err1);
     }
     $this->_retvalue = $this->yystack[$this->yyidx + -3]->minor . "(". implode(',',$this->yystack[$this->yyidx + -1]->minor) .")";
     }
-#line 2505 "Parser.php"
-#line 1082 "Parser.y"
+#line 2506 "Parser.php"
+#line 1083 "Parser.y"
     function yy_r124(){
     $this->_retvalue = array_merge($this->yystack[$this->yyidx + -2]->minor,array($this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2510 "Parser.php"
-#line 1099 "Parser.y"
+#line 2511 "Parser.php"
+#line 1100 "Parser.y"
     function yy_r127(){
     $this->_retvalue = array_merge($this->yystack[$this->yyidx + -2]->minor,array(array_merge($this->yystack[$this->yyidx + -1]->minor,$this->yystack[$this->yyidx + 0]->minor)));
     }
-#line 2515 "Parser.php"
-#line 1103 "Parser.y"
+#line 2516 "Parser.php"
+#line 1104 "Parser.y"
     function yy_r128(){
     $this->_retvalue = array(array_merge($this->yystack[$this->yyidx + -1]->minor,$this->yystack[$this->yyidx + 0]->minor));
     }
-#line 2520 "Parser.php"
-#line 1107 "Parser.y"
+#line 2521 "Parser.php"
+#line 1108 "Parser.y"
     function yy_r129(){
     $this->compiler->assert_is_not_strict('@ is not allowed in templates', $this);
     $this->_retvalue = array($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2526 "Parser.php"
-#line 1112 "Parser.y"
+#line 2527 "Parser.php"
+#line 1113 "Parser.y"
     function yy_r130(){
     $this->_retvalue =  array($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2531 "Parser.php"
-#line 1120 "Parser.y"
+#line 2532 "Parser.php"
+#line 1121 "Parser.y"
     function yy_r131(){
     $this->_retvalue = array_merge($this->yystack[$this->yyidx + -1]->minor,$this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2536 "Parser.php"
-#line 1140 "Parser.y"
+#line 2537 "Parser.php"
+#line 1141 "Parser.y"
     function yy_r135(){
     $this->_retvalue = '==';
     }
-#line 2541 "Parser.php"
-#line 1144 "Parser.y"
+#line 2542 "Parser.php"
+#line 1145 "Parser.y"
     function yy_r136(){
     $this->_retvalue = '!=';
     }
-#line 2546 "Parser.php"
-#line 1148 "Parser.y"
+#line 2547 "Parser.php"
+#line 1149 "Parser.y"
     function yy_r137(){
     $this->_retvalue = '>';
     }
-#line 2551 "Parser.php"
-#line 1152 "Parser.y"
+#line 2552 "Parser.php"
+#line 1153 "Parser.y"
     function yy_r138(){
     $this->_retvalue = '<';
     }
-#line 2556 "Parser.php"
-#line 1156 "Parser.y"
+#line 2557 "Parser.php"
+#line 1157 "Parser.y"
     function yy_r139(){
     $this->_retvalue = '>=';
     }
-#line 2561 "Parser.php"
-#line 1160 "Parser.y"
+#line 2562 "Parser.php"
+#line 1161 "Parser.y"
     function yy_r140(){
     $this->_retvalue = '<=';
     }
-#line 2566 "Parser.php"
-#line 1164 "Parser.y"
+#line 2567 "Parser.php"
+#line 1165 "Parser.y"
     function yy_r141(){
     $this->_retvalue = '===';
     }
-#line 2571 "Parser.php"
-#line 1168 "Parser.y"
+#line 2572 "Parser.php"
+#line 1169 "Parser.y"
     function yy_r142(){
     $this->_retvalue = '!==';
     }
-#line 2576 "Parser.php"
-#line 1172 "Parser.y"
+#line 2577 "Parser.php"
+#line 1173 "Parser.y"
     function yy_r143(){
     $this->_retvalue = '%';
     }
-#line 2581 "Parser.php"
-#line 1176 "Parser.y"
+#line 2582 "Parser.php"
+#line 1177 "Parser.y"
     function yy_r144(){
     $this->_retvalue = '&&';
     }
-#line 2586 "Parser.php"
-#line 1180 "Parser.y"
+#line 2587 "Parser.php"
+#line 1181 "Parser.y"
     function yy_r145(){
     $this->_retvalue = '||';
     }
-#line 2591 "Parser.php"
-#line 1184 "Parser.y"
+#line 2592 "Parser.php"
+#line 1185 "Parser.y"
     function yy_r146(){
     $this->compiler->assert_is_not_strict('XOR is not supported in strict mode', $this);
     $this->_retvalue = ' XOR ';
     }
-#line 2597 "Parser.php"
-#line 1192 "Parser.y"
+#line 2598 "Parser.php"
+#line 1193 "Parser.y"
     function yy_r147(){
     $this->_retvalue = 'array('.$this->yystack[$this->yyidx + -1]->minor.')';
     }
-#line 2602 "Parser.php"
-#line 1200 "Parser.y"
+#line 2603 "Parser.php"
+#line 1201 "Parser.y"
     function yy_r149(){
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor.','.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2607 "Parser.php"
-#line 1204 "Parser.y"
+#line 2608 "Parser.php"
+#line 1205 "Parser.y"
     function yy_r150(){
     return;
     }
-#line 2612 "Parser.php"
-#line 1208 "Parser.y"
+#line 2613 "Parser.php"
+#line 1209 "Parser.y"
     function yy_r151(){
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor.'=>'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2617 "Parser.php"
-#line 1212 "Parser.y"
+#line 2618 "Parser.php"
+#line 1213 "Parser.y"
     function yy_r152(){
     $this->_retvalue = '\''.$this->yystack[$this->yyidx + -2]->minor.'\'=>'.$this->yystack[$this->yyidx + 0]->minor;
     }
-#line 2622 "Parser.php"
-#line 1224 "Parser.y"
+#line 2623 "Parser.php"
+#line 1225 "Parser.y"
     function yy_r154(){
     $this->_retvalue = "''";
     }
-#line 2627 "Parser.php"
-#line 1228 "Parser.y"
+#line 2628 "Parser.php"
+#line 1229 "Parser.y"
     function yy_r155(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor->to_smarty_php();
     }
-#line 2632 "Parser.php"
-#line 1233 "Parser.y"
+#line 2633 "Parser.php"
+#line 1234 "Parser.y"
     function yy_r156(){
     $this->yystack[$this->yyidx + -1]->minor->append_subtree($this->yystack[$this->yyidx + 0]->minor);
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
-#line 2638 "Parser.php"
-#line 1238 "Parser.y"
+#line 2639 "Parser.php"
+#line 1239 "Parser.y"
     function yy_r157(){
     $this->_retvalue = new Helpers\DoubleQuoted($this, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2643 "Parser.php"
-#line 1242 "Parser.y"
+#line 2644 "Parser.php"
+#line 1243 "Parser.y"
     function yy_r158(){
     $this->_retvalue = new Helpers\Code($this, '(string)' . $this->compileVariable("'" . substr($this->yystack[$this->yyidx + 0]->minor,1) . "'"));
     }
-#line 2648 "Parser.php"
-#line 1246 "Parser.y"
+#line 2649 "Parser.php"
+#line 1247 "Parser.y"
     function yy_r159(){
     $this->_retvalue = new Helpers\Code($this, '(string)'.$this->yystack[$this->yyidx + -1]->minor);
     }
-#line 2653 "Parser.php"
-#line 1250 "Parser.y"
+#line 2654 "Parser.php"
+#line 1251 "Parser.y"
     function yy_r160(){
     $this->_retvalue = new Helpers\Code($this, '(string)('.$this->yystack[$this->yyidx + -1]->minor.')');
     }
-#line 2658 "Parser.php"
-#line 1254 "Parser.y"
+#line 2659 "Parser.php"
+#line 1255 "Parser.y"
     function yy_r161(){
     $this->_retvalue = new Helpers\DoubleQuotedContent($this, $this->yystack[$this->yyidx + 0]->minor);
     }
-#line 2663 "Parser.php"
+#line 2664 "Parser.php"
 
     private $_retvalue;
 
@@ -2715,12 +2716,12 @@ static public $yy_action = array(
 
     public function yy_syntax_error($yymajor, $TOKEN)
     {
-#line 120 "Parser.y"
+#line 121 "Parser.y"
 
     $this->internalError = true;
     $this->yymajor = $yymajor;
     $this->compiler->trigger_template_error();
-#line 2717 "Parser.php"
+#line 2718 "Parser.php"
     }
 
     public function yy_accept()
@@ -2728,12 +2729,12 @@ static public $yy_action = array(
         while ($this->yyidx >= 0) {
             $stack = $this->yy_pop_parser_stack();
         }
-#line 113 "Parser.y"
+#line 114 "Parser.y"
 
     $this->successful = !$this->internalError;
     $this->internalError = false;
     $this->retvalue = $this->_retvalue;
-#line 2731 "Parser.php"
+#line 2732 "Parser.php"
     }
 
     public function doParse($yymajor, $yytokenvalue)

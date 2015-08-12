@@ -78,6 +78,7 @@ class StrictModeTest extends Smarty_TestCase
      */
     public function testThingsThatArentBannedDontGetBanned($source) {
         $this->smarty->createTemplate('eval:{* set strict *}' . $source)->compileTemplateSource();
+        $this->assertTrue(true); // to prevent this from being a sketchy test
     }
 
     public function banned_plugin_provider() {

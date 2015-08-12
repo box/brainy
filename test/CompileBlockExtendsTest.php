@@ -246,7 +246,7 @@ class CompileBlockExtendsTest extends Smarty_TestCase
      */
     public function testChildStrip_023() {
         $result = $this->smarty->fetch('023_child.tpl');
-        $this->assertContains('<div id="header"><div>Demo</div></div>', $result);
+        $this->assertContains('<div id="header"> <div>Demo</div></div>', $result);
     }
 
     /**
