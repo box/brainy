@@ -717,7 +717,6 @@ variable(res)  ::= variableinternal(base). {
 }
 
 variablebase(res)  ::= DOLLAR varvar(v). {
-    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     res = v;
 }
 
@@ -819,23 +818,22 @@ indexdef(res)   ::= OPENB expr(e) CLOSEB. {
 
 // single identifier element
 varvar(res)      ::= varvarele(v). {
-    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     res = v;
 }
 
-                    // sequence of identifier elements
+// sequence of identifier elements
 varvar(res)      ::= varvar(v1) varvarele(v2). {
-    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     res = v1.'.'.v2;
 }
 
-                    // fix sections of element
+// fix sections of element
 varvarele(res)   ::= ID(s). {
     res = '\''.s.'\'';
 }
 
-                    // variable sections of element
+// variable sections of element
 varvarele(res)   ::= LDEL expr(e) RDEL. {
+    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     res = '('.e.')';
 }
 
