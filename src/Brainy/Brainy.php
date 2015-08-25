@@ -42,7 +42,7 @@ if (!defined('SMARTY_PLUGINS_DIR')) {
 }
 
 
-class Brainy extends Templates\TemplateBase
+class Brainy extends Templates\TemplateData
 {
     /**
      * The current version string for the current version of Brainy.
@@ -98,11 +98,6 @@ class Brainy extends Templates\TemplateBase
      * @var string
      */
     const PLUGIN_FUNCTION = 'function';
-    /**
-     * Represents a block plugin
-     * @var string
-     */
-    const PLUGIN_BLOCK = 'block';
     /**
      * Represents a compiler plugin
      * @var string
@@ -389,11 +384,6 @@ class Brainy extends Templates\TemplateBase
      * @internal
      */
     public $registered_plugins = array();
-    /**
-     * The order in which to search for plugins
-     * @var string[]
-     */
-    public $plugin_search_order = array('function', 'block', 'compiler', 'class');
     /**
      * registered resources
      * @var array
@@ -761,48 +751,6 @@ class Brainy extends Templates\TemplateBase
         return $tpl;
     }
 
-
-    /**
-     * Takes unknown classes and loads plugin files for them
-     * class name format: Smarty_PluginType_PluginName
-     * plugin filename format: plugintype.pluginname.php
-     *
-     * @param  string $plugin_name class plugin name to load
-     * @param  bool   $check       check if already loaded
-     * @return string |boolean filepath of loaded file or false
-     */
-    public function loadPlugin($plugin_name, $check = false) {
-        // if function or class exists, exit silently (already loaded)
-        if ($check && (is_callable($plugin_name) || class_exists($plugin_name, false))) {
-            return true;
-        }
-        // Plugin name is expected to be: Smarty_[Type]_[Name]
-        $_name_parts = explode('_', $plugin_name, 3);
-        // class name must have three parts to be valid plugin
-        // count($_name_parts) < 3 === !isset($_name_parts[2])
-        if (!isset($_name_parts[2]) || strtolower($_name_parts[0]) !== 'smarty') {
-            throw new SmartyException("plugin {$plugin_name} is not a valid name format");
-
-            return false;
-        }
-        // plugin filename is expected to be: [type].[name].php
-        $_plugin_filename = "{$_name_parts[1]}.{$_name_parts[2]}.php";
-
-        // loop through plugin dirs and find the plugin
-        foreach ($this->getPluginsDir() as $_plugin_dir) {
-            if (file_exists($_plugin_dir . $_plugin_filename)) {
-                require_once $_plugin_dir . $_plugin_filename;
-                return $_plugin_dir . $_plugin_filename;
-            }
-            if (file_exists($_plugin_dir . strtolower($_plugin_filename))) {
-                require_once $_plugin_dir . strtolower($_plugin_filename);
-                return $_plugin_dir . strtolower($_plugin_filename);
-            }
-        }
-        // no plugin loaded
-        return false;
-    }
-
     /**
      * Compile all template files
      *
@@ -844,4 +792,125 @@ class Brainy extends Templates\TemplateBase
      * @return void
      */
     public function fetchedTemplate($templatePath) {}
+
+    /**
+     * Registers plugin to be used in templates
+     *
+     * @param  string                       $type       plugin type
+     * @param  string                       $tag        name of template tag
+     * @param  callable                     $callback   PHP callback to register
+     * @param  boolean                      $cacheable  if true (default) this fuction is cachable
+     * @param  array|null                   $cache_attr caching attributes if any
+     * @return Brainy Self-reference to facilitate chaining
+     * @throws SmartyException              when the plugin tag is invalid
+     */
+    public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null) {
+        if (isset($this->registered_plugins[$type][$tag])) {
+            throw new Exceptions\SmartyException("Plugin tag \"{$tag}\" already registered");
+        } elseif (!is_callable($callback)) {
+            throw new Exceptions\SmartyException("Plugin \"{$tag}\" not callable");
+        }
+
+        $this->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
+        return $this;
+    }
+
+    /**
+     * Unregister Plugin
+     *
+     * @param  string                       $type of plugin
+     * @param  string                       $tag  name of plugin
+     * @return Brainy Self-reference to facilitate chaining
+     */
+    public function unregisterPlugin($type, $tag) {
+        if (isset($this->registered_plugins[$type][$tag])) {
+            unset($this->registered_plugins[$type][$tag]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Registers a resource to fetch a template
+     * @param  string                       $type     name of resource type
+     * @param  \Box\Brainy\Resources\Resource|\Box\Brainy\Resources\Resource[] $callback Instance of \Box\Brainy\Resources\Resource, or array of callbacks to handle resource (deprecated)
+     * @return Brainy Self-reference to facilitate chaining
+     */
+    public function registerResource($type, $callback) {
+        $this->registered_resources[$type] = $callback instanceof \Box\Brainy\Resources\Resource ? $callback : array($callback, false);
+
+        return $this;
+    }
+
+    /**
+     * Unregisters a resource
+     * @param  string                       $type name of resource type
+     * @return Brainy Self-reference to facilitate chaining
+     */
+    public function unregisterResource($type) {
+        if (isset($this->registered_resources[$type])) {
+            unset($this->registered_resources[$type]);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Sets the left delimiter
+     * @param string $delim
+     */
+    public function setLeftDelimiter($delim)
+    {
+        $this->left_delimiter = $delim;
+    }
+    /**
+     * Gets the left delimiter
+     * @return string
+     */
+    public function getLeftDelimiter()
+    {
+        return $this->left_delimiter;
+    }
+
+    /**
+     * Sets the right delimiter
+     * @param string $delim
+     */
+    public function setRightDelimiter($delim)
+    {
+        $this->right_delimiter = $delim;
+    }
+    /**
+     * Gets the right delimiter
+     * @return string
+     */
+    public function getRightDelimiter()
+    {
+        return $this->right_delimiter;
+    }
+
+
+    /**
+     * Proxy to fetch() on a template
+     * @return string
+     */
+    public function fetch()
+    {
+        $args = func_get_args();
+        $template = new Templates\TemplateBase($this);
+        return call_user_func_array(array($template, 'fetch'), $args);
+    }
+
+    /**
+     * Proxy to display() on a template
+     * @return string
+     */
+    public function display()
+    {
+        $args = func_get_args();
+        $template = new Templates\TemplateBase($this);
+        return call_user_func_array(array($template, 'display'), $args);
+    }
+
 }

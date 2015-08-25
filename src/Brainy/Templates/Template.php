@@ -37,11 +37,6 @@ class Template extends TemplateBase
      */
     public $required_plugins = array('compiled' => array());
     /**
-     * Global smarty instance
-     * @var Smarty
-     */
-    public $smarty = null;
-    /**
      * blocks for template inheritance
      * @var array
      */
@@ -56,11 +51,6 @@ class Template extends TemplateBase
      * @var array
      */
     public $_capture_stack = array(0 => array());
-    /**
-     * Flag indicating that the template is running in strict mode
-     * @var bool
-     */
-    public $strict_mode = false;
 
     /**
      * Create template data object
@@ -74,7 +64,7 @@ class Template extends TemplateBase
      * @param mixed                    $_compile_id       compile id or null
      */
     public function __construct($template_resource, $smarty, $_parent = null, $_compile_id = null) {
-        $this->smarty = &$smarty;
+        parent::__construct($smarty);
         // Smarty parameter
         $this->compile_id = $_compile_id === null ? $this->smarty->compile_id : $_compile_id;
         $this->parent = $_parent;
@@ -262,8 +252,7 @@ class Template extends TemplateBase
         // build property code
         $output = '';
         if (!$this->source->recompiled) {
-            $output = "/*%%SmartyHeaderCode%%*/";
-            $output .= "if(!defined('SMARTY_DIR')) exit('no direct access allowed');\n";
+            $output = "/*%%SmartyHeaderCode%%*/\n";
         }
         if ($cache) {
             // remove compiled code of{function} definition
@@ -275,7 +264,7 @@ class Template extends TemplateBase
         }
         if (!$this->source->recompiled) {
             $output .= "\$_valid = \$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ',' . ($cache ? 'true' : 'false') . "); /*/%%SmartyHeaderCode%%*/\n";
-            $output .= 'if ($_valid && !is_callable(\'' . $this->properties['unifunc'] . '\')) {';
+            $output .= 'if ($_valid && !is_callable(\'' . $this->properties['unifunc'] . "')) {\n";
 
             // Output a proper PHPDoc for Augmented Types users.
             $output .= <<<'PHPDOC'
@@ -283,6 +272,7 @@ class Template extends TemplateBase
  * @param \Box\Brainy\Templates\TemplateBase $_smarty_tpl The smarty template instance
  * @return void
  */
+
 PHPDOC;
 
             $output .= 'function ' . $this->properties['unifunc'] . "(\$_smarty_tpl) {\n";
@@ -290,7 +280,7 @@ PHPDOC;
         $output .= $plugins_string;
         $output .= $content;
         if (!$this->source->recompiled) {
-            $output .= "}\n}\n";
+            $output .= "\n}\n}\n";
         }
 
         return $output;
@@ -482,18 +472,6 @@ PHPDOC;
         }
 
         throw new SmartyException("template property '$property_name' does not exist.");
-    }
-
-    /**
-     * @param string $reason
-     * @return void
-     * @throws BrainyStrictModeException
-     */
-    public function assert_is_not_strict($reason)
-    {
-        if (Brainy::$strict_mode || $this->strict_mode) {
-            throw new BrainyStrictModeException('Strict Mode: ' . $reason);
-        }
     }
 
     /**

@@ -35,21 +35,6 @@ class RegisterCompilerFunctionTest extends Smarty_TestCase
         $this->assertEquals('open tag hallo close tag', $result);
     }
     /**
-     * test register->compilerFunction method for static class
-     */
-    public function testRegisterCompilerFunctionClass() {
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction', array('mycompilerfunctionclass', 'execute'));
-        $this->assertEquals('hello world 2', $this->smarty->fetch('eval:{testcompilerfunction var1=2}'));
-    }
-    /**
-     * test register->compilerFunction method for objects
-     */
-    public function testRegisterCompilerFunctionObject() {
-        $obj = new mycompilerfunctionclass;
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction', array($obj, 'compile'));
-        $this->assertEquals('hello world 3', $this->smarty->fetch('eval:{testcompilerfunction var2=3}'));
-    }
-    /**
      * test unregister->compilerFunction method
      */
     public function testUnregisterCompilerFunction() {
@@ -64,14 +49,6 @@ class RegisterCompilerFunctionTest extends Smarty_TestCase
         $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction');
         $this->assertFalse(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_COMPILER]['testcompilerfunction']));
     }
-    /**
-     * test unregister->compilerFunction method other registered
-     */
-    public function testUnregisterCompilerFunctionOtherRegistered() {
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testcompilerfunction', 'mycompilerfunction');
-        $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_COMPILER,'testcompilerfunction');
-        $this->assertTrue(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_BLOCK]['testcompilerfunction']));
-    }
 }
 function mycompilerfunction($params, $smarty) {
     return "echo 'hello world {$params['var']}';\n";
@@ -81,13 +58,4 @@ function mycompilerfunctionopen($params, $smarty) {
 }
 function mycompilerfunctionclose($params, $smarty) {
     return "echo 'close tag';\n";
-}
-class mycompilerfunctionclass
-{
-    static function execute($params, $smarty) {
-        return "echo 'hello world {$params['var1']}';\n";
-    }
-    public function compile($params, $smarty) {
-        return "echo 'hello world {$params['var2']}';\n";
-    }
 }

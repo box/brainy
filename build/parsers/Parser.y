@@ -140,6 +140,7 @@
 // complete template
 start(res) ::= strictmode(strict) template. {
     res = strict . $this->root_buffer->to_smarty_php();
+    var_dump($res);
 }
 
 strictmode(res) ::= SETSTRICT(foo). {
@@ -369,13 +370,13 @@ smartytag(res)   ::= LDEL ID(i). {
             res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->right_delimiter));
             break;
         default:
-            res = $this->compiler->compileTag(i,array());
+            res = $this->compiler->compileTag(i, array());
     }
 }
 
                   // tag with modifier and optional Smarty2 style attributes
 smartytag(res)   ::= LDEL ID(i) modifierlist(l)attributes(a). {
-    res = "ob_start();\n".$this->compiler->compileTag(i,a).'echo ';
+    res = 'ob_start();\necho ' . $this->compiler->compileTag(i, a) . 'echo ';
     $this->compiler->has_code = true;
     res .= Constructs\ConstructModifier::compileOpen($this->compiler, array(
         'value' => 'ob_get_clean()',
@@ -842,7 +843,7 @@ value(res)       ::= doublequoted_with_quotes(s). {
 
                   // Smarty tag
 value(res)       ::= smartytag(st) RDEL. {
-    res = 'array(ob_start(),' . st . ', ob_get_clean())[2]';
+    res = st;
 }
 
 value(res)       ::= value(v) modifierlist(l). {
@@ -870,49 +871,46 @@ variableinternal(res)  ::= variableinternal(a1) indexdef(a2). {
     res = $this->compileSafeLookupWithBase(a1, a2);
 }
 
-// FIXME: This is a hack to make $smarty.config.foo work. :(
+// FIXME: This is a hack to make $smarty.foreach.foo work. :(
 variableinternal(res)  ::= variablebase(base) indexdef(a) indexdef(b). {
     if (base == '\'smarty\'') {
-        switch (Decompile::decompileString(a)) {
-            case 'foreach':
-                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][" . b . "]");
-                break;
-            case 'capture':
-                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['capture'][" . b . "]");
-                break;
-            default:
-                $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
-        }
-    } else {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
         res = $this->compileSafeLookupWithBase(res, b);
+    }
+    switch (Decompile::decompileString(a)) {
+        case 'foreach':
+            res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][" . b . "]");
+            break;
+        case 'capture':
+            res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['capture'][" . b . "]");
+            break;
+        default:
+            $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
     }
 }
 
 variableinternal(res)  ::= variablebase(base) indexdef(a). {
-    if (base == '\'smarty\'') {
-        switch (Decompile::decompileString(a)) {
-            case 'now':
-                res = new Wrappers\StaticWrapper('time()');
-                break;
-            case 'template':
-                res = new Wrappers\StaticWrapper('basename($_smarty_tpl->source->filepath)');
-                break;
-            case 'version':
-                res = new Wrappers\StaticWrapper(var_export(\Box\Brainy\Brainy::SMARTY_VERSION));
-                break;
-            case 'ldelim':
-                res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->left_delimiter));
-                break;
-            case 'rdelim':
-                res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->right_delimiter));
-                break;
-            default:
-                $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
-        }
-
-    } else {
+    if (base !== '\'smarty\'') {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
+    }
+    switch (Decompile::decompileString(a)) {
+        case 'now':
+            res = new Wrappers\StaticWrapper('time()');
+            break;
+        case 'template':
+            res = new Wrappers\StaticWrapper('basename($_smarty_tpl->source->filepath)');
+            break;
+        case 'version':
+            res = new Wrappers\StaticWrapper(var_export(\Box\Brainy\Brainy::SMARTY_VERSION));
+            break;
+        case 'ldelim':
+            res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->left_delimiter));
+            break;
+        case 'rdelim':
+            res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->right_delimiter));
+            break;
+        default:
+            $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
     }
 }
 

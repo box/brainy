@@ -32,21 +32,6 @@ class RegisterFunctionTest extends Smarty_TestCase
         $this->assertEquals('myfunction', $this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_FUNCTION]['testfunction'][0]);
         $this->assertEquals('hello world 1', $this->smarty->fetch('eval:{testfunction value=1}'));
     }
-    /**
-     * test register->templateFunction method for class
-     */
-    public function testRegisterFunctionClass() {
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_FUNCTION,'testfunction', array('myfunctionclass', 'execute'));
-        $this->assertEquals('hello world 2', $this->smarty->fetch('eval:{testfunction value=2}'));
-    }
-    /**
-     * test register->templateFunction method for object
-     */
-    public function testRegisterFunctionObject() {
-        $myfunction_object = new myfunctionclass;
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_FUNCTION,'testfunction', array($myfunction_object, 'execute'));
-        $this->assertEquals('hello world 3', $this->smarty->fetch('eval:{testfunction value=3}'));
-    }
     public function testRegisterFunctionCaching1() {
         $this->smarty->caching = 1;
         $this->smarty->force_compile = true;
@@ -78,21 +63,7 @@ class RegisterFunctionTest extends Smarty_TestCase
         $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_FUNCTION,'testfunction');
         $this->assertFalse(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_FUNCTION]['testfunction']));
     }
-    /**
-     * test unregister->templateFunction method other registered
-     */
-    public function testUnregisterFunctionOtherRegistered() {
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testfunction', 'myfunction');
-        $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_FUNCTION,'testfunction');
-        $this->assertTrue(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_BLOCK]['testfunction']));
-    }
 }
 function myfunction($params, &$smarty) {
     return "hello world $params[value]";
-}
-class myfunctionclass
-{
-    static function execute($params, &$smarty) {
-        return "hello world $params[value]";
-    }
 }

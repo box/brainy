@@ -27,25 +27,6 @@ class RegisterModifierTest extends Smarty_TestCase
         $this->assertEquals('foo function blar bar', $this->smarty->fetch('eval:{$foo|testmodifier:blar:$bar}'));
     }
     /**
-     * test register->modifier method for classes
-     */
-    public function testRegisterModifierClass() {
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier', array('mymodifierclass', 'static_method'));
-        $this->smarty->assign('foo', 'foo');
-        $this->smarty->assign('bar', 'bar');
-        $this->assertEquals('foo static blar bar', $this->smarty->fetch('eval:{$foo|testmodifier:blar:$bar}'));
-    }
-    /**
-     * test register->modifier method for objects
-     */
-    public function testRegisterModifierObject() {
-        $obj = new mymodifierclass;
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier', array($obj, 'object_method'));
-        $this->smarty->assign('foo', 'foo');
-        $this->smarty->assign('bar', 'bar');
-        $this->assertEquals('foo object blar bar', $this->smarty->fetch('eval:{$foo|testmodifier:blar:$bar}'));
-    }
-    /**
      * test unregister->modifier method
      */
     public function testUnregisterModifier() {
@@ -60,24 +41,7 @@ class RegisterModifierTest extends Smarty_TestCase
         $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier');
         $this->assertFalse(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_MODIFIER]['testmodifier']));
     }
-    /**
-     * test unregister->modifier method other registered
-     */
-    public function testUnregisterModifierOtherRegistered() {
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_BLOCK,'testmodifier', 'mymodifier');
-        $this->smarty->unregisterPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier');
-        $this->assertTrue(isset($this->smarty->registered_plugins[\Box\Brainy\Brainy::PLUGIN_BLOCK]['testmodifier']));
-    }
 }
 function mymodifier($a, $b, $c) {
     return "$a function $b $c";
-}
-class mymodifierclass
-{
-    static function static_method($a, $b, $c) {
-        return "$a static $b $c";
-    }
-    public function object_method($a, $b, $c) {
-        return "$a object $b $c";
-    }
 }

@@ -28,13 +28,6 @@ class TemplateCompiler
     public $suppressMergedTemplates = false;
 
     /**
-     * compile tag objects
-     *
-     * @var array
-     */
-    public static $_tag_objects = array();
-
-    /**
      * tag stack
      *
      * @var array
@@ -215,8 +208,8 @@ class TemplateCompiler
         // template header code
         $template_header = '';
         if (!$this->suppressHeader) {
-            $template_header .= "<?php /* Brainy version " . Brainy::SMARTY_VERSION . ", created on " . strftime("%Y-%m-%d %H:%M:%S") . "\n";
-            $template_header .= "         compiled from \"" . $this->template->source->filepath . "\" */\n";
+            $template_header .= "<?php\n/* Brainy version " . Brainy::SMARTY_VERSION . ", created on " . strftime("%Y-%m-%d %H:%M:%S");
+            $template_header .= " compiled from \"" . $this->template->source->filepath . "\" */\n";
         }
 
         if (empty($this->template->source->components)) {
@@ -246,7 +239,6 @@ class TemplateCompiler
         unset($save_source);
         // free memory
         unset($this->parser->root_buffer, $this->parser->current_buffer, $this->parser, $this->lex, $this->template);
-        self::$_tag_objects = array();
         // return compiled code to template object
         $merged_code = '';
         if (!$this->suppressMergedTemplates && !empty($this->merged_templates)) {
@@ -267,177 +259,130 @@ class TemplateCompiler
     }
 
     /**
-     * Compile Tag
-     *
-     * This is a call back from the lexer/parser
-     * It executes the required compile plugin for the Smarty tag
-     *
      * @param  string $tag       tag name
      * @param  array  $args      array with tag attributes
      * @param  array  $parameter array with compilation parameter
      * @return string compiled   code
      */
-    public function compileTag($tag, $args, $parameter = array(), $param2 = null, $param3 = null) {
+    public function compileTag($tag, $args, $parameter = array()) {
         // $args contains the attributes parsed and compiled by the lexer/parser
         // assume that tag does compile into code, but creates no HTML output
         $this->has_code = true;
         $this->has_output = false;
 
-        $_output = false;
         if (isset($this->smarty->template_functions[$tag])) {
+            $_output = false;
             // template defined by {template} tag
             $args['_attr']['name'] = "'" . $tag . "'";
             $_output = $this->callTagCompiler('call', $args, $parameter);
+            if ($_output !== false) {
+                if ($_output === true) {
+                    // tag did not produce compiled code
+                    return null;
+                }
+                // Does it create output?
+                if ($this->has_output) {
+                    $_output .= "\n";
+                }
+                // return compiled code
+                return $_output;
+            }
         }
 
-        if ($_output !== false) {
-            if ($_output !== true) {
-                // did we get compiled code
-                if ($this->has_code) {
-                    // Does it create output?
-                    if ($this->has_output) {
-                        $_output .= "\n";
-                    }
-                    // return compiled code
-                    return $_output;
-                }
-            }
-            // tag did not produce compiled code
-            return null;
+        if (isset($this->smarty->security_policy) &&
+            !$this->smarty->security_policy->isTrustedTag($tag, $this)) {
+            $this->trigger_template_error("Use of disallowed tag: \"{$tag}\"", $this->lex->taglineno);
+            return; // unreachable
         }
+
+        if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_FUNCTION, $tag, $this->smarty)) {
+            return (
+                \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_FUNCTION, $tag) .
+                '(' . $this->formatStaticArgs($parameter) . ', $_smarty_tpl)'
+            );
+        }
+
+
         // map_named attributes
         if (isset($args['_attr'])) {
             foreach ($args['_attr'] as $key => $attribute) {
-                if (is_array($attribute)) {
-                    $args = array_merge($args, $attribute);
+                if (!is_array($attribute)) {
+                    continue;
                 }
+                $args = array_merge($args, $attribute);
             }
         }
         // not an internal compiler tag
         if (strlen($tag) < 6 || substr($tag, -5) !== 'close') {
 
             if (isset($this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag])) {
-                $new_args = array();
-                foreach ($args as $key => $mixed) {
-                    if (is_array($mixed)) {
-                        $new_args = array_merge($new_args, $mixed);
-                    } else {
-                        $new_args[$key] = $mixed;
-                    }
-                }
                 $function = $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag][0];
-                if (!is_array($function)) {
-                    return $function($new_args, $this);
-                } elseif (is_object($function[0])) {
-                    return $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag][0][0]->$function[1]($new_args, $this);
-                } else {
-                    return call_user_func_array($function, array($new_args, $this));
-                }
+                return call_user_func($function, $this->formatPluginArgs($args), $this);
             }
 
             // check plugins from plugins folder
-            foreach ($this->smarty->plugin_search_order as $plugin_type) {
-                if ($plugin_type == Brainy::PLUGIN_COMPILER &&
-                    $this->smarty->loadPlugin('smarty_compiler_' . $tag, true) &&
-                    (!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this))) {
-
-                    $plugin = 'smarty_compiler_' . $tag;
-                    if (is_callable($plugin)) {
-                        // convert arguments format for old compiler plugins
-                        $new_args = array();
-                        foreach ($args as $key => $mixed) {
-                            if (is_array($mixed)) {
-                                $new_args = array_merge($new_args, $mixed);
-                            } else {
-                                $new_args[$key] = $mixed;
-                            }
-                        }
-
-                        return $plugin($new_args, $this->smarty);
-                    }
-                    if (class_exists($plugin, false)) {
-                        $plugin_object = new $plugin;
-                        if (method_exists($plugin_object, 'compile')) {
-                            return $plugin_object->compile($args, $this);
-                        }
-                    }
+            if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_COMPILER, $tag, $this->smarty)) {
+                $plugin = \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_COMPILER, $tag);
+                if (!is_callable($plugin)) {
                     throw new SmartyException("Plugin \"{$tag}\" not callable");
-
                 }
-
+                return call_user_func($plugin, $this->formatPluginArgs($args), $this->smarty);
             }
-            $this->trigger_template_error("unknown compiler tag \"" . $tag . "\"", $this->lex->taglineno);
+
+            $this->trigger_template_error("unknown compiler tag \"{$tag}\"", $this->lex->taglineno);
 
         }
 
-        // compile closing tag of block function
-        $base_tag = substr($tag, 0, -5);
         // registered compiler plugin ?
         if (isset($this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag])) {
-            // if compiler function plugin call it now
-            $args = array();
             $function = $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag][0];
-            if (!is_array($function)) {
-                return $function($args, $this);
-            } elseif (is_object($function[0])) {
-                return $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag][0][0]->$function[1]($args, $this);
-            } else {
-                return call_user_func_array($function, array($args, $this));
-            }
+            return call_user_func($function, array(), $this);
         }
-        if ($this->smarty->loadPlugin('smarty_compiler_' . $tag, true)) {
-            $plugin = 'smarty_compiler_' . $tag;
-            if (is_callable($plugin)) {
-                return $plugin($args, $this->smarty);
+        if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_COMPILER, $tag, $this->smarty)) {
+            $plugin = \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_COMPILER, $tag);
+            if (!is_callable($plugin)) {
+                throw new SmartyException("Plugin \"{$tag}\" not callable");
             }
-            if (class_exists($plugin, false)) {
-                $plugin_object = new $plugin;
-                if (method_exists($plugin_object, 'compile')) {
-                    return $plugin_object->compile($args, $this);
-                }
-            }
-            throw new SmartyException("Plugin \"{$tag}\" not callable");
+            return call_user_func($plugin, $args, $this->smarty);
         }
+
         $this->trigger_template_error("unknown tag \"" . $tag . "\"", $this->lex->taglineno);
     }
 
     /**
-     * Check for plugins and return function name
-     *
-     * @param  string $pugin_name  name of plugin or function
-     * @param  string $plugin_type type of plugin
-     * @return string call name of function
+     * Formats args for old compiler plugins
+     * @param  array $args
+     * @return array
      */
-    public function getPlugin($plugin_name, $plugin_type) {
-        $function = null;
-        if (isset($this->template->required_plugins['compiled'][$plugin_name][$plugin_type])) {
-            $function = $this->template->required_plugins['compiled'][$plugin_name][$plugin_type]['function'];
-            if (isset($function)) {
-                return $function;
+    private function formatStaticArgs($args)
+    {
+        $params = array();
+        foreach ($args as $key => $value) {
+            if (is_int($key)) {
+                $params[] = "$key => $value";
+            } else {
+                $params[] = "'$key' => $value";
             }
         }
-        // loop through plugin dirs and find the plugin
-        $function = 'smarty_' . $plugin_type . '_' . $plugin_name;
-        $file = $this->smarty->loadPlugin($function, false);
-        if ($file === true) {
-            return $function;
-        }
+        return 'array(' . implode(', ', $params) . ')';
+    }
 
-        if (is_string($file)) {
-            $this->template->required_plugins['compiled'][$plugin_name][$plugin_type]['file'] = $file;
-            $this->template->required_plugins['compiled'][$plugin_name][$plugin_type]['function'] = $function;
-            if ($plugin_type == 'modifier') {
-                $this->modifier_plugins[$plugin_name] = true;
+    /**
+     * Formats args for old compiler plugins
+     * @param  array $args
+     * @return array
+     */
+    private function formatPluginArgs($args)
+    {
+        $new_args = array();
+        foreach ($args as $key => $mixed) {
+            if (is_array($mixed)) {
+                $new_args = array_merge($new_args, $mixed);
+            } else {
+                $new_args[$key] = $mixed;
             }
-
-            return $function;
         }
-        if (is_callable($function)) {
-            // plugin function is defined in the script
-            return $function;
-        }
-
-        return false;
+        return $new_args;
     }
 
     /**

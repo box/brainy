@@ -36,7 +36,7 @@ class Tag extends ParseTree
      * @return string content
      */
     public function to_smarty_php() {
-        return $this->data;
+        return 'echo ' . $this->data . ';';
     }
 
     /**

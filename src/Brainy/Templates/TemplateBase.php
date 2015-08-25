@@ -8,16 +8,49 @@
 namespace Box\Brainy\Templates;
 
 use Box\Brainy\Brainy;
+use Box\Brainy\Exceptions\BrainyStrictModeException;
 use Box\Brainy\Exceptions\SmartyException;
 
 
-abstract class TemplateBase extends TemplateData
+class TemplateBase extends TemplateData
 {
     /**
      * Template resource
      * @var string
      */
     public $template_resource = null;
+    /**
+     * Flag indicating that the template is running in strict mode
+     * @var bool
+     */
+    public $strict_mode = false;
+    /**
+     * Global smarty instance
+     * @var Smarty
+     */
+    public $smarty = null;
+
+
+    /**
+     * @param \Box\Brainy\Brainy $brainyInstance
+     */
+    public function __construct($brainyInstance)
+    {
+        $this->smarty = &$brainyInstance;
+    }
+
+
+    /**
+     * @param string $reason
+     * @return void
+     * @throws BrainyStrictModeException
+     */
+    public function assert_is_not_strict($reason)
+    {
+        if (Brainy::$strict_mode || $this->strict_mode) {
+            throw new BrainyStrictModeException('Strict Mode: ' . $reason);
+        }
+    }
 
     /**
      * Renders and returns a template.
@@ -194,70 +227,6 @@ abstract class TemplateBase extends TemplateData
     }
 
     /**
-     * Registers plugin to be used in templates
-     *
-     * @param  string                       $type       plugin type
-     * @param  string                       $tag        name of template tag
-     * @param  callable                     $callback   PHP callback to register
-     * @param  boolean                      $cacheable  if true (default) this fuction is cachable
-     * @param  array|null                   $cache_attr caching attributes if any
-     * @return TemplateBase Self-reference to facilitate chaining
-     * @throws SmartyException              when the plugin tag is invalid
-     */
-    public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null) {
-        if (isset($this->smarty->registered_plugins[$type][$tag])) {
-            throw new SmartyException("Plugin tag \"{$tag}\" already registered");
-        } elseif (!is_callable($callback)) {
-            throw new SmartyException("Plugin \"{$tag}\" not callable");
-        }
-
-        $this->smarty->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
-        return $this;
-    }
-
-    /**
-     * Unregister Plugin
-     *
-     * @param  string                       $type of plugin
-     * @param  string                       $tag  name of plugin
-     * @return TemplateBase Self-reference to facilitate chaining
-     */
-    public function unregisterPlugin($type, $tag) {
-        if (isset($this->smarty->registered_plugins[$type][$tag])) {
-            unset($this->smarty->registered_plugins[$type][$tag]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Registers a resource to fetch a template
-     *
-     * @param  string                       $type     name of resource type
-     * @param  \Box\Brainy\Resources\Resource|\Box\Brainy\Resources\Resource[] $callback Instance of \Box\Brainy\Resources\Resource, or array of callbacks to handle resource (deprecated)
-     * @return TemplateBase Self-reference to facilitate chaining
-     */
-    public function registerResource($type, $callback) {
-        $this->smarty->registered_resources[$type] = $callback instanceof \Box\Brainy\Resources\Resource ? $callback : array($callback, false);
-
-        return $this;
-    }
-
-    /**
-     * Unregisters a resource
-     *
-     * @param  string                       $type name of resource type
-     * @return TemplateBase Self-reference to facilitate chaining
-     */
-    public function unregisterResource($type) {
-        if (isset($this->smarty->registered_resources[$type])) {
-            unset($this->smarty->registered_resources[$type]);
-        }
-
-        return $this;
-    }
-
-    /**
      * preg_replace callback to convert camelcase getter/setter to underscore property names
      *
      * @param  string $match match string
@@ -265,69 +234,6 @@ abstract class TemplateBase extends TemplateData
      */
     private function replaceCamelcase($match) {
         return "_" . strtolower($match[1]);
-    }
-
-    /**
-     * Handle unknown class methods
-     *
-     * @param string $name unknown method-name
-     * @param array  $args argument array
-     * @ignore
-     */
-    public function __call($name, $args) {
-        static $_prefixes = array('set' => true, 'get' => true);
-        static $_resolved_property_name = array();
-        static $_resolved_property_source = array();
-
-        // method of Brainy object?
-        if (method_exists($this->smarty, $name)) {
-            return call_user_func_array(array($this->smarty, $name), $args);
-        }
-        // see if this is a set/get for a property
-        $first3 = strtolower(substr($name, 0, 3));
-        if (isset($_prefixes[$first3]) && isset($name[3]) && $name[3] !== '_') {
-            if (isset($_resolved_property_name[$name])) {
-                $property_name = $_resolved_property_name[$name];
-            } else {
-                // try to keep case correct for future PHP 6.0 case-sensitive class methods
-                // lcfirst() not available < PHP 5.3.0, so improvise
-                $property_name = strtolower(substr($name, 3, 1)) . substr($name, 4);
-                // convert camel case to underscored name
-                $property_name = preg_replace_callback('/([A-Z])/', array($this, 'replaceCamelcase'), $property_name);
-                $_resolved_property_name[$name] = $property_name;
-            }
-            if (isset($_resolved_property_source[$property_name])) {
-                $_is_this = $_resolved_property_source[$property_name];
-            } else {
-                $_is_this = null;
-                if (property_exists($this, $property_name)) {
-                    $_is_this = true;
-                } elseif (property_exists($this->smarty, $property_name)) {
-                    $_is_this = false;
-                }
-                $_resolved_property_source[$property_name] = $_is_this;
-            }
-            if ($_is_this) {
-                if ($first3 == 'get') {
-                    return $this->$property_name;
-                } else {
-                    return $this->$property_name = $args[0];
-                }
-            } elseif ($_is_this === false) {
-                if ($first3 == 'get') {
-                    return $this->smarty->$property_name;
-                } else {
-                    return $this->smarty->$property_name = $args[0];
-                }
-            }
-            throw new SmartyException("property '$property_name' does not exist.");
-        }
-
-        if ($name == 'Brainy') {
-            throw new SmartyException("PHP5 requires you to call __construct() instead of Brainy()");
-        }
-        // must be unknown
-        throw new SmartyException("Call of unknown method '$name'.");
     }
 
 }

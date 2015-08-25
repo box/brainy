@@ -38,12 +38,8 @@ abstract class ParseTree
         if (is_null($data)) {
             $data = $this->to_inline_data();
         }
-        if (strpos($data, '\\') === false) {
-            $data = str_replace("'", "\\'", $data);
-            return "echo '$data';\n";
-        } else {
-            return 'echo "' . $data . "\";\n";
-        }
+        $data = var_export($data);
+        return "echo $data;\n";
     }
 
     /**

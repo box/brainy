@@ -35,7 +35,7 @@ class CompileFunctionPluginTest extends Smarty_TestCase
     * test function plugin function definition in script
     */
     public function testFunctionPluginRegisteredFunction() {
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_FUNCTION,'plugintest', 'myplugintest');
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_FUNCTION, 'plugintest', 'myplugintest');
         $tpl = $this->smarty->createTemplate('eval:{plugintest foo=bar}', $this->smarty);
         $this->assertEquals("plugin test called bar", $this->smarty->fetch($tpl));
     }
@@ -47,6 +47,7 @@ class CompileFunctionPluginTest extends Smarty_TestCase
         $this->assertEquals("10", $this->smarty->fetch("eval:{counter\n\tstart=10}"));
     }
 }
-        function myplugintest($params, &$smarty) {
-            return "plugin test called $params[foo]";
-        }
+
+function myplugintest($params, &$smarty) {
+    return "plugin test called $params[foo]";
+}
