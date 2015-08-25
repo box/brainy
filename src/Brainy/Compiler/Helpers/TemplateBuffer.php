@@ -13,15 +13,6 @@ class TemplateBuffer extends ParseTree
     public $subtrees = array();
 
     /**
-     * Create root of parse tree for template elements
-     *
-     * @param object $parser parse object
-     */
-    public function __construct($parser) {
-        $this->parser = $parser;
-    }
-
-    /**
      * Append buffer to subtree
      *
      * @param _smarty_parsetree $subtree
@@ -34,12 +25,7 @@ class TemplateBuffer extends ParseTree
      * @return string
      */
     public function to_inline_data() {
-        $code = '';
-        for ($key = 0, $cnt = count($this->subtrees); $key < $cnt; $key++) {
-            $code .= $this->subtrees[$key]->to_inline_data();
-        }
-
-        return $code . "\n";
+        throw new \Box\Brainy\Exceptions\SmartyException('Template buffer cast to inline template data');
     }
 
     /**
@@ -50,30 +36,24 @@ class TemplateBuffer extends ParseTree
     public function to_smarty_php() {
         $code = '';
         $buffer = '';
-        for ($key = 0, $cnt = count($this->subtrees); $key < $cnt; $key++) {
-            if ($key + 2 < $cnt &&
-                $this->subtrees[$key] instanceof LineBreak &&
-                $this->subtrees[$key + 1] instanceof Tag &&
-                $this->subtrees[$key + 1]->data === '' &&
-                $this->subtrees[$key + 2] instanceof LineBreak) {
-
-                $key++;
-                continue;
-            }
-            $node = $this->subtrees[$key];
+        foreach ($this->subtrees as $node) {
             if ($node->can_combine_inline_data()) {
                 $buffer .= $node->to_inline_data();
                 continue;
             }
-            if ($buffer !== '') {
-                $code .= $this->echo_data($buffer);
+
+            if ($buffer) {
+                $code .= $this->echo_data(var_export($buffer, true));
                 $buffer = '';
             }
+
             $code .= $node->to_smarty_php();
         }
-        if ($buffer !== '') {
-            $code .= $this->echo_data($buffer);
+
+        if ($buffer) {
+            $code .= $this->echo_data(var_export($buffer, true));
         }
+
         return $code;
     }
 

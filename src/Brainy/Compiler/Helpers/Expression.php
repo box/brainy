@@ -8,11 +8,9 @@ class Code extends ParseTree
     /**
      * Create parse tree buffer for code fragment
      *
-     * @param object $parser parser object
      * @param string $data   content
      */
-    public function __construct($parser, $data) {
-        $this->parser = $parser;
+    public function __construct($data) {
         $this->data = $data;
     }
 
@@ -20,7 +18,7 @@ class Code extends ParseTree
      * @return string
      */
     public function to_inline_data() {
-        return $this->to_smarty_php();
+        throw new \Box\Brainy\Exceptions\SmartyException('PHP Expression cast to inline template data');
     }
 
     /**

@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class FileResourceTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     protected function relative($path) {
         $path = str_replace( dirname(__FILE__), '.', $path );
         if (DIRECTORY_SEPARATOR == "\\") {

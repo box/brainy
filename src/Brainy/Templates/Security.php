@@ -124,7 +124,7 @@ class Security
 
     /**
      * Constructs a new security policy
-     * @param Smarty $smarty An instance of Brainy
+     * @param \Box\Brainy\Brainy $smarty An instance of Brainy
      */
     public function __construct($smarty) {
         $this->smarty = $smarty;
@@ -144,24 +144,6 @@ class Security
         }
 
         $compiler->trigger_template_error("PHP function '{$function_name}' not allowed by security setting");
-
-        return false; // should not, but who knows what happens to the compiler in the future?
-    }
-
-    /**
-     * Check if static class is trusted.
-     *
-     * @param  string                  $class_name The name of the static class
-     * @param  object                  $compiler   compiler object
-     * @return boolean                 true if class is trusted
-     * @throws SmartyCompilerException if static class is not trusted
-     */
-    public function isTrustedStaticClass($class_name, $compiler) {
-        if (isset($this->static_classes) && (empty($this->static_classes) || in_array($class_name, $this->static_classes))) {
-            return true;
-        }
-
-        $compiler->trigger_template_error("access to static class '{$class_name}' not allowed by security setting");
 
         return false; // should not, but who knows what happens to the compiler in the future?
     }

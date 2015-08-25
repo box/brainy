@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class PluginModifierTruncateTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testDefault() {
         $result = 'Two Sisters Reunite after Eighteen Years at Checkout Counter.';
         $tpl = $this->smarty->createTemplate('eval:{"Two Sisters Reunite after Eighteen Years at Checkout Counter."|truncate}');

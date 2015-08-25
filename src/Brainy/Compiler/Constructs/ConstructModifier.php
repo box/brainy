@@ -21,6 +21,7 @@ class ConstructModifier extends BaseConstruct
 
         foreach ($modifierlist as $rawModifier) {
             $modifier = $rawModifier[0];
+
             $rawModifier[0] = $output;
             for ($i = 0; $i < count($rawModifier); $i++) {
                 if ($rawModifier[$i] instanceof \Box\Brainy\Compiler\Wrappers\StaticWrapper) {
@@ -43,36 +44,39 @@ class ConstructModifier extends BaseConstruct
                 continue;
 
             } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIERCOMPILER, $modifier, $compiler->smarty)) {
-                // check if modifier allowed
-                if (!is_object($compiler->smarty->security_policy) ||
-                    $compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
 
-                    $func = PluginLoader::getPluginFunction(Brainy::PLUGIN_MODIFIERCOMPILER, $modifier);
-                    $output = call_user_func($func, $rawModifier, $compiler);
-                    continue;
+                if (is_object($compiler->smarty->security_policy) &&
+                    !$compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
+                    $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
+                    return null;
                 }
-                $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
+
+                $func = PluginLoader::getPluginFunction(Brainy::PLUGIN_MODIFIERCOMPILER, $modifier);
+                $output = call_user_func($func, $rawModifier, $compiler);
+                continue;
 
             } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIER, $modifier, $compiler->smarty)) {
-                // check if modifier allowed
-                if (!is_object($compiler->smarty->security_policy) ||
-                    $compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
 
-                    $func = PluginLoader::getPluginFunction(Brainy::PLUGIN_MODIFIER, $modifier);
-                    $output = "{$func}({$params})";
-                    continue;
+                if (is_object($compiler->smarty->security_policy) &&
+                    !$compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
+                    $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
+                    return null;
                 }
-                $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
+
+                $func = PluginLoader::getPluginFunction(Brainy::PLUGIN_MODIFIER, $modifier);
+                $output = "{$func}({$params})";
+                continue;
 
             } elseif (is_callable($modifier)) {
-                // check if modifier allowed
-                if (!is_object($compiler->smarty->security_policy) ||
-                    $compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
 
-                    $output = "{$modifier}({$params})";
-                    continue;
+                if (is_object($compiler->smarty->security_policy) &&
+                    !$compiler->smarty->security_policy->isTrustedPhpModifier($modifier, $compiler)) {
+                    $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
+                    return null;
                 }
-                $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
+
+                $output = "{$modifier}({$params})";
+                continue;
 
             }
 

@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class RegisterFunctionTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-   }
-
     /**
      * test register->templateFunction method for function
      */

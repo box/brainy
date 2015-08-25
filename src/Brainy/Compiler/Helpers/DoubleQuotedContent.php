@@ -11,8 +11,7 @@ class DoubleQuotedContent extends ParseTree
      * @param object $parser parser object
      * @param string $data   string section
      */
-    public function __construct($parser, $data) {
-        $this->parser = $parser;
+    public function __construct($data) {
         $this->data = $data;
     }
 
@@ -24,8 +23,6 @@ class DoubleQuotedContent extends ParseTree
     }
 
     /**
-     * Return content as double quoted string
-     *
      * @return string doubled quoted string
      */
     public function to_smarty_php() {

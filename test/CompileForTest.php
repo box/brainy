@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class CompileForTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     /**
     * test {for $x=0;$x<10;$x++} tag
     */

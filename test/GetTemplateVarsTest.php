@@ -13,11 +13,6 @@ use Box\Brainy\Templates\TemplateData;
 
 class GetTemplateVarsTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     /**
     * test root getTemplateVars single value
     */

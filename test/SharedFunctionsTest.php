@@ -11,10 +11,6 @@ namespace Box\Brainy\Tests;
 
 class SharedFunctionsTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
 
     /**
     * test smarty_function_escape_special_chars()

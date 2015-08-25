@@ -8,7 +8,7 @@
 /**
  * @author Matt Basta
  * @param string[] $params parameters
- * @param Smarty $compiler template object
+ * @param \Box\Brainy\Brainy $compiler template object
  * @return string
  */
 function smarty_compiler_storeclose($params, $compiler) {

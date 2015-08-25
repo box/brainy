@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class PluginModifierCountSentencesTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testDefault() {
         $tpl = $this->smarty->createTemplate('eval:{"hello world."|count_sentences}');
         $this->assertEquals("1", $this->smarty->fetch($tpl));

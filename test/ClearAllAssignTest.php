@@ -55,15 +55,18 @@ class ClearAllAssignTest extends Smarty_TestCase
         $this->_data->clearAllAssign();
         $this->assertEquals('fooblar', $this->smarty->fetch($this->_tpl));
     }
+
     /**
-    * test clear all assign in Smarty object
-    */
+     * Clearing all on Brainy shouldn't affect the tempalte once the template
+     * is already created. There should be no logical connection between the
+     * Brainy instance's root scope and the template instance's root scope.
+     */
     public function testClearAllAssignInSmarty() {
         $this->smarty->clearAllAssign();
-        $this->assertEquals('barblar', $this->smarty->fetch($this->_tpl));
+        $this->assertEquals('foobarblar', $this->smarty->fetch($this->_tpl));
     }
     public function testSmarty2ClearAllAssignInSmarty() {
         $this->smartyBC->clear_all_assign();
-        $this->assertEquals('barblar', $this->smartyBC->fetch($this->_tplBC));
+        $this->assertEquals('foobarblar', $this->smartyBC->fetch($this->_tplBC));
     }
 }

@@ -15,13 +15,13 @@ class ArrayTest extends Smarty_TestCase
     * test simple array definition
     */
     public function testSimpleArrayDefinition() {
-        $this->assertEquals('12345', $this->smarty->fetch('eval:{$foo=[1,2,3,4,5]}{foreach $foo as $bar}{$bar}{/foreach}'));
+        $this->assertEquals('12345', $this->smarty->fetch('string:{$foo=[1,2,3,4,5]}{foreach $foo as $bar}{$bar}{/foreach}'));
     }
     /**
     * test smarty2 array access
     */
     public function testSmarty2ArrayAccess() {
-        $this->assertEquals('123', $this->smarty->fetch('eval:{$foo=[1,2,3,4, 5]}{$foo.0}{$foo.1}{$foo.2}'));
+        $this->assertEquals('123', $this->smarty->fetch('eval:{$foo=[1,2,3,4,5]}{$foo.0}{$foo.1}{$foo.2}'));
     }
     /**
     * test smarty3 array access

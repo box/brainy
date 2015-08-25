@@ -10,12 +10,7 @@ namespace Box\Brainy\Tests;
 
 
 class DefaultAssignScopeTest extends Smarty_TestCase
-{
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-    public function tearDown() {
+{    public function tearDown() {
         \Box\Brainy\Brainy::$default_assign_scope = \Box\Brainy\Brainy::SCOPE_LOCAL;
     }
 

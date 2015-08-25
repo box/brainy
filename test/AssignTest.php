@@ -9,18 +9,13 @@
 namespace Box\Brainy\Tests;
 
 
-class AssignTest extends \PHPUnit_Framework_TestCase
+class AssignTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     /**
     * test simple assign
     */
     public function testSimpleAssign() {
-        $this->smarty->assign('foo','bar');
+        $this->smarty->assign('foo', 'bar');
         $this->assertEquals('bar', $this->smarty->fetch('eval:{$foo}'));
     }
     /**
@@ -28,6 +23,6 @@ class AssignTest extends \PHPUnit_Framework_TestCase
     */
     public function testArrayAssign() {
         $this->smarty->assign(array('foo'=>'bar', 'foo2'=>'bar2'));
-        $this->assertEquals('bar bar2', $this->smarty->fetch('eval:{$foo} {$foo2}'));
+        $this->assertEquals('bar bar2', $this->smarty->fetch('string:{$foo} {$foo2}'));
     }
 }

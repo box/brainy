@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class StringResourceTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        $this->smarty->clearCompiledTemplate();
-        SmartyTests::init();
-    }
 
     protected function relative($path) {
         $path = str_replace( dirname(__FILE__), '.', $path );

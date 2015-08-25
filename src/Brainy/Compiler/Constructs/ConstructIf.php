@@ -14,7 +14,7 @@ class ConstructIf extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         $cond = self::getRequiredArg($args, 'cond');
         self::openTag($compiler, 'if');
@@ -28,7 +28,7 @@ class ConstructIf extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         self::closeTag($compiler, array('if', 'elseif', 'else'));
         return "}\n";

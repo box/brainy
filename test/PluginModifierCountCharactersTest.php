@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class PluginModifierCountCharactersTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testDefault() {
         $result = "29";
         $tpl = $this->smarty->createTemplate('eval:{"Cold Wave Linked to Temperatures."|count_characters}');

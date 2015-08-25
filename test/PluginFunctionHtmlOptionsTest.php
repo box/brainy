@@ -13,11 +13,6 @@ namespace Box\Brainy\Tests;
 */
 class PluginFunctionHtmlOptionsTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testAssociativeArray() {
         $n = "\n";
         $expected = '<select name="foo">'

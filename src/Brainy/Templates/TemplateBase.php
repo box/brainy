@@ -37,6 +37,7 @@ class TemplateBase extends TemplateData
     public function __construct($brainyInstance)
     {
         $this->smarty = &$brainyInstance;
+        $this->tpl_vars = $brainyInstance->tpl_vars;
     }
 
 

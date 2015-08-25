@@ -43,7 +43,7 @@ class ResourceString extends Resource
     /**
      * modify resource_name according to resource handlers specifications
      *
-     * @param  Smarty $smarty        Smarty instance
+     * @param  \Box\Brainy\Brainy $smarty        Smarty instance
      * @param  string $resource_name resource_name to make unique
      * @return string unique resource name
      */

@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class CompileDelimiterTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     /**
     * test delimiter tag test
     */

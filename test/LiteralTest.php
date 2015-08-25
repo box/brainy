@@ -9,11 +9,6 @@ namespace Box\Brainy\Tests;
 
 class LiteralTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testLiteralTag() {
         $tpl = $this->smarty->createTemplate("eval:{literal} {\$foo} {/literal}");
         $this->assertEquals(' {$foo} ', $this->smarty->fetch($tpl));

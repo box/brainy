@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class CompileStripTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function dataProviderForStripTests() {
         return array(
             array("<table>\n </table>", '<table></table>'),

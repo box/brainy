@@ -5,11 +5,6 @@ namespace Box\Brainy\Compiler\Helpers;
 
 class Tag extends ParseTree
 {
-    /**
-     * Saved block nesting level
-     * @var int
-     */
-    public $saved_block_nesting;
 
     /**
      * Create parse tree buffer for Smarty tag
@@ -17,17 +12,15 @@ class Tag extends ParseTree
      * @param object $parser parser object
      * @param string $data   content
      */
-    public function __construct($parser, $data) {
-        $this->parser = $parser;
+    public function __construct($data) {
         $this->data = $data;
-        $this->saved_block_nesting = $parser->block_nesting_level;
     }
 
     /**
      * @return string
      */
     public function to_inline_data() {
-        return $this->data;
+        throw new \Box\Brainy\Exceptions\SmartyException('Brainy tag cast to inline template data');
     }
 
     /**
@@ -36,7 +29,7 @@ class Tag extends ParseTree
      * @return string content
      */
     public function to_smarty_php() {
-        return 'echo ' . $this->data . ';';
+        return $this->data;
     }
 
     /**

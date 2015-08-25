@@ -5,41 +5,26 @@ namespace Box\Brainy\Compiler\Helpers;
 
 class DoubleQuoted extends ParseTree
 {
+
+    private $parser;
+
     /**
-     * Create parse tree buffer for double quoted string subtrees
-     *
      * @param object            $parser  parser object
      * @param ParseTree $subtree parsetree buffer
      */
     public function __construct($parser, ParseTree $subtree) {
         $this->parser = $parser;
-        $this->subtrees[] = $subtree;
-        if ($subtree instanceof Tag) {
-            $this->parser->block_nesting_level = count($this->parser->compiler->_tag_stack);
-        }
+        $this->subtrees = [];
     }
 
     /**
-     * Append buffer to subtree
-     *
      * @param ParseTree $subtree parsetree buffer
      */
     public function append_subtree(ParseTree $subtree) {
-        $last_subtree = count($this->subtrees) - 1;
-        if ($last_subtree >= 0 && $this->subtrees[$last_subtree] instanceof Tag && $this->subtrees[$last_subtree]->saved_block_nesting < $this->parser->block_nesting_level) {
-            if ($subtree instanceof Code) {
-                $this->subtrees[$last_subtree]->data .= 'echo ' . $subtree->data . ';';
-            } elseif ($subtree instanceof DoubleQuotedContent) {
-                $this->subtrees[$last_subtree]->data .= $this->echo_data($subtree->data);
-            } else {
-                $this->subtrees[$last_subtree]->data .= $subtree->data;
-            }
-        } else {
-            $this->subtrees[] = $subtree;
-        }
         if ($subtree instanceof Tag) {
-            $this->parser->block_nesting_level = count($this->parser->compiler->_tag_stack);
+            throw new \Box\Brainy\Exceptions\SmartyCompilerException('Cannot use tags inside double quoted strings');
         }
+        $this->subtrees[] = $subtree;
     }
 
     /**
@@ -50,22 +35,35 @@ class DoubleQuoted extends ParseTree
     }
 
     /**
-     * Merge subtree buffer content together
-     *
      * @return string compiled template code
      */
     public function to_smarty_php() {
         $code = '';
+        $buffer = '';
         foreach ($this->subtrees as $subtree) {
-            if ($code !== "") {
-                $code .= ".";
+            if (!($subtree instanceof DoubleQuotedContent)) {
+                $this->parser->compiler->has_variable_string = true;
+            }
+            if ($subtree->can_combine_inline_data()) {
+                $buffer .= $subtree->to_inline_data();
+                continue;
+            }
+
+            if ($code) {
+                $code .= '.';
+            }
+
+            if ($buffer) {
+                $code .= $this->escape_data($buffer) . '.';
+                $buffer = '';
             }
 
             $code .= $subtree->to_smarty_php();
 
-            if (!$subtree instanceof DoubleQuotedContent) {
-                $this->parser->compiler->has_variable_string = true;
-            }
+        }
+
+        if ($buffer) {
+            $code .= $this->escape_data($buffer);
         }
 
         return $code;

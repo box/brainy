@@ -13,11 +13,6 @@ namespace Box\Brainy\Tests;
 */
 class PluginFunctionHtmlRadiosTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testAssociativeArray() {
         $n = "\n";
         $expected = '<label><input type="radio" name="id" value="1000" />Joe Schmoe</label><br />'

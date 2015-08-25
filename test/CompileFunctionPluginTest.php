@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class CompileFunctionPluginTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     /**
     * test function plugin tag in template file
     */

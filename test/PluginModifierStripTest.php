@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class PluginModifierStripTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testDefault() {
         $tpl = $this->smarty->createTemplate('eval:{" hello     spaced words  "|strip}');
         $this->assertEquals(" hello spaced words ", $this->smarty->fetch($tpl));

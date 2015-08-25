@@ -6,39 +6,30 @@ namespace Box\Brainy\Compiler\Helpers;
 abstract class ParseTree
 {
     /**
-     * Parser object
-     * @var object
-     */
-    public $parser;
-    /**
      * Buffer content
      * @var mixed
      */
     public $data;
 
     /**
-     * Return buffer
+     * Returns a PHP expression
      *
-     * @return string buffer content
+     * @return string
      */
     abstract public function to_smarty_php();
 
     /**
-     * Return buffer
+     * Return the raw string contents of the node
      *
-     * @return string buffer content
+     * @return string
      */
     abstract public function to_inline_data();
 
     /**
-     * @param string|null|void $data
+     * @param string $data
      * @return string
      */
-    public function echo_data($data = null) {
-        if (is_null($data)) {
-            $data = $this->to_inline_data();
-        }
-        $data = var_export($data);
+    public function echo_data($data) {
         return "echo $data;\n";
     }
 
@@ -49,13 +40,10 @@ abstract class ParseTree
      * @return string escaped string
      */
     protected function escape_data($toEscape) {
-        $out = str_replace("\\", '\\\\', $toEscape);
-        $out = str_replace("\n", '\n', $out);
-        $out = str_replace("\r", '\r', $out);
-        $out = str_replace("\t", '\t', $out);
-        $out = str_replace('$', '\$', $out);
-        $out = str_replace('"', '\"', $out);
-        return $out;
+        // Escape the data
+        $data = var_export((string) $toEscape, true);
+        $data = mb_substr($data, 1, mb_strlen($data) - 2);
+        return $data;
     }
 
     /**

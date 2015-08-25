@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class GetterSetterTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     /**
     * test setter on Smarty object
     */
@@ -33,27 +28,5 @@ class GetterSetterTest extends Smarty_TestCase
         $this->smarty->setRightDelimiter('}>');
         $this->assertEquals('<{', $this->smarty->getLeftDelimiter());
         $this->assertEquals('}>', $this->smarty->getRightDelimiter());
-    }
-    /**
-    * test setter on Template object
-    */
-    public function testTemplateSetter() {
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $tpl->setLeftDelimiter('<{');
-        $tpl->setRightDelimiter('}>');
-        $this->assertEquals('<{', $tpl->smarty->left_delimiter);
-        $this->assertEquals('}>', $tpl->smarty->right_delimiter);
-        $this->assertEquals('{', $this->smarty->left_delimiter);
-        $this->assertEquals('}', $this->smarty->right_delimiter);
-    }
-    /**
-    * test getter on Template object
-    */
-    public function testTemplateGetter() {
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $tpl->setLeftDelimiter('<{');
-        $tpl->setRightDelimiter('}>');
-        $this->assertEquals('<{', $tpl->getLeftDelimiter());
-        $this->assertEquals('}>', $tpl->getRightDelimiter());
     }
 }

@@ -59,7 +59,7 @@ class Template extends TemplateBase
      * It load the required template resources and cacher plugins
      *
      * @param string                   $template_resource template resource string
-     * @param Smarty                   $smarty            Smarty instance
+     * @param \Box\Brainy\Brainy                   $smarty            Smarty instance
      * @param Template $_parent           back pointer to parent object with variables or null
      * @param mixed                    $_compile_id       compile id or null
      */
@@ -296,7 +296,8 @@ PHPDOC;
      * @param  bool  $cache      flag if called from cache file
      * @return bool  flag if compiled or cache file is valid
      */
-    public function decodeProperties($properties, $cache = false) {
+    public function decodeProperties($properties, $cache = false)
+    {
         if (isset($properties['file_dependency'])) {
             $this->properties['file_dependency'] = array_merge($this->properties['file_dependency'], $properties['file_dependency']);
         }
@@ -304,13 +305,14 @@ PHPDOC;
             $this->properties['function'] = array_merge($this->properties['function'], $properties['function']);
             $this->smarty->template_functions = array_merge($this->smarty->template_functions, $properties['function']);
         }
-        $this->properties['version'] = (isset($properties['version'])) ? $properties['version'] : '';
+        $this->properties['version'] = isset($properties['version']) ? $properties['version'] : '';
         $this->properties['unifunc'] = $properties['unifunc'];
         // check file dependencies at compiled code
-        $is_valid = true;
         if ($this->properties['version'] != Brainy::SMARTY_VERSION) {
-            $is_valid = false;
-        } elseif (((!$cache && $this->smarty->compile_check && empty($this->compiled->_properties) && !$this->compiled->isCompiled) || $cache && ($this->smarty->compile_check === true || $this->smarty->compile_check === Brainy::COMPILECHECK_ON)) && !empty($this->properties['file_dependency'])) {
+            return false;
+        }
+
+        if (((!$cache && $this->smarty->compile_check && empty($this->compiled->_properties) && !$this->compiled->isCompiled) || $cache && ($this->smarty->compile_check === true || $this->smarty->compile_check === Brainy::COMPILECHECK_ON)) && !empty($this->properties['file_dependency'])) {
             foreach ($this->properties['file_dependency'] as $_file_to_check) {
                 if ($_file_to_check[2] == 'file' || $_file_to_check[2] == 'php') {
                     if ($this->source->filepath == $_file_to_check[0] && isset($this->source->timestamp)) {
@@ -327,60 +329,14 @@ PHPDOC;
                     $mtime = $source->timestamp;
                 }
                 if (!$mtime || $mtime > $_file_to_check[1]) {
-                    $is_valid = false;
-                    break;
+                    return false;
                 }
             }
         }
         // store data in reusable Smarty_Template_Compiled
         $this->compiled->_properties = $properties;
 
-        return $is_valid;
-    }
-
-    /**
-     * Template code runtime function to create a local Smarty variable for array assignments
-     *
-     * @param string $tpl_var tempate variable name
-     * @param int    $scope   scope of variable
-     */
-    public function createLocalArrayVariable($tpl_var, $scope = Brainy::SCOPE_LOCAL) {
-        if (!isset($this->tpl_vars[$tpl_var])) {
-            $this->tpl_vars[$tpl_var] = new Variable(array(), $scope);
-            return;
-        }
-
-        $this->tpl_vars[$tpl_var] = clone $this->tpl_vars[$tpl_var];
-        if ($scope != Brainy::SCOPE_LOCAL) {
-            $this->tpl_vars[$tpl_var]->scope = $scope;
-        }
-        if (!(is_array($this->tpl_vars[$tpl_var]->value) || $this->tpl_vars[$tpl_var]->value instanceof ArrayAccess)) {
-            settype($this->tpl_vars[$tpl_var]->value, 'array');
-        }
-    }
-
-    /**
-     * Template code runtime function to get pointer to template variable array of requested scope
-     *
-     * @param  int   $scope requested variable scope
-     * @return array array of template variables
-     */
-    public function &getScope($scope) {
-        if ($scope == Brainy::SCOPE_PARENT && !empty($this->parent)) {
-            return $this->parent->tpl_vars;
-        } elseif ($scope == Brainy::SCOPE_ROOT && !empty($this->parent)) {
-            $ptr = $this->parent;
-            while (!empty($ptr->parent)) {
-                $ptr = $ptr->parent;
-            }
-
-            return $ptr->tpl_vars;
-        } elseif ($scope == Brainy::SCOPE_GLOBAL) {
-            return Brainy::$global_tpl_vars;
-        }
-        $null = null;
-
-        return $null;
+        return true;
     }
 
     /**
@@ -389,10 +345,12 @@ PHPDOC;
      * @param  int   $scope pqrent or root scope
      * @return mixed object
      */
-    public function getScopePointer($scope) {
+    public function getScopePointer($scope)
+    {
         if ($scope == Brainy::SCOPE_PARENT && !empty($this->parent)) {
             return $this->parent;
-        } elseif ($scope == Brainy::SCOPE_ROOT && !empty($this->parent)) {
+        }
+        if ($scope == Brainy::SCOPE_ROOT && !empty($this->parent)) {
             $ptr = $this->parent;
             while (!empty($ptr->parent)) {
                 $ptr = $ptr->parent;
@@ -410,7 +368,8 @@ PHPDOC;
      * @param string $property_name property name
      * @param mixed  $value         value
      */
-    public function __set($property_name, $value) {
+    public function __set($property_name, $value)
+    {
         switch ($property_name) {
             case 'source':
             case 'compiled':
@@ -436,7 +395,8 @@ PHPDOC;
      *
      * @param string $property_name property name
      */
-    public function __get($property_name) {
+    public function __get($property_name)
+    {
         switch ($property_name) {
             case 'source':
                 if (strlen($this->template_resource) == 0) {
@@ -482,7 +442,8 @@ PHPDOC;
      * @param  Smarty  $smarty    smarty instance
      * @return boolean true
      */
-    public static function writeFile($_filepath, $_contents, Brainy $smarty) {
+    public static function writeFile($_filepath, $_contents, Brainy $smarty)
+    {
         if ($smarty->_file_perms !== null) {
             $old_umask = umask(0);
         }

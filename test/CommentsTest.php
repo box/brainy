@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class CommentsTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     /**
      * test simple comments
      */

@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class PluginModifierWordwrapTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testDefault() {
         $tpl = $this->smarty->createTemplate('eval:{"Blind woman gets new kidney from dad she hasn\'t seen in years."|wordwrap}');
         $this->assertEquals("Blind woman gets new kidney from dad she hasn't seen in years.", $this->smarty->fetch($tpl));

@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class PluginModifierLowerTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testDefault() {
         $result = "two convicts evade noose, jury hung.";
         $tpl = $this->smarty->createTemplate('eval:{"Two Convicts Evade Noose, Jury Hung."|lower}');

@@ -38,7 +38,7 @@
         $this->compiler->has_variable_string = false;
         $this->security = isset($this->smarty->security_policy);
         $this->block_nesting_level = 0;
-        $this->current_buffer = $this->root_buffer = new Helpers\TemplateBuffer($this);
+        $this->current_buffer = $this->root_buffer = new Helpers\TemplateBuffer();
 
         $this->safe_lookups = $this->smarty->safe_lookups;
     }
@@ -140,7 +140,6 @@
 // complete template
 start(res) ::= strictmode(strict) template. {
     res = strict . $this->root_buffer->to_smarty_php();
-    var_dump($res);
 }
 
 strictmode(res) ::= SETSTRICT(foo). {
@@ -171,8 +170,10 @@ template ::= .
 
 // Smarty tag
 template_element(res) ::= smartytag(st) RDEL. {
-    if ($this->compiler->has_code) {
-        res = new Helpers\Tag($this, (string) st);
+    if ($this->compiler->has_code && !is_object(st)) {
+        res = new Helpers\Tag((string) st);
+    } elseif ($this->compiler->has_code) {
+        res = st;
     } else {
         res = null;
     }
@@ -193,9 +194,9 @@ template_element(res) ::= literal(l). {
 // template text
 template_element(res) ::= TEXT(o). {
     if ($this->strip) {
-        res = new Helpers\Text($this, self::stripString(o));
+        res = new Helpers\Text(self::stripString(o));
     } else {
-        res = new Helpers\Text($this, o);
+        res = new Helpers\Text(o);
     }
 }
 
@@ -364,10 +365,10 @@ smartytag(res)   ::= LDEL ID(i). {
             res = Constructs\ConstructElse::compileOpen($this->compiler, null, null);
             break;
         case 'ldelim':
-            res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->left_delimiter));
+            res = new Helpers\Text($this->compiler->smarty->left_delimiter);
             break;
         case 'rdelim':
-            res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->right_delimiter));
+            res = new Helpers\Text($this->compiler->smarty->right_delimiter);
             break;
         default:
             res = $this->compiler->compileTag(i, array());
@@ -873,44 +874,46 @@ variableinternal(res)  ::= variableinternal(a1) indexdef(a2). {
 
 // FIXME: This is a hack to make $smarty.foreach.foo work. :(
 variableinternal(res)  ::= variablebase(base) indexdef(a) indexdef(b). {
-    if (base == '\'smarty\'') {
+    if (base != '\'smarty\'') {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
         res = $this->compileSafeLookupWithBase(res, b);
-    }
-    switch (Decompile::decompileString(a)) {
-        case 'foreach':
-            res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][" . b . "]");
-            break;
-        case 'capture':
-            res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['capture'][" . b . "]");
-            break;
-        default:
-            $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
+    } else {
+        switch (Decompile::decompileString(a)) {
+            case 'foreach':
+                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][" . b . "]");
+                break;
+            case 'capture':
+                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['capture'][" . b . "]");
+                break;
+            default:
+                $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
+        }
     }
 }
 
 variableinternal(res)  ::= variablebase(base) indexdef(a). {
     if (base !== '\'smarty\'') {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
-    }
-    switch (Decompile::decompileString(a)) {
-        case 'now':
-            res = new Wrappers\StaticWrapper('time()');
-            break;
-        case 'template':
-            res = new Wrappers\StaticWrapper('basename($_smarty_tpl->source->filepath)');
-            break;
-        case 'version':
-            res = new Wrappers\StaticWrapper(var_export(\Box\Brainy\Brainy::SMARTY_VERSION));
-            break;
-        case 'ldelim':
-            res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->left_delimiter));
-            break;
-        case 'rdelim':
-            res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->right_delimiter));
-            break;
-        default:
-            $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
+    } else {
+        switch (Decompile::decompileString(a)) {
+            case 'now':
+                res = new Wrappers\StaticWrapper('time()');
+                break;
+            case 'template':
+                res = new Wrappers\StaticWrapper('basename($_smarty_tpl->source->filepath)');
+                break;
+            case 'version':
+                res = new Wrappers\StaticWrapper(var_export(\Box\Brainy\Brainy::SMARTY_VERSION, true));
+                break;
+            case 'ldelim':
+                res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->left_delimiter, true));
+                break;
+            case 'rdelim':
+                res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->right_delimiter, true));
+                break;
+            default:
+                $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
+        }
     }
 }
 
@@ -1239,23 +1242,24 @@ doublequoted(res)          ::= doublequoted(o1) doublequotedcontent(o2). {
 }
 
 doublequoted(res)          ::= doublequotedcontent(o). {
-    res = new Helpers\DoubleQuoted($this, o);
+    res = new Helpers\DoubleQuoted($this);
+    res->append_subtree(o);
 }
 
 doublequotedcontent(res)           ::=  DOLLARID(i). {
-    res = new Helpers\Code($this, '(string)' . $this->compileVariable("'" . substr(i,1) . "'"));
+    res = new Helpers\Expression('(string)' . $this->compileVariable("'" . substr(i, 1) . "'"));
 }
 
 doublequotedcontent(res)           ::=  LDEL variable(v) RDEL. {
-    res = new Helpers\Code($this, '(string)'.v);
+    res = new Helpers\Expression('(string)' . v);
 }
 
 doublequotedcontent(res)           ::=  LDEL expr(e) RDEL. {
-    res = new Helpers\Code($this, '(string)('.e.')');
+    res = new Helpers\Expression('(string)(' . e . ')');
 }
 
 doublequotedcontent(res)           ::=  TEXT(o). {
-    res = new Helpers\DoubleQuotedContent($this, o);
+    res = new Helpers\DoubleQuotedContent(o);
 }
 
 

@@ -295,14 +295,6 @@ class TemplateCompiler
             return; // unreachable
         }
 
-        if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_FUNCTION, $tag, $this->smarty)) {
-            return (
-                \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_FUNCTION, $tag) .
-                '(' . $this->formatStaticArgs($parameter) . ', $_smarty_tpl)'
-            );
-        }
-
-
         // map_named attributes
         if (isset($args['_attr'])) {
             foreach ($args['_attr'] as $key => $attribute) {
@@ -312,7 +304,17 @@ class TemplateCompiler
                 $args = array_merge($args, $attribute);
             }
         }
-        // not an internal compiler tag
+
+        if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_FUNCTION, $tag, $this->smarty)) {
+            return (
+                'echo ' .
+                \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_FUNCTION, $tag) .
+                '(' . $this->formatStaticArgs($args) . ', $_smarty_tpl)' .
+                ";\n"
+            );
+        }
+
+
         if (strlen($tag) < 6 || substr($tag, -5) !== 'close') {
 
             if (isset($this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag])) {
@@ -346,7 +348,7 @@ class TemplateCompiler
             return call_user_func($plugin, $args, $this->smarty);
         }
 
-        $this->trigger_template_error("unknown tag \"" . $tag . "\"", $this->lex->taglineno);
+        $this->trigger_template_error("unknown tag \"$tag\"", $this->lex->taglineno);
     }
 
     /**
@@ -358,7 +360,11 @@ class TemplateCompiler
     {
         $params = array();
         foreach ($args as $key => $value) {
-            if (is_int($key)) {
+            if (is_array($value)) {
+                foreach ($value as $key => $value) {
+                    $params[] = "'$key' => $value";
+                }
+            } elseif (is_int($key)) {
                 $params[] = "$key => $value";
             } else {
                 $params[] = "'$key' => $value";

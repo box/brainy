@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class PluginModifierUpperTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
-    }
-
     public function testDefault() {
         $result = "IF STRIKE ISN'T SETTLED QUICKLY IT MAY LAST A WHILE.";
         $tpl = $this->smarty->createTemplate('eval:{"If Strike isn\'t Settled Quickly it may Last a While."|upper}');
