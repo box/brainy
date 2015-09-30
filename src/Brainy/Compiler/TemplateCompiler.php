@@ -77,13 +77,6 @@ class TemplateCompiler
     public $extends_uid = array();
 
     /**
-     * plugins loaded by default plugin handler
-     *
-     * @var array
-     */
-    public $default_handler_plugins = array();
-
-    /**
      * saved preprocessed modifier list
      *
      * @var mixed
@@ -318,7 +311,7 @@ class TemplateCompiler
         if (strlen($tag) < 6 || substr($tag, -5) !== 'close') {
 
             if (isset($this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag])) {
-                $function = $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag][0];
+                $function = $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag];
                 return call_user_func($function, $this->formatPluginArgs($args), $this);
             }
 
@@ -337,7 +330,7 @@ class TemplateCompiler
 
         // registered compiler plugin ?
         if (isset($this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag])) {
-            $function = $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag][0];
+            $function = $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag];
             return call_user_func($function, array(), $this);
         }
         if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_COMPILER, $tag, $this->smarty)) {

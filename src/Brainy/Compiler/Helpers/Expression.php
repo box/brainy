@@ -3,7 +3,7 @@
 namespace Box\Brainy\Compiler\Helpers;
 
 
-class Code extends ParseTree
+class Expression extends ParseTree
 {
     /**
      * Create parse tree buffer for code fragment

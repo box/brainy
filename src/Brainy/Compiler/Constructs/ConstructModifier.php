@@ -34,10 +34,10 @@ class ConstructModifier extends BaseConstruct
                 $output = "{$function}({$params})";
                 continue;
 
-            } elseif (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIERCOMPILER][$modifier][0])) {
+            } elseif (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIERCOMPILER][$modifier])) {
                 // This gets a copy of `$output` because $rawModifier[0] is set to $output above.
                 $output = call_user_func(
-                    $compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIERCOMPILER][$modifier][0],
+                    $compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIERCOMPILER][$modifier],
                     $rawModifier,
                     $compiler->smarty
                 );

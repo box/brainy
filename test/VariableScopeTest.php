@@ -12,8 +12,7 @@ namespace Box\Brainy\Tests;
 class VariableScopeTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smarty->assign('foo', 'bar');
     }
@@ -54,25 +53,6 @@ class VariableScopeTest extends Smarty_TestCase
         $data2 = new Helpers\Data($data1);
         $tpl = $this->smarty->createTemplate("eval:{\$foo}", $data2);
         $this->assertEquals("bar", $tpl->fetch());
-    }
-
-    /**
-    * test overwrite variable with data object chain
-    */
-    public function testVariableScope3() {
-        $data1 = new Helpers\Data($this->smarty);
-        $data1->assign('foo','newvalue');
-        $data2 = new Helpers\Data($data1);
-        $tpl = $this->smarty->createTemplate("eval:{\$foo}", null, null, $data2);
-        // must see the new value
-        $this->assertEquals("newvalue", $this->smarty->fetch($tpl));
-    }
-    public function testVariableScope32() {
-        $data1 = new Helpers\Data($this->smarty);
-        $data2 = new Helpers\Data($data1);
-        $tpl = $this->smarty->createTemplate("eval:{\$foo}", $data2);
-        // must see the old value at root
-        $this->assertEquals("bar", $this->smarty->fetch($tpl));
     }
 
     /**
@@ -144,12 +124,8 @@ class VariableScopeTest extends Smarty_TestCase
     }
     public function testDataArray() {
         // create global variable $foo2 in template
-        $tpl = $this->smarty->createTemplate("eval:{\$foo} {\$foo2}", array('foo'=>'bar','foo2'=>'bar2'));
+        $tpl = $this->smarty->createTemplate("eval:{\$foo} {\$foo2}", null, null, array('foo'=>'bar','foo2'=>'bar2'));
         $this->assertEquals("bar bar2", $this->smarty->fetch($tpl));
-    }
-    public function testDataArray2() {
-        // create global variable $foo2 in template
-        $this->assertEquals("bar bar2", $this->smarty->fetch("eval:{\$foo} {\$foo2}", array('foo'=>'bar','foo2'=>'bar2')));
     }
 
     public function testAssigns() {

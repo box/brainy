@@ -211,11 +211,11 @@ template_element ::= STRIPOFF(d). {
     }
     $this->strip--;
 }
-                      // process source of inheritance child block
+// process source of inheritance child block
 template_element ::= BLOCKSOURCE(s). {
-    // if ($this->strip) {
+// if ($this->strip) {
     //     SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, self::stripString(s));
-    // } else {
+// } else {
     //     SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, s);
     // }
 }
@@ -249,8 +249,8 @@ literal_element(res) ::= LITERAL(l). {
 // output tags start here
 //
 
-                  // output with optional attributes
-smartytag(res)   ::= LDEL value(e). {
+// output with optional attributes
+smartytag(res) ::= LDEL value(e). {
     $this->compiler->assert_no_enforced_modifiers(e instanceof Wrappers\StaticWrapper);
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
@@ -263,7 +263,7 @@ smartytag(res)   ::= LDEL value(e). {
     );
 }
 
-smartytag(res)   ::= LDEL value(e) modifierlist(l) attributes(a). {
+smartytag(res) ::= LDEL value(e) modifierlist(l) attributes(a). {
     $this->compiler->assert_expected_modifier(l, e instanceof Wrappers\StaticWrapper);
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
@@ -276,7 +276,7 @@ smartytag(res)   ::= LDEL value(e) modifierlist(l) attributes(a). {
     );
 }
 
-smartytag(res)   ::= LDEL value(e) attributes(a). {
+smartytag(res) ::= LDEL value(e) attributes(a). {
     $this->compiler->assert_no_enforced_modifiers(e instanceof Wrappers\StaticWrapper);
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
@@ -289,7 +289,7 @@ smartytag(res)   ::= LDEL value(e) attributes(a). {
     );
 }
 
-smartytag(res)   ::= LDEL expr(e) modifierlist(l) attributes(a). {
+smartytag(res) ::= LDEL expr(e) modifierlist(l) attributes(a). {
     $this->compiler->assert_expected_modifier(l, e instanceof Wrappers\StaticWrapper);
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
@@ -302,7 +302,7 @@ smartytag(res)   ::= LDEL expr(e) modifierlist(l) attributes(a). {
     );
 }
 
-smartytag(res)   ::= LDEL expr(e) attributes(a). {
+smartytag(res) ::= LDEL expr(e) attributes(a). {
     $this->compiler->assert_no_enforced_modifiers(e instanceof Wrappers\StaticWrapper);
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
@@ -318,11 +318,11 @@ smartytag(res)   ::= LDEL expr(e) attributes(a). {
 //
 // Smarty tags start here
 //
-smartytag(res)   ::= LDEL variable(vi) EQUAL expr(e). {
+smartytag(res) ::= LDEL variable(vi) EQUAL expr(e). {
     res = vi . ' = (' . e . ');';
 }
 
-smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL value(e). {
+smartytag(res) ::= LDEL DOLLAR ID(i) EQUAL value(e). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructAssign::compileOpen(
         $this->compiler,
@@ -331,7 +331,7 @@ smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL value(e). {
     );
 }
 
-smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e). {
+smartytag(res) ::= LDEL DOLLAR ID(i) EQUAL expr(e). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructAssign::compileOpen(
         $this->compiler,
@@ -341,18 +341,21 @@ smartytag(res)   ::= LDEL DOLLAR ID(i) EQUAL expr(e). {
 }
 
 // tag with optional Smarty2 style attributes
-smartytag(res)   ::= LDEL ID(i) attributes(a). {
+smartytag(res) ::= LDEL ID(i) attributes(a). {
     $this->compiler->has_code = true;
     switch (i) {
         case 'assign':
             res = Constructs\ConstructAssign::compileOpen($this->compiler, a, null);
+            break;
+        case 'include':
+            res = Constructs\ConstructInclude::compileOpen($this->compiler, a, null);
             break;
         default:
             res = $this->compiler->compileTag(i, a);
     }
 }
 
-smartytag(res)   ::= LDEL ID(i). {
+smartytag(res) ::= LDEL ID(i). {
     $this->compiler->has_code = true;
     switch (i) {
         case 'foreachelse':
@@ -375,8 +378,8 @@ smartytag(res)   ::= LDEL ID(i). {
     }
 }
 
-                  // tag with modifier and optional Smarty2 style attributes
-smartytag(res)   ::= LDEL ID(i) modifierlist(l)attributes(a). {
+// tag with modifier and optional Smarty2 style attributes
+smartytag(res) ::= LDEL ID(i) modifierlist(l)attributes(a). {
     res = 'ob_start();\necho ' . $this->compiler->compileTag(i, a) . 'echo ';
     $this->compiler->has_code = true;
     res .= Constructs\ConstructModifier::compileOpen($this->compiler, array(
@@ -386,8 +389,8 @@ smartytag(res)   ::= LDEL ID(i) modifierlist(l)attributes(a). {
 }
 
 
-                  // {if}, {elseif} and {while} tag
-smartytag(res)   ::= LDELIF(i) expr(ie). {
+// {if}, {elseif} and {while} tag
+smartytag(res) ::= LDELIF(i) expr(ie). {
     $tag = trim(substr(i, $this->lex->ldel_length));
     $this->compiler->has_code = true;
     switch ($tag) {
@@ -403,7 +406,7 @@ smartytag(res)   ::= LDELIF(i) expr(ie). {
     }
 }
 
-smartytag(res)   ::= LDELIF(i) expr(ie) attributes(a). {
+smartytag(res) ::= LDELIF(i) expr(ie) attributes(a). {
     $tag = trim(substr(i, $this->lex->ldel_length));
     $this->compiler->has_code = true;
     switch ($tag) {
@@ -419,7 +422,7 @@ smartytag(res)   ::= LDELIF(i) expr(ie) attributes(a). {
     }
 }
 
-smartytag(res)   ::= LDELFOR statements(st) SEMICOLON optspace expr(ie) SEMICOLON optspace DOLLAR varvar(v2) foraction(e2) attributes(a). {
+smartytag(res) ::= LDELFOR statements(st) SEMICOLON optspace expr(ie) SEMICOLON optspace DOLLAR varvar(v2) foraction(e2) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructFor::compileOpen(
         $this->compiler,
@@ -436,15 +439,15 @@ smartytag(res)   ::= LDELFOR statements(st) SEMICOLON optspace expr(ie) SEMICOLO
     );
 }
 
-foraction(res)   ::= EQUAL expr(e). {
+foraction(res) ::= EQUAL expr(e). {
     res = '='.e;
 }
 
-foraction(res)   ::= INCDEC(e). {
+foraction(res) ::= INCDEC(e). {
     res = e;
 }
 
-smartytag(res)   ::= LDELFOR statement(st) TO expr(v) attributes(a). {
+smartytag(res) ::= LDELFOR statement(st) TO expr(v) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructFor::compileOpen(
         $this->compiler,
@@ -456,7 +459,7 @@ smartytag(res)   ::= LDELFOR statement(st) TO expr(v) attributes(a). {
     );
 }
 
-smartytag(res)   ::= LDELFOR statement(st) TO expr(v) STEP expr(v2) attributes(a). {
+smartytag(res) ::= LDELFOR statement(st) TO expr(v) STEP expr(v2) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructFor::compileOpen(
         $this->compiler,
@@ -468,14 +471,14 @@ smartytag(res)   ::= LDELFOR statement(st) TO expr(v) STEP expr(v2) attributes(a
     );
 }
 
-                  // {foreach} tag
-smartytag(res)   ::= LDELFOREACH attributes(a). {
+// {foreach} tag
+smartytag(res) ::= LDELFOREACH attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen($this->compiler, a, null);
 }
 
-                  // {foreach $array as $var} tag
-smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v0) attributes(a). {
+// {foreach $array as $var} tag
+smartytag(res) ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v0) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
@@ -484,7 +487,7 @@ smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v0) attributes
     );
 }
 
-smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v2) APTR DOLLAR varvar(v0) attributes(a). {
+smartytag(res) ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v2) APTR DOLLAR varvar(v0) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
@@ -500,7 +503,7 @@ smartytag(res)   ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v2) APTR DOLLA
     );
 }
 
-smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a). {
+smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
@@ -509,7 +512,7 @@ smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a
     );
 }
 
-smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR varvar(v0) attributes(a). {
+smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR varvar(v0) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
@@ -526,22 +529,25 @@ smartytag(res)   ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR 
 }
 
 
-                  // {$smarty.block.child} or {$smarty.block.parent}
-smartytag(res)   ::= LDEL SMARTYBLOCKCHILDPARENT(i). {
+// {$smarty.block.child} or {$smarty.block.parent}
+smartytag(res) ::= LDEL SMARTYBLOCKCHILDPARENT(i). {
     $j = strrpos(i,'.');
     if (i[$j+1] == 'c') {
-        // {$smarty.block.child}
+// {$smarty.block.child}
         // res = SMARTY_INTERNAL_COMPILE_BLOCK::compileChildBlock($this->compiler);
     } else {
-        // {$smarty.block.parent}
+// {$smarty.block.parent}
         // res = SMARTY_INTERNAL_COMPILE_BLOCK::compileParentBlock($this->compiler);
     }
 }
 
 
-                  // end of block tag  {/....}
-smartytag(res)   ::= LDELSLASH ID(i). {
+// end of block tag  {/....}
+smartytag(res) ::= LDELSLASH ID(i). {
     switch (i) {
+        case 'if':
+            res = Constructs\ConstructIf::compileClose($this->compiler, null, null);
+            break;
         case 'for':
             res = Constructs\ConstructFor::compileClose($this->compiler, null, null);
             break;
@@ -553,8 +559,11 @@ smartytag(res)   ::= LDELSLASH ID(i). {
     }
 }
 
-smartytag(res)   ::= LDELSLASH ID(i) modifierlist(l). {
+smartytag(res) ::= LDELSLASH ID(i) modifierlist(l). {
     switch (i) {
+        case 'if':
+            res = Constructs\ConstructIf::compileClose($this->compiler, null, null);
+            break;
         case 'for':
             res = Constructs\ConstructFor::compileClose($this->compiler, null, null);
             break;
@@ -569,24 +578,24 @@ smartytag(res)   ::= LDELSLASH ID(i) modifierlist(l). {
 //
 //Attributes of Smarty tags
 //
-                  // list of attributes
-attributes(res)  ::= attributes(a1) attribute(a2). {
+// list of attributes
+attributes(res) ::= attributes(a1) attribute(a2). {
     res = a1;
     res[] = a2;
 }
 
-                  // single attribute
-attributes(res)  ::= attribute(a). {
+// single attribute
+attributes(res) ::= attribute(a). {
     res = array(a);
 }
 
-                  // no attributes
-attributes(res)  ::= . {
+// no attributes
+attributes(res) ::= . {
     res = array();
 }
 
-                  // attribute
-attribute(res)   ::= SPACE ID(v) EQUAL ID(id). {
+// attribute
+attribute(res) ::= SPACE ID(v) EQUAL ID(id). {
     if (preg_match('~^true$~i', id)) {
         res = array(v=>'true');
     } elseif (preg_match('~^false$~i', id)) {
@@ -598,27 +607,27 @@ attribute(res)   ::= SPACE ID(v) EQUAL ID(id). {
     }
 }
 
-attribute(res)   ::= ATTR(v) expr(e). {
+attribute(res) ::= ATTR(v) expr(e). {
     res = array(trim(v," =\n\r\t")=>e);
 }
 
-attribute(res)   ::= ATTR(v) value(e). {
+attribute(res) ::= ATTR(v) value(e). {
     res = array(trim(v," =\n\r\t")=>e);
 }
 
-attribute(res)   ::= SPACE ID(v). {
+attribute(res) ::= SPACE ID(v). {
     res = "'".v."'";
 }
 
-attribute(res)   ::= SPACE expr(e). {
+attribute(res) ::= SPACE expr(e). {
     res = e;
 }
 
-attribute(res)   ::= SPACE value(v). {
+attribute(res) ::= SPACE value(v). {
     res = v;
 }
 
-attribute(res)   ::= SPACE INTEGER(i) EQUAL expr(e). {
+attribute(res) ::= SPACE INTEGER(i) EQUAL expr(e). {
     res = array(i=>e);
 }
 
@@ -627,25 +636,25 @@ attribute(res)   ::= SPACE INTEGER(i) EQUAL expr(e). {
 //
 // statement
 //
-statements(res)   ::= statement(s). {
+statements(res) ::= statement(s). {
     res = array(s);
 }
 
-statements(res)   ::= statements(s1) COMMA statement(s). {
+statements(res) ::= statements(s1) COMMA statement(s). {
     s1[]=s;
     res = s1;
 }
 
-statement(res)    ::= DOLLAR varvar(v) EQUAL expr(e). {
+statement(res) ::= DOLLAR varvar(v) EQUAL expr(e). {
     $this->compiler->assert_is_not_strict('Variable variable assignment is not supported in strict mode', $this);
     res = array('var' => v, 'value'=>e);
 }
 
-statement(res)    ::= variablebase(vi) EQUAL expr(e). {
+statement(res) ::= variablebase(vi) EQUAL expr(e). {
     res = array('var' => vi, 'value'=>e);
 }
 
-statement(res)    ::= OPENP statement(st) CLOSEP. {
+statement(res) ::= OPENP statement(st) CLOSEP. {
     res = st;
 }
 
@@ -654,37 +663,37 @@ statement(res)    ::= OPENP statement(st) CLOSEP. {
 // expressions
 //
 
-                  // single value
-expr(res)        ::= value(v). {
+// single value
+expr(res) ::= value(v). {
     res = v;
 }
 
-                 // ternary
-expr(res)        ::= ternary(v). {
+// ternary
+expr(res) ::= ternary(v). {
     res = v;
 }
 
-                  // arithmetic expression
-expr(res)        ::= expr(e) MATH(m) value(v). {
+// arithmetic expression
+expr(res) ::= expr(e) MATH(m) value(v). {
     res = Wrappers\StaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
 }
 
-expr(res)        ::= expr(e) UNIMATH(m) value(v). {
+expr(res) ::= expr(e) UNIMATH(m) value(v). {
     res = Wrappers\StaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
 }
 
-                  // bit operation
-expr(res)        ::= expr(e) ANDSYM(m) value(v). {
+// bit operation
+expr(res) ::= expr(e) ANDSYM(m) value(v). {
     res = Wrappers\StaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
 }
 
-                  // array
-expr(res)       ::= array(a). {
+// array
+expr(res) ::= array(a). {
     res = a;
 }
 
-                  // modifier
-expr(res)        ::= expr(e) modifierlist(l). {
+// modifier
+expr(res) ::= expr(e) modifierlist(l). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructModifier::compileOpen($this->compiler, array(
         'value' => e,
@@ -693,66 +702,66 @@ expr(res)        ::= expr(e) modifierlist(l). {
 }
 
 // if expression
-                    // simple expression
-expr(res)        ::= expr(e1) ifcond(c) expr(e2). {
+// simple expression
+expr(res) ::= expr(e1) ifcond(c) expr(e2). {
     res = new Wrappers\StaticWrapper(e1.c.e2);
 }
 
-expr(res)        ::= expr(e1) ISIN array(a).  {
+expr(res) ::= expr(e1) ISIN array(a).  {
     res = new Wrappers\StaticWrapper('in_array('.e1.','.a.')');
 }
 
-expr(res)        ::= expr(e1) ISIN value(v).  {
+expr(res) ::= expr(e1) ISIN value(v).  {
     res = new Wrappers\StaticWrapper('in_array('.e1.',(array)'.v.')');
 }
 
-expr(res)        ::= expr(e1) lop(o) expr(e2).  {
-    res = new Wrappers\StaticWrapper(e1.o.e2);
+expr(res) ::= expr(e1) lop(o) expr(e2).  {
+    res = new Wrappers\StaticWrapper(e1 . o . e2);
 }
 
-expr(res)        ::= expr(e1) ISDIVBY expr(e2). {
+expr(res) ::= expr(e1) ISDIVBY expr(e2). {
     res = new Wrappers\StaticWrapper('!('.e1.' % '.e2.')');
 }
 
-expr(res)        ::= expr(e1) ISNOTDIVBY expr(e2).  {
+expr(res) ::= expr(e1) ISNOTDIVBY expr(e2).  {
     $this->compiler->assert_is_not_strict('`is not div by` is not supported in strict mode', $this);
     res = new Wrappers\StaticWrapper('('.e1.' % '.e2.')');
 }
 
-expr(res)        ::= expr(e1) ISEVEN. {
+expr(res) ::= expr(e1) ISEVEN. {
     res = new Wrappers\StaticWrapper('!(1 & '.e1.')');
 }
 
-expr(res)        ::= expr(e1) ISNOTEVEN.  {
+expr(res) ::= expr(e1) ISNOTEVEN.  {
     $this->compiler->assert_is_not_strict('`is not even` is not supported in strict mode', $this);
     res = new Wrappers\StaticWrapper('(1 & '.e1.')');
 }
 
-expr(res)        ::= expr(e1) ISEVENBY expr(e2).  {
+expr(res) ::= expr(e1) ISEVENBY expr(e2).  {
     $this->compiler->assert_is_not_strict('`is even by` is not supported in strict mode', $this);
     res = new Wrappers\StaticWrapper('!(1 & '.e1.' / '.e2.')');
 }
 
-expr(res)        ::= expr(e1) ISNOTEVENBY expr(e2). {
+expr(res) ::= expr(e1) ISNOTEVENBY expr(e2). {
     $this->compiler->assert_is_not_strict('`is not even by` is not supported in strict mode', $this);
     res = new Wrappers\StaticWrapper('(1 & '.e1.' / '.e2.')');
 }
 
-expr(res)        ::= expr(e1) ISODD.  {
+expr(res) ::= expr(e1) ISODD.  {
     res = new Wrappers\StaticWrapper('(1 & '.e1.')');
 }
 
-expr(res)        ::= expr(e1) ISNOTODD. {
+expr(res) ::= expr(e1) ISNOTODD. {
     $this->compiler->assert_is_not_strict('`is not odd` is not supported in strict mode', $this);
     res = new Wrappers\StaticWrapper('!(1 & '.e1.')');
 }
 
-expr(res)        ::= expr(e1) ISODDBY expr(e2). {
+expr(res) ::= expr(e1) ISODDBY expr(e2). {
     $this->compiler->assert_is_not_strict('`is odd by` is not supported in strict mode', $this);
     res = new Wrappers\StaticWrapper('(1 & '.e1.' / '.e2.')');
 }
 
-expr(res)        ::= expr(e1) ISNOTODDBY expr(e2).  {
+expr(res) ::= expr(e1) ISNOTODDBY expr(e2).  {
     $this->compiler->assert_is_not_strict('`is not odd by` is not supported in strict mode', $this);
     res = new Wrappers\StaticWrapper('!(1 & '.e1.' / '.e2.')');
 }
@@ -760,56 +769,48 @@ expr(res)        ::= expr(e1) ISNOTODDBY expr(e2).  {
 //
 // ternary
 //
-ternary(res)        ::= OPENP expr(v) CLOSEP  QMARK DOLLAR ID(e1) COLON  expr(e2). {
+ternary(res) ::= OPENP expr(v) CLOSEP  QMARK DOLLAR ID(e1) COLON  expr(e2). {
     res = v.' ? '. $this->compileVariable("'".e1."'") . ' : '.e2;
 }
 
-ternary(res)        ::= OPENP expr(v) CLOSEP  QMARK  expr(e1) COLON  expr(e2). {
+ternary(res) ::= OPENP expr(v) CLOSEP  QMARK  expr(e1) COLON  expr(e2). {
     res = v.' ? '.e1.' : '.e2;
 }
 
-                 // value
-value(res)       ::= variable(v). {
+// value
+value(res) ::= variable(v). {
     res = v;
 }
 
-                  // +/- value
-value(res)        ::= UNIMATH(m) value(v). {
+// +/- value
+value(res) ::= UNIMATH(m) value(v). {
     res = Wrappers\StaticWrapper::static_concat(m, v);
 }
 
-                  // logical negation
-value(res)       ::= NOT value(v). {
+// logical negation
+value(res) ::= NOT value(v). {
     res = Wrappers\StaticWrapper::static_concat('!', v);
 }
 
-value(res)       ::= TYPECAST(t) value(v). {
+value(res) ::= TYPECAST(t) value(v). {
     res = t . v;
 }
 
-value(res)       ::= variable(v) INCDEC(o). {
+value(res) ::= variable(v) INCDEC(o). {
     res = v . o;
 }
 
 // numeric
-value(res)       ::= INTEGER(n). {
+value(res) ::= INTEGER(n). {
     res = new Wrappers\StaticWrapper(n);
 }
 
-value(res)       ::= INTEGER(n1) DOT INTEGER(n2). {
+value(res) ::= INTEGER(n1) DOT INTEGER(n2). {
     res = new Wrappers\StaticWrapper(n1.'.'.n2);
 }
 
-value(res)       ::= INTEGER(n1) DOT. {
-    res = new Wrappers\StaticWrapper(n1.'.');
-}
-
-value(res)       ::= DOT INTEGER(n1). {
-    res = new Wrappers\StaticWrapper('.'.n1);
-}
-
-                 // ID, true, false, null
-value(res)       ::= ID(id). {
+// ID, true, false, null
+value(res) ::= ID(id). {
     if (preg_match('~^true$~i', id)) {
         res = new Wrappers\StaticWrapper('true');
     } elseif (preg_match('~^false$~i', id)) {
@@ -821,33 +822,27 @@ value(res)       ::= ID(id). {
     }
 }
 
-                  // function call
-value(res)       ::= function(f). {
+// function call
+value(res) ::= function(f). {
     res = f;
 }
 
-                  // expression
-value(res)       ::= OPENP expr(e) CLOSEP. {
+// expression
+value(res) ::= OPENP expr(e) CLOSEP. {
     res = Wrappers\StaticWrapper::static_if_all("(". e .")", array(e));
 }
 
-                  // singele quoted string
-value(res)       ::= SINGLEQUOTESTRING(t). {
+// singele quoted string
+value(res) ::= SINGLEQUOTESTRING(t). {
     res = new Wrappers\StaticWrapper(t);
 }
 
-                  // double quoted string
-value(res)       ::= doublequoted_with_quotes(s). {
+// double quoted string
+value(res) ::= doublequoted_with_quotes(s). {
     res = new Wrappers\StaticWrapper(s);
 }
 
-
-                  // Smarty tag
-value(res)       ::= smartytag(st) RDEL. {
-    res = st;
-}
-
-value(res)       ::= value(v) modifierlist(l). {
+value(res) ::= value(v) modifierlist(l). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructModifier::compileOpen($this->compiler, array(
         'value' => v,
@@ -860,20 +855,20 @@ value(res)       ::= value(v) modifierlist(l). {
 // variables
 //
 
-variable(res)  ::= variableinternal(base). {
+variable(res) ::= variableinternal(base). {
     res = base;
 }
 
-variablebase(res)  ::= DOLLAR varvar(v). {
+variablebase(res) ::= DOLLAR varvar(v). {
     res = v;
 }
 
-variableinternal(res)  ::= variableinternal(a1) indexdef(a2). {
+variableinternal(res) ::= variableinternal(a1) indexdef(a2). {
     res = $this->compileSafeLookupWithBase(a1, a2);
 }
 
 // FIXME: This is a hack to make $smarty.foreach.foo work. :(
-variableinternal(res)  ::= variablebase(base) indexdef(a) indexdef(b). {
+variableinternal(res) ::= variablebase(base) indexdef(a) indexdef(b). {
     if (base != '\'smarty\'') {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
         res = $this->compileSafeLookupWithBase(res, b);
@@ -891,7 +886,7 @@ variableinternal(res)  ::= variablebase(base) indexdef(a) indexdef(b). {
     }
 }
 
-variableinternal(res)  ::= variablebase(base) indexdef(a). {
+variableinternal(res) ::= variablebase(base) indexdef(a). {
     if (base !== '\'smarty\'') {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
     } else {
@@ -917,67 +912,67 @@ variableinternal(res)  ::= variablebase(base) indexdef(a). {
     }
 }
 
-variableinternal(res)  ::= variablebase(v). {
+variableinternal(res) ::= variablebase(v). {
     res = $this->compileVariable(v);
 }
 
-variableinternal(res)  ::= variableinternal(a1) objectelement(a2). {
+variableinternal(res) ::= variableinternal(a1) objectelement(a2). {
     res = a1 . a2;
 }
 // variable with property
-variableinternal(res)    ::= DOLLAR varvar(v) AT ID(p). {
+variableinternal(res) ::= DOLLAR varvar(v) AT ID(p). {
     res = $this->compileVariable(v, p);
 }
 
 // single index definition
 // Smarty2 style index
-indexdef(res)    ::= DOT DOLLAR varvar(v).  {
+indexdef(res) ::= DOT DOLLAR varvar(v).  {
     $this->compiler->assert_is_not_strict('Variable indicies with dot syntax is not supported in strict mode', $this);
     res = $this->compileVariable(v);
 }
 
-indexdef(res)    ::= DOT DOLLAR varvar(v) AT ID(p). {
+indexdef(res) ::= DOT DOLLAR varvar(v) AT ID(p). {
     $this->compiler->assert_is_not_strict('Variable indicies with dot syntax is not supported in strict mode', $this);
     res = $this->compileVariable(v).'->'.p;
 }
 
-indexdef(res)   ::= DOT ID(i). {
+indexdef(res) ::= DOT ID(i). {
     res = "'". i ."'";
 }
 
-indexdef(res)   ::= DOT INTEGER(n). {
+indexdef(res) ::= DOT INTEGER(n). {
     res = n;
 }
 
-indexdef(res)   ::= DOT LDEL expr(e) RDEL. {
+indexdef(res) ::= DOT LDEL expr(e) RDEL. {
     $this->compiler->assert_is_not_strict('Dot syntax with expressions is not supported in strict mode', $this);
     res = e;
 }
 
 // PHP style index
-indexdef(res)   ::= OPENB expr(e) CLOSEB. {
+indexdef(res) ::= OPENB expr(e) CLOSEB. {
     res = e;
 }
 
 // variable variable names
 
 // single identifier element
-varvar(res)      ::= varvarele(v). {
+varvar(res) ::= varvarele(v). {
     res = v;
 }
 
 // sequence of identifier elements
-varvar(res)      ::= varvar(v1) varvarele(v2). {
+varvar(res) ::= varvar(v1) varvarele(v2). {
     res = v1.'.'.v2;
 }
 
 // fix sections of element
-varvarele(res)   ::= ID(s). {
+varvarele(res) ::= ID(s). {
     res = '\''.s.'\'';
 }
 
 // variable sections of element
-varvarele(res)   ::= LDEL expr(e) RDEL. {
+varvarele(res) ::= LDEL expr(e) RDEL. {
     $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     res = '('.e.')';
 }
@@ -1018,7 +1013,7 @@ objectelement(res)::= PTR ID(ii) LDEL expr(e) RDEL. {
     res = '->{\''.ii.'\'.'.e.'}';
 }
 
-                    // method
+// method
 objectelement(res)::= PTR method(f).  {
     res = '->'.f;
 }
@@ -1027,56 +1022,57 @@ objectelement(res)::= PTR method(f).  {
 //
 // function
 //
-function(res)     ::= ID(f) OPENP params(p) CLOSEP. {
-    if (!$this->security || $this->smarty->security_policy->isTrustedPhpFunction(f, $this->compiler)) {
-        if (strcasecmp(f, 'isset') === 0 || strcasecmp(f, 'empty') === 0 || strcasecmp(f, 'array') === 0 || is_callable(f)) {
-            $func_name = strtolower(f);
+function(res) ::= ID(f) OPENP params(p) CLOSEP. {
+    if ($this->security && !$this->smarty->security_policy->isTrustedPhpFunction(f, $this->compiler)) {
+        $this->compiler->trigger_template_error('Cannot use untrusted function: ' . f);
+    }
+    if (!(strcasecmp(f, 'isset') === 0 || strcasecmp(f, 'empty') === 0 || strcasecmp(f, 'array') === 0 || is_callable(f))) {
+        $this->compiler->trigger_template_error("unknown function \"" . f . "\"");
+    }
 
-            $is_language_construct = $func_name === 'isset' || $func_name === 'empty';
-            $combined_params = array();
-            foreach (p as $param) {
-                if ($is_language_construct && $param instanceof Wrappers\SafeLookupWrapper) {
-                    $combined_params[] = $param->getUnsafe();
-                    continue;
-                }
-                $combined_params[] = $param;
-            }
-            $par = implode(',', $combined_params);
+    $func_name = strtolower(f);
 
-            if ($func_name == 'isset') {
-                if (count($combined_params) == 0) {
-                    $this->compiler->trigger_template_error('Illegal number of paramer in "isset()"');
-                }
-                $isset_par=str_replace("')->value","',null,true,false)->value",$par);
-                res = f . "(". $isset_par .")";
-
-            } elseif (in_array($func_name, array('empty', 'reset', 'current', 'end', 'prev', 'next'))) {
-
-                if ($func_name !== 'empty') {
-                    $this->compiler->assert_is_not_strict($func_name . ' is not allowed in strict mode', $this);
-                }
-
-                if (count($combined_params) != 1) {
-                    $this->compiler->trigger_template_error('Illegal number of paramer in "empty()"');
-                }
-                if ($func_name == 'empty') {
-                    res = $func_name.'('.str_replace("')->value","',null,true,false)->value",$combined_params[0]).')';
-                } else {
-                    res = $func_name.'('.$combined_params[0].')';
-                }
-            } else {
-                res = f . "(". $par .")";
-            }
-        } else {
-            $this->compiler->trigger_template_error("unknown function \"" . f . "\"");
+    $is_language_construct = $func_name === 'isset' || $func_name === 'empty';
+    $combined_params = array();
+    foreach (p as $param) {
+        if ($is_language_construct && $param instanceof Wrappers\SafeLookupWrapper) {
+            $combined_params[] = $param->getUnsafe();
+            continue;
         }
+        $combined_params[] = $param;
+    }
+    $par = implode(',', $combined_params);
+
+    if ($func_name == 'isset') {
+        if (count($combined_params) !== 1) {
+            $this->compiler->trigger_template_error('Illegal number of paramer in "isset()"');
+        }
+        $isset_par = str_replace("')->value", "',null,true,false)->value", $par);
+        res = f . "(". $isset_par .")";
+
+    } elseif (in_array($func_name, array('empty', 'reset', 'current', 'end', 'prev', 'next'))) {
+
+        if ($func_name !== 'empty') {
+            $this->compiler->assert_is_not_strict($func_name . ' is not allowed in strict mode', $this);
+        }
+
+        if (count($combined_params) != 1) {
+            $this->compiler->trigger_template_error('Illegal number of paramer in "' . $func_name . '()"');
+        }
+        if ($func_name == 'empty') {
+            res = $func_name.'('.str_replace("')->value", "',null,true,false)->value",$combined_params[0]).')';
+        } else {
+            res = $func_name.'('.$combined_params[0].')';
+        }
+    } else {
+        res = f . "(". $par .")";
     }
 }
 
 //
 // method
 //
-method(res)     ::= ID(f) OPENP params(p) CLOSEP. {
+method(res) ::= ID(f) OPENP params(p) CLOSEP. {
     if ($this->security && substr(f,0,1) == '_') {
         $this->compiler->trigger_template_error(self::Err1);
     }
@@ -1084,18 +1080,18 @@ method(res)     ::= ID(f) OPENP params(p) CLOSEP. {
 }
 
 // function/method parameter
-                    // multiple parameters
-params(res)       ::= params(p) COMMA expr(e). {
+// multiple parameters
+params(res) ::= params(p) COMMA expr(e). {
     res = array_merge(p,array(e));
 }
 
-                    // single parameter
-params(res)       ::= expr(e). {
+// single parameter
+params(res) ::= expr(e). {
     res = array(e);
 }
 
-                    // kein parameter
-params(res)       ::= . {
+// kein parameter
+params(res) ::= . {
     res = array();
 }
 
@@ -1110,29 +1106,26 @@ modifierlist(res) ::= modifier(m) modparameters(p). {
     res = array(array_merge(m,p));
 }
 
-modifier(res)    ::= VERT AT ID(m). {
+modifier(res) ::= VERT AT ID(m). {
     $this->compiler->assert_is_not_strict('@ is not allowed in templates', $this);
     res = array(m);
 }
 
-modifier(res)    ::= VERT ID(m). {
+modifier(res) ::= VERT ID(m). {
     res =  array(m);
 }
 
-//
-// modifier parameter
-//
-                    // multiple parameter
+// multiple parameter
 modparameters(res) ::= modparameters(mps) modparameter(mp). {
     res = array_merge(mps,mp);
 }
 
-                    // no parameter
-modparameters(res)      ::= . {
+// no parameter
+modparameters(res) ::= . {
     res = array();
 }
 
-                    // parameter expression
+// parameter expression
 modparameter(res) ::= COLON value(mp). {
     res = array(mp);
 }
@@ -1143,51 +1136,51 @@ modparameter(res) ::= COLON array(mp). {
 
 
 // if conditions and operators
-ifcond(res)        ::= EQUALS. {
+ifcond(res) ::= EQUALS. {
     res = '==';
 }
 
-ifcond(res)        ::= NOTEQUALS. {
+ifcond(res) ::= NOTEQUALS. {
     res = '!=';
 }
 
-ifcond(res)        ::= GREATERTHAN. {
+ifcond(res) ::= GREATERTHAN. {
     res = '>';
 }
 
-ifcond(res)        ::= LESSTHAN. {
+ifcond(res) ::= LESSTHAN. {
     res = '<';
 }
 
-ifcond(res)        ::= GREATEREQUAL. {
+ifcond(res) ::= GREATEREQUAL. {
     res = '>=';
 }
 
-ifcond(res)        ::= LESSEQUAL. {
+ifcond(res) ::= LESSEQUAL. {
     res = '<=';
 }
 
-ifcond(res)        ::= IDENTITY. {
+ifcond(res) ::= IDENTITY. {
     res = '===';
 }
 
-ifcond(res)        ::= NONEIDENTITY. {
+ifcond(res) ::= NONEIDENTITY. {
     res = '!==';
 }
 
-ifcond(res)        ::= MOD. {
+ifcond(res) ::= MOD. {
     res = '%';
 }
 
-lop(res)        ::= LAND. {
+lop(res) ::= LAND. {
     res = '&&';
 }
 
-lop(res)        ::= LOR. {
+lop(res) ::= LOR. {
     res = '||';
 }
 
-lop(res)        ::= LXOR. {
+lop(res) ::= LXOR. {
     $this->compiler->assert_is_not_strict('XOR is not supported in strict mode', $this);
     res = ' XOR ';
 }
@@ -1195,31 +1188,31 @@ lop(res)        ::= LXOR. {
 //
 // ARRAY element assignment
 //
-array(res)           ::=  OPENB arrayelements(a) CLOSEB.  {
+array(res) ::=  OPENB arrayelements(a) CLOSEB.  {
     res = 'array('.a.')';
 }
 
-arrayelements(res)   ::=  arrayelement(a).  {
+arrayelements(res) ::=  arrayelement(a).  {
     res = a;
 }
 
-arrayelements(res)   ::=  arrayelements(a1) COMMA arrayelement(a).  {
+arrayelements(res) ::=  arrayelements(a1) COMMA arrayelement(a).  {
     res = a1.','.a;
 }
 
-arrayelements        ::=  .  {
+arrayelements ::=  .  {
     return;
 }
 
-arrayelement(res)    ::=  value(e1) APTR expr(e2). {
+arrayelement(res) ::=  value(e1) APTR expr(e2). {
     res = e1.'=>'.e2;
 }
 
-arrayelement(res)    ::=  ID(i) APTR expr(e2). {
+arrayelement(res) ::=  ID(i) APTR expr(e2). {
     res = '\''.i.'\'=>'.e2;
 }
 
-arrayelement(res)    ::=  expr(e). {
+arrayelement(res) ::=  expr(e). {
     res = e;
 }
 
@@ -1236,29 +1229,29 @@ doublequoted_with_quotes(res) ::= QUOTE doublequoted(s) QUOTE. {
 }
 
 
-doublequoted(res)          ::= doublequoted(o1) doublequotedcontent(o2). {
+doublequoted(res) ::= doublequoted(o1) doublequotedcontent(o2). {
     o1->append_subtree(o2);
     res = o1;
 }
 
-doublequoted(res)          ::= doublequotedcontent(o). {
+doublequoted(res) ::= doublequotedcontent(o). {
     res = new Helpers\DoubleQuoted($this);
     res->append_subtree(o);
 }
 
-doublequotedcontent(res)           ::=  DOLLARID(i). {
+doublequotedcontent(res) ::=  DOLLARID(i). {
     res = new Helpers\Expression('(string)' . $this->compileVariable("'" . substr(i, 1) . "'"));
 }
 
-doublequotedcontent(res)           ::=  LDEL variable(v) RDEL. {
+doublequotedcontent(res) ::=  LDEL variable(v) RDEL. {
     res = new Helpers\Expression('(string)' . v);
 }
 
-doublequotedcontent(res)           ::=  LDEL expr(e) RDEL. {
+doublequotedcontent(res) ::=  LDEL expr(e) RDEL. {
     res = new Helpers\Expression('(string)(' . e . ')');
 }
 
-doublequotedcontent(res)           ::=  TEXT(o). {
+doublequotedcontent(res) ::=  TEXT(o). {
     res = new Helpers\DoubleQuotedContent(o);
 }
 
@@ -1266,10 +1259,10 @@ doublequotedcontent(res)           ::=  TEXT(o). {
 //
 // optional space
 //
-optspace(res)     ::= SPACE(s).  {
+optspace(res) ::= SPACE(s).  {
     res = s;
 }
 
-optspace(res)     ::= .          {
+optspace(res) ::= . {
     res = '';
 }

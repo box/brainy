@@ -17,9 +17,9 @@ class Data extends \Box\Brainy\Templates\TemplateData
      * Create Smarty data object
      *
      * @param Smarty|array $_parent parent template
-     * @param \Box\Brainy\Brainy       $smarty  global smarty instance
      */
-    public function __construct($_parent = null, $smarty = null) {
+    public function __construct($_parent = null, $smarty = null)
+    {
         $this->smarty = $smarty;
         if (is_object($_parent)) {
             // when object set up back pointer

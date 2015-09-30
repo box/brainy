@@ -373,12 +373,6 @@ class Brainy extends Templates\TemplateData
      */
     public $properties = array();
     /**
-     * cached template objects
-     * @var array
-     * @internal
-     */
-    public $template_objects = array();
-    /**
      * registered plugins
      * @var array
      * @internal
@@ -432,31 +426,21 @@ class Brainy extends Templates\TemplateData
      */
     public $smarty;
     /**
-     * Saved parameter of merged templates during compilation
-     *
      * @var array
      * @internal
      */
-    public $merged_templates_func = array();
+    public $merged_templates_func;
 
 
     /**
      * Initialize a new instance of Brainy.
      */
-    public function __construct() {
-        // selfpointer needed by some other class methods
-        $this->smarty = $this;
+    public function __construct()
+    {
         // set default dirs
         $this->setTemplateDir('.' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR)
             ->setCompileDir('.' . DIRECTORY_SEPARATOR . 'compiled' . DIRECTORY_SEPARATOR)
             ->setPluginsDir(SMARTY_PLUGINS_DIR);
-    }
-
-    /**
-     * @internal
-     */
-    public function __clone() {
-        $this->smarty = $this;
     }
 
 
@@ -466,14 +450,12 @@ class Brainy extends Templates\TemplateData
      * @param  string  $resource_name template name
      * @return boolean Whether the template exists
      */
-    public function templateExists($resource_name) {
-        // create template object
-        $save = $this->template_objects;
+    public function templateExists($resource_name)
+    {
+        Runtime\TemplateCache::lock();
         $tpl = new Templates\Template($resource_name, $this);
-        // check if it does exists
         $result = $tpl->source->exists;
-        $this->template_objects = $save;
-
+        Runtime\TemplateCache::unlock();
         return $result;
     }
 
@@ -484,7 +466,8 @@ class Brainy extends Templates\TemplateData
      * @param  string|null|void $varname variable name or null
      * @return mixed Variable value or array of variable values
      */
-    public function getGlobal($varname = null) {
+    public function getGlobal($varname = null)
+    {
         if ($varname) {
             if (!isset(self::$global_tpl_vars[$varname])) {
                 return '';
@@ -506,7 +489,8 @@ class Brainy extends Templates\TemplateData
      * @return Brainy The current Smarty instance for chaining
      * @throws Exceptions\SmartyException when an invalid class is provided
      */
-    public function enableSecurity($security_class = null) {
+    public function enableSecurity($security_class = null)
+    {
         if ($security_class === null) {
             $security_class = new Templates\Security($this);
         }
@@ -710,45 +694,19 @@ class Brainy extends Templates\TemplateData
      * @param  boolean|void $do_clone   When true, the Smarty object will be cloned
      * @return Template
      */
-    public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true) {
-        if ($cache_id !== null && (is_object($cache_id) || is_array($cache_id))) {
-             $parent = $cache_id;
-             $cache_id = null;
-         }
-        if ($parent !== null && is_array($parent)) {
-            $data = $parent;
-            $parent = null;
-        } else {
-            $data = null;
-        }
+    public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null) {
 
         // already in template cache?
-        $_templateId = $this->joined_template_dir . '#' . $template . $compile_id;
-        if (isset($_templateId[150])) {
-            $_templateId = sha1($_templateId);
-        }
-
-        if (isset($this->template_objects[$_templateId])) {
+        $tpl = Runtime\TemplateCache::get($template, $this, $compile_id);
+        if ($tpl) {
             // return cached template object
-            $tpl = clone $this->template_objects[$_templateId];
-            if ($do_clone) {
-                $tpl->smarty = clone $tpl->smarty;
-            }
+            $tpl = clone $tpl;
             $tpl->parent = $parent;
             $tpl->tpl_vars = array();
-        } else {
-            $tpl = new Templates\Template($template, $do_clone ? clone $this : $this, $parent, $compile_id);
+            return $tpl;
         }
 
-        // fill data if present
-        if (!empty($data) && is_array($data)) {
-            // set up variable values
-            foreach ($data as $_key => $_val) {
-                $tpl->tpl_vars[$_key] = new Templates\Variable($_val);
-            }
-        }
-
-        return $tpl;
+        return new Templates\Template($template, $this, $parent, $compile_id);
     }
 
     /**
@@ -799,19 +757,17 @@ class Brainy extends Templates\TemplateData
      * @param  string                       $type       plugin type
      * @param  string                       $tag        name of template tag
      * @param  callable                     $callback   PHP callback to register
-     * @param  boolean                      $cacheable  if true (default) this fuction is cachable
-     * @param  array|null                   $cache_attr caching attributes if any
      * @return Brainy Self-reference to facilitate chaining
      * @throws SmartyException              when the plugin tag is invalid
      */
-    public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null) {
+    public function registerPlugin($type, $tag, $callback) {
         if (isset($this->registered_plugins[$type][$tag])) {
             throw new Exceptions\SmartyException("Plugin tag \"{$tag}\" already registered");
         } elseif (!is_callable($callback)) {
             throw new Exceptions\SmartyException("Plugin \"{$tag}\" not callable");
         }
 
-        $this->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
+        $this->registered_plugins[$type][$tag] = $callback;
         return $this;
     }
 

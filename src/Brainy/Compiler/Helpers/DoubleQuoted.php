@@ -10,9 +10,8 @@ class DoubleQuoted extends ParseTree
 
     /**
      * @param object            $parser  parser object
-     * @param ParseTree $subtree parsetree buffer
      */
-    public function __construct($parser, ParseTree $subtree) {
+    public function __construct($parser) {
         $this->parser = $parser;
         $this->subtrees = [];
     }

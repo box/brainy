@@ -216,4 +216,29 @@ class TemplateData
         return new UndefinedVariable;
     }
 
+
+    /**
+     * Applies all of the data to the current object
+     * @param  TemplateData $target
+     * @return void
+     */
+    public function applyData(TemplateData $target)
+    {
+        foreach ($this->tpl_vars as $name => &$value) {
+            $target->tpl_vars[$name] = &$value;
+        }
+    }
+
+    /**
+     * Applies all of the data to the current object
+     * @param  TemplateData $target
+     * @return void
+     */
+    public function applyDataFrom(array $source)
+    {
+        foreach ($source as $name => &$value) {
+            $this->tpl_vars[$name] = new Variable($value);
+        }
+    }
+
 }

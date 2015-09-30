@@ -22,11 +22,6 @@ class Template extends TemplateBase
      */
     public $compile_id = null;
     /**
-     * flag if compiled template is invalid and must be (re)compiled
-     * @var bool
-     */
-    public $mustCompile = null;
-    /**
      * special compiled template properties
      * @var array
      */
@@ -76,6 +71,14 @@ class Template extends TemplateBase
         }
 
         $this->smarty->fetchedTemplate($template_resource);
+
+        if ($this->parent) {
+            if (is_array($this->parent)) {
+                $this->applyDataFrom($this->parent);
+            } else {
+                $this->parent->applyData($this);
+            }
+        }
     }
 
     /**
@@ -94,12 +97,10 @@ class Template extends TemplateBase
             }
             throw new SmartyException("Unable to load template {$this->source->type} '{$this->source->name}'{$parent_resource}");
         }
-        return (!$this->source->uncompiled &&
-                ($this->smarty->force_compile ||
+        return ($this->smarty->force_compile ||
                     $this->source->recompiled ||
                     $this->compiled->timestamp === false ||
                     ($this->smarty->compile_check && $this->compiled->timestamp < $this->source->timestamp)
-                    )
                 );
     }
 
@@ -155,16 +156,12 @@ class Template extends TemplateBase
      * @param int     $parent_scope   scope in which {include} should execute
      * @return string template content
      */
-    public function getSubTemplate($template, $compile_id, $data, $parent_scope) {
+    public function renderSubTemplate($template, $compile_id, $data, $parent_scope) {
         // already in template cache?
-        $_templateId = $this->smarty->joined_template_dir . '#' . $template . $compile_id;
-
-        if (isset($_templateId[150])) {
-            $_templateId = sha1($_templateId);
-        }
-        if (isset($this->smarty->template_objects[$_templateId])) {
+        $tpl = \Box\Brainy\Runtime\TemplateCache::get($template, $this->smarty, $compile_id);
+        if ($tpl) {
             // clone cached template object because of possible recursive call
-            $tpl = clone $this->smarty->template_objects[$_templateId];
+            $tpl = clone $tpl;
             $tpl->parent = $this;
         } else {
             $tpl = new Template($template, $this->smarty, $this, $compile_id);
@@ -182,14 +179,12 @@ class Template extends TemplateBase
         } else {
             $tpl->tpl_vars = &$scope_ptr->tpl_vars;
         }
+
         if ($data) {
-            // set up variable values
-            foreach ($data as $_key => $_val) {
-                $tpl->tpl_vars[$_key] = new Variable($_val);
-            }
+            $tpl->applyDataFrom($data);
         }
 
-        return $tpl->fetch(null, null, null, null, false, false, true);
+        return $tpl->display();
     }
 
     /**
@@ -251,9 +246,6 @@ class Template extends TemplateBase
         }
         // build property code
         $output = '';
-        if (!$this->source->recompiled) {
-            $output = "/*%%SmartyHeaderCode%%*/\n";
-        }
         if ($cache) {
             // remove compiled code of{function} definition
             unset($this->properties['function']);
@@ -263,8 +255,8 @@ class Template extends TemplateBase
             $this->properties['unifunc'] = 'content_' . str_replace(array('.',','), '_', uniqid('', true));
         }
         if (!$this->source->recompiled) {
-            $output .= "\$_valid = \$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ',' . ($cache ? 'true' : 'false') . "); /*/%%SmartyHeaderCode%%*/\n";
-            $output .= 'if ($_valid && !is_callable(\'' . $this->properties['unifunc'] . "')) {\n";
+            $decode = "\$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ',' . ($cache ? 'true' : 'false') . ")";
+            $output .= 'if (' . $decode . ' && !is_callable(\'' . $this->properties['unifunc'] . "')) {\n";
 
             // Output a proper PHPDoc for Augmented Types users.
             $output .= <<<'PHPDOC'
@@ -277,6 +269,7 @@ PHPDOC;
 
             $output .= 'function ' . $this->properties['unifunc'] . "(\$_smarty_tpl) {\n";
         }
+
         $output .= $plugins_string;
         $output .= $content;
         if (!$this->source->recompiled) {
@@ -293,7 +286,6 @@ PHPDOC;
      * - Check if compiled or cache file is valid
      *
      * @param  array $properties special template properties
-     * @param  bool  $cache      flag if called from cache file
      * @return bool  flag if compiled or cache file is valid
      */
     public function decodeProperties($properties, $cache = false)
@@ -312,7 +304,7 @@ PHPDOC;
             return false;
         }
 
-        if (((!$cache && $this->smarty->compile_check && empty($this->compiled->_properties) && !$this->compiled->isCompiled) || $cache && ($this->smarty->compile_check === true || $this->smarty->compile_check === Brainy::COMPILECHECK_ON)) && !empty($this->properties['file_dependency'])) {
+        if ($this->smarty->compile_check && empty($this->compiled->_properties) && !$this->compiled->isCompiled && !empty($this->properties['file_dependency'])) {
             foreach ($this->properties['file_dependency'] as $_file_to_check) {
                 if ($_file_to_check[2] == 'file' || $_file_to_check[2] == 'php') {
                     if ($this->source->filepath == $_file_to_check[0] && isset($this->source->timestamp)) {

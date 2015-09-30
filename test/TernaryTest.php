@@ -88,13 +88,6 @@ class TernaryTest extends Smarty_TestCase
         $this->assertEquals('yes', $this->smarty->fetch($tpl));
     }
     /**
-    * test output on template function
-    */
-    public function testTernaryOutputTemplateFunction1() {
-        $tpl = $this->smarty->createTemplate("eval:{({counter start=1} == 1) ? 'yes' : 'no'}");
-        $this->assertEquals('yes', $this->smarty->fetch($tpl));
-    }
-    /**
     * test output on expression
     */
     public function testTernaryOutputExpression1() {

@@ -36,9 +36,6 @@ class ResourceExtends extends Resource
         $exists = true;
         foreach ($components as $component) {
             $s = Resource::source(null, $source->smarty, $component);
-            if ($s->type == 'php') {
-                throw new SmartyException("Resource type {$s->type} cannot be used with the extends resource type");
-            }
             $sources[$s->uid] = $s;
             $uid .= $s->filepath;
             if ($_template && $_template->smarty->compile_check) {

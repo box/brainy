@@ -48,12 +48,6 @@ class TemplateSource
     public $filepath = null;
 
     /**
-     * Source is bypassing compiler
-     * @var boolean
-     */
-    public $uncompiled = null;
-
-    /**
      * Source must be recompiled on every occasion
      * @var boolean
      */
@@ -87,8 +81,6 @@ class TemplateSource
      */
     public function __construct(Resource $handler, \Box\Brainy\Brainy $smarty, $resource, $type, $name, $unique_resource) {
         $this->handler = $handler; // Note: prone to circular references
-
-        $this->uncompiled = $this->handler instanceof \Box\Brainy\Resources\ResourceUncompiled;
         $this->recompiled = $this->handler instanceof \Box\Brainy\Resources\ResourceRecompiled;
 
         $this->smarty = $smarty;
@@ -129,15 +121,6 @@ class TemplateSource
     }
 
     /**
-     * render the uncompiled source
-     *
-     * @param Template $_template template object
-     */
-    public function renderUncompiled(Template $_template) {
-        return $this->handler->renderUncompiled($this, $_template);
-    }
-
-    /**
      * <<magic>> Generic Setter.
      *
      * @param  string          $property_name valid: timestamp, exists, content, template
@@ -148,11 +131,17 @@ class TemplateSource
         switch ($property_name) {
             // regular attributes
             case 'timestamp':
+                $this->timestamp = $value;
+                return;
             case 'exists':
+                $this->exists = $value;
+                return;
             case 'content':
+                $this->content = $value;
+                return;
             // required for extends: only
             case 'template':
-                $this->$property_name = $value;
+                $this->template = $value;
                 break;
 
             default:
@@ -170,10 +159,11 @@ class TemplateSource
     public function __get($property_name) {
         switch ($property_name) {
             case 'timestamp':
+                $this->handler->populateTimestamp($this);
+                return $this->timestamp;
             case 'exists':
                 $this->handler->populateTimestamp($this);
-
-                return $this->$property_name;
+                return $this->exists;
 
             case 'content':
                 return $this->content = $this->handler->getContent($this);

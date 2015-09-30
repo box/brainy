@@ -115,4 +115,25 @@ abstract class BaseConstruct
         return is_null($data) ? $openTag : $data;
     }
 
+
+    /**
+     * Flattens an array without encoding the values, unlike var_export
+     * @param string[] $arr
+     * @return string
+     */
+    protected static function flattenCompiledArray($arr)
+    {
+        $flattened = array();
+        foreach ($arr as $key => $val) {
+            if (is_array($val)) {
+                foreach ($val as $innerKey => $innerVal) {
+                    $flattened[$innerKey] = (string) $innerVal;
+                }
+            } else {
+                $flattened[$key] = (string) $val;
+            }
+        }
+        return $flattened;
+    }
+
 }

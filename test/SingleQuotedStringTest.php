@@ -11,6 +11,13 @@ namespace Box\Brainy\Tests;
 
 class SingleQuotedStringTest extends Smarty_TestCase
 {
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->smarty->escape_html = false;
+    }
+
     /**
     * test single quotes out of context
     */

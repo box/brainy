@@ -57,8 +57,21 @@ class CompiledTemplate
      *
      * @param TemplateSource $source source object this compiled object belongs to
      */
-    public function __construct(TemplateSource $source) {
+    public function __construct(TemplateSource $source)
+    {
         $this->source = $source;
+    }
+
+    /**
+     * Loads the template from disk
+     * @param  Template $_smarty_tpl
+     * @return void
+     */
+    public function load($_smarty_tpl)
+    {
+        require $this->filepath;
+        $this->loaded = true;
+        $this->isCompiled = true;
     }
 
 }

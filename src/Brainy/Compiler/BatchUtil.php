@@ -71,7 +71,7 @@ class BatchUtil
                 flush();
                 $_start_time = microtime(true);
                 try {
-                    $_tpl = $smarty->createTemplate($_template_file, null, null, null, false);
+                    $_tpl = $smarty->createTemplate($_template_file);
                     if ($_tpl->mustCompile()) {
                         $_tpl->compileTemplateSource();
                         $_count++;
@@ -86,8 +86,7 @@ class BatchUtil
                     $_error_count++;
                 }
                 // free memory
-                $smarty->template_objects = array();
-                $_tpl->smarty->template_objects = array();
+                \Box\Brainy\Runtime\TemplateCache::clear();
                 $_tpl = null;
                 if ($max_errors !== null && $_error_count == $max_errors) {
                     echo '<br><br>too many errors';
@@ -117,19 +116,12 @@ class BatchUtil
             $tpl = new \Box\Brainy\Templates\Template($resource_name, $smarty);
 
             // remove from template cache
-            $tpl->source; // have the template registered before unset()
-            $_templateId = $tpl->source->unique_resource . $tpl->compile_id;
-            if (isset($_templateId[150])) {
-                $_templateId = sha1($_templateId);
-            }
-            unset($smarty->template_objects[$_templateId]);
-
-            if ($tpl->source->exists) {
-                 $_resource_part_1 = basename(str_replace('^', '/', $tpl->compiled->filepath));
-                 $_resource_part_1_length = strlen($_resource_part_1);
-            } else {
+            \Box\Brainy\Runtime\TemplateCache::clearTemplate($tpl);
+            if (!$tpl->source->exists) {
                 return 0;
             }
+            $_resource_part_1 = basename(str_replace('^', '/', $tpl->compiled->filepath));
+            $_resource_part_1_length = strlen($_resource_part_1);
         }
         $_dir = $_compile_dir;
         if ($smarty->use_sub_dirs && isset($_compile_id)) {

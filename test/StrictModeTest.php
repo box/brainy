@@ -83,7 +83,6 @@ class StrictModeTest extends Smarty_TestCase
 
     public function banned_plugin_provider() {
         return array(
-            array('{textformat}{/textformat}'),
             array('{html_checkboxes options=array()}'),
             array('{html_options}'),
             array('{html_radios options=array()}'),

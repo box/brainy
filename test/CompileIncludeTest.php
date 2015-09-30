@@ -12,8 +12,7 @@ namespace Box\Brainy\Tests;
 class CompileIncludeTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->force_compile = true;
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
     }
@@ -114,20 +113,4 @@ class CompileIncludeTest extends Smarty_TestCase
         $this->assertContains("before 1 bar<br>\nbefore 3 bar<br>\nbefore 5 bar<br>\n\nafter 5 bar<br>\n\nafter 3 bar<br>\n\nafter 1 bar<br>", $content);
     }
 
-
-    /**
-     * @expectedException SmartyCompilerException
-     */
-    public function testDynamicIncludesWithInlineShouldFail() {
-        // Uses `string` instead of `eval` so that we actually simulate compilation
-        $this->smarty->fetch('string:{include file="foo{1+2}.tpl" inline}');
-    }
-    /**
-     * @expectedException SmartyCompilerException
-     */
-    public function testDynamicIncludesWithMCIShouldFail() {
-        $this->smarty->merge_compiled_includes = true;
-        // Uses `string` instead of `eval` so that we actually simulate compilation
-        $this->smarty->fetch('string:{include file="foo{1+2}.tpl"}');
-    }
 }

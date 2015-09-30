@@ -129,8 +129,7 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase
                     $tpl->compiler->inheritance = true;
                 }
                 // make sure whole chain gets compiled
-                $tpl->mustCompile = true;
-                if (!($tpl->source->uncompiled) && $tpl->source->exists) {
+                if ($tpl->source->exists) {
                     // get compiled code
                     $compiled_code = $tpl->compiler->compileTemplate($tpl);
                     // release compiler object to free memory

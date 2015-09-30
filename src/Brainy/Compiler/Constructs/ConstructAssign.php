@@ -20,23 +20,7 @@ class ConstructAssign extends BaseConstruct
         $var = self::getRequiredArg($args, 'var');
         $value = self::getRequiredArg($args, 'value');
 
-        $scopeRaw = self::getOptionalArg($args, 'scope', self::getDefaultScope());
-        switch (\Box\Brainy\Compiler\Decompile::decompileString($scopeRaw)) {
-            case 'local':
-                $scope = Brainy::SCOPE_LOCAL;
-                break;
-            case 'parent':
-                $scope = Brainy::SCOPE_PARENT;
-                break;
-            case 'root':
-                $scope = Brainy::SCOPE_ROOT;
-                break;
-            case 'global':
-                $scope = Brainy::SCOPE_GLOBAL;
-                break;
-            default:
-                $compiler->trigger_template_error('illegal value for "scope" attribute: ' . $scopeRaw, $compiler->lex->taglineno);
-        }
+        $scope = self::getScope($args);
 
         // implement Smarty2's behaviour of variables assigned by reference
         if ($compiler->template->smarty instanceof SmartyBC && Brainy::$assignment_compat === Brainy::ASSIGN_COMPAT) {
@@ -52,11 +36,35 @@ class ConstructAssign extends BaseConstruct
     }
 
     /**
+     * Returns the scope, given the raw scope string
+     * @param  string $raw
+     * @param  int|null|void $default The default scope, or null
+     * @return int
+     */
+    public static function getScope($args, $default = null)
+    {
+        $scopeRaw = self::getOptionalArg($args, 'scope', self::getDefaultScope($default));
+        switch (\Box\Brainy\Compiler\Decompile::decompileString($scopeRaw)) {
+            case 'local':
+                return Brainy::SCOPE_LOCAL;
+            case 'parent':
+                return Brainy::SCOPE_PARENT;
+            case 'root':
+                return Brainy::SCOPE_ROOT;
+            case 'global':
+                return Brainy::SCOPE_GLOBAL;
+            default:
+                $compiler->trigger_template_error('illegal value for "scope" attribute: ' . $scopeRaw, $compiler->lex->taglineno);
+        }
+    }
+
+    /**
+     * @param int|null|void $default
      * @return string
      */
-    private static function getDefaultScope()
+    private static function getDefaultScope($default)
     {
-        switch (Brainy::$default_assign_scope) {
+        switch ($default ?: Brainy::$default_assign_scope) {
             case Brainy::SCOPE_LOCAL:
                 return '"local"';
             case Brainy::SCOPE_PARENT:
