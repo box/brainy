@@ -127,61 +127,6 @@ class Smarty_Internal_Data
     }
 
     /**
-     * Append an element to an assigned array
-     *
-     * If you append to a string value, it is converted to an array value and
-     * then appended to. You can explicitly pass name/value pairs, or
-     * associative arrays containing the name/value pairs. If you pass the
-     * optional third parameter of true, the value will be merged with the
-     * current array instead of appended.
-     *
-     * The $merge parameter does not use the PHP array_merge function. Merging
-     * two numerically indexed arrays may cause values to overwrite each other
-     * or result in non-sequential keys.
-     *
-     * @deprecated append() and all of its derivative functions are deprecated
-     *             because they do not observe scoping rules, and their current
-     *             semantics prevent them from being changed in a backwards-
-     *             compatible way.
-     * @param  array|string         $tpl_var the template variable name(s)
-     * @param  mixed                $value   the value to append
-     * @param  boolean              $merge   flag if array elements shall be merged
-     * @return Smarty_Internal_Data current Smarty_Internal_Data (or Smarty or Smarty_Internal_Template) instance for chaining
-     */
-    public function append($tpl_var, $value = null, $merge = false) {
-        if (is_array($tpl_var)) {
-            // $tpl_var is an array, ignore $value
-            foreach ($tpl_var as $_key => $_val) {
-                $this->append($_key, $_val, $merge);
-            }
-            return $this;
-        }
-
-        if ($tpl_var != '' && isset($value)) {
-            if (!isset($this->tpl_vars[$tpl_var])) {
-                $tpl_var_inst = $this->getVariable($tpl_var, null, true, false);
-                if ($tpl_var_inst instanceof Undefined_Smarty_Variable) {
-                    $this->tpl_vars[$tpl_var] = new Smarty_variable(null);
-                } else {
-                    $this->tpl_vars[$tpl_var] = clone $tpl_var_inst;
-                }
-            }
-            if (!(is_array($this->tpl_vars[$tpl_var]->value) || $this->tpl_vars[$tpl_var]->value instanceof ArrayAccess)) {
-                settype($this->tpl_vars[$tpl_var]->value, 'array');
-            }
-            if ($merge && is_array($value)) {
-                foreach ($value as $_mkey => $_mval) {
-                    $this->tpl_vars[$tpl_var]->value[$_mkey] = $_mval;
-                }
-            } else {
-                $this->tpl_vars[$tpl_var]->value[] = $value;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Returns a single or all assigned template variables
      *
      * @param  string $varname Name of variable to process, or null to return all

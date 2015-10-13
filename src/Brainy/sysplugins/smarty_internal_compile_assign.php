@@ -26,7 +26,6 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase
      * @return string compiled code
      */
     public function compile($args, $compiler, $parameter) {
-        // the following must be assigned at runtime because it will be overwritten in Smarty_Internal_Compile_Append
         $this->required_attributes = array('var', 'value');
         $this->shorttag_order = array('var', 'value');
         $this->optional_attributes = array('scope');

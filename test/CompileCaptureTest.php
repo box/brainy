@@ -47,10 +47,6 @@ class CompileCaptureTest extends PHPUnit_Framework_TestCase
         $tpl = $this->smarty->createTemplate('eval:{capture short}hello shorttag{/capture}{$smarty.capture.short}');
         $this->assertEquals("hello shorttag", $this->smarty->fetch($tpl));
     }
-    public function testCapture7() {
-        $tpl = $this->smarty->createTemplate('eval:{capture append=foo}hello{/capture}bar{capture append=foo}world{/capture}{foreach $foo item} {$item@key} {$item}{/foreach}');
-        $this->assertEquals("bar 0 hello 1 world", $this->smarty->fetch($tpl));
-    }
     public function testCapture8() {
         $tpl = $this->smarty->createTemplate('eval:{capture assign=foo}hello {capture assign=bar}this is my {/capture}world{/capture}{$foo} {$bar}');
         $this->assertEquals("hello world this is my ", $this->smarty->fetch($tpl));
