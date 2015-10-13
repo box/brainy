@@ -720,11 +720,7 @@ variablebase(res)  ::= DOLLAR varvar(v). {
 }
 
 variableinternal(res)  ::= variableinternal(a1) indexdef(a2). {
-    if (a2 === '[]') {
-        res = a1 . a2;
-    } else {
-        res = $this->compileSafeLookupWithBase(a1, a2);
-    }
+    res = $this->compileSafeLookupWithBase(a1, a2);
 }
 
 // FIXME: This is a hack to make $smarty.config.foo work. :(
@@ -740,8 +736,6 @@ variableinternal(res)  ::= variablebase(base) indexdef(a) indexdef(b). {
 variableinternal(res)  ::= variablebase(base) indexdef(a). {
     if (base == '\'smarty\'') {
         res = $this->compiler->compileTag('private_special_variable', array(), a);
-    } elseif (a === '[]') {
-        res = $this->compileVariable(base) . a;
     } else {
         res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
     }
@@ -766,10 +760,6 @@ variableinternal(res)    ::= HATCH ID(i) HATCH. {
 
 variableinternal(res)    ::= HATCH variableinternal(v) HATCH. {
     res = '$_smarty_tpl->getConfigVariable('. v .')';
-}
-
-indexdef(res)    ::= OPENB CLOSEB.  {
-    res = '[]';
 }
 
 // single index definition
