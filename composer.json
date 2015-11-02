@@ -36,5 +36,11 @@
             "src/Brainy/SmartyBC.class.php",
             "src/Brainy/sysplugins/smarty_security.php"
         ]
+    },
+    "archive": {
+        "exclude": [
+            "/build",
+            "/test"
+        ]
     }
 }
