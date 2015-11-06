@@ -554,24 +554,11 @@ smartytag(res) ::= LDELSLASH ID(i). {
         case 'foreach':
             res = Constructs\ConstructForEach::compileClose($this->compiler, null, null);
             break;
+        case 'while':
+            res = Constructs\ConstructWhile::compileClose($this->compiler, null, null);
+            break;
         default:
             res = $this->compiler->compileTag(i.'close',array());
-    }
-}
-
-smartytag(res) ::= LDELSLASH ID(i) modifierlist(l). {
-    switch (i) {
-        case 'if':
-            res = Constructs\ConstructIf::compileClose($this->compiler, null, null);
-            break;
-        case 'for':
-            res = Constructs\ConstructFor::compileClose($this->compiler, null, null);
-            break;
-        case 'foreach':
-            res = Constructs\ConstructForEach::compileClose($this->compiler, null, null);
-            break;
-        default:
-            res = $this->compiler->compileTag(i.'close',array(),array('modifier_list'=>l));
     }
 }
 
@@ -987,30 +974,6 @@ objectelement(res)::= PTR ID(i). {
         $this->compiler->trigger_template_error(self::Err1);
     }
     res = '->'.i;
-}
-
-objectelement(res)::= PTR DOLLAR varvar(v). {
-    $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
-    if ($this->security) {
-        $this->compiler->trigger_template_error(self::Err2);
-    }
-    res = '->{'.$this->compileVariable(v).'}';
-}
-
-objectelement(res)::= PTR LDEL expr(e) RDEL. {
-    $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
-    if ($this->security) {
-        $this->compiler->trigger_template_error(self::Err2);
-    }
-    res = '->{'.e.'}';
-}
-
-objectelement(res)::= PTR ID(ii) LDEL expr(e) RDEL. {
-    $this->compiler->assert_is_not_strict('Variable method calls are not supported in strict mode', $this);
-    if ($this->security) {
-        $this->compiler->trigger_template_error(self::Err2);
-    }
-    res = '->{\''.ii.'\'.'.e.'}';
 }
 
 // method

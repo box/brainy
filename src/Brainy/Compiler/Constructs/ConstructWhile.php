@@ -13,7 +13,7 @@ class ConstructWhile extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         $cond = self::getRequiredArg($args, 'cond');
         self::openTag($compiler, 'while');
@@ -26,7 +26,7 @@ class ConstructWhile extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         self::closeTag($compiler, array('while'));
         return "}\n";
