@@ -34,7 +34,7 @@ class CompileStripTest extends Smarty_TestCase
     }
 
     /**
-     * @expectedException SmartyCompilerException
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
      */
     public function testUnbalancedStrip() {
         $this->smarty->fetch("eval:{strip}<table>\n </table>{/strip}{/strip}");
