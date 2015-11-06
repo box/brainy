@@ -1733,7 +1733,7 @@ static public $yy_action = array(
 #line 1726 "Parser.php"
 #line 186 "Parser.y"
     function yy_r8(){
-    $this->_retvalue = new Helpers\Text($this, $this->yystack[$this->yyidx + 0]->minor);
+    $this->_retvalue = new Helpers\Text($this->yystack[$this->yyidx + 0]->minor);
     }
 #line 1731 "Parser.php"
 #line 191 "Parser.y"

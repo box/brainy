@@ -188,7 +188,7 @@ template_element(res) ::= COMMENT(c). {
 
 // Literal
 template_element(res) ::= literal(l). {
-    res = new Helpers\Text($this, l);
+    res = new Helpers\Text(l);
 }
 
 // template text

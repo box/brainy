@@ -382,11 +382,11 @@ abstract class Resource
      * Either [$_template] or [$smarty, $template_resource] must be specified
      *
      * @param  Template $_template         template object
-     * @param  Smarty                   $smarty            smarty object
+     * @param  Brainy                   $smarty            smarty object
      * @param  string                   $template_resource resource identifier
      * @return TemplateSource   Source Object
      */
-    public static function source(Template $_template=null, Smarty $smarty=null, $template_resource=null) {
+    public static function source(Template $_template=null, Brainy $smarty=null, $template_resource=null) {
         if ($_template) {
             $smarty = $_template->smarty;
             $template_resource = $_template->template_resource;
