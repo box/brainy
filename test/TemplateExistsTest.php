@@ -11,15 +11,10 @@ namespace Box\Brainy\Tests;
 
 class TemplateExistsTest extends Smarty_TestCase
 {
-    /**
-    * test $smarty->templateExists true
-    */
     public function testSmartyTemplateExists() {
         $this->assertTrue($this->smarty->templateExists('helloworld.tpl'));
     }
-    /**
-    * test $smarty->templateExists false
-    */
+
     public function testSmartyTemplateNotExists() {
         $this->assertFalse($this->smarty->templateExists('notthere.tpl'));
     }

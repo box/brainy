@@ -906,21 +906,12 @@ variableinternal(res) ::= variablebase(v). {
 variableinternal(res) ::= variableinternal(a1) objectelement(a2). {
     res = a1 . a2;
 }
-// variable with property
-variableinternal(res) ::= DOLLAR varvar(v) AT ID(p). {
-    res = $this->compileVariable(v, p);
-}
 
 // single index definition
 // Smarty2 style index
 indexdef(res) ::= DOT DOLLAR varvar(v).  {
     $this->compiler->assert_is_not_strict('Variable indicies with dot syntax is not supported in strict mode', $this);
     res = $this->compileVariable(v);
-}
-
-indexdef(res) ::= DOT DOLLAR varvar(v) AT ID(p). {
-    $this->compiler->assert_is_not_strict('Variable indicies with dot syntax is not supported in strict mode', $this);
-    res = $this->compileVariable(v).'->'.p;
 }
 
 indexdef(res) ::= DOT ID(i). {
