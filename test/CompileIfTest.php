@@ -163,11 +163,11 @@ class CompileIfTest extends Smarty_TestCase
         $this->assertEquals("yes", $this->smarty->fetch($tpl));
     }
     public function testIfIdent1() {
-        $tpl = $this->smarty->createTemplate('eval:{if 1 === "1"}yes{else}no{/if}');
+        $tpl = $this->smarty->createTemplate('eval:{if 1 === \'1\'}yes{else}no{/if}');
         $this->assertEquals("no", $this->smarty->fetch($tpl));
     }
     public function testIfIdent2() {
-        $tpl = $this->smarty->createTemplate('eval:{if "1" === "1"}yes{else}no{/if}');
+        $tpl = $this->smarty->createTemplate('eval:{if \'1\' === \'1\'}yes{else}no{/if}');
         $this->assertEquals("yes", $this->smarty->fetch($tpl));
     }
     public function testIfAnd1() {
@@ -248,12 +248,12 @@ class CompileIfTest extends Smarty_TestCase
     }
     public function testIfFunc1() {
         $this->smarty->security_policy->php_functions = array('strlen');
-        $tpl = $this->smarty->createTemplate('eval:{if strlen("hello world") ==  11}yes{else}no{/if}');
+        $tpl = $this->smarty->createTemplate('eval:{if strlen(\'hello world\') == 11}yes{else}no{/if}');
         $this->assertEquals("yes", $this->smarty->fetch($tpl));
     }
     public function testIfFunc2() {
         $this->smarty->security_policy->php_functions = array('strlen');
-        $tpl = $this->smarty->createTemplate('eval:{if 3 ge strlen("foo")}yes{else}no{/if}');
+        $tpl = $this->smarty->createTemplate('eval:{if 3 ge strlen(\'foo\')}yes{else}no{/if}');
         $this->assertEquals("yes", $this->smarty->fetch($tpl));
     }
     public function testIfFunc3() {
@@ -280,10 +280,10 @@ class CompileIfTest extends Smarty_TestCase
     }
 
     public function testSpacedElseIf() {
-        $tpl = $this->smarty->createTemplate('eval:{if false}yes{else if false}no{/if}');
+        $tpl = $this->smarty->createTemplate('eval:{if false}yes{elseif false}no{/if}');
         $this->assertEquals("", $this->smarty->fetch($tpl));
 
-        $tpl = $this->smarty->createTemplate('eval:{if false}yes{else if true}no{/if}');
+        $tpl = $this->smarty->createTemplate('eval:{if false}yes{elseif true}no{/if}');
         $this->assertEquals("no", $this->smarty->fetch($tpl));
     }
 }

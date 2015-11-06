@@ -13,7 +13,7 @@ class ConstructElse extends BaseConstruct
      * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, array $args, array $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
     {
         self::closeTag($compiler, array('if', 'elseif'));
         self::openTag($compiler, 'elseif');
