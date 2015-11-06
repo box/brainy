@@ -110,14 +110,14 @@ class EnforceModifierTest extends Smarty_TestCase
      */
     public function testBareSmartyVariablesThrow() {
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array('escape');
-        $this->smarty->display('eval:{$smarty.request.foo}');
+        $this->smarty->display('eval:{$smarty.now}');
     }
 
     public function testProtectedSmartyVariablesThrow() {
         $_REQUEST['foo'] = 'bar';
         $this->expectOutputString('bar');
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array('escape');
-        $this->smarty->display('eval:{$smarty.request.foo|escape}');
+        $this->smarty->display('eval:{$smarty.now|escape}');
     }
 
     /**

@@ -17,7 +17,7 @@ class DelimiterTest extends Smarty_TestCase
     public function testDelimiter1() {
         $this->smarty->left_delimiter = '<{';
         $this->smarty->right_delimiter = '}>';
-        $tpl = $this->smarty->createTemplate('eval:<{* comment *}><{if true}><{"hello world"}><{/if}>');
+        $tpl = $this->smarty->createTemplate('eval:<{* comment *}><{if true}><{\'hello world\'}><{/if}>');
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
     /**
@@ -26,7 +26,7 @@ class DelimiterTest extends Smarty_TestCase
     public function testDelimiter2() {
         $this->smarty->left_delimiter = '<-{';
         $this->smarty->right_delimiter = '}->';
-        $tpl = $this->smarty->createTemplate('eval:<-{* comment *}-><-{if true}-><-{"hello world"}-><-{/if}->');
+        $tpl = $this->smarty->createTemplate('eval:<-{* comment *}-><-{if true}-><-{\'hello world\'}-><-{/if}->');
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
     /**
@@ -35,7 +35,7 @@ class DelimiterTest extends Smarty_TestCase
     public function testDelimiter3() {
         $this->smarty->left_delimiter = '<--{';
         $this->smarty->right_delimiter = '}-->';
-        $tpl = $this->smarty->createTemplate('eval:<--{* comment *}--><--{if true}--><--{"hello world"}--><--{/if}-->');
+        $tpl = $this->smarty->createTemplate('eval:<--{* comment *}--><--{if true}--><--{\'hello world\'}--><--{/if}-->');
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
     /**
@@ -44,7 +44,7 @@ class DelimiterTest extends Smarty_TestCase
     public function testDelimiter4() {
         $this->smarty->left_delimiter = '{{';
         $this->smarty->right_delimiter = '}}';
-        $tpl = $this->smarty->createTemplate('eval:{{* comment *}}{{if true}}{{"hello world"}}{{/if}}');
+        $tpl = $this->smarty->createTemplate('eval:{{* comment *}}{{if true}}{{\'hello world\'}}{{/if}}');
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
     /**
@@ -53,7 +53,14 @@ class DelimiterTest extends Smarty_TestCase
     public function testDelimiter5() {
         $this->smarty->left_delimiter = '{=';
         $this->smarty->right_delimiter = '=}';
-        $tpl = $this->smarty->createTemplate('eval:{=assign var=foo value="hello world"=}{=$foo=}');
+        $tpl = $this->smarty->createTemplate('eval:{=assign var=foo value=\'hello world\'=}{=$foo=}');
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
+    }
+
+    public function testSmartyVars() {
+        $this->smarty->left_delimiter = '{=';
+        $this->smarty->right_delimiter = '=}';
+        $tpl = $this->smarty->createTemplate('eval:{=$smarty.ldelim=}{=$smarty.rdelim=}');
+        $this->assertEquals("{==}", $this->smarty->fetch($tpl));
     }
 }
