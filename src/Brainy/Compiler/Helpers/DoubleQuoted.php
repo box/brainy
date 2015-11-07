@@ -62,6 +62,9 @@ class DoubleQuoted extends ParseTree
         }
 
         if ($buffer) {
+            if ($code) {
+                $code .= '.';
+            }
             $code .= $this->escape_data($buffer);
         }
 

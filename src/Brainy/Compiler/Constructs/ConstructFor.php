@@ -11,25 +11,23 @@ class ConstructFor extends BaseConstruct
      * Compiles the opening tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
      * @param  array|null  $args     Arguments
-     * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         if (isset($args['ifexp'])) {
-            return self::compileOpenCStyle($compiler, $args, $params);
+            return self::compileOpenCStyle($compiler, $args);
         } else {
-            return self::compileOpenShorthand($compiler, $args, $params);
+            return self::compileOpenShorthand($compiler, $args);
         }
     }
 
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
      * @param  array|null  $args     Arguments
-     * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpenCStyle(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
+    public static function compileOpenCStyle(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         $start = self::getRequiredArg($args, 'start');
         $ifexp = self::getRequiredArg($args, 'ifexp');
@@ -51,10 +49,9 @@ class ConstructFor extends BaseConstruct
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
      * @param  array|null  $args     Arguments
-     * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpenShorthand(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
+    public static function compileOpenShorthand(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         $start = self::getRequiredArg($args, 'start');
         $to = self::getRequiredArg($args, 'to');
@@ -84,10 +81,9 @@ class ConstructFor extends BaseConstruct
      * Compiles the closing tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
      * @param  array|null  $args     Arguments
-     * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
+    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         list($openTag) = self::closeTag($compiler, array('for', 'forelse'));
 

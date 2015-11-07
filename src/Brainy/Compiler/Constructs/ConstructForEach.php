@@ -10,10 +10,9 @@ class ConstructForEach extends BaseConstruct
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
      * @param  array|null  $args     Arguments
-     * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         $from = self::getRequiredArg($args, 'from');
         $item = self::getRequiredArg($args, 'item');
@@ -75,10 +74,9 @@ class ConstructForEach extends BaseConstruct
      * Compiles the closing tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
      * @param  array|null  $args     Arguments
-     * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
+    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         list($openTag) = self::closeTag($compiler, array('foreach', 'foreachelse'));
 

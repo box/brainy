@@ -24,12 +24,8 @@ class StrictModeTest extends Smarty_TestCase
             array('{${$foo}="bar"}'), // Variable variable assignment
             array('{${$foo}}'), // Variable variable lookups
             array('{$foo.$bar}'), // Variable variable indices
-            array('{$foo.$bar@zap}'), // Variable variable indices
             array('{$foo.{$bar}}'), // Dot notation with variable subscript
             array('{$foo=${$bar}}'), // Variable variable non-base lookups
-            array('{$foo->$foo}'), // Variable variable methods
-            array('{$foo->{$x+$y}}'), // Expression methods
-            array('{$foo->bar{$x+$y}}'), // Expression methods
             array('{$foo|@json_encode}'), // @modifiers
             array('{if $x XOR $y}{/if}'), // XOR operator
             // Banned functions

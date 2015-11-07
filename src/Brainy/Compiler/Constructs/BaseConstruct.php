@@ -12,10 +12,9 @@ abstract class BaseConstruct
      * Compiles the opening tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
      * @param  array|null  $args     Arguments
-     * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
+    public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         throw new \BadMethodCallException('Not implemented!');
     }
@@ -24,10 +23,9 @@ abstract class BaseConstruct
      * Compiles the closing tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
      * @param  array|null  $args     Arguments
-     * @param  array|null  $params   Parameters
      * @return mixed
      */
-    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args, $params)
+    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         throw new \BadMethodCallException('Not implemented!');
     }

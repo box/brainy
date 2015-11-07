@@ -87,27 +87,6 @@ class SmartyBC extends Brainy
     }
 
     /**
-     * Registers block function to be used in templates
-     *
-     * @param string $block       name of template block
-     * @param string $block_impl  PHP function to register
-     * @param bool   $cacheable
-     * @param mixed  $cache_attrs
-     */
-    public function register_block($block, $block_impl, $cacheable=true, $cache_attrs=null) {
-        $this->registerPlugin('block', $block, $block_impl, $cacheable, $cache_attrs);
-    }
-
-    /**
-     * Unregisters block function
-     *
-     * @param string $block name of template function
-     */
-    public function unregister_block($block) {
-        $this->unregisterPlugin('block', $block);
-    }
-
-    /**
      * Registers compiler function
      *
      * @param string $function      name of template function

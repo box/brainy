@@ -26,7 +26,7 @@ class DoubleQuotedContent extends ParseTree
      * @return string doubled quoted string
      */
     public function to_smarty_php() {
-        return '"' . $this->data . '"';
+        return var_export($this->data, true);
     }
 
     /**

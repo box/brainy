@@ -40,9 +40,10 @@ abstract class ParseTree
      * @return string escaped string
      */
     protected function escape_data($toEscape) {
+        $toEscape = (string) $toEscape;
         // Escape the data
-        $data = var_export((string) $toEscape, true);
-        $data = mb_substr($data, 1, mb_strlen($data) - 2);
+        $data = var_export($toEscape, true);
+        // $data = mb_substr($data, 1, mb_strlen($data) - 2);
         return $data;
     }
 
