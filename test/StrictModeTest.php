@@ -66,6 +66,13 @@ class StrictModeTest extends Smarty_TestCase
         return array(
             array('{if $foo}{/if}'),
             array('{$foo}'),
+
+            array('{for $i=0 to $foo.bar.baz-1}'),
+            array('{for $i=0 to count($foo)-1}'),
+            array('{for $i=0 to count($foo)-1 step 2}'),
+            array('{for $i=1 to $foo}'),
+            array('{for $i=count($foo)-1 to 0 step -1}'),
+            array('{for $i=0 to 5 step 2}'),
         );
     }
 

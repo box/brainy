@@ -579,7 +579,6 @@ statements(res) ::= statements(s1) COMMA statement(s). {
 }
 
 statement(res) ::= DOLLAR varvar(v) EQUAL expr(e). {
-    $this->compiler->assert_is_not_strict('Variable variable assignment is not supported in strict mode', $this);
     res = array('var' => v, 'value'=>e);
 }
 

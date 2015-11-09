@@ -2006,12 +2006,6 @@ static public $yy_action = array(
 #line 1999 "Parser.php"
 #line 577 "Parser.y"
     function yy_r53(){
-    $this->compiler->assert_is_not_strict('Variable variable assignment is not supported in strict mode', $this);
-    $this->_retvalue = array('var' => $this->yystack[$this->yyidx + -2]->minor, 'value'=>$this->yystack[$this->yyidx + 0]->minor);
-    }
-#line 2005 "Parser.php"
-#line 582 "Parser.y"
-    function yy_r54(){
     $this->_retvalue = array('var' => $this->yystack[$this->yyidx + -2]->minor, 'value'=>$this->yystack[$this->yyidx + 0]->minor);
     }
 #line 2010 "Parser.php"
