@@ -37,15 +37,6 @@ class LookupSafetyTest extends Smarty_TestCase
         $this->smarty->display('eval:{$foo[0]}');
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error_Notice
-     */
-    public function testUnsafeSuperglobalIndexLookupsThrowException() {
-        $this->expectOutputString('');
-        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
-        $this->smarty->display('eval:{$smarty.request.this_should_never_exist}');
-    }
-
     /*
     The tests below test the LOOKUP_SAFE behavior.
     */
@@ -80,7 +71,7 @@ class LookupSafetyTest extends Smarty_TestCase
     public function testSafeSuperglobalIndexLookupsPasses() {
         $this->expectOutputString('');
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
-        $this->smarty->display('eval:{$smarty.request.this_should_never_exist}');
+        $this->smarty->display('eval:{$smarty.now}');
     }
 
     /*

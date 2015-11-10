@@ -49,8 +49,8 @@ class ConstructInclude extends BaseConstruct
      */
     protected static function getDisplayCode($templatePath, $compileID, $scope, $data)
     {
-        if ($file instanceof \Box\Brainy\Compiler\Helpers\ParseTree) {
-            $file = $file->to_smarty_php();
+        if ($templatePath instanceof \Box\Brainy\Compiler\Helpers\ParseTree) {
+            $templatePath = $templatePath->to_smarty_php();
         }
 
         $data = self::flattenCompiledArray($data);

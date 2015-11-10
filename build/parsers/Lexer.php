@@ -82,7 +82,6 @@ class Lexer
         $this->rdel_length = strlen($this->smarty->right_delimiter);
         $this->smarty_token_names['LDEL'] =  $this->smarty->left_delimiter;
         $this->smarty_token_names['RDEL'] =  $this->smarty->right_delimiter;
-        $this->mbstring_overload = ini_get('mbstring.func_overload') & 2;
     }
 
  
@@ -289,20 +288,12 @@ class Lexer
     function yy_r1_15($yy_subpatterns)
     {
 
-   if ($this->mbstring_overload) {
-     $to = mb_strlen($this->data,'latin1');
-   } else {
-     $to = strlen($this->data);
-   }
+  $to = mb_strlen($this->data,'latin1');
    preg_match("/{$this->ldel}/",$this->data,$match,PREG_OFFSET_CAPTURE,$this->counter);
    if (isset($match[0][1])) {
      $to = $match[0][1];
    }
-   if ($this->mbstring_overload) {
-     $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
-   } else {
-     $this->value = substr($this->data,$this->counter,$to-$this->counter);
-   }
+   $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
    $this->token = Parser::TP_TEXT;
      }
 
@@ -335,47 +326,39 @@ class Lexer
               27 => 0,
               28 => 0,
               29 => 0,
-              30 => 0,
-              31 => 0,
-              32 => 0,
-              33 => 0,
+              30 => 3,
               34 => 0,
               35 => 0,
               36 => 0,
-              37 => 3,
+              37 => 0,
+              38 => 0,
+              39 => 0,
+              40 => 0,
               41 => 0,
-              42 => 0,
-              43 => 0,
-              44 => 0,
-              45 => 0,
+              42 => 1,
+              44 => 1,
               46 => 0,
               47 => 0,
               48 => 0,
-              49 => 1,
-              51 => 1,
+              49 => 0,
+              50 => 0,
+              51 => 0,
+              52 => 0,
               53 => 0,
               54 => 0,
               55 => 0,
               56 => 0,
-              57 => 0,
-              58 => 0,
+              57 => 1,
               59 => 0,
               60 => 0,
               61 => 0,
               62 => 0,
               63 => 0,
-              64 => 0,
-              65 => 1,
-              67 => 0,
-              68 => 0,
-              69 => 0,
-              70 => 0,
-              71 => 0,
             );
         if ($this->counter >= strlen($this->data)) {
             return false; // end of input
         }
-        $yy_global_pattern = "/\G(\")|\G('[^'\\\\]*(?:\\\\.[^'\\\\]*)*')|\G([$]smarty\\.block\\.(child|parent))|\G(\\$)|\G(\\s*".$this->rdel.")|\G(\\s+is\\s+in\\s+)|\G(\\s+as\\s+)|\G(\\s+to\\s+)|\G(\\s+step\\s+)|\G(\\s*===\\s*)|\G(\\s*!==\\s*)|\G(\\s*==\\s*|\\s+eq\\s+)|\G(\\s*!=\\s*|\\s*<>\\s*|\\s+(ne|neq)\\s+)|\G(\\s*>=\\s*|\\s+(ge|gte)\\s+)|\G(\\s*<=\\s*|\\s+(le|lte)\\s+)|\G(\\s*>\\s*|\\s+gt\\s+)|\G(\\s*<\\s*|\\s+lt\\s+)|\G(\\s+mod\\s+)|\G(!\\s*|not\\s+)|\G(\\s*&&\\s*|\\s*and\\s+)|\G(\\s*\\|\\|\\s*|\\s*or\\s+)|\G(\\s*xor\\s+)|\G(\\s+is\\s+odd\\s+by\\s+)|\G(\\s+is\\s+not\\s+odd\\s+by\\s+)|\G(\\s+is\\s+odd)|\G(\\s+is\\s+not\\s+odd)|\G(\\s+is\\s+even\\s+by\\s+)|\G(\\s+is\\s+not\\s+even\\s+by\\s+)|\G(\\s+is\\s+even)|\G(\\s+is\\s+not\\s+even)|\G(\\s+is\\s+div\\s+by\\s+)|\G(\\s+is\\s+not\\s+div\\s+by\\s+)|\G(\\((int(eger)?|bool(ean)?|float|double|real|string|binary|array|object)\\)\\s*)|\G(\\s*\\(\\s*)|\G(\\s*\\))|\G(\\[\\s*)|\G(\\s*\\])|\G(\\s*->\\s*)|\G(\\s*=>\\s*)|\G(\\s*=\\s*)|\G(\\+\\+|--)|\G(\\s*(\\+|-)\\s*)|\G(\\s*(\\*|\/|%)\\s*)|\G(@)|\G(\\s+[0-9]*[a-zA-Z_][a-zA-Z0-9_\-:]*\\s*=\\s*)|\G([0-9]*[a-zA-Z_]\\w*)|\G(\\d+)|\G(\\|)|\G(\\.)|\G(\\s*,\\s*)|\G(\\s*;)|\G(\\s*:\\s*)|\G(\\s*&\\s*)|\G(\\s*\\?\\s*)|\G(\\s+)|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G([\S\s])/iS";
+        $yy_global_pattern = "/\G(\")|\G('[^'\\\\]*(?:\\\\.[^'\\\\]*)*')|\G([$]smarty\\.block\\.(child|parent))|\G(\\$)|\G(\\s*".$this->rdel.")|\G(\\s+is\\s+in\\s+)|\G(\\s+as\\s+)|\G(\\s+to\\s+)|\G(\\s+step\\s+)|\G(\\s*===\\s*)|\G(\\s*!==\\s*)|\G(\\s*==\\s*|\\s+eq\\s+)|\G(\\s*!=\\s*|\\s*<>\\s*|\\s+(ne|neq)\\s+)|\G(\\s*>=\\s*|\\s+(ge|gte)\\s+)|\G(\\s*<=\\s*|\\s+(le|lte)\\s+)|\G(\\s*>\\s*|\\s+gt\\s+)|\G(\\s*<\\s*|\\s+lt\\s+)|\G(\\s+mod\\s+)|\G(!\\s*|not\\s+)|\G(\\s*&&\\s*|\\s*and\\s+)|\G(\\s*\\|\\|\\s*|\\s*or\\s+)|\G(\\s*xor\\s+)|\G(\\s+is\\s+odd)|\G(\\s+is\\s+even)|\G(\\s+is\\s+div\\s+by\\s+)|\G(\\((int(eger)?|bool(ean)?|float|double|real|string|binary|array|object)\\)\\s*)|\G(\\s*\\(\\s*)|\G(\\s*\\))|\G(\\[\\s*)|\G(\\s*\\])|\G(\\s*->\\s*)|\G(\\s*=>\\s*)|\G(\\s*=\\s*)|\G(\\+\\+|--)|\G(\\s*(\\+|-)\\s*)|\G(\\s*(\\*|\/|%)\\s*)|\G(@)|\G([0-9]*[a-zA-Z_]\\w*)|\G(\\d+)|\G(\\|)|\G(\\.)|\G(\\s*,\\s*)|\G(\\s*;)|\G(\\s*:\\s*)|\G(\\s*&\\s*)|\G(\\s*\\?\\s*)|\G(\\s+)|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G([\S\s])/iS";
 
         do {
             if (preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
@@ -541,176 +524,129 @@ class Lexer
     function yy_r2_27($yy_subpatterns)
     {
 
-   $this->token = Parser::TP_ISODDBY;
+   $this->token = Parser::TP_ISODD;
      }
     function yy_r2_28($yy_subpatterns)
     {
 
-   $this->token = Parser::TP_ISNOTODDBY;
+   $this->token = Parser::TP_ISEVEN;
      }
     function yy_r2_29($yy_subpatterns)
     {
 
-   $this->token = Parser::TP_ISODD;
+   $this->token = Parser::TP_ISDIVBY;
      }
     function yy_r2_30($yy_subpatterns)
     {
 
-   $this->token = Parser::TP_ISNOTODD;
-     }
-    function yy_r2_31($yy_subpatterns)
-    {
-
-   $this->token = Parser::TP_ISEVENBY;
-     }
-    function yy_r2_32($yy_subpatterns)
-    {
-
-   $this->token = Parser::TP_ISNOTEVENBY;
-     }
-    function yy_r2_33($yy_subpatterns)
-    {
-
-   $this->token = Parser::TP_ISEVEN;
+   $this->token = Parser::TP_TYPECAST;
      }
     function yy_r2_34($yy_subpatterns)
     {
 
-   $this->token = Parser::TP_ISNOTEVEN;
+   $this->token = Parser::TP_OPENP;
      }
     function yy_r2_35($yy_subpatterns)
     {
 
-   $this->token = Parser::TP_ISDIVBY;
+   $this->token = Parser::TP_CLOSEP;
      }
     function yy_r2_36($yy_subpatterns)
     {
 
-   $this->token = Parser::TP_ISNOTDIVBY;
+   $this->token = Parser::TP_OPENB;
      }
     function yy_r2_37($yy_subpatterns)
     {
 
-   $this->token = Parser::TP_TYPECAST;
-     }
-    function yy_r2_41($yy_subpatterns)
-    {
-
-   $this->token = Parser::TP_OPENP;
-     }
-    function yy_r2_42($yy_subpatterns)
-    {
-
-   $this->token = Parser::TP_CLOSEP;
-     }
-    function yy_r2_43($yy_subpatterns)
-    {
-
-   $this->token = Parser::TP_OPENB;
-     }
-    function yy_r2_44($yy_subpatterns)
-    {
-
    $this->token = Parser::TP_CLOSEB;
      }
-    function yy_r2_45($yy_subpatterns)
+    function yy_r2_38($yy_subpatterns)
     {
 
    $this->token = Parser::TP_PTR;
      }
-    function yy_r2_46($yy_subpatterns)
+    function yy_r2_39($yy_subpatterns)
     {
 
    $this->token = Parser::TP_APTR;
      }
-    function yy_r2_47($yy_subpatterns)
+    function yy_r2_40($yy_subpatterns)
     {
 
    $this->token = Parser::TP_EQUAL;
      }
-    function yy_r2_48($yy_subpatterns)
+    function yy_r2_41($yy_subpatterns)
     {
 
    $this->token = Parser::TP_INCDEC;
      }
-    function yy_r2_49($yy_subpatterns)
+    function yy_r2_42($yy_subpatterns)
     {
 
    $this->token = Parser::TP_UNIMATH;
      }
-    function yy_r2_51($yy_subpatterns)
+    function yy_r2_44($yy_subpatterns)
     {
 
    $this->token = Parser::TP_MATH;
      }
-    function yy_r2_53($yy_subpatterns)
+    function yy_r2_46($yy_subpatterns)
     {
 
    $this->token = Parser::TP_AT;
      }
-    function yy_r2_54($yy_subpatterns)
-    {
-
-   // resolve conflicts with shorttag and right_delimiter starting with '='
-   if (substr($this->data, $this->counter + strlen($this->value) - 1, $this->rdel_length) == $this->smarty->right_delimiter) {
-      preg_match("/\s+/",$this->value,$match);
-      $this->value = $match[0];
-      $this->token = Parser::TP_SPACE;
-   } else {
-      $this->token = Parser::TP_ATTR;
-   }
-     }
-    function yy_r2_55($yy_subpatterns)
+    function yy_r2_47($yy_subpatterns)
     {
 
    $this->token = Parser::TP_ID;
      }
-    function yy_r2_56($yy_subpatterns)
+    function yy_r2_48($yy_subpatterns)
     {
 
    $this->token = Parser::TP_INTEGER;
      }
-    function yy_r2_57($yy_subpatterns)
+    function yy_r2_49($yy_subpatterns)
     {
 
    $this->token = Parser::TP_VERT;
      }
-    function yy_r2_58($yy_subpatterns)
+    function yy_r2_50($yy_subpatterns)
     {
 
    $this->token = Parser::TP_DOT;
      }
-    function yy_r2_59($yy_subpatterns)
+    function yy_r2_51($yy_subpatterns)
     {
 
    $this->token = Parser::TP_COMMA;
      }
-    function yy_r2_60($yy_subpatterns)
+    function yy_r2_52($yy_subpatterns)
     {
 
    $this->token = Parser::TP_SEMICOLON;
      }
-    function yy_r2_61($yy_subpatterns)
+    function yy_r2_53($yy_subpatterns)
     {
 
    $this->token = Parser::TP_COLON;
      }
-    function yy_r2_62($yy_subpatterns)
+    function yy_r2_54($yy_subpatterns)
     {
 
    $this->token = Parser::TP_ANDSYM;
      }
-    function yy_r2_63($yy_subpatterns)
+    function yy_r2_55($yy_subpatterns)
     {
 
    $this->token = Parser::TP_QMARK;
      }
-    function yy_r2_64($yy_subpatterns)
+    function yy_r2_56($yy_subpatterns)
     {
 
    $this->token = Parser::TP_SPACE;
      }
-    function yy_r2_65($yy_subpatterns)
+    function yy_r2_57($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -721,7 +657,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r2_67($yy_subpatterns)
+    function yy_r2_59($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -732,7 +668,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r2_68($yy_subpatterns)
+    function yy_r2_60($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -743,7 +679,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r2_69($yy_subpatterns)
+    function yy_r2_61($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -754,7 +690,7 @@ class Lexer
      $this->taglineno = $this->line;
    }
      }
-    function yy_r2_70($yy_subpatterns)
+    function yy_r2_62($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -765,7 +701,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r2_71($yy_subpatterns)
+    function yy_r2_63($yy_subpatterns)
     {
 
    $this->token = Parser::TP_TEXT;
@@ -856,22 +792,14 @@ class Lexer
     function yy_r3_3($yy_subpatterns)
     {
 
-   if ($this->mbstring_overload) {
-     $to = mb_strlen($this->data,'latin1');
-   } else {
-     $to = strlen($this->data);
-   }
+   $to = mb_strlen($this->data,'latin1');
    preg_match("/{$this->ldel}\/?literal{$this->rdel}/",$this->data,$match,PREG_OFFSET_CAPTURE,$this->counter);
    if (isset($match[0][1])) {
      $to = $match[0][1];
    } else {
      $this->compiler->trigger_template_error ("missing or misspelled literal closing tag");
    }
-   if ($this->mbstring_overload) {
-     $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
-   } else {
-     $this->value = substr($this->data,$this->counter,$to-$this->counter);
-   }
+   $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
    $this->token = Parser::TP_LITERAL;
      }
 
@@ -1022,16 +950,8 @@ class Lexer
     function yy_r4_14($yy_subpatterns)
     {
 
-   if ($this->mbstring_overload) {
-     $to = mb_strlen($this->data,'latin1');
-   } else {
-     $to = strlen($this->data);
-   }
-   if ($this->mbstring_overload) {
-     $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
-   } else {
-     $this->value = substr($this->data,$this->counter,$to-$this->counter);
-   }
+   $to = mb_strlen($this->data,'latin1');
+   $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
    $this->token = Parser::TP_TEXT;
      }
 
@@ -1128,20 +1048,12 @@ class Lexer
     function yy_r5_4($yy_subpatterns)
     {
 
-   if ($this->mbstring_overload) {
-     $to = mb_strlen($this->data,'latin1');
-   } else {
-     $to = strlen($this->data);
-   }
+   $to = mb_strlen($this->data,'latin1');
    preg_match("/".$this->ldel."\s*((\/)?strip\s*".$this->rdel."|block\s+)/",$this->data,$match,PREG_OFFSET_CAPTURE,$this->counter);
    if (isset($match[0][1])) {
      $to = $match[0][1];
    }
-   if ($this->mbstring_overload) {
-     $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
-   } else {
-     $this->value = substr($this->data,$this->counter,$to-$this->counter);
-   }
+   $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
    return false;
      }
 
@@ -1251,20 +1163,12 @@ class Lexer
     function yy_r6_6($yy_subpatterns)
     {
 
-   if ($this->mbstring_overload) {
-     $to = mb_strlen($this->data,'latin1');
-   } else {
-     $to = strlen($this->data);
-   }
+   $to = mb_strlen($this->data,'latin1');
    preg_match("/".$this->ldel."\s*(literal\s*".$this->rdel."|(\/)?block(\s|".$this->rdel.")|[\$]smarty\.block\.(child|parent))/",$this->data,$match,PREG_OFFSET_CAPTURE,$this->counter);
    if (isset($match[0][1])) {
      $to = $match[0][1];
    }
-   if ($this->mbstring_overload) {
-     $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
-   } else {
-     $this->value = substr($this->data,$this->counter,$to-$this->counter);
-   }
+   $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
    $this->token = Parser::TP_BLOCKSOURCE;
      }
 
@@ -1352,22 +1256,14 @@ class Lexer
     function yy_r7_3($yy_subpatterns)
     {
 
-   if ($this->mbstring_overload) {
-     $to = mb_strlen($this->data,'latin1');
-   } else {
-     $to = strlen($this->data);
-   }
+   $to = mb_strlen($this->data,'latin1');
    preg_match("/{$this->ldel}\/?literal\s*{$this->rdel}/",$this->data,$match,PREG_OFFSET_CAPTURE,$this->counter);
    if (isset($match[0][1])) {
      $to = $match[0][1];
    } else {
      $this->compiler->trigger_template_error ("Missing or misspelled literal closing tag");
    }
-   if ($this->mbstring_overload) {
-     $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
-   } else {
-     $this->value = substr($this->data,$this->counter,$to-$this->counter);
-   }
+   $this->value = mb_substr($this->data,$this->counter,$to-$this->counter,'latin1');
    $this->token = Parser::TP_BLOCKSOURCE;
      }
 

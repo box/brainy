@@ -421,36 +421,13 @@ smartytag(res) ::= LDELFOR statement(st) TO expr(v) STEP expr(v2) attributes(a).
     );
 }
 
-// {foreach} tag
+// {foreach foo=x bar=y} tag
 smartytag(res) ::= LDELFOREACH attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen($this->compiler, a);
 }
 
-// {foreach $array as $var} tag
-smartytag(res) ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v0) attributes(a). {
-    $this->compiler->has_code = true;
-    res = Constructs\ConstructForEach::compileOpen(
-        $this->compiler,
-        array_merge(a, array(array('from' => v1), array('item' => v0)))
-    );
-}
-
-smartytag(res) ::= LDELFOREACH SPACE value(v1) AS DOLLAR varvar(v2) APTR DOLLAR varvar(v0) attributes(a). {
-    $this->compiler->has_code = true;
-    res = Constructs\ConstructForEach::compileOpen(
-        $this->compiler,
-        array_merge(
-            a,
-            array(
-                array('from' => v1),
-                array('item' => v0),
-                array('key' => v2),
-            )
-        )
-    );
-}
-
+// {foreach [1, 2, 3] as $val foo=x bar=y} tag
 smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
@@ -459,6 +436,7 @@ smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a).
     );
 }
 
+// {foreach [0 => 1, 1 => 2, 2 => 3] as $key => $var foo=x bar=y} tag
 smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR varvar(v0) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
@@ -530,38 +508,34 @@ attributes(res) ::= . {
 // attribute
 attribute(res) ::= SPACE ID(v) EQUAL ID(id). {
     if (preg_match('~^true$~i', id)) {
-        res = array(v=>'true');
+        res = array(v => 'true');
     } elseif (preg_match('~^false$~i', id)) {
-        res = array(v=>'false');
+        res = array(v => 'false');
     } elseif (preg_match('~^null$~i', id)) {
-        res = array(v=>'null');
+        res = array(v => 'null');
     } else {
-        res = array(v=>"'".id."'");
+        res = array(v => var_export(id, true));
     }
 }
 
-attribute(res) ::= ATTR(v) expr(e). {
-    res = array(trim(v," =\n\r\t")=>e);
+attribute(res) ::= SPACE ID(v) EQUAL expr(e). {
+    res = array(v => e);
 }
 
-attribute(res) ::= ATTR(v) value(e). {
-    res = array(trim(v," =\n\r\t")=>e);
+attribute(res) ::= SPACE ID(v) EQUAL value(e). {
+    res = array(v => e);
 }
 
 attribute(res) ::= SPACE ID(v). {
-    res = "'".v."'";
+    res = var_export(v, true);
 }
 
 attribute(res) ::= SPACE expr(e). {
     res = e;
 }
 
-attribute(res) ::= SPACE value(v). {
-    res = v;
-}
-
 attribute(res) ::= SPACE INTEGER(i) EQUAL expr(e). {
-    res = array(i=>e);
+    res = array(i => e);
 }
 
 
@@ -655,47 +629,12 @@ expr(res) ::= expr(e1) ISDIVBY expr(e2). {
     res = new Wrappers\StaticWrapper('!('.e1.' % '.e2.')');
 }
 
-expr(res) ::= expr(e1) ISNOTDIVBY expr(e2).  {
-    $this->compiler->assert_is_not_strict('`is not div by` is not supported in strict mode', $this);
-    res = new Wrappers\StaticWrapper('('.e1.' % '.e2.')');
-}
-
 expr(res) ::= expr(e1) ISEVEN. {
     res = new Wrappers\StaticWrapper('!(1 & '.e1.')');
 }
 
-expr(res) ::= expr(e1) ISNOTEVEN.  {
-    $this->compiler->assert_is_not_strict('`is not even` is not supported in strict mode', $this);
-    res = new Wrappers\StaticWrapper('(1 & '.e1.')');
-}
-
-expr(res) ::= expr(e1) ISEVENBY expr(e2).  {
-    $this->compiler->assert_is_not_strict('`is even by` is not supported in strict mode', $this);
-    res = new Wrappers\StaticWrapper('!(1 & '.e1.' / '.e2.')');
-}
-
-expr(res) ::= expr(e1) ISNOTEVENBY expr(e2). {
-    $this->compiler->assert_is_not_strict('`is not even by` is not supported in strict mode', $this);
-    res = new Wrappers\StaticWrapper('(1 & '.e1.' / '.e2.')');
-}
-
 expr(res) ::= expr(e1) ISODD.  {
     res = new Wrappers\StaticWrapper('(1 & '.e1.')');
-}
-
-expr(res) ::= expr(e1) ISNOTODD. {
-    $this->compiler->assert_is_not_strict('`is not odd` is not supported in strict mode', $this);
-    res = new Wrappers\StaticWrapper('!(1 & '.e1.')');
-}
-
-expr(res) ::= expr(e1) ISODDBY expr(e2). {
-    $this->compiler->assert_is_not_strict('`is odd by` is not supported in strict mode', $this);
-    res = new Wrappers\StaticWrapper('(1 & '.e1.' / '.e2.')');
-}
-
-expr(res) ::= expr(e1) ISNOTODDBY expr(e2).  {
-    $this->compiler->assert_is_not_strict('`is not odd by` is not supported in strict mode', $this);
-    res = new Wrappers\StaticWrapper('!(1 & '.e1.' / '.e2.')');
 }
 
 //
@@ -880,25 +819,15 @@ indexdef(res) ::= OPENB expr(e) CLOSEB. {
 // variable variable names
 
 // single identifier element
-varvar(res) ::= varvarele(v). {
-    res = v;
-}
-
-// sequence of identifier elements
-varvar(res) ::= varvar(v1) varvarele(v2). {
-    res = v1.'.'.v2;
-}
-
-// fix sections of element
-varvarele(res) ::= ID(s). {
+varvar(res) ::= ID(s). {
     res = '\''.s.'\'';
 }
 
-// variable sections of element
-varvarele(res) ::= LDEL expr(e) RDEL. {
-    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
+// sequence of identifier elements
+varvar(res) ::= LDEL expr(e) RDEL. {
     res = '('.e.')';
 }
+
 
 //
 // objects
@@ -1091,14 +1020,12 @@ array(res) ::=  OPENB arrayelements(a) CLOSEB.  {
     res = 'array('.a.')';
 }
 
-arrayelements(res) ::=  arrayelement(a).  {
-    res = a;
-}
-
 arrayelements(res) ::=  arrayelements(a1) COMMA arrayelement(a).  {
     res = a1.','.a;
 }
-
+arrayelements(res) ::=  arrayelement(a).  {
+    res = a;
+}
 arrayelements ::=  .  {
     return;
 }
@@ -1140,10 +1067,6 @@ doublequoted(res) ::= doublequotedcontent(o). {
 
 doublequotedcontent(res) ::=  DOLLARID(i). {
     res = new Helpers\Expression('(string)' . $this->compileVariable("'" . substr(i, 1) . "'"));
-}
-
-doublequotedcontent(res) ::=  LDEL variable(v) RDEL. {
-    res = new Helpers\Expression('(string)' . v);
 }
 
 doublequotedcontent(res) ::=  LDEL expr(e) RDEL. {
