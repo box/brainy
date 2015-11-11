@@ -31,6 +31,26 @@ abstract class BaseConstruct
     }
 
     /**
+     * Returns whether an argument is present or not
+     * @param  array|null  $args The argument list
+     * @param  string $name The argument name
+     * @return bool
+     */
+    public static function hasArg(array $args, $name)
+    {
+        if (isset($args[$name])) {
+            return true;
+        }
+        foreach ($args as $arg) {
+            if (!is_array($arg) || !isset($arg[$name])) {
+                continue;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Returns an argument from the args array
      * @param  array|null  $args The argument list
      * @param  string $name The argument name

@@ -1,49 +1,8 @@
 <?php
+namespace Box\Brainy\Runtime;
 
-namespace Box\Brainy\Templates;
-
-
-class ForEachSpecialVariable extends Variable
+class Loops
 {
-    public $total = 0;
-    public $iteration = 0;
-    public $index = 0;
-    public $show = false;
-    public $_loop = false;
-
-    public $first = false;
-    public $last = false;
-
-    public $source = null;
-    public $key = null;
-    public $value = null;
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return 'foreach';
-    }
-
-    /**
-     * Sets the source
-     * @param mixed $source
-     * @return void
-     */
-    public function setSource($source)
-    {
-        $this->source = $source;
-    }
-
-    /**
-     * Sets the count based on the source
-     * @return void
-     */
-    public function setCount()
-    {
-        $this->total = self::getCount($this->source);
-    }
 
     /**
      * Returns the size of an item
@@ -55,7 +14,6 @@ class ForEachSpecialVariable extends Variable
         if (is_array($value) || $value instanceof \Countable) {
             return count($value);
         }
-
         if ($value instanceof \IteratorAggregate) {
             // Note: getIterator() returns a Traversable, not an Iterator
             // thus rewind() and valid() methods may not be present
@@ -73,7 +31,6 @@ class ForEachSpecialVariable extends Variable
         } elseif (is_object($value)) {
             return count($value);
         }
-
         return 0;
     }
 

@@ -15,7 +15,7 @@ class ConstructFor extends BaseConstruct
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
-        if (isset($args['ifexp'])) {
+        if (self::hasArg($args, 'ifexp')) {
             return self::compileOpenCStyle($compiler, $args);
         } else {
             return self::compileOpenShorthand($compiler, $args);
@@ -36,7 +36,7 @@ class ConstructFor extends BaseConstruct
 
         $output = '';
         foreach ($start as $stmt) {
-            $output .= "\$_smarty_tpl->tpl_vars[{$stmt['var']}] = new \\Box\\Brainy\\Templates\\Variable({$stmt['value']});\n";
+            $output .= "\$_smarty_tpl->setVariable({$stmt['var']}, {$stmt['value']});\n";
         }
         $output .= "if ($ifexp) {\n";
         $output .= "  for (\$_foo=true; {$ifexp}; \$_smarty_tpl->tpl_vars[{$var}]->value{$step}) {\n";
@@ -66,11 +66,18 @@ class ConstructFor extends BaseConstruct
             $total = "min($total, $max)";
         }
 
-        $output = "\$_smarty_tpl->tpl_vars[$var] = new \\Box\\Brainy\\Templates\\LoopVariable($step, (int) $total);\n";
-        $output .= "if (\$_smarty_tpl->tpl_vars[$var]->total > 0) {\n";
-        $output .= "  for (\$_smarty_tpl->tpl_vars[$var]->value = $value, \$_smarty_tpl->tpl_vars[$var]->iteration = 1; \$_smarty_tpl->tpl_vars[$var]->iteration <= \$_smarty_tpl->tpl_vars[$var]->total;\$_smarty_tpl->tpl_vars[$var]->value += \$_smarty_tpl->tpl_vars[$var]->step, \$_smarty_tpl->tpl_vars[$var]->iteration++) {\n";
-        $output .= "\$_smarty_tpl->tpl_vars[$var]->first = \$_smarty_tpl->tpl_vars[$var]->iteration == 1;\n";
-        $output .= "\$_smarty_tpl->tpl_vars[$var]->last = \$_smarty_tpl->tpl_vars[$var]->iteration == \$_smarty_tpl->tpl_vars[$var]->total;\n";
+        $stepVar = '$' . $compiler->getUniqueVarName();
+        $totalVar = '$' . $compiler->getUniqueVarName();
+        $iterationVar = '$' . $compiler->getUniqueVarName();
+
+        $output = "$stepVar = $step;\n";
+        $output .= "$totalVar = (int) $total;\n";
+
+        $output .= "if ($totalVar > 0) {\n";
+        $output .= "  \$_smarty_tpl->setVariable($var, 0);\n";
+
+        $varVar = "\$_smarty_tpl->tpl_vars[$var]->value";
+        $output .= "  for ($varVar = $value, $iterationVar = 1; $iterationVar <= $totalVar; $varVar += $stepVar, $iterationVar++) {\n";
 
         self::openTag($compiler, 'for', array('for'));
 

@@ -22,47 +22,53 @@ class ConstructForEach extends BaseConstruct
 
         $usages = self::getUsages($compiler, $name);
 
-
-        $output = "if (!empty($from)) {\n";
-        $output .= "\$_smarty_tpl->tpl_vars[$item] = new \\Box\\Brainy\\Templates\\ForEachSpecialVariable();\n";
+        $innerVarVar = '$' . $compiler->getUniqueVarName();
+        $output = "$innerVarVar = array('source' => $from);\n";
+        $output .= "if (!array_key_exists('foreach', \$_smarty_tpl->tpl_vars['smarty']->value)) \$_smarty_tpl->tpl_vars['smarty']->value['foreach'] = array();\n";
         if ($name) {
-            $output .= "\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][$name] = &\$_smarty_tpl->tpl_vars[$item];\n";
+            $output .= "\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][$name] = &$innerVarVar;\n";
         }
+
+        $output .= "if (!empty({$innerVarVar}['source'])) {\n";
+
+        $output .= "\$_smarty_tpl->tpl_vars[$item] = new \\Box\\Brainy\\Templates\\Variable();\n";
+        $itemVar = "\$_smarty_tpl->tpl_vars[$item]->value";
+
         if ($key) {
             $output .= "\$_smarty_tpl->tpl_vars[$key] = new \\Box\\Brainy\\Templates\\Variable();\n";
             $keyVar = "\$_smarty_tpl->tpl_vars[$key]->value";
-        } else {
-            $keyVar = "\$_smarty_tpl->tpl_vars[$item]->key";
         }
 
-        $output .= "\$_smarty_tpl->tpl_vars[$item]->setSource($from);\n";
-
-        if ($usages['total']) {
-            $output .= "\$_smarty_tpl->tpl_vars[$item]->setCount();\n";
+        if ($usages['total'] || $usages['last'] || $usages['show']) {
+            $output .= "{$innerVarVar}['total'] = \\Box\\Brainy\\Runtime\\Loops::getCount({$innerVarVar}['source']);\n";
         }
         if ($usages['iteration']) {
-            $output .= "\$_smarty_tpl->tpl_vars[$item]->iteration = 0;\n";
+            $output .= "{$innerVarVar}['iteration'] = 0;\n";
         }
-        if ($usages['index']) {
-            $output .= "\$_smarty_tpl->tpl_vars[$item]->index = -1;\n";
+        if ($usages['index'] || $usages['first'] || $usages['last']) {
+            $output .= "{$innerVarVar}['index'] = -1;\n";
         }
         if ($usages['show']) {
-            $output .= "\$_smarty_tpl->tpl_vars[$item]->show = \$_smarty_tpl->tpl_vars[$item]->total > 0;\n";
+            $output .= "{$innerVarVar}['show'] = {$innerVarVar}['total'] > 0;\n";
         }
 
-        $output .= "foreach (\$_smarty_tpl->tpl_vars[$item]->source as $keyVar => \$_smarty_tpl->tpl_vars[$item]->value) {\n";
+        if ($key) {
+            $output .= "foreach ({$innerVarVar}['source'] as $keyVar => $itemVar) {\n";
+        } else {
+            $output .= "foreach ({$innerVarVar}['source'] as $itemVar) {\n";
+        }
 
         if ($usages['iteration']) {
-            $output .= "\$_smarty_tpl->tpl_vars[$item]->iteration++;\n";
+            $output .= "{$innerVarVar}['iteration']++;\n";
         }
-        if ($usages['index']) {
-            $output .= "\$_smarty_tpl->tpl_vars[$item]->index++;\n";
+        if ($usages['index'] || $usages['first'] || $usages['last']) {
+            $output .= "{$innerVarVar}['index']++;\n";
         }
         if ($usages['first']) {
-            $output .= "\$_smarty_tpl->tpl_vars[$item]->first = \$_smarty_tpl->tpl_vars[$item]->index === 0;\n";
+            $output .= "{$innerVarVar}['first'] = {$innerVarVar}['index'] === 0;\n";
         }
         if ($usages['last']) {
-            $output .= "\$_smarty_tpl->tpl_vars[$item]->last = \$_smarty_tpl->tpl_vars[$item]->index === \$_smarty_tpl->tpl_vars[$item]->total;\n";
+            $output .= "{$innerVarVar}['last'] = {$innerVarVar}['index'] + 1 === {$innerVarVar}['total'];\n";
         }
 
         self::openTag($compiler, 'foreach');
@@ -95,6 +101,7 @@ class ConstructForEach extends BaseConstruct
     private static function getUsages($compiler, $name)
     {
         $data = $compiler->lex->data;
+
         return array(
             'first' => strpos($data, '.first') !== false,
             'last' => strpos($data, '.last') !== false,

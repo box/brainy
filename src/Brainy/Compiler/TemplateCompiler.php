@@ -147,12 +147,26 @@ class TemplateCompiler
      */
     public $smarty;
 
+
+
+    private $idInc = 0;
+
+
     /**
      * @param \Box\Brainy\Brainy $smarty       global instance
      */
     public function __construct(\Box\Brainy\Brainy $smarty)
     {
         $this->smarty = $smarty;
+    }
+
+    /**
+     * Returns a unique variable name, sans dollar sign.
+     * @return string Unique variable name
+     */
+    public function getUniqueVarName()
+    {
+        return 'tv' . $this->idInc++;
     }
 
     /**

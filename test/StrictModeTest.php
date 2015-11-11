@@ -35,6 +35,9 @@ class StrictModeTest extends Smarty_TestCase
             array('{current($foo)}'),
             array('{reset($foo)}'),
 
+            // Banned Smarty variable stuff
+            array('{$smarty.template}'),
+
             // Banned shorthand:
             array('{include "foo"}'),
             array('{capture "foo"}{/capture}'),
@@ -64,12 +67,12 @@ class StrictModeTest extends Smarty_TestCase
             array('{if $foo}{/if}'),
             array('{$foo}'),
 
-            array('{for $i=0 to $foo.bar.baz-1}'),
-            array('{for $i=0 to count($foo)-1}'),
-            array('{for $i=0 to count($foo)-1 step 2}'),
-            array('{for $i=1 to $foo}'),
-            array('{for $i=count($foo)-1 to 0 step -1}'),
-            array('{for $i=0 to 5 step 2}'),
+            array('{for $i=0 to $foo.bar.baz-1}{/for}'),
+            array('{for $i=0 to count($foo)-1}{/for}'),
+            array('{for $i=0 to count($foo)-1 step 2}{/for}'),
+            array('{for $i=1 to $foo}{/for}'),
+            array('{for $i=count($foo)-1 to 0 step -1}{/for}'),
+            array('{for $i=0 to 5 step 2}{/for}'),
         );
     }
 

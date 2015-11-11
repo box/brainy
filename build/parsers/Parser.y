@@ -755,10 +755,8 @@ variableinternal(res) ::= variablebase(base) indexdef(a) indexdef(b). {
     } else {
         switch (Decompile::decompileString(a)) {
             case 'foreach':
-                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][" . b . "]");
-                break;
             case 'capture':
-                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value['capture'][" . b . "]");
+                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value[" . a . "][" . b . "]");
                 break;
             default:
                 $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
@@ -775,6 +773,7 @@ variableinternal(res) ::= variablebase(base) indexdef(a). {
                 res = new Wrappers\StaticWrapper('time()');
                 break;
             case 'template':
+                $this->compiler->assert_is_not_strict('$smarty.template is not supported in strict mode', $this);
                 res = new Wrappers\StaticWrapper('basename($_smarty_tpl->source->filepath)');
                 break;
             case 'version':

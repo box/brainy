@@ -1,73 +1,33 @@
 <?php
-/**
- * Smarty PHPunit tests compilation of {for} tag
- *
- * @package PHPunit
- * @author Uwe Tews
- */
-
 namespace Box\Brainy\Tests;
 
 
 class CompileForTest extends Smarty_TestCase
 {
+
+    public function dataProviderForForLoops()
+    {
+        return array(
+            array('{for $x=0;$x<10;$x++}{$x}{/for}', "0123456789"),
+            array('{for $x=0; $x<10; $x++}{$x}{forelse}else{/for}', "0123456789"),
+            array('{for $x=10;$x<10;$x++}{$x}{forelse}else{/for}', "else"),
+            array('{for $x=9;$x>=0;$x--}{$x}{forelse}else{/for}', "9876543210"),
+            array('{for $x=-1;$x>=0;$x--}{$x}{forelse}else{/for}', "else"),
+            array('{for $x=0,$y=10;$x<$y;$x++}{$x}{forelse}else{/for}', "0123456789"),
+            array('{for $x=0;$x<10;$x=$x+2}{$x}{/for}', "02468"),
+            array('{for $x=0 to 8}{$x}{/for}', "012345678"),
+            array('{for $x=0 to 8 step=2}{$x}{/for}', "02468"),
+            array('{for $x=8 to 0 step=-2}{$x}{/for}', "86420"),
+            array('{for $x=8 to 0 step=2}{$x}{forelse}step error{/for}', "step error"),
+            array('{for $x=8 to 0 step -1 max=3}{$x}{/for}', "876"),
+        );
+    }
+
     /**
-    * test {for $x=0;$x<10;$x++} tag
-    */
-    public function testFor1() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=0;$x<10;$x++}{$x}{/for}');
-        $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
-    }
-    public function testFor2() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=0; $x<10; $x++}{$x}{forelse}else{/for}');
-        $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
-    }
-    public function testFor3() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=10;$x<10;$x++}{$x}{forelse}else{/for}');
-        $this->assertEquals("else", $this->smarty->fetch($tpl));
-    }
-    public function testFor4() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=9;$x>=0;$x--}{$x}{forelse}else{/for}');
-        $this->assertEquals("9876543210", $this->smarty->fetch($tpl));
-    }
-    public function testFor5() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=-1;$x>=0;$x--}{$x}{forelse}else{/for}');
-        $this->assertEquals("else", $this->smarty->fetch($tpl));
-    }
-    public function testFor6() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=0,$y=10;$x<$y;$x++}{$x}{forelse}else{/for}');
-        $this->assertEquals("0123456789", $this->smarty->fetch($tpl));
-    }
-    public function testFor7() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=0;$x<10;$x=$x+2}{$x}{/for}');
-        $this->assertEquals("02468", $this->smarty->fetch($tpl));
-    }
-    public function testFor8() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=0 to 8}{$x}{/for}');
-        $this->assertEquals("012345678", $this->smarty->fetch($tpl));
-    }
-    public function testFor9() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=0 to 8 step=2}{$x}{/for}');
-        $this->assertEquals("02468", $this->smarty->fetch($tpl));
-    }
-    public function testFor10() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=0 to 8 step=2}{if $x@first}{$x} {$x@total}{/if}{/for}');
-        $this->assertEquals("0 5", $this->smarty->fetch($tpl));
-    }
-    public function testFor11() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=0 to 8 step=2}{if $x@last}{$x} {$x@iteration}{/if}{/for}');
-        $this->assertEquals("8 5", $this->smarty->fetch($tpl));
-    }
-    public function testFor12() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=8 to 0 step=-2}{$x}{/for}');
-        $this->assertEquals("86420", $this->smarty->fetch($tpl));
-    }
-    public function testFor13() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=8 to 0 step=2}{$x}{forelse}step error{/for}');
-        $this->assertEquals("step error", $this->smarty->fetch($tpl));
-    }
-    public function testFor14() {
-        $tpl = $this->smarty->createTemplate('eval:{for $x=8 to 0 step -1 max=3}{$x}{/for}');
-        $this->assertEquals("876", $this->smarty->fetch($tpl));
+     * @dataProvider dataProviderForForLoops
+     */
+    public function testForLoops($template, $expected)
+    {
+        $this->assertEquals($expected, $this->smarty->fetch('eval:' . $template));
     }
 }
