@@ -41,11 +41,6 @@ class Template extends TemplateBase
      * @var bool
      */
     public $allow_relative_path = false;
-    /**
-     * internal capture runtime stack
-     * @var array
-     */
-    public $_capture_stack = array(0 => array());
 
     /**
      * Create template data object
@@ -54,15 +49,15 @@ class Template extends TemplateBase
      * It load the required template resources and cacher plugins
      *
      * @param string                   $template_resource template resource string
-     * @param \Box\Brainy\Brainy                   $smarty            Smarty instance
-     * @param Template $_parent           back pointer to parent object with variables or null
-     * @param mixed                    $_compile_id       compile id or null
+     * @param Brainy                   $smarty            Smarty instance
+     * @param Template $parent           back pointer to parent object with variables or null
+     * @param mixed                    $compileID       compile id or null
      */
-    public function __construct($template_resource, $smarty, $_parent = null, $_compile_id = null) {
+    public function __construct($template_resource, $smarty, $parent = null, $compileID = null)
+    {
         parent::__construct($smarty);
-        // Smarty parameter
-        $this->compile_id = $_compile_id === null ? $this->smarty->compile_id : $_compile_id;
-        $this->parent = $_parent;
+        $this->compile_id = $compileID ?: $this->smarty->compile_id;
+        $this->parent = $parent;
         // Template resource
         $this->template_resource = $template_resource;
         // copy block data of template inheritance
@@ -76,7 +71,7 @@ class Template extends TemplateBase
             if (is_array($this->parent)) {
                 $this->applyDataFrom($this->parent);
             } else {
-                $this->parent->applyData($this);
+                $this->cloneDataFrom($this->parent);
             }
         }
     }
@@ -88,7 +83,8 @@ class Template extends TemplateBase
      *
      * @return boolean true if the template must be compiled
      */
-    public function mustCompile() {
+    public function mustCompile()
+    {
         if (!$this->source->exists) {
             if ($this->parent instanceof Template) {
                 $parent_resource = " in '$this->parent->template_resource}'";
@@ -109,7 +105,8 @@ class Template extends TemplateBase
      *
      * If the template is not evaluated the compiled template is saved on disk
      */
-    public function compileTemplateSource() {
+    public function compileTemplateSource()
+    {
         if (!$this->source->recompiled) {
             $this->properties['file_dependency'] = array();
             if (!$this->source->components) {
@@ -156,7 +153,8 @@ class Template extends TemplateBase
      * @param int     $parent_scope   scope in which {include} should execute
      * @return string template content
      */
-    public function renderSubTemplate($template, $compile_id, $data, $parent_scope) {
+    public function renderSubTemplate($template, $compile_id, $data, $parent_scope)
+    {
         // already in template cache?
         $tpl = \Box\Brainy\Runtime\TemplateCache::get($template, $this->smarty, $compile_id);
         if ($tpl) {
@@ -168,7 +166,8 @@ class Template extends TemplateBase
         }
         // get variables from calling scope
         if ($parent_scope == Brainy::SCOPE_LOCAL) {
-            $tpl->tpl_vars = $this->tpl_vars;
+            $tpl->tpl_vars = array();
+            $tpl->cloneDataFrom($this);
             $tpl->tpl_vars['smarty'] = clone $this->tpl_vars['smarty'];
         } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
             $tpl->tpl_vars = &$this->tpl_vars;
@@ -180,7 +179,7 @@ class Template extends TemplateBase
             $tpl->tpl_vars = &$scope_ptr->tpl_vars;
         }
 
-        if ($data) {
+        if (!empty($data)) {
             $tpl->applyDataFrom($data);
         }
 
@@ -196,7 +195,8 @@ class Template extends TemplateBase
      * @param int     $parent_scope   scope in which {include} should execute
      * @returns string template content
      */
-    public function setupInlineSubTemplate($template, $compile_id, $data, $parent_scope) {
+    public function setupInlineSubTemplate($template, $compile_id, $data, $parent_scope)
+    {
         $tpl = new Template($template, $this->smarty, $this, $compile_id);
         // get variables from calling scope
         if ($parent_scope == Brainy::SCOPE_LOCAL) {
@@ -204,6 +204,8 @@ class Template extends TemplateBase
             $tpl->tpl_vars['smarty'] = clone $this->tpl_vars['smarty'];
         } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
             $tpl->tpl_vars = &$this->tpl_vars;
+        } elseif ($parent_scope == Brainy::SCOPE_ROOT) {
+            $tpl->tpl_vars = &$this->smarty->tpl_vars;
         } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {
             $tpl->tpl_vars = &Brainy::$global_tpl_vars;
         } elseif (($scope_ptr = $this->getScopePointer($parent_scope)) == null) {
@@ -213,9 +215,7 @@ class Template extends TemplateBase
         }
         if (!empty($data)) {
             // set up variable values
-            foreach ($data as $_key => $_val) {
-                $tpl->tpl_vars[$_key] = new Variable($_val);
-            }
+            $tpl->applyDataFrom($data);
         }
 
         return $tpl;
@@ -229,7 +229,8 @@ class Template extends TemplateBase
      * @param  bool   $cache   flag for cache file
      * @return string
      */
-    public function createTemplateCodeFrame($content = '', $cache = false) {
+    public function createTemplateCodeFrame($content = '', $cache = false)
+    {
         $plugins_string = '';
         // include code for plugins
         if (!empty($this->required_plugins['compiled'])) {
@@ -395,17 +396,6 @@ PHPDOC;
                     throw new SmartyException('Missing template name');
                 }
                 $this->source = \Box\Brainy\Resources\Resource::source($this);
-                // cache template object under a unique ID
-                // do not cache eval resources
-                if ($this->source->type != 'eval') {
-                    $_templateId = $this->smarty->joined_template_dir . '#' . $this->template_resource . $this->compile_id;
-
-                    if (isset($_templateId[150])) {
-                        $_templateId = sha1($_templateId);
-                    }
-                    $this->smarty->template_objects[$_templateId] = $this;
-                }
-
                 return $this->source;
 
             case 'compiled':
@@ -423,7 +413,7 @@ PHPDOC;
                 }
         }
 
-        throw new SmartyException("template property '$property_name' does not exist.");
+        throw new \Box\Brainy\Exceptions\SmartyException("template property '$property_name' does not exist.");
     }
 
     /**

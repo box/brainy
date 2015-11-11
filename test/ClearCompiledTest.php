@@ -46,7 +46,6 @@ class ClearCompiledTest extends Smarty_TestCase
         }
 
         \Box\Brainy\Resources\Resource::$sources = array();
-        $this->smarty->template_objects = array();
 
         return $this->_files;
     }

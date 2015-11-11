@@ -26,7 +26,11 @@ class ConstructInclude extends BaseConstruct
         }
         $file = (string) $file;
         $assign = self::getOptionalArg($args, 'assign');
-        $compileID = self::getOptionalArg($args, 'compile_id', "''");
+        $compileID = self::getOptionalArg(
+            $args,
+            'compile_id',
+            var_export($compiler->smarty->compile_id, true)
+        );
         $scope = ConstructAssign::getScope($args, Brainy::SCOPE_LOCAL);
 
         if (!$assign) {
@@ -59,11 +63,16 @@ class ConstructInclude extends BaseConstruct
         unset($data['file']);
         unset($data['inline']);
         unset($data['scope']);
+        foreach ($data as $key => $value) {
+            if (is_numeric($key)) {
+                unset($data[$key]);
+            }
+        }
 
         return '$_smarty_tpl->renderSubTemplate(' .
             $templatePath . ', ' .
-            $compileID . ', ' .
-            var_export($data, true) . ', ' .
+            ($compileID ?: null) . ', ' .
+            self::exportArray($data, true) . ', ' .
             var_export($scope, true) .
             ");\n";
     }

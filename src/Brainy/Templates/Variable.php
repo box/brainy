@@ -11,19 +11,12 @@ class Variable
     public $value = null;
 
     /**
-     * the scope the variable will have  (local,parent or root)
-     */
-    public $scope = \Box\Brainy\Brainy::SCOPE_LOCAL;
-
-    /**
      * create Smarty variable object
      *
      * @param mixed   $value   the value to assign
-     * @param int     $scope   the scope the variable will have  (local,parent or root)
      */
-    public function __construct($value = null, $scope = \Box\Brainy\Brainy::SCOPE_LOCAL) {
+    public function __construct($value = null) {
         $this->value = $value;
-        $this->scope = $scope;
     }
 
     /**

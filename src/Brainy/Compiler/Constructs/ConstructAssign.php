@@ -27,9 +27,9 @@ class ConstructAssign extends BaseConstruct
             $output .= "  \$_smarty_tpl->tpl_vars[$var] = clone \$_smarty_tpl->tpl_vars[$var];\n";
             $output .= "  \$_smarty_tpl->tpl_vars[$var]->value = $value;\n";
             $output .= "  \$_smarty_tpl->tpl_vars[$var]->scope = $scope;\n";
-            $output .= "} else {\$_smarty_tpl->assign($var, $value, $scope);}\n";
+            $output .= "} else {\$_smarty_tpl->setVariable($var, $value, $scope);}\n";
         } else {
-            $output = "\$_smarty_tpl->assign($var, $value, $scope);\n";
+            $output = "\$_smarty_tpl->setVariable($var, $value, $scope);\n";
         }
         return $output;
     }

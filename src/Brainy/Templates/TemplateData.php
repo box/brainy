@@ -24,6 +24,7 @@ class TemplateData
      *
      * @var Template
      * @internal
+     * @todo This should probably be moved to TemplateBase
      */
     public $parent = null;
 
@@ -35,9 +36,10 @@ class TemplateData
      * @param  array|string         $var the template variable name(s)
      * @param  mixed|null|void      $value   the value to assign
      * @param  int|void             $scope   the scope to associate with the Smarty_Variable instance
-     * @return \Box\Brainy\Templates\TemplateData current \Box\Brainy\Templates\TemplateData (or Smarty or Template) instance for chaining
+     * @return TemplateData current TemplateData (or Smarty or Template) instance for chaining
      */
-    public function assign($var, $value = null, $scope = -1) {
+    public function assign($var, $value = null, $scope = -1)
+    {
         if (is_array($var)) {
             foreach ($var as $_key => $_val) {
                 if ($_key != '') {
@@ -61,13 +63,18 @@ class TemplateData
      * @param  int $scope the scope to associate with the Smarty_Variable
      * @return void
      */
-    private function assignSingleVar($var, $value, $scope) {
+    protected function assignSingleVar($var, $value, $scope)
+    {
         if ($scope === -1) {
             $scope = Brainy::$default_assign_scope;
         }
 
-        $variable = new Variable($value, $scope);
+        $variable = new Variable($value);
         $this->tpl_vars[$var] = $variable;
+
+        if ($scope === Brainy::SCOPE_LOCAL) {
+            return;
+        }
 
         if ($scope === Brainy::SCOPE_PARENT) {
             if ($this->parent != null) {
@@ -91,10 +98,11 @@ class TemplateData
      *
      * @param  string               $varname the global variable name
      * @param  mixed                $value   the value to assign
-     * @return \Box\Brainy\Templates\TemplateData current \Box\Brainy\Templates\TemplateData (or Smarty or Template) instance for chaining
+     * @return TemplateData current TemplateData (or Smarty or Template) instance for chaining
      * @todo This may not work with multiple Brainy instances.
      */
-    public function assignGlobal($varname, $value = null) {
+    public function assignGlobal($varname, $value = null)
+    {
         if ($varname != '') {
             Brainy::$global_tpl_vars[$varname] = new Variable($value);
             $ptr = $this;
@@ -111,60 +119,55 @@ class TemplateData
      * Returns a single or all assigned template variables
      *
      * @param  string $varname Name of variable to process, or null to return all
-     * @param  \Box\Brainy\Templates\TemplateData $_ptr Optional reference to data object
+     * @param  TemplateData $_ptr Optional reference to data object
      * @param  boolean $search_parents Whether to include results from parent scopes
      * @return string|array variable value or or array of variables
      */
-    public function getTemplateVars($varname = null, $_ptr = null, $search_parents = true) {
+    public function getTemplateVars($varname = null, $_ptr = null, $search_parents = true)
+    {
         if (isset($varname)) {
-            $_var = $this->getVariable($varname, $_ptr, $search_parents, false);
-            if (is_object($_var)) {
-                return $_var->value;
-            } else {
-                return null;
-            }
-        } else {
-            $_result = array();
-            if ($_ptr === null) {
-                $_ptr = $this;
-            } while ($_ptr !== null) {
-                foreach ($_ptr->tpl_vars AS $key => $var) {
-                    if (!array_key_exists($key, $_result)) {
-                        $_result[$key] = $var->value;
-                    }
-                }
-                // not found, try at parent
-                if ($search_parents) {
-                    $_ptr = $_ptr->parent;
-                } else {
-                    $_ptr = null;
-                }
-            }
-            if ($search_parents && isset(Brainy::$global_tpl_vars)) {
-                foreach (Brainy::$global_tpl_vars AS $key => $var) {
-                    if (!array_key_exists($key, $_result)) {
-                        $_result[$key] = $var->value;
-                    }
-                }
-            }
-
-            return $_result;
+            $var = $this->getVariable($varname, $_ptr, $search_parents, false);
+            return is_object($var) ? $var->value : null;
         }
+
+        $output = array();
+        if ($_ptr === null) {
+            $_ptr = $this;
+        }
+        while ($_ptr !== null) {
+            foreach ($_ptr->tpl_vars AS $key => $var) {
+                if (!array_key_exists($key, $output)) {
+                    $output[$key] = $var->value;
+                }
+            }
+            // not found, try at parent
+            $_ptr = $search_parents ? $_ptr->parent : null;
+        }
+        if ($search_parents && isset(Brainy::$global_tpl_vars)) {
+            foreach (Brainy::$global_tpl_vars as $key => $var) {
+                if (!array_key_exists($key, $output)) {
+                    $output[$key] = $var->value;
+                }
+            }
+        }
+
+        return $output;
     }
 
     /**
      * Clear the given assigned template variable.
      *
-     * @param  string|string[]         $tpl_var The template variable(s) to clear
-     * @return \Box\Brainy\Templates\TemplateData current \Box\Brainy\Templates\TemplateData (or Smarty or Template) instance for chaining
+     * @param  string|string[]         $varName The template variable(s) to clear
+     * @return TemplateData current TemplateData (or Smarty or Template) instance for chaining
      */
-    public function clearAssign($tpl_var) {
-        if (is_array($tpl_var)) {
-            foreach ($tpl_var as $curr_var) {
-                unset($this->tpl_vars[$curr_var]);
+    public function clearAssign($varName)
+    {
+        if (is_array($varName)) {
+            foreach ($varName as $var) {
+                unset($this->tpl_vars[$var]);
             }
         } else {
-            unset($this->tpl_vars[$tpl_var]);
+            unset($this->tpl_vars[$varName]);
         }
 
         return $this;
@@ -172,11 +175,11 @@ class TemplateData
 
     /**
      * Clear all the assigned template variables.
-     * @return \Box\Brainy\Templates\TemplateData current \Box\Brainy\Templates\TemplateData (or Smarty or Template) instance for chaining
+     * @return TemplateData current TemplateData instance for chaining
      */
-    public function clearAllAssign() {
+    public function clearAllAssign()
+    {
         $this->tpl_vars = array();
-
         return $this;
     }
 
@@ -184,12 +187,13 @@ class TemplateData
      * Return the contents of an assigned variable.
      *
      * @param  string  $variable       the name of the Smarty variable
-     * @param  \Box\Brainy\Templates\TemplateData|null $_ptr Optional reference to the data object
+     * @param  TemplateData|null $_ptr Optional reference to the data object
      * @param  boolean $search_parents Whether to search in the parent scope
      * @param  boolean $error_enable Whether to raise an error when the variable is not found.
      * @return mixed The contents of the variable.
      */
-    public function getVariable($variable, $_ptr = null, $search_parents = true, $error_enable = true) {
+    public function getVariable($variable, $_ptr = null, $search_parents = true, $error_enable = true)
+    {
         if ($_ptr === null) {
             $_ptr = $this;
         }
@@ -218,14 +222,15 @@ class TemplateData
 
 
     /**
-     * Applies all of the data to the current object
-     * @param  TemplateData $target
+     * Copies each variable from the source into this object, creating new
+     * `Variable` objects along the way.
+     * @param  TemplateData $source
      * @return void
      */
-    public function applyData(TemplateData $target)
+    public function cloneDataFrom(TemplateData &$source)
     {
-        foreach ($this->tpl_vars as $name => &$value) {
-            $target->tpl_vars[$name] = &$value;
+        foreach ($source->tpl_vars as $name => $var) {
+            $this->tpl_vars[$name] = new Variable($var->value);
         }
     }
 

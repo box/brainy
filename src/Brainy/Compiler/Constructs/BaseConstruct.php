@@ -115,9 +115,9 @@ abstract class BaseConstruct
 
 
     /**
-     * Flattens an array without encoding the values, unlike var_export
-     * @param string[] $arr
-     * @return string
+     * Flattens an associative array of arrays into an associative array of strings
+     * @param array $arr
+     * @return array
      */
     protected static function flattenCompiledArray($arr)
     {
@@ -132,6 +132,33 @@ abstract class BaseConstruct
             }
         }
         return $flattened;
+    }
+
+
+    /**
+     * Collapse an array of strings into an array with pre-encoded values.
+     * This is very similar to var_export($arr, true), but the values of the
+     * associative array are not changed.
+     * @param string[] $arr
+     * @return string
+     */
+    protected static function exportArray($arr)
+    {
+        $out = 'array(';
+
+        $first = true;
+        foreach ($arr as $key => $value) {
+            if (!$first) {
+                $out .= ', ';
+            }
+            $first = false;
+            $out .= var_export($key, true);
+            $out .= ' => ';
+            $out .= $value;
+        }
+
+        $out .= ')';
+        return $out;
     }
 
 }

@@ -15,7 +15,6 @@ class SmartyTests
         $smarty->setTemplateDir(realpath('test' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR));
         $smarty->setCompileDir(realpath('test' . DIRECTORY_SEPARATOR . 'compiled' . DIRECTORY_SEPARATOR));
         $smarty->setPluginsDir(SMARTY_PLUGINS_DIR);
-        $smarty->template_objects = array();
         \Box\Brainy\Brainy::$global_tpl_vars = array();
         $smarty->template_functions = array();
         $smarty->tpl_vars = array();

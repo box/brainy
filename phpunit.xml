@@ -4,7 +4,6 @@
     convertWarningsToExceptions="true"
     colors="true"
     verbose="true"
-    strict="true"
     bootstrap="test/bootstrap.php">
 
     <testsuites>
@@ -15,7 +14,7 @@
 
     <php>
         <ini name="memory_limit" value="200M" />
-        <ini name="max_execution_time" value="800" />
+        <ini name="max_execution_time" value="250" />
     </php>
 
 </phpunit>

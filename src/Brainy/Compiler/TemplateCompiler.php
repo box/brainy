@@ -35,6 +35,12 @@ class TemplateCompiler
     public $_tag_stack = array();
 
     /**
+     * internal capture runtime stack
+     * @var array
+     */
+    public $_capture_stack = array(0 => array());
+
+    /**
      * current template
      *
      * @var Template
@@ -142,16 +148,10 @@ class TemplateCompiler
     public $smarty;
 
     /**
-     * array of vars which can be compiled in local scope
-     *
-     * @var array
-     */
-    public $local_var = array();
-
-    /**
      * @param \Box\Brainy\Brainy $smarty       global instance
      */
-    public function __construct(\Box\Brainy\Brainy $smarty) {
+    public function __construct(\Box\Brainy\Brainy $smarty)
+    {
         $this->smarty = $smarty;
     }
 
@@ -161,7 +161,8 @@ class TemplateCompiler
      * @param  mixed $_content template source
      * @return bool  true if compiling succeeded, false if it failed
      */
-    protected function doCompile($_content) {
+    protected function doCompile($_content)
+    {
         // init the lexer/parser to compile the template
         $this->lex = new Lexer($_content, $this);
         $this->parser = new Parser($this->lex, $this);
@@ -194,7 +195,8 @@ class TemplateCompiler
      * @param  Template $template template object to compile
      * @return bool             true if compiling succeeded, false if it failed
      */
-    public function compileTemplate(Template $template) {
+    public function compileTemplate(Template $template)
+    {
         // save template object in compiler class
         $this->template = $template;
         $save_source = $this->template->source;
@@ -211,6 +213,9 @@ class TemplateCompiler
             // we have array of inheritance templates by extends: resource
             $this->sources = array_reverse($template->source->components);
         }
+
+        array_unshift($this->_capture_stack, array());
+
         $loop = 0;
         // the $this->sources array can get additional elements while compiling by the {extends} tag
         while ($this->template->source = array_shift($this->sources)) {
@@ -226,6 +231,12 @@ class TemplateCompiler
                 $_compiled_code = $this->doCompile($this->template->source->content);
             }
         }
+
+        // any unclosed {capture} tags ?
+        if (isset($this->_capture_stack[0][0])) {
+            throw new SmartyException("Unbalanced {capture} tags in \"{$this->template_resource}\"");
+        }
+        array_shift($this->_capture_stack);
 
         // restore source
         $this->template->source = $save_source;
@@ -257,7 +268,8 @@ class TemplateCompiler
      * @param  array  $parameter array with compilation parameter
      * @return string compiled   code
      */
-    public function compileTag($tag, $args, $parameter = array()) {
+    public function compileTag($tag, $args, $parameter = array())
+    {
         // $args contains the attributes parsed and compiled by the lexer/parser
         // assume that tag does compile into code, but creates no HTML output
         $this->has_code = true;
@@ -397,7 +409,8 @@ class TemplateCompiler
      * @param  string|void $exception_class The name of the exception class to raise
      * @throws SmartyCompilerException when an unexpected token is found
      */
-    public function trigger_template_error($args = null, $line = null, $exception_class = '\Box\Brainy\Exceptions\SmartyCompilerException') {
+    public function trigger_template_error($args = null, $line = null, $exception_class = '\Box\Brainy\Exceptions\SmartyCompilerException')
+    {
         // get template source line which has error
         if (!isset($line)) {
             $line = $this->lex->line;
@@ -439,7 +452,8 @@ class TemplateCompiler
      * @return void
      * @throws SmartyCompilerException
      */
-    public function trigger_expression_modifiers_error() {
+    public function trigger_expression_modifiers_error()
+    {
         $this->trigger_template_error(
             'Modifier Enforcement: All expressions must be suffixed with one of the following modifiers: ' .
             implode(',', Brainy::$enforce_expression_modifiers),
@@ -455,7 +469,8 @@ class TemplateCompiler
      * @param bool|void $static When true, the expression is static.
      * @return void
      */
-    public function assert_no_enforced_modifiers($static = false) {
+    public function assert_no_enforced_modifiers($static = false)
+    {
         if (!empty(Brainy::$enforce_expression_modifiers)) {
             if ($static && !Brainy::$enforce_modifiers_on_static_expressions) {
                 return;
@@ -473,7 +488,8 @@ class TemplateCompiler
      * @param bool|void $static When true, the expression is static.
      * @return void
      */
-    public function assert_expected_modifier($modifier_list, $static = false) {
+    public function assert_expected_modifier($modifier_list, $static = false)
+    {
         if (empty(Brainy::$enforce_expression_modifiers)) {
             return;
         }

@@ -34,10 +34,14 @@ class TemplateBase extends TemplateData
     /**
      * @param \Box\Brainy\Brainy $brainyInstance
      */
-    public function __construct($brainyInstance)
+    public function __construct($brainyInstance, $useRootScope = false)
     {
         $this->smarty = &$brainyInstance;
-        $this->tpl_vars = $brainyInstance->tpl_vars;
+        if ($useRootScope) {
+            $this->tpl_vars = $brainyInstance->tpl_vars;
+        } else {
+            $this->cloneDataFrom($brainyInstance);
+        }
     }
 
 
@@ -137,16 +141,9 @@ class TemplateBase extends TemplateData
             if (empty($template->properties['unifunc']) || !is_callable($template->properties['unifunc'])) {
                 throw new SmartyException("Invalid compiled template for '{$template->template_resource}'");
             }
-            array_unshift($template->_capture_stack, array());
-            //
+
             // render compiled template
-            //
             call_user_func($template->properties['unifunc'], $template);
-            // any unclosed {capture} tags ?
-            if (isset($template->_capture_stack[0][0])) {
-                throw new SmartyException("Not matching {capture} open/close in \"{$this->template_resource}\"");
-            }
-            array_shift($template->_capture_stack);
         }
 
         if (!$template->source->recompiled && empty($template->properties['file_dependency'][$template->source->uid])) {
@@ -162,6 +159,22 @@ class TemplateBase extends TemplateData
                 }
             }
         }
+    }
+
+
+    /**
+     * Assigns $value to the variale $var.
+     *
+     * @param  string $var the template variable name
+     * @param  mixed $value the value to assign
+     * @param  int $scope the scope to associate with the Smarty_Variable
+     * @see TemplateData::assignSingleVar()
+     * @return void
+     */
+    public function setVariable($var, $value, $scope)
+    {
+        // Pass-through
+        $this->assignSingleVar($var, $value, $scope);
     }
 
 }

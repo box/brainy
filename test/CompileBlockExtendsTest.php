@@ -185,7 +185,6 @@ class CompileBlockExtendsTest extends Smarty_TestCase
         $tpl = $this->smarty->createTemplate('021_grandchild.tpl');
         $result = $this->smarty->fetch($tpl);
         $this->assertContains('Grandchild Page Title', $result);
-        $this->smarty->template_objects = null;
         $tpl2 = $this->smarty->createTemplate('021_grandchild.tpl');
         $result = $this->smarty->fetch($tpl2);
         $this->assertContains('Grandchild Page Title', $result);
@@ -199,7 +198,6 @@ class CompileBlockExtendsTest extends Smarty_TestCase
         $tpl = $this->smarty->createTemplate('021_grandchild.tpl');
         $result = $this->smarty->fetch($tpl);
         $this->assertContains('Grandchild Page Title', $result);
-        $this->smarty->template_objects = null;
         $tpl2 = $this->smarty->createTemplate('021_grandchild.tpl');
         $result = $this->smarty->fetch($tpl2);
         $this->assertContains('Grandchild Page Title', $result);
@@ -213,7 +211,6 @@ class CompileBlockExtendsTest extends Smarty_TestCase
         $tpl = $this->smarty->createTemplate('021_grandchild.tpl');
         $result = $this->smarty->fetch($tpl);
         $this->assertContains('Grandchild Page Title', $result);
-        $this->smarty->template_objects = null;
         $tpl2 = $this->smarty->createTemplate('021_grandchild.tpl');
         $result = $this->smarty->fetch($tpl2);
         $this->assertContains('Grandchild Page Title', $result);
@@ -227,7 +224,6 @@ class CompileBlockExtendsTest extends Smarty_TestCase
         $tpl = $this->smarty->createTemplate('021_grandchild.tpl');
         $result = $this->smarty->fetch($tpl);
         $this->assertContains('Grandchild Page Title', $result);
-        $this->smarty->template_objects = null;
         $tpl2 = $this->smarty->createTemplate('021_grandchild.tpl');
         $result = $this->smarty->fetch($tpl2);
         $this->assertContains('Grandchild Page Title', $result);

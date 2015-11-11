@@ -413,23 +413,12 @@ class Brainy extends Templates\TemplateData
      */
     public $_dir_perms = 0771;
     /**
-     * block tag hierarchy
-     * @var array
-     * @internal
-     */
-    public $_tag_stack = array();
-    /**
      * self pointer to Smarty object
      * @var Smarty
      * @internal
      * @todo Investigate whether this is necessary.
      */
     public $smarty;
-    /**
-     * @var array
-     * @internal
-     */
-    public $merged_templates_func;
 
 
     /**
@@ -462,9 +451,8 @@ class Brainy extends Templates\TemplateData
     /**
      * Returns a single or all global variables
      *
-     * @param  object $smarty
      * @param  string|null|void $varname variable name or null
-     * @return mixed Variable value or array of variable values
+     * @return array|mixed Variable value or associative array of variable values
      */
     public function getGlobal($varname = null)
     {
@@ -474,12 +462,12 @@ class Brainy extends Templates\TemplateData
             }
             return self::$global_tpl_vars[$varname]->value;
         }
-        $_result = array();
+        $output = array();
         foreach (self::$global_tpl_vars as $key => $var) {
-            $_result[$key] = $var->value;
+            $output[$key] = $var->value;
         }
 
-        return $_result;
+        return $output;
     }
 
     /**
@@ -507,7 +495,8 @@ class Brainy extends Templates\TemplateData
      * @param string|string[] $template_dir directory(s) of template sources
      * @return Brainy The current Smarty instance for chaining
      */
-    public function setTemplateDir($template_dir) {
+    public function setTemplateDir($template_dir)
+    {
         $this->template_dir = array();
         foreach ((array) $template_dir as $k => $v) {
             $this->template_dir[$k] = preg_replace('#(\w+)(/|\\\\){1,}#', '$1$2', rtrim($v, '/\\')) . DIRECTORY_SEPARATOR;
@@ -526,7 +515,8 @@ class Brainy extends Templates\TemplateData
      * @return Brainy          The current Smarty instance for chaining
      * @throws SmartyException when the given template directory is not valid
      */
-    public function addTemplateDir($template_dir, $key = null) {
+    public function addTemplateDir($template_dir, $key = null)
+    {
         // make sure we're dealing with an array
         $this->template_dir = (array) $this->template_dir;
 
@@ -562,7 +552,8 @@ class Brainy extends Templates\TemplateData
      * @param int|null $index of directory to get, null to get all
      * @return array|string list of template directories, or directory of $index
      */
-    public function getTemplateDir($index = null) {
+    public function getTemplateDir($index = null)
+    {
         if ($index !== null) {
             return isset($this->template_dir[$index]) ? $this->template_dir[$index] : null;
         }
@@ -576,7 +567,8 @@ class Brainy extends Templates\TemplateData
      * @param string|array $plugins_dir directory(s) of plugins
      * @return Brainy current Smarty instance for chaining
      */
-    public function setPluginsDir($plugins_dir) {
+    public function setPluginsDir($plugins_dir)
+    {
         $this->plugins_dir = array();
         foreach ((array) $plugins_dir as $k => $v) {
             $this->plugins_dir[$k] = rtrim($v, '/\\') . DIRECTORY_SEPARATOR;
@@ -591,7 +583,8 @@ class Brainy extends Templates\TemplateData
      * @param string|array $plugins_dir plugins folder
      * @return Brainy current Smarty instance for chaining
      */
-    public function addPluginsDir($plugins_dir) {
+    public function addPluginsDir($plugins_dir)
+    {
         // make sure we're dealing with an array
         $this->plugins_dir = (array) $this->plugins_dir;
 
@@ -620,7 +613,8 @@ class Brainy extends Templates\TemplateData
      *
      * @return string[] List of plugin directories
      */
-    public function getPluginsDir() {
+    public function getPluginsDir()
+    {
         return (array) $this->plugins_dir;
     }
 
@@ -630,7 +624,8 @@ class Brainy extends Templates\TemplateData
      * @param  string $compile_dir directory to store compiled templates in
      * @return Brainy current Smarty instance for chaining
      */
-    public function setCompileDir($compile_dir) {
+    public function setCompileDir($compile_dir)
+    {
         $this->compile_dir = rtrim($compile_dir, '/\\') . DIRECTORY_SEPARATOR;
         return $this;
     }
@@ -640,7 +635,8 @@ class Brainy extends Templates\TemplateData
      *
      * @return string Path to compiled templates
      */
-    public function getCompileDir() {
+    public function getCompileDir()
+    {
         return $this->compile_dir;
     }
 
@@ -650,7 +646,8 @@ class Brainy extends Templates\TemplateData
      * @param  array|string $modifiers modifier or list of modifiers to set
      * @return Brainy       current Smarty instance for chaining
      */
-    public function setDefaultModifiers($modifiers) {
+    public function setDefaultModifiers($modifiers)
+    {
         $this->default_modifiers = (array) $modifiers;
         return $this;
     }
@@ -661,9 +658,12 @@ class Brainy extends Templates\TemplateData
      * @param  array|string $modifiers modifier or list of modifiers to add
      * @return Brainy       current Smarty instance for chaining
      */
-    public function addDefaultModifiers($modifiers) {
+    public function addDefaultModifiers($modifiers)
+    {
         if (is_array($modifiers)) {
-            $this->default_modifiers = array_merge($this->default_modifiers, $modifiers);
+            foreach ($modifiers as $modifier) {
+                $this->default_modifiers[] = $modifier;
+            }
         } else {
             $this->default_modifiers[] = $modifiers;
         }
@@ -676,7 +676,8 @@ class Brainy extends Templates\TemplateData
      *
      * @return array list of default modifiers
      */
-    public function getDefaultModifiers() {
+    public function getDefaultModifiers()
+    {
         return $this->default_modifiers;
     }
 
@@ -694,7 +695,8 @@ class Brainy extends Templates\TemplateData
      * @param  boolean|void $do_clone   When true, the Smarty object will be cloned
      * @return Template
      */
-    public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null) {
+    public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null)
+    {
 
         // already in template cache?
         $tpl = Runtime\TemplateCache::get($template, $this, $compile_id);
@@ -702,7 +704,7 @@ class Brainy extends Templates\TemplateData
             // return cached template object
             $tpl = clone $tpl;
             $tpl->parent = $parent;
-            $tpl->tpl_vars = array();
+            $tpl->tpl_vars = clone $this->tpl_vars;
             return $tpl;
         }
 
@@ -718,7 +720,8 @@ class Brainy extends Templates\TemplateData
      * @param  int     $max_errors Optional integer to set an error limit. If more errors occur, the function will abort
      * @return integer number of template files recompiled
      */
-    public function compileAllTemplates($extension = '.tpl', $force_compile = false, $time_limit = 0, $max_errors = null) {
+    public function compileAllTemplates($extension = '.tpl', $force_compile = false, $time_limit = 0, $max_errors = null)
+    {
         return \Box\Brainy\Compiler\BatchUtil::compileAllTemplates($extension, $force_compile, $time_limit, $max_errors, $this);
     }
 
@@ -738,7 +741,8 @@ class Brainy extends Templates\TemplateData
      * @param  integer|null $exp_time      expiration time
      * @return integer number of template files deleted
      */
-    public function clearCompiledTemplate($resource_name = null, $compile_id = null, $exp_time = null) {
+    public function clearCompiledTemplate($resource_name = null, $compile_id = null, $exp_time = null)
+    {
         return \Box\Brainy\Compiler\BatchUtil::clearCompiledTemplate($resource_name, $compile_id, $exp_time, $this);
     }
 
@@ -749,7 +753,8 @@ class Brainy extends Templates\TemplateData
      * @param string $templatePath The path to the included template
      * @return void
      */
-    public function fetchedTemplate($templatePath) {}
+    public function fetchedTemplate($templatePath)
+    {}
 
     /**
      * Registers plugin to be used in templates
@@ -760,7 +765,8 @@ class Brainy extends Templates\TemplateData
      * @return Brainy Self-reference to facilitate chaining
      * @throws SmartyException              when the plugin tag is invalid
      */
-    public function registerPlugin($type, $tag, $callback) {
+    public function registerPlugin($type, $tag, $callback)
+    {
         if (isset($this->registered_plugins[$type][$tag])) {
             throw new Exceptions\SmartyException("Plugin tag \"{$tag}\" already registered");
         } elseif (!is_callable($callback)) {
@@ -778,7 +784,8 @@ class Brainy extends Templates\TemplateData
      * @param  string                       $tag  name of plugin
      * @return Brainy Self-reference to facilitate chaining
      */
-    public function unregisterPlugin($type, $tag) {
+    public function unregisterPlugin($type, $tag)
+    {
         if (isset($this->registered_plugins[$type][$tag])) {
             unset($this->registered_plugins[$type][$tag]);
         }
@@ -792,7 +799,8 @@ class Brainy extends Templates\TemplateData
      * @param  \Box\Brainy\Resources\Resource|\Box\Brainy\Resources\Resource[] $callback Instance of \Box\Brainy\Resources\Resource, or array of callbacks to handle resource (deprecated)
      * @return Brainy Self-reference to facilitate chaining
      */
-    public function registerResource($type, $callback) {
+    public function registerResource($type, $callback)
+    {
         $this->registered_resources[$type] = $callback instanceof \Box\Brainy\Resources\Resource ? $callback : array($callback, false);
 
         return $this;
@@ -803,7 +811,8 @@ class Brainy extends Templates\TemplateData
      * @param  string                       $type name of resource type
      * @return Brainy Self-reference to facilitate chaining
      */
-    public function unregisterResource($type) {
+    public function unregisterResource($type)
+    {
         if (isset($this->registered_resources[$type])) {
             unset($this->registered_resources[$type]);
         }
@@ -854,7 +863,7 @@ class Brainy extends Templates\TemplateData
     public function fetch()
     {
         $args = func_get_args();
-        $template = new Templates\TemplateBase($this);
+        $template = new Templates\TemplateBase($this, true);
         return call_user_func_array(array($template, 'fetch'), $args);
     }
 
@@ -865,7 +874,7 @@ class Brainy extends Templates\TemplateData
     public function display()
     {
         $args = func_get_args();
-        $template = new Templates\TemplateBase($this);
+        $template = new Templates\TemplateBase($this, true);
         return call_user_func_array(array($template, 'display'), $args);
     }
 

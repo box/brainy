@@ -288,7 +288,7 @@ class Security
         }
 
         // give up
-        throw new SmartyException("directory '{$_filepath}' not allowed by security setting");
+        throw new \Box\Brainy\Exceptions\SmartyException("directory '{$_filepath}' not allowed by security setting");
     }
 
     /**
@@ -305,7 +305,7 @@ class Security
     public function isTrustedUri($uri) {
         $_uri = parse_url($uri);
         if (empty($_uri['scheme']) || empty($_uri['host'])) {
-            throw new SmartyException("URI '{$uri}' not allowed by security setting");
+            throw new \Box\Brainy\Exceptions\SmartyException("URI '{$uri}' not allowed by security setting");
         }
 
         $_uri = $_uri['scheme'] . '://' . $_uri['host'];
