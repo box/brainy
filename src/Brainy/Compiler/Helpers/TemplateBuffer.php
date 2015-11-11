@@ -42,7 +42,7 @@ class TemplateBuffer extends ParseTree
                 continue;
             }
 
-            if ($buffer) {
+            if ($buffer !== '') {
                 $code .= $this->echo_data(var_export($buffer, true));
                 $buffer = '';
             }
@@ -50,7 +50,7 @@ class TemplateBuffer extends ParseTree
             $code .= $node->to_smarty_php();
         }
 
-        if ($buffer) {
+        if ($buffer !== '') {
             $code .= $this->echo_data(var_export($buffer, true));
         }
 

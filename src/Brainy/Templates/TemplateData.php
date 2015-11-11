@@ -63,7 +63,7 @@ class TemplateData
      * @param  int $scope the scope to associate with the Smarty_Variable
      * @return void
      */
-    protected function assignSingleVar($var, $value, $scope)
+    protected function assignSingleVar($var, $value, $scope = -1)
     {
         if ($scope === -1) {
             $scope = Brainy::$default_assign_scope;

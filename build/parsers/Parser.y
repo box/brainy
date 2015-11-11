@@ -316,6 +316,9 @@ smartytag(res) ::= LDEL ID(i) attributes(a). {
         case 'assign':
             res = Constructs\ConstructAssign::compileOpen($this->compiler, a);
             break;
+        case 'capture':
+            res = Constructs\ConstructCapture::compileOpen($this->compiler, a);
+            break;
         case 'include':
             res = Constructs\ConstructInclude::compileOpen($this->compiler, a);
             break;
@@ -327,14 +330,17 @@ smartytag(res) ::= LDEL ID(i) attributes(a). {
 smartytag(res) ::= LDEL ID(i). {
     $this->compiler->has_code = true;
     switch (i) {
+        case 'capture':
+            res = Constructs\ConstructCapture::compileOpen($this->compiler, array());
+            break;
+        case 'else':
+            res = Constructs\ConstructElse::compileOpen($this->compiler, null);
+            break;
         case 'foreachelse':
             res = Constructs\ConstructForEachElse::compileOpen($this->compiler, null);
             break;
         case 'forelse':
             res = Constructs\ConstructForElse::compileOpen($this->compiler, null);
-            break;
-        case 'else':
-            res = Constructs\ConstructElse::compileOpen($this->compiler, null);
             break;
         case 'ldelim':
             res = new Helpers\Text($this->compiler->smarty->left_delimiter);
@@ -432,7 +438,7 @@ smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a).
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
-        array_merge(a, array(array('from' => v1), array('item' => v0)))
+        array_merge(a, array(array('from' => e), array('item' => v0)))
     );
 }
 
@@ -444,9 +450,9 @@ smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR va
         array_merge(
             a,
             array(
-                array('from' => v1),
+                array('from' => e),
                 array('item' => v0),
-                array('key' => v2),
+                array('key' => v1),
             )
         )
     );
@@ -469,14 +475,17 @@ smartytag(res) ::= LDEL SMARTYBLOCKCHILDPARENT(i). {
 // end of block tag  {/....}
 smartytag(res) ::= LDELSLASH ID(i). {
     switch (i) {
-        case 'if':
-            res = Constructs\ConstructIf::compileClose($this->compiler, null);
+        case 'capture':
+            res = Constructs\ConstructCapture::compileClose($this->compiler, null);
             break;
         case 'for':
             res = Constructs\ConstructFor::compileClose($this->compiler, null);
             break;
         case 'foreach':
             res = Constructs\ConstructForEach::compileClose($this->compiler, null);
+            break;
+        case 'if':
+            res = Constructs\ConstructIf::compileClose($this->compiler, null);
             break;
         case 'while':
             res = Constructs\ConstructWhile::compileClose($this->compiler, null);

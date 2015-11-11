@@ -108,7 +108,7 @@ class TemplateBase extends TemplateData
         }
 
         // dummy local smarty variable
-        $template->tpl_vars['smarty'] = new Variable();
+        $template->tpl_vars['smarty'] = new Variable(array());
 
         // must reset merge template date
         $template->smarty->mergedtemplates_func = array();
@@ -171,7 +171,7 @@ class TemplateBase extends TemplateData
      * @see TemplateData::assignSingleVar()
      * @return void
      */
-    public function setVariable($var, $value, $scope)
+    public function setVariable($var, $value, $scope = -1)
     {
         // Pass-through
         $this->assignSingleVar($var, $value, $scope);

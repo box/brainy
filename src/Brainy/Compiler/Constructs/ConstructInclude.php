@@ -19,6 +19,7 @@ class ConstructInclude extends BaseConstruct
         try {
             $file = self::getRequiredArg($args, 'file');
         } catch (SmartyCompilerException $e) {
+            $compiler->assert_is_not_strict('Include shorthand is not allowed in strict mode. Use the file="" attribute instead.');
             if (!isset($args[0])) {
                 throw $e;
             }

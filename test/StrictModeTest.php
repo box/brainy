@@ -34,13 +34,10 @@ class StrictModeTest extends Smarty_TestCase
             array('{end($foo)}'),
             array('{current($foo)}'),
             array('{reset($foo)}'),
-            // Banned operators:
-            array('{if $x is not div by $y}{/if}'),
-            array('{if $x is not even}{/if}'),
-            array('{if $x is even by $y}{/if}'),
-            array('{if $x is not even by $y}{/if}'),
-            array('{if $x is not odd}{/if}'),
-            array('{if $x is not odd by $y}{/if}'),
+
+            // Banned shorthand:
+            array('{include "foo"}'),
+            array('{capture "foo"}{/capture}'),
         );
     }
 

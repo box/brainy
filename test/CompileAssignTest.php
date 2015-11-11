@@ -49,7 +49,7 @@ class CompileAssignTest extends Smarty_TestCase
         $this->assertEquals("9876", $this->smarty->fetch($tpl));
     }
     public function testAssignOld9() {
-        $tpl = $this->smarty->createTemplate('eval:{assign var=foo value=[\'a\'=>9,\'b\'=>8,\'c\'=>7,\'d\'=>6]}{foreach $foo as $x}{$x@key}{$x}{/foreach}');
+        $tpl = $this->smarty->createTemplate('eval:{assign var=foo value=[\'a\'=>9,\'b\'=>8,\'c\'=>7,\'d\'=>6]}{foreach $foo as $k => $x}{$k}{$x}{/foreach}');
         $this->assertEquals("a9b8c7d6", $this->smarty->fetch($tpl));
     }
     /**
@@ -84,7 +84,7 @@ class CompileAssignTest extends Smarty_TestCase
         $this->assertEquals("9876", $this->smarty->fetch($tpl));
     }
     public function testAssignNew7() {
-        $tpl = $this->smarty->createTemplate("eval:{\$foo=['a'=>9,'b'=>8,'c'=>7,'d'=>6]}{foreach \$foo as \$x}{\$x@key}{\$x}{/foreach}");
+        $tpl = $this->smarty->createTemplate("eval:{\$foo=['a'=>9,'b'=>8,'c'=>7,'d'=>6]}{foreach \$foo as \$k => \$x}{\$k}{\$x}{/foreach}");
         $this->assertEquals("a9b8c7d6", $this->smarty->fetch($tpl));
     }
 
@@ -92,6 +92,6 @@ class CompileAssignTest extends Smarty_TestCase
      * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
      */
     public function testInvalidScope() {
-        $this->smarty->fetch('eval:{assign var=foo scope="foo"}');
+        $this->smarty->display('eval:{assign var=foo scope="foo"}');
     }
 }
