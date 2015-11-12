@@ -316,8 +316,14 @@ smartytag(res) ::= LDEL ID(i) attributes(a). {
         case 'assign':
             res = Constructs\ConstructAssign::compileOpen($this->compiler, a);
             break;
+        case 'break':
+            res = Constructs\ConstructBreak::compileOpen($this->compiler, a);
+            break;
         case 'capture':
             res = Constructs\ConstructCapture::compileOpen($this->compiler, a);
+            break;
+        case 'continue':
+            res = Constructs\ConstructContinue::compileOpen($this->compiler, a);
             break;
         case 'include':
             res = Constructs\ConstructInclude::compileOpen($this->compiler, a);
@@ -330,8 +336,14 @@ smartytag(res) ::= LDEL ID(i) attributes(a). {
 smartytag(res) ::= LDEL ID(i). {
     $this->compiler->has_code = true;
     switch (i) {
+        case 'break':
+            res = Constructs\ConstructBreak::compileOpen($this->compiler, array());
+            break;
         case 'capture':
             res = Constructs\ConstructCapture::compileOpen($this->compiler, array());
+            break;
+        case 'continue':
+            res = Constructs\ConstructContinue::compileOpen($this->compiler, array());
             break;
         case 'else':
             res = Constructs\ConstructElse::compileOpen($this->compiler, null);
