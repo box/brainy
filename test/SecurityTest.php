@@ -11,13 +11,11 @@ namespace Box\Brainy\Tests;
 
 class SecurityTest extends Smarty_TestCase
 {
-    public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        $this->smartyBC = SmartyTests::$smartyBC;
-        SmartyTests::init();
+    public function setUp()
+    {
+        parent::setUp();
         $this->smarty->force_compile = true;
         $this->smartyBC->force_compile = true;
-        $this->smarty->clearCompiledTemplate();
     }
 
     /**
@@ -62,7 +60,7 @@ class SecurityTest extends Smarty_TestCase
     public function testNotTrustedModifier() {
         $this->smarty->security_policy->php_modifiers = array('null');
         try {
-            $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|@count}');
+            $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|count}');
         } catch (\Exception $e) {
             $this->assertContains(htmlentities("modifier 'count' not allowed by security setting"), $e->getMessage());
 
@@ -144,50 +142,6 @@ class SecurityTest extends Smarty_TestCase
             return;
         }
         $this->fail('Exception for disabled tag has not been raised.');
-    }
-
-    /**
-    * test standard directory
-    */
-    public function testStandardDirectory() {
-        $content = $this->smarty->fetch('eval:{include file="helloworld.tpl"}');
-        $this->assertEquals("hello world", $content);
-    }
-
-    /**
-    * test trusted directory
-    */
-    public function testTrustedDirectory() {
-        $this->smarty->security_policy->secure_dir = array('test' . DIRECTORY_SEPARATOR . 'templates_2' . DIRECTORY_SEPARATOR);
-        $this->assertEquals("hello world", $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}'));
-    }
-
-    /**
-    * test not trusted directory
-    */
-    public function testNotTrustedDirectory() {
-        $this->smarty->security_policy->secure_dir = array('test' . DIRECTORY_SEPARATOR . 'templates_3' . DIRECTORY_SEPARATOR);
-        try {
-            $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}');
-        } catch (\Exception $e) {
-            $this->assertContains("/test/templates_2/hello.tpl' not allowed by security setting", str_replace('\\','/',$e->getMessage()));
-
-            return;
-        }
-        $this->fail('Exception for not trusted directory has not been raised.');
-    }
-
-    public function testChangedTrustedDirectory() {
-        $this->smarty->security_policy->secure_dir = array(
-            'test' . DIRECTORY_SEPARATOR . 'templates_2' . DIRECTORY_SEPARATOR,
-        );
-        $this->assertEquals("hello world", $this->smarty->fetch('eval:{include file="test/templates_2/hello.tpl"}'));
-
-        $this->smarty->security_policy->secure_dir = array(
-            'test' . DIRECTORY_SEPARATOR . 'templates_2' . DIRECTORY_SEPARATOR,
-            'test' . DIRECTORY_SEPARATOR . 'templates_3' . DIRECTORY_SEPARATOR,
-        );
-        $this->assertEquals("templates_3", $this->smarty->fetch('eval:{include file="test/templates_3/dirname.tpl"}'));
     }
 
 }
