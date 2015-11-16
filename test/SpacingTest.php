@@ -12,8 +12,7 @@ namespace Box\Brainy\Tests;
 class SpacingTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->assign('foo','bar');
     }
 

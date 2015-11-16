@@ -1,10 +1,4 @@
 <?php
-/**
- * Brainy modifier enforcement tests
- *
- * @package PHPunit
- * @author Matt Basta
- */
 
 namespace Box\Brainy\Tests;
 
@@ -12,8 +6,7 @@ namespace Box\Brainy\Tests;
 class EnforceModifierTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         // We want to show all errors for this test suite.
         error_reporting(E_ALL);
     }

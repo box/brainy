@@ -353,7 +353,4 @@ class FileResourceTest extends Smarty_TestCase
         $this->_relativeMap($map, $cwd);
     }
 
-    public static function tearDownAfterClass() {
-        SmartyTests::$smarty->clearCompiledTemplate();
-    }
 }

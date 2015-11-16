@@ -12,8 +12,7 @@ namespace Box\Brainy\Tests;
 class IndexedFileResourceTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->addTemplateDir(dirname(__FILE__) .'/templates_2');
         // note that 10 is a string!
         $this->smarty->addTemplateDir(dirname(__FILE__) .'/templates_3', '10');
@@ -69,7 +68,4 @@ class IndexedFileResourceTest extends Smarty_TestCase
         $this->assertEquals($expected, $this->relative($tpl->compiled->filepath));
     }
 
-    public static function tearDownAfterClass() {
-        SmartyTests::$smarty->clearCompiledTemplate();
-    }
 }

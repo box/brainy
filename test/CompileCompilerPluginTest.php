@@ -12,8 +12,7 @@ namespace Box\Brainy\Tests;
 class CompileCompilerPluginTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->force_compile = true;
     }
 

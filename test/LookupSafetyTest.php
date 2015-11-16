@@ -12,8 +12,7 @@ namespace Box\Brainy\Tests;
 class LookupSafetyTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         // We want to show all errors for this test suite.
         error_reporting(E_ALL);
     }

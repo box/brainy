@@ -12,9 +12,7 @@ namespace Box\Brainy\Tests;
 class ClearAssignTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        $this->smartyBC = SmartyTests::$smartyBC;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smartyBC->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
 

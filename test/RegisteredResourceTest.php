@@ -12,8 +12,7 @@ namespace Box\Brainy\Tests;
 class RegisteredResourceTest extends Smarty_TestCase
 {
     public function setUp() {
-        $this->smarty = SmartyTests::$smarty;
-        SmartyTests::init();
+        parent::setUp();
         $this->smarty->registerResource("rr", array("rr_get_template",
                 "rr_get_timestamp",
                 "rr_get_secure",

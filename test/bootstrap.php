@@ -5,17 +5,32 @@ namespace Box\Brainy\Tests;
 require __DIR__ . '/../vendor/autoload.php';
 
 
-class SmartyTests
+class Smarty_TestCase extends \PHPUnit_Framework_TestCase
 {
-    public static $smarty = null;
-    public static $smartyBC = null;
+    protected $smarty = null;
+    protected $smartyBC = null;
 
-    public static function _init($smarty) {
+    public function setUp()
+    {
+        $this->smarty = new \Box\Brainy\Brainy();
+        $this->setUpInstance($this->smarty);
+        $this->smartyBC = new \Box\Brainy\SmartyBC();
+        $this->setUpInstance($this->smartyBC);
+
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array();
+        \Box\Brainy\Brainy::$global_tpl_vars = array();
+        \Box\Brainy\Resources\Resource::$sources = array();
+        \Box\Brainy\Resources\Resource::$compileds = array();
+
+        $this->clearFiles();
+        parent::setUp();
+    }
+
+    protected function setUpInstance($smarty)
+    {
         $smarty->setTemplateDir(realpath('test' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR));
         $smarty->setCompileDir(realpath('test' . DIRECTORY_SEPARATOR . 'compiled' . DIRECTORY_SEPARATOR));
         $smarty->setPluginsDir(SMARTY_PLUGINS_DIR);
-        \Box\Brainy\Brainy::$global_tpl_vars = array();
         $smarty->template_functions = array();
         $smarty->tpl_vars = array();
         $smarty->force_compile = false;
@@ -33,22 +48,9 @@ class SmartyTests
         $smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
     }
 
-    public static function init() {
-        self::_init(SmartyTests::$smarty);
-        self::_init(SmartyTests::$smartyBC);
-        \Box\Brainy\Resources\Resource::$sources = array();
-        \Box\Brainy\Resources\Resource::$compileds = array();
-
-        self::clearFiles();
-    }
-
-    /**
-     * clear $smarty->compile_dir
-     *
-     * @return void
-     */
-    public static function clearFiles() {
-        $directory = realpath(self::$smarty->getCompileDir());
+    protected function clearFiles()
+    {
+        $directory = realpath($this->smarty->getCompileDir());
 
         $di = new \RecursiveDirectoryIterator($directory);
         $it = new \RecursiveIteratorIterator($di, \RecursiveIteratorIterator::CHILD_FIRST);
@@ -67,32 +69,7 @@ class SmartyTests
 
         }
     }
-}
 
-class Smarty_TestCase extends \PHPUnit_Framework_TestCase
-{
-    public $smarty = null;
-    public $smartyBC = null;
-
-    public function setUp()
-    {
-        $this->smarty = &SmartyTests::$smarty;
-        $this->smartyBC = &SmartyTests::$smartyBC;
-        SmartyTests::init();
-        $this->smarty->escape_html = true;
-        $this->smartyBC->escape_html = true;
-        parent::setUp();
-    }
-
-    protected function setUpInstance($smarty)
-    {
-        return SmartyTests::_init($smarty);
-    }
-
-    protected function clearFiles()
-    {
-        SmartyTests::clearFiles();
-    }
 }
 
 
@@ -115,9 +92,5 @@ class _object_noString
         $this->string = (string) $string;
     }
 }
-
-
-SmartyTests::$smarty = new \Box\Brainy\Brainy();
-SmartyTests::$smartyBC = new \Box\Brainy\SmartyBC();
 
 ini_set('date.timezone', 'UTC');

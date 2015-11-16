@@ -11,12 +11,6 @@ namespace Box\Brainy\Tests;
 
 class DoubleQuotedStringTest extends Smarty_TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-        $this->smarty->escape_html = false;
-        $this->smartyBC->escape_html = false;
-    }
 
     /**
      * test simple double quoted string
