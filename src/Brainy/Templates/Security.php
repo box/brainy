@@ -19,12 +19,6 @@ namespace Box\Brainy\Templates;
 class Security
 {
     /**
-     * List of regular expressions (PCRE) that include trusted URIs
-     *
-     * @var array
-     */
-    public $trusted_uri = array();
-    /**
      * This is an array of trusted PHP functions.
      *
      * If empty all functions are allowed. If null, no functions are allowed.
@@ -274,32 +268,6 @@ class Security
 
         // give up
         throw new \Box\Brainy\Exceptions\SmartyException("directory '{$_filepath}' not allowed by security setting");
-    }
-
-    /**
-     * Check if URI (e.g. {html_image}) is trusted
-     *
-     * To simplify things, isTrustedUri() resolves all input to "{$PROTOCOL}://{$HOSTNAME}".
-     * So "http://username:password@hello.world.example.org:8080/some-path?some=query-string"
-     * is reduced to "http://hello.world.example.org" prior to applying the patters from {@link $trusted_uri}.
-     * @param  string          $uri The URI to test
-     * @return boolean         true if URI is trusted
-     * @throws SmartyException if URI is not trusted
-     * @uses $trusted_uri for list of patterns to match against $uri
-     */
-    public function isTrustedUri($uri) {
-        $_uri = parse_url($uri);
-        if (empty($_uri['scheme']) || empty($_uri['host'])) {
-            throw new \Box\Brainy\Exceptions\SmartyException("URI '{$uri}' not allowed by security setting");
-        }
-
-        $_uri = $_uri['scheme'] . '://' . $_uri['host'];
-        foreach ($this->trusted_uri as $pattern) {
-            if (preg_match($pattern, $_uri)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }
