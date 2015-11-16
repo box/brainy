@@ -19,26 +19,11 @@ namespace Box\Brainy\Templates;
 class Security
 {
     /**
-     * This is the list of template directories that are considered secure.
-     * $template_dir is in this list implicitly.
-     *
-     * @var array
-     */
-    public $secure_dir = array();
-    /**
      * List of regular expressions (PCRE) that include trusted URIs
      *
      * @var array
      */
     public $trusted_uri = array();
-    /**
-     * This is an array of trusted static classes.
-     *
-     * If empty access to all static classes is allowed.
-     * If set to 'none' none is allowed.
-     * @var array
-     */
-    public $static_classes = array();
     /**
      * This is an array of trusted PHP functions.
      *
@@ -59,8 +44,22 @@ class Security
      * @var string[]|null
      */
     public $php_modifiers = array(
-        'escape',
-        'count'
+        'abs',
+        'base64_encode',
+        'ceil',
+        'count',
+        'floor',
+        'htmlspecialchars',
+        'implode',
+        'json_encode',
+        'ltrim',
+        'md5',
+        'number_format',
+        'rtrim',
+        'sha1',
+        'split',
+        'str_repeat',
+        'urlencode',
     );
     /**
      * This is an array of allowed tags.
@@ -90,18 +89,6 @@ class Security
      * @var string[]
      */
     public $disabled_modifiers = array();
-    /**
-     * When true, constants can be accessed from templates
-     * @var boolean
-     */
-    public $allow_constants = true;
-    /**
-     * When true, superglobals can be accessed from templates
-     * @var boolean
-     * @deprecated This will be disallowed in the future.
-     */
-    public $allow_super_globals = true;
-
     /**
      * Cache for $resource_dir lookups
      * @internal
@@ -139,7 +126,9 @@ class Security
      * @throws SmartyCompilerException if php function is not trusted
      */
     public function isTrustedPhpFunction($function_name, $compiler) {
-        if (isset($this->php_functions) && (empty($this->php_functions) || in_array($function_name, $this->php_functions))) {
+        if (isset($this->php_functions) &&
+            (empty($this->php_functions) ||
+             in_array($function_name, $this->php_functions))) {
             return true;
         }
 
@@ -183,14 +172,12 @@ class Security
         if (empty($this->allowed_tags)) {
             if (empty($this->disabled_tags) || !in_array($tag_name, $this->disabled_tags)) {
                 return true;
-            } else {
-                $compiler->trigger_template_error("tag '{$tag_name}' disabled by security setting", $compiler->lex->taglineno);
             }
+            $compiler->trigger_template_error("tag '{$tag_name}' disabled by security setting", $compiler->lex->taglineno);
         } elseif (in_array($tag_name, $this->allowed_tags) && !in_array($tag_name, $this->disabled_tags)) {
             return true;
-        } else {
-            $compiler->trigger_template_error("tag '{$tag_name}' not allowed by security setting", $compiler->lex->taglineno);
         }
+        $compiler->trigger_template_error("tag '{$tag_name}' not allowed by security setting", $compiler->lex->taglineno);
 
         return false; // should not, but who knows what happens to the compiler in the future?
     }
@@ -212,14 +199,12 @@ class Security
         if (empty($this->allowed_modifiers)) {
             if (empty($this->disabled_modifiers) || !in_array($modifier_name, $this->disabled_modifiers)) {
                 return true;
-            } else {
-                $compiler->trigger_template_error("modifier '{$modifier_name}' disabled by security setting", $compiler->lex->taglineno);
             }
+            $compiler->trigger_template_error("modifier '{$modifier_name}' disabled by security setting", $compiler->lex->taglineno);
         } elseif (in_array($modifier_name, $this->allowed_modifiers) && !in_array($modifier_name, $this->disabled_modifiers)) {
             return true;
-        } else {
-            $compiler->trigger_template_error("modifier '{$modifier_name}' not allowed by security setting", $compiler->lex->taglineno);
         }
+        $compiler->trigger_template_error("modifier '{$modifier_name}' not allowed by security setting", $compiler->lex->taglineno);
 
         return false; // should not, but who knows what happens to the compiler in the future?
     }
