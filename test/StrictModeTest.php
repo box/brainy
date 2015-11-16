@@ -114,20 +114,4 @@ class StrictModeTest extends Smarty_TestCase
         $this->assertTrue($output !== null);
     }
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\BrainyStrictModeException
-     * @expectedExceptionMessage Strict Mode:
-     */
-    public function test_html_image_is_not_allowed() {
-        $this->smarty->fetch('eval:{* set strict *}{html_image}');
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage html_image
-     */
-    public function test_html_image_is_allowed_outside_strict() {
-        $output = $this->smarty->fetch('eval:{html_image}');
-        $this->assertEmpty($output);
-    }
 }
