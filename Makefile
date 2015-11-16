@@ -3,8 +3,16 @@ all: parsers autoload test
 autoload:
 	composer dump-autoload
 
-parsers:
-	cd build/parsers; make all
+parsers: src/Brainy/Compiler/Lexer.php src/Brainy/Compiler/Parser.php clean
+
+src/Brainy/Compiler/Lexer.php: build/parsers/Lexer.plex
+	cd build/parsers/ && php Create_Template_Parser.php
+	mv build/parsers/Lexer.php src/Brainy/Compiler/Lexer.php
+
+src/Brainy/Compiler/Parser.php: build/parsers/Parser.y
+	cd build/parsers/ && php Create_Template_Parser.php
+	mv build/parsers/Parser.php src/Brainy/Compiler/Parser.php
+
 
 test: clean autoload
 	mkdir -p test/compiled
@@ -24,6 +32,8 @@ lint:
 
 clean:
 	rm -rf test/compiled/*
+	rm -f build/parsers/*.out
+	rm -f build/parsers/Lexer.php build/parsers/Parser.php
 
 docs: clean
 	vendor/bin/phpdoc -d src/Brainy -t docs/ --ignore "*_internal_compile_*,*_internal_*parser.php,*_internal_*lexer.php,*/plugins/*"
