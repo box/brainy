@@ -6,11 +6,13 @@ ini_set('xdebug.max_nesting_level', 300);
 require_once './LexerGenerator.php';
 $lex = new PHP_LexerGenerator('Lexer.plex');
 $contents = file_get_contents('Lexer.php');
-$contents = str_replace(array('SMARTYldel', 'SMARTYrdel'), array('".$this->ldel."', '".$this->rdel."'),$contents);
+$contents = str_replace(array('SMARTYldel', 'SMARTYrdel'), array('".$this->ldel."', '".$this->rdel."'), $contents);
 file_put_contents('Lexer.php', $contents);
 
 // Create Parser
-passthru("php ./ParserGenerator/cli.php Parser.y");
+require_once './ParserGenerator.php';
+$me = new PHP_ParserGenerator();
+$me->main('Parser.y');
 
 $contents = file_get_contents('Parser.php');
 $contents = '<?php

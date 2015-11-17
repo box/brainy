@@ -46,7 +46,6 @@
  * @since      File available since Release 0.1.0
  */
 /**
-/**
  * The state vector for the entire parser generator is recorded in
  * this class.
  *

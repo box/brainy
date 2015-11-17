@@ -11,12 +11,6 @@ namespace Box\Brainy\Tests;
 
 class LookupSafetyTest extends Smarty_TestCase
 {
-    public function setUp() {
-        parent::setUp();
-        // We want to show all errors for this test suite.
-        error_reporting(E_ALL);
-    }
-
     /**
      * @expectedException PHPUnit_Framework_Error_Notice
      */
@@ -68,9 +62,9 @@ class LookupSafetyTest extends Smarty_TestCase
     }
 
     public function testSafeSuperglobalIndexLookupsPasses() {
-        $this->expectOutputString('');
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
-        $this->smarty->display('eval:{$smarty.now}');
+        $out = $this->smarty->fetch('eval:{$smarty.now}');
+        $this->assertEquals($out, time());
     }
 
     /*

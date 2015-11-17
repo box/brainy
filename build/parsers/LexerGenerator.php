@@ -323,4 +323,3 @@ class PHP_LexerGenerator
         $this->_parser->doParse(0, 0);
     }
 }
-//$a = new PHP_LexerGenerator('/development/File_ChessPGN/ChessPGN/Lexer.plex');

@@ -92,7 +92,7 @@ class PHP_LexerGenerator_ParseryyStackEntry
                      ** number for the token at this stack level */
     public $minor; /* The user-supplied minor token value.  This
                      ** is the value of the token  */
-};
+}
 
 // code external to the class is included here
 #line 3 "Parser.y"

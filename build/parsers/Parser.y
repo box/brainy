@@ -17,9 +17,6 @@
 %declare_class {class Parser}
 %include_class
 {
-    const Err1 = "Security error: Call to private object member not allowed";
-    const Err2 = "Security error: Call to dynamic object member not allowed";
-    // states whether the parse was successful or not
     public $successful = true;
     public $retvalue = 0;
     public static $prefix_number = 0;
@@ -220,9 +217,6 @@ template_element ::= BLOCKSOURCE(s). {
     // }
 }
 
-literal(res) ::= LITERALSTART LITERALEND. {
-    res = '';
-}
 
 literal(res) ::= LITERALSTART literal_elements(l) LITERALEND. {
     res = l;
@@ -240,6 +234,7 @@ literal_element(res) ::= literal(l). {
     res = l;
 }
 
+// TODO: needed?
 literal_element(res) ::= LITERAL(l). {
     res = l;
 }
@@ -250,7 +245,7 @@ literal_element(res) ::= LITERAL(l). {
 //
 
 // output with optional attributes
-smartytag(res) ::= LDEL value(e). {
+smartytag(res) ::= LDEL expr(e). {
     $this->compiler->assert_no_enforced_modifiers(e instanceof Wrappers\StaticWrapper);
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
@@ -262,29 +257,6 @@ smartytag(res) ::= LDEL value(e). {
     );
 }
 
-smartytag(res) ::= LDEL value(e) modifierlist(l). {
-    $this->compiler->assert_expected_modifier(l, e instanceof Wrappers\StaticWrapper);
-    if (e instanceof Wrappers\StaticWrapper) {
-        e = (string) e;
-    }
-    $this->compiler->has_code = true;
-    res = Constructs\ConstructPrintExpression::compileOpen(
-        $this->compiler,
-        array('value' => e, 'modifierlist' => l)
-    );
-}
-
-smartytag(res) ::= LDEL expr(e) modifierlist(l). {
-    $this->compiler->assert_expected_modifier(l, e instanceof Wrappers\StaticWrapper);
-    if (e instanceof Wrappers\StaticWrapper) {
-        e = (string) e;
-    }
-    $this->compiler->has_code = true;
-    res = Constructs\ConstructPrintExpression::compileOpen(
-        $this->compiler,
-        array('value' => e, 'modifierlist' => l)
-    );
-}
 
 //
 // Smarty tags start here
@@ -365,16 +337,6 @@ smartytag(res) ::= LDEL ID(i). {
     }
 }
 
-// tag with modifier and optional Smarty2 style attributes
-smartytag(res) ::= LDEL ID(i) modifierlist(l)attributes(a). {
-    res = 'ob_start();\necho ' . $this->compiler->compileTag(i, a) . 'echo ';
-    $this->compiler->has_code = true;
-    res .= Constructs\ConstructModifier::compileOpen($this->compiler, array(
-        'value' => 'ob_get_clean()',
-        'modifierlist' => l,
-    ));
-}
-
 
 // {if}, {elseif} and {while} tag
 smartytag(res) ::= LDELIF(i) expr(ie). {
@@ -410,7 +372,7 @@ smartytag(res) ::= LDELFOR statements(st) SEMICOLON optspace expr(ie) SEMICOLON 
 }
 
 foraction(res) ::= EQUAL expr(e). {
-    res = '='.e;
+    res = '=' . e;
 }
 
 foraction(res) ::= INCDEC(e). {
@@ -445,12 +407,34 @@ smartytag(res) ::= LDELFOREACH attributes(a). {
     res = Constructs\ConstructForEach::compileOpen($this->compiler, a);
 }
 
+// {foreach [1, 2, 3] as $val} tag
+smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0). {
+    $this->compiler->has_code = true;
+    res = Constructs\ConstructForEach::compileOpen(
+        $this->compiler,
+        array(array('from' => e), array('item' => v0))
+    );
+}
+
 // {foreach [1, 2, 3] as $val foo=x bar=y} tag
 smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
         array_merge(a, array(array('from' => e), array('item' => v0)))
+    );
+}
+
+// {foreach [0 => 1, 1 => 2, 2 => 3] as $key => $var foo=x bar=y} tag
+smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR varvar(v0). {
+    $this->compiler->has_code = true;
+    res = Constructs\ConstructForEach::compileOpen(
+        $this->compiler,
+        array(
+            array('from' => e),
+            array('item' => v0),
+            array('key' => v1),
+        )
     );
 }
 
@@ -521,43 +505,14 @@ attributes(res) ::= attribute(a). {
     res = array(a);
 }
 
-// no attributes
-attributes(res) ::= . {
-    res = array();
-}
-
 // attribute
-attribute(res) ::= SPACE ID(v) EQUAL ID(id). {
-    if (preg_match('~^true$~i', id)) {
-        res = array(v => 'true');
-    } elseif (preg_match('~^false$~i', id)) {
-        res = array(v => 'false');
-    } elseif (preg_match('~^null$~i', id)) {
-        res = array(v => 'null');
-    } else {
-        res = array(v => var_export(id, true));
-    }
-}
-
-attribute(res) ::= SPACE ID(v) EQUAL expr(e). {
+attribute(res) ::= SPACE expr(v) EQUAL expr(e). {
     res = array(v => e);
 }
-
-attribute(res) ::= SPACE ID(v) EQUAL value(e). {
-    res = array(v => e);
-}
-
-attribute(res) ::= SPACE ID(v). {
-    res = var_export(v, true);
-}
-
 attribute(res) ::= SPACE expr(e). {
     res = e;
 }
 
-attribute(res) ::= SPACE INTEGER(i) EQUAL expr(e). {
-    res = array(i => e);
-}
 
 
 
@@ -575,10 +530,6 @@ statements(res) ::= statements(s1) COMMA statement(s). {
 
 statement(res) ::= DOLLAR varvar(v) EQUAL expr(e). {
     res = array('var' => v, 'value'=>e);
-}
-
-statement(res) ::= variablebase(vi) EQUAL expr(e). {
-    res = array('var' => vi, 'value'=>e);
 }
 
 statement(res) ::= OPENP statement(st) CLOSEP. {
@@ -661,11 +612,8 @@ expr(res) ::= expr(e1) ISODD.  {
 //
 // ternary
 //
-ternary(res) ::= OPENP expr(v) CLOSEP  QMARK DOLLAR ID(e1) COLON  expr(e2). {
-    res = v.' ? '. $this->compileVariable("'".e1."'") . ' : '.e2;
-}
 
-ternary(res) ::= OPENP expr(v) CLOSEP  QMARK  expr(e1) COLON  expr(e2). {
+ternary(res) ::= OPENP expr(v) CLOSEP QMARK expr(e1) COLON expr(e2). {
     res = v.' ? '.e1.' : '.e2;
 }
 
@@ -688,7 +636,7 @@ value(res) ::= TYPECAST(t) value(v). {
     res = t . v;
 }
 
-value(res) ::= variable(v) INCDEC(o). {
+value(res) ::= value(v) INCDEC(o). {
     res = v . o;
 }
 
@@ -734,53 +682,23 @@ value(res) ::= doublequoted_with_quotes(s). {
     res = new Wrappers\StaticWrapper(s);
 }
 
-value(res) ::= value(v) modifierlist(l). {
-    $this->compiler->has_code = true;
-    res = Constructs\ConstructModifier::compileOpen($this->compiler, array(
-        'value' => v,
-        'modifierlist' => l,
-    ));
-}
-
 
 //
 // variables
 //
 
-variable(res) ::= variableinternal(base). {
-    res = base;
-}
-
-variablebase(res) ::= DOLLAR varvar(v). {
-    res = v;
-}
-
-variableinternal(res) ::= variableinternal(a1) indexdef(a2). {
-    res = $this->compileSafeLookupWithBase(a1, a2);
-}
-
-// FIXME: This is a hack to make $smarty.foreach.foo work. :(
-variableinternal(res) ::= variablebase(base) indexdef(a) indexdef(b). {
-    if (base != '\'smarty\'') {
-        res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
-        res = $this->compileSafeLookupWithBase(res, b);
+variable(res) ::= DOLLAR varvar(v). {
+    if (v === "'smarty'") {
+        res = new Wrappers\SmartyVarLookupWrapper();
     } else {
-        switch (Decompile::decompileString(a)) {
-            case 'foreach':
-            case 'capture':
-                res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value[" . a . "][" . b . "]");
-                break;
-            default:
-                $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
-        }
+        res = $this->compileVariable(v);
     }
 }
 
-variableinternal(res) ::= variablebase(base) indexdef(a). {
-    if (base !== '\'smarty\'') {
-        res = $this->compileSafeLookupWithBase($this->compileVariable(base), a);
-    } else {
-        switch (Decompile::decompileString(a)) {
+variable(res) ::= variable(a1) indexdef(a2). {
+    if (a1 instanceof Wrappers\SmartyVarLookupWrapper) {
+        $decompiled = Decompile::decompileString(a2);
+        switch ($decompiled) {
             case 'now':
                 res = new Wrappers\StaticWrapper('time()');
                 break;
@@ -797,17 +715,23 @@ variableinternal(res) ::= variablebase(base) indexdef(a). {
             case 'rdelim':
                 res = new Wrappers\StaticWrapper(var_export($this->compiler->smarty->right_delimiter, true));
                 break;
+            case 'foreach':
+            case 'capture':
+                res = new Wrappers\SmartyVarPoisonWrapper($decompiled);
+                break;
             default:
-                $this->compiler->trigger_template_error('$smarty.' . trim(a, "'") . ' is invalid');
+                $this->compiler->trigger_template_error('$smarty[' . a2 . '] is invalid');
         }
+
+    } elseif (a1 instanceof Wrappers\SmartyVarPoisonWrapper) {
+        res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value[" . a1->type . "][" . a2 . "]");
+
+    } else {
+        res = $this->compileSafeLookupWithBase(a1, a2);
     }
 }
 
-variableinternal(res) ::= variablebase(v). {
-    res = $this->compileVariable(v);
-}
-
-variableinternal(res) ::= variableinternal(a1) objectelement(a2). {
+variable(res) ::= variable(a1) objectelement(a2). {
     res = a1 . a2;
 }
 
@@ -819,7 +743,7 @@ indexdef(res) ::= DOT DOLLAR varvar(v).  {
 }
 
 indexdef(res) ::= DOT ID(i). {
-    res = "'". i ."'";
+    res = var_export(i, true);
 }
 
 indexdef(res) ::= DOT INTEGER(n). {
@@ -856,14 +780,17 @@ varvar(res) ::= LDEL expr(e) RDEL. {
 // variable
 objectelement(res)::= PTR ID(i). {
     if ($this->security && substr(i, 0, 1) == '_') {
-        $this->compiler->trigger_template_error(self::Err1);
+        $this->compiler->trigger_template_error('Call to private object member "' . i . '" not allowed');
     }
     res = '->'.i;
 }
 
 // method
-objectelement(res)::= PTR method(f).  {
-    res = '->'.f;
+objectelement(res)::= PTR ID(f) OPENP params(p) CLOSEP.  {
+    if ($this->security && substr(f, 0, 1) == '_') {
+        $this->compiler->trigger_template_error('Call to private object member "' . f . '" not allowed');
+    }
+    res = '->' . f . "(" . implode(',', p) . ")";
 }
 
 
@@ -917,18 +844,10 @@ function(res) ::= ID(f) OPENP params(p) CLOSEP. {
     }
 }
 
-//
-// method
-//
-method(res) ::= ID(f) OPENP params(p) CLOSEP. {
-    if ($this->security && substr(f,0,1) == '_') {
-        $this->compiler->trigger_template_error(self::Err1);
-    }
-    res = f . "(". implode(',',p) .")";
-}
 
 // function/method parameter
 // multiple parameters
+// TODO: could this allow a trailing comma in the signature?
 params(res) ::= params(p) COMMA expr(e). {
     res = array_merge(p,array(e));
 }
@@ -1046,16 +965,12 @@ arrayelements(res) ::=  arrayelements(a1) COMMA arrayelement(a).  {
 arrayelements(res) ::=  arrayelement(a).  {
     res = a;
 }
-arrayelements ::=  .  {
+arrayelements ::=  . {
     return;
 }
 
-arrayelement(res) ::=  value(e1) APTR expr(e2). {
+arrayelement(res) ::=  expr(e1) APTR expr(e2). {
     res = e1.'=>'.e2;
-}
-
-arrayelement(res) ::=  ID(i) APTR expr(e2). {
-    res = '\''.i.'\'=>'.e2;
 }
 
 arrayelement(res) ::=  expr(e). {

@@ -404,23 +404,14 @@ class PHP_ParserGenerator
 */
 
     /* The main program.  Parse the command line and do it... */
-    public function main() {
+    public function main($filename = null) {
         $lem = new PHP_ParserGenerator_Data;
 
-        $this->OptInit($_SERVER['argv']);
-        if ($this->version) {
-            echo "Lemon version 1.0/PHP_ParserGenerator port version 0.1.5\n";
-            exit(0);
-        }
-        if ($this->OptNArgs($_SERVER['argv']) != 1) {
-            echo "Exactly one filename argument is required.\n";
-            exit(1);
-        }
         $lem->errorcnt = 0;
 
         /* Initialize the machine */
-        $lem->argv0 = $_SERVER['argv'][0];
-        $lem->filename = $this->OptArg(0, $_SERVER['argv']);
+        $lem->argv0 = $filename;
+        $lem->filename = $filename;
         $a = pathinfo($lem->filename);
         if (isset($a['extension'])) {
             $ext = '.' . $a['extension'];
@@ -514,12 +505,6 @@ class PHP_ParserGenerator
             /* Generate the source code for the parser */
             $lem->ReportTable($this->mhflag);
 
-    /* Produce a header file for use by the scanner.  (This step is
-    ** omitted if the "-m" option is used because makeheaders will
-    ** generate the file for us.) */
-//            if (!$this->mhflag) {
-//                $this->ReportHeader();
-//            }
         }
         if ($this->statistics) {
             printf("Parser statistics: %d terminals, %d nonterminals, %d rules\n",
@@ -530,7 +515,6 @@ class PHP_ParserGenerator
         if ($lem->nconflict) {
             printf("%d parsing conflicts.\n", $lem->nconflict);
         }
-        exit($lem->errorcnt + $lem->nconflict);
 
         return ($lem->errorcnt + $lem->nconflict);
     }
@@ -721,9 +705,6 @@ class PHP_ParserGenerator
         }
         for ($rp = $this->rule; $rp; $rp = $rp->next) {
             printf("%s", $rp->lhs->name);
-/*          if ($rp->lhsalias) {
-                printf("(%s)", $rp->lhsalias);
-            }*/
             print " ::=";
             for ($i = 0; $i < $rp->nrhs; $i++) {
                 $sp = $rp->rhs[$i];
@@ -733,22 +714,12 @@ class PHP_ParserGenerator
                         printf("|%s", $sp->subsym[$j]->name);
                     }
                 }
-/*              if ($rp->rhsalias[$i]) {
-                    printf("(%s)", $rp->rhsalias[$i]);
-                }*/
             }
             print ".";
             if ($rp->precsym) {
                 printf(" [%s]", $rp->precsym->name);
             }
-/*          if ($rp->code) {
-                print "\n    " . $rp->code);
-            }*/
             print "\n";
         }
     }
 }
-//$a = new PHP_ParserGenerator;
-//$_SERVER['argv'] = array('lemon', '-s', '/development/lemon/PHP_Parser.y');
-//$_SERVER['argv'] = array('lemon', '-s', '/development/File_ChessPGN/ChessPGN/Parser.y');
-//$a->main();
