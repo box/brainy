@@ -37,8 +37,8 @@ class GetTemplateVarsTest extends Smarty_TestCase
     * test single variable with data object chain
     */
     public function testGetSingleTemplateVarScopeAll() {
-        $data1 = new TemplateData($this->smarty);
-        $data2 = new TemplateData($data1);
+        $data1 = new TemplateDataHelper($this->smarty);
+        $data2 = new TemplateDataHelper($data1);
         $this->smarty->assign('foo', 'bar');
         $this->smarty->assign('blar', 'buh');
         $this->assertEquals("bar", $this->smarty->getTemplateVars('foo', $data2));
@@ -47,8 +47,8 @@ class GetTemplateVarsTest extends Smarty_TestCase
     * test get all variables with data object chain
     */
     public function testGetAllTemplateVarsScopeAll() {
-        $data1 = new TemplateData($this->smarty);
-        $data2 = new TemplateData($data1);
+        $data1 = new TemplateDataHelper($this->smarty);
+        $data2 = new TemplateDataHelper($data1);
         $this->smarty->assign('foo', 'bar');
         $data1->assign('blar', 'buh');
         $data2->assign('foo2', 'bar2');
@@ -62,8 +62,8 @@ class GetTemplateVarsTest extends Smarty_TestCase
     * test get all variables with data object chain search parents disabled
     */
     public function testGetAllTemplateVarsScopeAllNoParents() {
-        $data1 = new TemplateData($this->smarty);
-        $data2 = new TemplateData($data1);
+        $data1 = new TemplateDataHelper($this->smarty);
+        $data2 = new TemplateDataHelper($data1);
         $this->smarty->assign('foo', 'bar');
         $data1->assign('blar', 'buh');
         $data2->assign('foo2', 'bar2');
@@ -78,8 +78,8 @@ class GetTemplateVarsTest extends Smarty_TestCase
     */
     public function testGetSingleTemplateVarsScopeAllNoParents() {
          error_reporting(error_reporting() & ~(E_NOTICE|E_USER_NOTICE));
-        $data1 = new TemplateData($this->smarty);
-        $data2 = new TemplateData($data1);
+        $data1 = new TemplateDataHelper($this->smarty);
+        $data2 = new TemplateDataHelper($data1);
         $this->smarty->assign('foo', 'bar');
         $data1->assign('blar', 'buh');
         $data2->assign('foo2', 'bar2');
@@ -87,4 +87,10 @@ class GetTemplateVarsTest extends Smarty_TestCase
         $this->assertEquals("bar2", $this->smarty->getTemplateVars('foo2', $data2, false));
         $this->assertEquals("", $this->smarty->getTemplateVars('blar', $data2, false));
     }
+}
+
+
+class TemplateDataHelper
+{
+    use TemplateData;
 }

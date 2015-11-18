@@ -16,14 +16,6 @@ class ConstructPrintExpression extends BaseConstruct
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         $output = self::getRequiredArg($args, 'value');
-        $modifiers = self::getOptionalArg($args, 'modifierlist', array());
-
-        if (!empty($modifiers)) {
-            $output = ConstructModifier::compileOpen($compiler, array(
-                'value' => $output,
-                'modifierlist' => $modifiers,
-            ), null);
-        }
 
         // default modifier
         if (!empty($compiler->smarty->default_modifiers)) {

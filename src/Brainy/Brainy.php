@@ -42,8 +42,10 @@ if (!defined('SMARTY_PLUGINS_DIR')) {
 }
 
 
-class Brainy extends Templates\TemplateData
+class Brainy
 {
+    use Templates\TemplateData;
+
     /**
      * The current version string for the current version of Brainy.
      * @var string
@@ -207,19 +209,6 @@ class Brainy extends Templates\TemplateData
      * @var string[]
      */
     public static $enforce_expression_modifiers = array('escape', 'unsafe_noescape');
-    /**
-     * When Brainy::$enforce_expression_modifiers is set and this member is set
-     * to true, even static values will require a modifier. For example:
-     *
-     *     {'foo'}
-     *
-     * The above would--by default--not require a modifier. When this is set to
-     * true, it would.
-     *
-     * @var bool
-     * @uses Brainy::$enforce_expression_modifiers
-     */
-    public static $enforce_modifiers_on_static_expressions = false;
     /**
      * Setting this option enables strict mode. This removes access to
      * deprecated, unperformant, or otherwise suspect features that were
@@ -770,7 +759,7 @@ class Brainy extends Templates\TemplateData
         if (isset($this->registered_plugins[$type][$tag])) {
             throw new Exceptions\SmartyException("Plugin tag \"{$tag}\" already registered");
         } elseif (!is_callable($callback)) {
-            throw new Exceptions\SmartyException("Plugin \"{$tag}\" not callable");
+            throw new Exceptions\SmartyException("Plugin \"{$callback}\" not callable");
         }
 
         $this->registered_plugins[$type][$tag] = $callback;

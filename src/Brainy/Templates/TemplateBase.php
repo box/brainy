@@ -7,13 +7,16 @@
 
 namespace Box\Brainy\Templates;
 
-use Box\Brainy\Brainy;
-use Box\Brainy\Exceptions\BrainyStrictModeException;
-use Box\Brainy\Exceptions\SmartyException;
+use \Box\Brainy\Brainy;
+use \Box\Brainy\Exceptions\BrainyStrictModeException;
+use \Box\Brainy\Exceptions\SmartyException;
 
 
-class TemplateBase extends TemplateData
+class TemplateBase
 {
+    use TemplateData;
+
+
     /**
      * Template resource
      * @var string
@@ -34,7 +37,7 @@ class TemplateBase extends TemplateData
     /**
      * @param \Box\Brainy\Brainy $brainyInstance
      */
-    public function __construct($brainyInstance, $useRootScope = false)
+    public function __construct(\Box\Brainy\Brainy $brainyInstance, $useRootScope = false)
     {
         $this->smarty = &$brainyInstance;
         if ($useRootScope) {
@@ -75,7 +78,7 @@ class TemplateBase extends TemplateData
         try {
             $this->display($template, null, $compile_id);
         } catch (Exception $e) {
-            ob_get_clean();
+            ob_end_clean();
             throw $e;
         }
         return ob_get_clean();

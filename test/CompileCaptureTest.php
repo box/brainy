@@ -11,6 +11,7 @@ namespace Box\Brainy\Tests;
 
 class CompileCaptureTest extends Smarty_TestCase
 {
+
     /**
     * test capture tag
     */

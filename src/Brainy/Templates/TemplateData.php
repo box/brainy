@@ -10,7 +10,7 @@ namespace Box\Brainy\Templates;
 use Box\Brainy\Brainy;
 
 
-class TemplateData
+trait TemplateData
 {
     /**
      * template variables
@@ -103,13 +103,16 @@ class TemplateData
      */
     public function assignGlobal($varname, $value = null)
     {
-        if ($varname != '') {
-            Brainy::$global_tpl_vars[$varname] = new Variable($value);
-            $ptr = $this;
-            while ($ptr instanceof Template) {
-                $ptr->tpl_vars[$varname] = clone Brainy::$global_tpl_vars[$varname];
-                $ptr = $ptr->parent;
-            }
+        if (!$varname) {
+            return $this;
+        }
+
+        Brainy::$global_tpl_vars[$varname] = new Variable($value);
+
+        $ptr = $this;
+        while ($ptr instanceof Template) {
+            $ptr->tpl_vars[$varname] = clone Brainy::$global_tpl_vars[$varname];
+            $ptr = $ptr->parent;
         }
 
         return $this;
@@ -227,7 +230,7 @@ class TemplateData
      * @param  TemplateData $source
      * @return void
      */
-    public function cloneDataFrom(TemplateData &$source)
+    public function cloneDataFrom(&$source)
     {
         foreach ($source->tpl_vars as $name => $var) {
             $this->tpl_vars[$name] = new Variable($var->value);

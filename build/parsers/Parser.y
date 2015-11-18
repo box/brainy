@@ -291,6 +291,9 @@ smartytag(res) ::= LDEL ID(i) attributes(a). {
         case 'break':
             res = Constructs\ConstructBreak::compileOpen($this->compiler, a);
             break;
+        case 'call':
+            res = Constructs\ConstructCall::compileOpen($this->compiler, a);
+            break;
         case 'capture':
             res = Constructs\ConstructCapture::compileOpen($this->compiler, a);
             break;
@@ -305,6 +308,9 @@ smartytag(res) ::= LDEL ID(i) attributes(a). {
             break;
         case 'forelse':
             res = Constructs\ConstructForElse::compileOpen($this->compiler, a);
+            break;
+        case 'function':
+            res = Constructs\ConstructFunction::compileOpen($this->compiler, a);
             break;
         case 'include':
             res = Constructs\ConstructInclude::compileOpen($this->compiler, a);
@@ -440,6 +446,9 @@ smartytag(res) ::= LDELSLASH ID(i). {
             break;
         case 'foreach':
             res = Constructs\ConstructForEach::compileClose($this->compiler, null);
+            break;
+        case 'function':
+            res = Constructs\ConstructFunction::compileClose($this->compiler, null);
             break;
         case 'if':
             res = Constructs\ConstructIf::compileClose($this->compiler, null);
@@ -581,7 +590,7 @@ expr(res) ::= expr(e1) ISODD.  {
 //
 
 ternary(res) ::= OPENP expr(v) CLOSEP QMARK expr(e1) COLON expr(e2). {
-    res = v.' ? '.e1.' : '.e2;
+    res = Wrappers\StaticWrapper::static_if_all(v . ' ? ' . e1 . ' : ' . e2, array(e1, e2));
 }
 
 // value
@@ -691,7 +700,7 @@ variable(res) ::= variable(a1) indexdef(a2). {
         }
 
     } elseif (a1 instanceof Wrappers\SmartyVarPoisonWrapper) {
-        res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value[" . a1->type . "][" . a2 . "]");
+        res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value[" . var_export(a1->type, true) . "][" . a2 . "]");
 
     } else {
         res = $this->compileSafeLookupWithBase(a1, a2);

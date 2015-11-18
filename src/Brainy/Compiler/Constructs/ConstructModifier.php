@@ -3,6 +3,7 @@
 namespace Box\Brainy\Compiler\Constructs;
 
 use \Box\Brainy\Brainy;
+use \Box\Brainy\Compiler\Wrappers\StaticWrapper;
 use \Box\Brainy\Runtime\PluginLoader;
 
 
@@ -22,16 +23,19 @@ class ConstructModifier extends BaseConstruct
             $modifier = $rawModifier[0];
 
             $rawModifier[0] = $output;
+            $modifierIsStatic = $output instanceof StaticWrapper;
             for ($i = 0; $i < count($rawModifier); $i++) {
-                if ($rawModifier[$i] instanceof \Box\Brainy\Compiler\Wrappers\StaticWrapper) {
+                if ($rawModifier[$i] instanceof StaticWrapper) {
                     $rawModifier[$i] = (string) $rawModifier[$i];
+                } elseif ($i > 0) {
+                    $modifierIsStatic = false;
                 }
             }
             $params = implode(', ', $rawModifier);
 
             if (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][$modifier])) {
+                $function = $compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][$modifier];
                 $output = "{$function}({$params})";
-                continue;
 
             } elseif (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIERCOMPILER][$modifier])) {
                 // This gets a copy of `$output` because $rawModifier[0] is set to $output above.
@@ -40,7 +44,6 @@ class ConstructModifier extends BaseConstruct
                     $rawModifier,
                     $compiler->smarty
                 );
-                continue;
 
             } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIERCOMPILER, $modifier, $compiler->smarty)) {
 
@@ -52,7 +55,6 @@ class ConstructModifier extends BaseConstruct
 
                 $func = PluginLoader::getPluginFunction(Brainy::PLUGIN_MODIFIERCOMPILER, $modifier);
                 $output = call_user_func($func, $rawModifier, $compiler);
-                continue;
 
             } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIER, $modifier, $compiler->smarty)) {
 
@@ -64,7 +66,6 @@ class ConstructModifier extends BaseConstruct
 
                 $func = PluginLoader::getPluginFunction(Brainy::PLUGIN_MODIFIER, $modifier);
                 $output = "{$func}({$params})";
-                continue;
 
             } elseif (is_callable($modifier)) {
 
@@ -75,13 +76,19 @@ class ConstructModifier extends BaseConstruct
                 }
 
                 $output = "{$modifier}({$params})";
-                continue;
 
+            } else {
+                $compiler->trigger_template_error('Unknown modifier: "' . $modifier . '"');
+                break;
             }
 
-            $compiler->trigger_template_error('Unknown modifier: "' . $modifier . '"');
+            if ($modifierIsStatic || in_array($modifier, Brainy::$enforce_expression_modifiers)) {
+                $output = new StaticWrapper($output);
+            }
+
         }
 
         return $output;
     }
+
 }

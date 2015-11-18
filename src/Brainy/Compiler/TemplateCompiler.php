@@ -486,50 +486,9 @@ class TemplateCompiler
     public function assert_no_enforced_modifiers($static = false)
     {
         if (!empty(Brainy::$enforce_expression_modifiers)) {
-            if ($static && !Brainy::$enforce_modifiers_on_static_expressions) {
+            if ($static) {
                 return;
             }
-            $this->trigger_expression_modifiers_error();
-        }
-    }
-
-    /**
-     * Accepts a modifier list. If the last modifier is not acceptable for the
-     * modifier enforcement, an error will be thrown.
-     *
-     * @see Brainy::$enforce_expression_modifiers
-     * @param string $modifier_list
-     * @param bool|void $static When true, the expression is static.
-     * @return void
-     */
-    public function assert_expected_modifier($modifier_list, $static = false)
-    {
-        if (empty(Brainy::$enforce_expression_modifiers)) {
-            return;
-        }
-        $last_modifier = end($modifier_list)[0];
-        reset($modifier_list);
-
-        // Test to see whether the modifier list is static.
-        foreach ($modifier_list as $modifier) {
-            // Ignore modifiers with no attributes.
-            if (count($modifier) === 1) {
-                continue;
-            }
-            $modifier_attributes = array_slice($modifier, 1);
-            foreach ($modifier_attributes as $attr) {
-                if (!($attr instanceof StaticWrapper)) {
-                    $static = false;
-                }
-            }
-        }
-
-        // Ignore purely static values.
-        if ($static && !Brainy::$enforce_modifiers_on_static_expressions) {
-            return;
-        }
-        // Throw an error if the final modifier is not acceptable.
-        if (!in_array($last_modifier, Brainy::$enforce_expression_modifiers)) {
             $this->trigger_expression_modifiers_error();
         }
     }
