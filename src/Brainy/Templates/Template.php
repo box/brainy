@@ -168,7 +168,6 @@ class Template extends TemplateBase
         if ($parent_scope == Brainy::SCOPE_LOCAL) {
             $tpl->tpl_vars = array();
             $tpl->cloneDataFrom($this);
-            $tpl->tpl_vars['smarty'] = clone $this->tpl_vars['smarty'];
         } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
             $tpl->tpl_vars = &$this->tpl_vars;
         } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {
@@ -178,6 +177,7 @@ class Template extends TemplateBase
         } else {
             $tpl->tpl_vars = &$scope_ptr->tpl_vars;
         }
+        $tpl->tpl_vars['smarty'] = &$this->tpl_vars['smarty'];
 
         if (!empty($data)) {
             $tpl->applyDataFrom($data);
@@ -185,42 +185,6 @@ class Template extends TemplateBase
 
         return $tpl->display();
     }
-
-    /**
-     * Template code runtime function to set up an inline subtemplate
-     *
-     * @param string  $template       the resource handle of the template file
-     * @param mixed   $compile_id     compile id to be used with this template
-     * @param array   $vars           optional  variables to assign
-     * @param int     $parent_scope   scope in which {include} should execute
-     * @returns string template content
-     */
-    public function setupInlineSubTemplate($template, $compile_id, $data, $parent_scope)
-    {
-        $tpl = new Template($template, $this->smarty, $this, $compile_id);
-        // get variables from calling scope
-        if ($parent_scope == Brainy::SCOPE_LOCAL) {
-            $tpl->tpl_vars = $this->tpl_vars;
-            $tpl->tpl_vars['smarty'] = clone $this->tpl_vars['smarty'];
-        } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
-            $tpl->tpl_vars = &$this->tpl_vars;
-        } elseif ($parent_scope == Brainy::SCOPE_ROOT) {
-            $tpl->tpl_vars = &$this->smarty->tpl_vars;
-        } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {
-            $tpl->tpl_vars = &Brainy::$global_tpl_vars;
-        } elseif (($scope_ptr = $this->getScopePointer($parent_scope)) == null) {
-            $tpl->tpl_vars = &$this->tpl_vars;
-        } else {
-            $tpl->tpl_vars = &$scope_ptr->tpl_vars;
-        }
-        if (!empty($data)) {
-            // set up variable values
-            $tpl->applyDataFrom($data);
-        }
-
-        return $tpl;
-    }
-
 
     /**
      * Create code frame for compiled and cached templates

@@ -16,6 +16,7 @@ class ConstructCall extends BaseConstruct
     {
 
         $name = self::getRequiredArg($args, 'name');
+        $assign = self::getOptionalArg($args, 'assign');
 
         $paramArray = self::flattenCompiledArray($args);
         $paramArray = self::exportArray($paramArray);
@@ -31,7 +32,13 @@ class ConstructCall extends BaseConstruct
         $output .= "  throw new \\Box\\Brainy\\Exceptions\\SmartyException('Call to undefined function \\'' . $tmpVar . '\\'. Defined functions: ' . implode(', ', array_keys(\$_smarty_tpl->tpl_vars['smarty']->value['functions'])));\n";
         $output .= "}\n";
 
+        if ($assign) {
+            $output .= "ob_start();\n";
+        }
         $output .= "\$_smarty_tpl->tpl_vars['smarty']->value['functions'][$tmpVar]($paramArray);\n";
+        if ($assign) {
+            $output .= "\$_smarty_tpl->setVariable($assign, ob_get_clean());\n";
+        }
 
         return $output;
     }
