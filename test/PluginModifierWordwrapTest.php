@@ -46,8 +46,8 @@ class PluginModifierWordwrapTest extends Smarty_TestCase
         $this->assertEquals("äöüßñ woman\nñsääöüßñameorsoäöüßñäöüßñä\nöüßñäöüßñßñ gets new\nkidney from dad she hasn't\nseen in years.", $this->smarty->fetch($tpl));
     }
 
-    public function testLinebreaks() {
-        $tpl = $this->smarty->createTemplate('eval:{"Blind woman\ngets new kidney from dad she hasn\'t seen in years."|wordwrap:30}');
+    public function testLinebreaks1() {
+        $tpl = $this->smarty->createTemplate('string:{"Blind woman\ngets new kidney from dad she hasn\'t seen in years."|wordwrap:30}');
         $this->assertEquals("Blind woman\ngets new kidney from dad she\nhasn't seen in years.", $this->smarty->fetch($tpl));
     }
 

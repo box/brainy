@@ -659,7 +659,7 @@ class PHP_ParserGenerator_Data
     //    struct state *stp;
             $stp = $this->sorted[$i]->data;
             if (!$stp->ap) {
-                throw new Exception('state has no actions associated');
+                throw new Exception('state has no actions associated: ');
             }
             echo 'processing state ' . $stp->statenum . " actions:\n";
             for ($ap = $stp->ap; $ap !== 0 && $ap->next !== 0; $ap = $ap->next) {

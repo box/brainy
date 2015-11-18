@@ -12,13 +12,14 @@ class DoubleQuotedContent extends ParseTree
      * @param string $data   string section
      */
     public function __construct($data) {
-        $this->data = $data;
+        $this->data = stripcslashes($data);
     }
 
     /**
      * @return string
      */
     public function to_inline_data() {
+        // echo $this->data, stripslashes($this->data), var_export($this->data, true);exit;
         return $this->data;
     }
 

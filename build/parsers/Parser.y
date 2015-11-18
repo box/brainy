@@ -297,34 +297,17 @@ smartytag(res) ::= LDEL ID(i) attributes(a). {
         case 'continue':
             res = Constructs\ConstructContinue::compileOpen($this->compiler, a);
             break;
-        case 'include':
-            res = Constructs\ConstructInclude::compileOpen($this->compiler, a);
-            break;
-        default:
-            res = $this->compiler->compileTag(i, a);
-    }
-}
-
-smartytag(res) ::= LDEL ID(i). {
-    $this->compiler->has_code = true;
-    switch (i) {
-        case 'break':
-            res = Constructs\ConstructBreak::compileOpen($this->compiler, array());
-            break;
-        case 'capture':
-            res = Constructs\ConstructCapture::compileOpen($this->compiler, array());
-            break;
-        case 'continue':
-            res = Constructs\ConstructContinue::compileOpen($this->compiler, array());
-            break;
         case 'else':
-            res = Constructs\ConstructElse::compileOpen($this->compiler, null);
+            res = Constructs\ConstructElse::compileOpen($this->compiler, a);
             break;
         case 'foreachelse':
-            res = Constructs\ConstructForEachElse::compileOpen($this->compiler, null);
+            res = Constructs\ConstructForEachElse::compileOpen($this->compiler, a);
             break;
         case 'forelse':
-            res = Constructs\ConstructForElse::compileOpen($this->compiler, null);
+            res = Constructs\ConstructForElse::compileOpen($this->compiler, a);
+            break;
+        case 'include':
+            res = Constructs\ConstructInclude::compileOpen($this->compiler, a);
             break;
         case 'ldelim':
             res = new Helpers\Text($this->compiler->smarty->left_delimiter);
@@ -333,7 +316,7 @@ smartytag(res) ::= LDEL ID(i). {
             res = new Helpers\Text($this->compiler->smarty->right_delimiter);
             break;
         default:
-            res = $this->compiler->compileTag(i, array());
+            res = $this->compiler->compileTag(i, a);
     }
 }
 
@@ -407,34 +390,12 @@ smartytag(res) ::= LDELFOREACH attributes(a). {
     res = Constructs\ConstructForEach::compileOpen($this->compiler, a);
 }
 
-// {foreach [1, 2, 3] as $val} tag
-smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0). {
-    $this->compiler->has_code = true;
-    res = Constructs\ConstructForEach::compileOpen(
-        $this->compiler,
-        array(array('from' => e), array('item' => v0))
-    );
-}
-
 // {foreach [1, 2, 3] as $val foo=x bar=y} tag
 smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v0) attributes(a). {
     $this->compiler->has_code = true;
     res = Constructs\ConstructForEach::compileOpen(
         $this->compiler,
         array_merge(a, array(array('from' => e), array('item' => v0)))
-    );
-}
-
-// {foreach [0 => 1, 1 => 2, 2 => 3] as $key => $var foo=x bar=y} tag
-smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR varvar(v0). {
-    $this->compiler->has_code = true;
-    res = Constructs\ConstructForEach::compileOpen(
-        $this->compiler,
-        array(
-            array('from' => e),
-            array('item' => v0),
-            array('key' => v1),
-        )
     );
 }
 
@@ -487,32 +448,38 @@ smartytag(res) ::= LDELSLASH ID(i). {
             res = Constructs\ConstructWhile::compileClose($this->compiler, null);
             break;
         default:
-            res = $this->compiler->compileTag(i.'close',array());
+            res = $this->compiler->compileTag(i . 'close', array());
     }
 }
 
 //
 //Attributes of Smarty tags
 //
-// list of attributes
+
+attributes(res) ::= . {
+    res = array();
+}
+
 attributes(res) ::= attributes(a1) attribute(a2). {
     res = a1;
     res[] = a2;
 }
 
-// single attribute
 attributes(res) ::= attribute(a). {
     res = array(a);
 }
 
-// attribute
-attribute(res) ::= SPACE expr(v) EQUAL expr(e). {
+attribute(res) ::= SPACE ID(v) EQUAL expr(e). {
     res = array(v => e);
 }
+
+attribute(res) ::= SPACE INTEGER(i) EQUAL expr(e). {
+    res = array(i => e);
+}
+
 attribute(res) ::= SPACE expr(e). {
     res = e;
 }
-
 
 
 

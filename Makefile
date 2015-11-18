@@ -16,7 +16,7 @@ src/Brainy/Compiler/Parser.php: build/parsers/Parser.y
 
 test: clean autoload
 	mkdir -p test/compiled
-	phpunit
+	./vendor/bin/phpunit
 
 test-hhvm: clean autoload
 	mkdir -p test/compiled
@@ -24,7 +24,7 @@ test-hhvm: clean autoload
 
 coverage: clean
 	mkdir -p coverage
-	phpunit --coverage-html ./coverage
+	./vendor/bin/phpunit --coverage-html ./coverage
 
 lint:
 	# find src -name "*.php" -exec php -l {} \; | grep "^(?!No syntax errors)"

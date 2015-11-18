@@ -33,18 +33,12 @@ class SecurityTest extends Smarty_TestCase
     }
 
     /**
-    * test not trusted PHP function
-    */
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
+     * @expectedExceptionMessage PHP function 'count' not allowed by security setting
+     */
     public function testNotTrustedPHPFunction() {
         $this->smarty->security_policy->php_functions = array('null');
-        try {
-            $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{count($foo)}');
-        } catch (Exception $e) {
-            $this->assertContains(htmlentities("PHP function 'count' not allowed by security setting"), $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for not trusted modifier has not been raised.');
+        $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{count($foo)}');
     }
 
     /**
@@ -55,18 +49,12 @@ class SecurityTest extends Smarty_TestCase
     }
 
     /**
-    * test not trusted modifier
-    */
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
+     * @expectedExceptionMessage modifier 'count' not allowed by security setting
+     */
     public function testNotTrustedModifier() {
         $this->smarty->security_policy->php_modifiers = array('null');
-        try {
-            $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|count}');
-        } catch (\Exception $e) {
-            $this->assertContains(htmlentities("modifier 'count' not allowed by security setting"), $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for not trusted modifier has not been raised.');
+        $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|count}');
     }
 
     /**
@@ -88,18 +76,12 @@ class SecurityTest extends Smarty_TestCase
     }
 
     /**
-    * test disabled tag
-    */
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
+     * @expectedExceptionMessage tag 'cycle' disabled by security setting
+     */
     public function testDisabledTags() {
         $this->smarty->security_policy->disabled_tags = array('cycle');
-        try {
-            $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
-        } catch (\Exception $e) {
-            $this->assertContains(htmlentities("tag 'cycle' disabled by security setting"), $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for disabled tag has not been raised.');
+        $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
     }
 
     /**
@@ -115,33 +97,21 @@ class SecurityTest extends Smarty_TestCase
     }
 
     /**
-    * test not allowed modifier
-    */
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
+     * @expectedExceptionMessage modifier 'lower' not allowed by security setting
+     */
     public function testNotAllowedModifier() {
         $this->smarty->security_policy->allowed_modifiers = array('upper');
-        try {
-            $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
-        } catch (\Exception $e) {
-            $this->assertContains(htmlentities("modifier 'lower' not allowed by security setting"), $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for not allowed tag has not been raised.');
+        $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
     }
 
     /**
-    * test disabled modifier
-    */
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
+     * @expectedExceptionMessage modifier 'lower' disabled by security setting
+     */
     public function testDisabledModifier() {
         $this->smarty->security_policy->disabled_modifiers = array('lower');
-        try {
-            $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
-        } catch (\Exception $e) {
-            $this->assertContains(htmlentities("modifier 'lower' disabled by security setting"), $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for disabled tag has not been raised.');
+        $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
     }
 
 }
