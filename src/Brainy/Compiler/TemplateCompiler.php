@@ -325,7 +325,7 @@ class TemplateCompiler
         if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_COMPILER, $tag, $this->smarty)) {
             $plugin = \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_COMPILER, $tag);
             if (!is_callable($plugin)) {
-                throw new SmartyException("Plugin \"{$tag}\" not callable");
+                throw new \Box\Brainy\Exceptions\SmartyException("Plugin \"{$tag}\" not callable");
             }
             return call_user_func($plugin, $this->formatPluginArgs($args), $this->smarty);
         }

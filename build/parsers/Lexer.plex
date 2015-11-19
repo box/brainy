@@ -144,7 +144,6 @@ class Lexer
  as = /\s+as\s+/
  to = /\s+to\s+/
  step = /\s+step\s+/
- block = /block/
  if = /(if|elseif|else if|while)\s+/
  for = /for\s+/
  foreach = /foreach(?![^\s])/

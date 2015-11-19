@@ -36,7 +36,7 @@ class Parser#line 16 "Parser.php"
     private $smarty;
     private $template;
     private $security;
-    private $current_buffer;
+    public $current_buffer;
 
     private $safe_lookups = 0;
     private $strict_mode = false;
