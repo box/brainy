@@ -17,24 +17,26 @@
 %declare_class {class Parser}
 %include_class
 {
-    public $successful = true;
     public $retvalue = 0;
-    public static $prefix_number = 0;
-    private $lex;
     private $internalError = false;
-    private $strip = 0;
+
+    private $lex;
+    private $compiler;
+    private $smarty;
+    private $template;
+    private $security;
+    private $current_buffer;
 
     private $safe_lookups = 0;
     private $strict_mode = false;
+    private $strip = 0;
 
     public function __construct($lex, $compiler) {
         $this->lex = $lex;
         $this->compiler = $compiler;
         $this->smarty = $this->compiler->smarty;
         $this->template = $this->compiler->template;
-        $this->compiler->has_variable_string = false;
         $this->security = isset($this->smarty->security_policy);
-        $this->block_nesting_level = 0;
         $this->current_buffer = $this->root_buffer = new Helpers\TemplateBuffer();
 
         $this->safe_lookups = $this->smarty->safe_lookups;
@@ -113,7 +115,6 @@
 
 %parse_accept
 {
-    $this->successful = !$this->internalError;
     $this->internalError = false;
     $this->retvalue = $this->_retvalue;
 }
@@ -174,8 +175,6 @@ template_element(res) ::= smartytag(st) RDEL. {
     } else {
         res = null;
     }
-    $this->compiler->has_variable_string = false;
-    $this->block_nesting_level = count($this->compiler->_tag_stack);
 }
 
 // comments
@@ -207,14 +206,6 @@ template_element ::= STRIPOFF(d). {
         $this->compiler->trigger_template_error('Unbalanced {strip} tags');
     }
     $this->strip--;
-}
-// process source of inheritance child block
-template_element ::= BLOCKSOURCE(s). {
-// if ($this->strip) {
-    //     SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, self::stripString(s));
-// } else {
-    //     SMARTY_INTERNAL_COMPILE_BLOCK::blockSource($this->compiler, s);
-    // }
 }
 
 
@@ -435,7 +426,7 @@ smartytag(res) ::= LDEL SMARTYBLOCKCHILDPARENT(i). {
 }
 
 
-// end of block tag  {/....}
+// end of tag  {/....}
 smartytag(res) ::= LDELSLASH ID(i). {
     switch (i) {
         case 'capture':

@@ -75,7 +75,6 @@ class Smarty_Internal_Compile_Extends extends Smarty_Internal_CompileBase
             }
         }
         unset ($_template);
-        $compiler->inheritance_child = true;
         $compiler->lex->yypushstate(\Box\Brainy\Compiler\Lexer::CHILDBODY);
         return '';
     }

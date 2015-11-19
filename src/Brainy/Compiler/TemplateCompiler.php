@@ -62,27 +62,6 @@ class TemplateCompiler
     public $sources = array();
 
     /**
-     * flag that we are inside {block}
-     *
-     * @var bool
-     */
-    public $inheritance = false;
-
-    /**
-     * flag when compiling inheritance child template
-     *
-     * @var bool
-     */
-    public $inheritance_child = false;
-
-    /**
-     * uid of templates called by {extends} for recursion check
-     *
-     * @var array
-     */
-    public $extends_uid = array();
-
-    /**
      * saved preprocessed modifier list
      *
      * @var mixed
@@ -180,10 +159,6 @@ class TemplateCompiler
         // init the lexer/parser to compile the template
         $this->lex = new Lexer($_content, $this);
         $this->parser = new Parser($this->lex, $this);
-        if ($this->inheritance_child) {
-            // start state on child templates
-            $this->lex->yypushstate(Lexer::CHILDBODY);
-        }
 
         // get tokens from lexer and parse them
         while ($this->lex->yylex()) {
@@ -238,7 +213,6 @@ class TemplateCompiler
                 $this->template->properties['file_dependency'][$this->template->source->uid] = array($this->template->source->filepath, $this->template->source->timestamp, $this->template->source->type);
             }
             $loop++;
-            $this->inheritance_child = (bool) $no_sources;
             $_compiled_code = '';
             // get template source
             if ($this->template->source->content) {

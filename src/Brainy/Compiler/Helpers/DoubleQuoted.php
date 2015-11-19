@@ -40,9 +40,6 @@ class DoubleQuoted extends ParseTree
         $code = '';
         $buffer = '';
         foreach ($this->subtrees as $subtree) {
-            if (!($subtree instanceof DoubleQuotedContent)) {
-                $this->parser->compiler->has_variable_string = true;
-            }
             if ($subtree->can_combine_inline_data()) {
                 $buffer .= $subtree->to_inline_data();
                 continue;
