@@ -43,39 +43,9 @@ class PluginModifierEscapeTest extends Smarty_TestCase
         $this->assertEquals("%61%2f%63%c3%a4%61", $this->smarty->fetch($tpl));
     }
 
-    public function testHexentity() {
-        $q = "a&#228;&#1047;&#1076;&#1088;&#1072;&#1074;&#1089;&#1089;&#1090;&#1074;&#1091;&#1081;&#1090;&#1077;";
-        $r = html_entity_decode($q, ENT_NOQUOTES, 'UTF-8');
-        $tpl = $this->smarty->createTemplate('eval:{"' . $r . '"|escape:"hexentity"}');
-        $this->assertEquals("&#x61;&#xE4;&#x417;&#x434;&#x440;&#x430;&#x432;&#x441;&#x441;&#x442;&#x432;&#x443;&#x439;&#x442;&#x435;", $this->smarty->fetch($tpl));
-
-        $tpl = $this->smarty->createTemplate('eval:{"abc"|escape:"hexentity"}');
-        $this->assertEquals("&#x61;&#x62;&#x63;", $this->smarty->fetch($tpl));
-    }
-
-    public function testDecentity() {
-        $q = "a&#228;&#1047;&#1076;&#1088;&#1072;&#1074;&#1089;&#1089;&#1090;&#1074;&#1091;&#1081;&#1090;&#1077;";
-        $r = html_entity_decode($q, ENT_NOQUOTES, 'UTF-8');
-        $tpl = $this->smarty->createTemplate('eval:{"' . $r . '"|escape:"decentity"}');
-        $this->assertEquals("&#97;&#228;&#1047;&#1076;&#1088;&#1072;&#1074;&#1089;&#1089;&#1090;&#1074;&#1091;&#1081;&#1090;&#1077;", $this->smarty->fetch($tpl));
-
-        $tpl = $this->smarty->createTemplate('eval:{"abc"|escape:"decentity"}');
-        $this->assertEquals("&#97;&#98;&#99;", $this->smarty->fetch($tpl));
-    }
-
     public function testJavascript() {
         $tpl = $this->smarty->createTemplate('eval:{"var x = { foo : \"bar\n\" };"|escape:"javascript"}');
         $this->assertEquals("var x = { foo : \\\"bar\\n\\\" };", $this->smarty->fetch($tpl));
-    }
-
-    public function testMail() {
-        $tpl = $this->smarty->createTemplate('eval:{"smarty@example.com"|escape:"mail"}');
-        $this->assertEquals("smarty [AT] example [DOT] com", $this->smarty->fetch($tpl));
-    }
-
-    public function testNonstd() {
-        $tpl = $this->smarty->createTemplate('eval:{"sma\'rty|»example«.com"|escape:"nonstd"}');
-        $this->assertEquals("sma'rty|&#187;example&#171;.com", $this->smarty->fetch($tpl));
     }
 
 }

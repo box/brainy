@@ -82,7 +82,7 @@ class ConstructModifier extends BaseConstruct
                 break;
             }
 
-            if ($modifierIsStatic || in_array($modifier, Brainy::$enforce_expression_modifiers)) {
+            if ($modifierIsStatic || in_array($modifier, Brainy::$enforce_expression_modifiers ?: array())) {
                 $output = new StaticWrapper($output);
             }
 

@@ -77,14 +77,7 @@ class ModifierTest extends Smarty_TestCase
     public function testModifierInsideExpression2() {
         $this->smarty->security_policy->php_modifiers = array('round');
         $tpl = $this->smarty->createTemplate('eval:{1.1*7.1|round}');
-        $this->assertEquals("7.7", $this->smarty->fetch($tpl));
-    }
-    /**
-    * test modifier at plugin result
-    */
-    public function testModifierAtPluginResult() {
-        $tpl = $this->smarty->createTemplate('eval:{counter|truncate:5 start=100000}');
-        $this->assertEquals("10...", $this->smarty->fetch($tpl));
+        $this->assertEquals("8", $this->smarty->fetch($tpl));
     }
     /**
     * test unqouted string as modifier parameter
@@ -94,45 +87,20 @@ class ModifierTest extends Smarty_TestCase
         $this->assertEquals("xxxxx world", $this->smarty->fetch($tpl));
     }
     /**
-    * test registered modifier function
-    */
-    public function testModifierRegisteredFunction() {
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier','testmodifier');
-        $tpl = $this->smarty->createTemplate('eval:{$foo|testmodifier}');
-        $tpl->assign('foo', 2);
-        $this->assertEquals("mymodifier function 2", $this->smarty->fetch($tpl));
-    }
-    /**
     * test registered modifier static class
     */
     public function testModifierRegisteredStaticClass() {
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier', array('testmodifierclass','staticcall'));
+        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER, 'testmodifier', '\Box\Brainy\Tests\ModifierTest::staticcall');
         $tpl = $this->smarty->createTemplate('eval:{$foo|testmodifier}');
         $tpl->assign('foo', 1);
         $this->assertEquals("mymodifier static 1", $this->smarty->fetch($tpl));
     }
     /**
-    * test registered modifier method call
-    */
-    public function testModifierRegisteredMethodCall() {
-        $obj= new testmodifierclass();
-        $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER,'testmodifier', array($obj,'method'));
-        $tpl = $this->smarty->createTemplate('eval:{$foo|testmodifier}');
-        $tpl->assign('foo', 3);
-        $this->assertEquals("mymodifier method 3", $this->smarty->fetch($tpl));
-    }
-    /**
-    * test unknown modifier error
-    */
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
+     * @expectedExceptionMessage Unknown modifier: "unknown"
+     */
     public function testUnknownModifier() {
-        try {
-            $this->smarty->fetch('eval:{"hello world"|unknown}');
-        } catch (Exception $e) {
-            $this->assertContains('unknown modifier "unknown"', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for unknown modifier has not been raised.');
+        $this->smarty->fetch('eval:{"hello world"|unknown}');
     }
     /**
     * test default modifier
@@ -144,16 +112,12 @@ class ModifierTest extends Smarty_TestCase
         $this->assertEquals('&lt;bar&gt;', $this->smarty->fetch($tpl));
     }
 
-}
-function testmodifier($value) {
-    return "mymodifier function $value";
-}
-class testmodifierclass
-{
-    static function staticcall($value) {
+
+    public static function staticcall($value) {
         return "mymodifier static $value";
     }
     public function method($value) {
         return "mymodifier method $value";
     }
+
 }

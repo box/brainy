@@ -93,4 +93,9 @@ class GetTemplateVarsTest extends Smarty_TestCase
 class TemplateDataHelper
 {
     use TemplateData;
+
+    public function __construct(&$parent)
+    {
+        $this->parent = &$parent;
+    }
 }

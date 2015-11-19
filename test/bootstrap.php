@@ -17,6 +17,7 @@ class Smarty_TestCase extends \PHPUnit_Framework_TestCase
         $this->smartyBC = new \Box\Brainy\SmartyBC();
         $this->setUpInstance($this->smartyBC);
 
+        \Box\Brainy\Brainy::$default_assign_scope = \Box\Brainy\Brainy::SCOPE_LOCAL;
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array();
         \Box\Brainy\Brainy::$global_tpl_vars = array();
         \Box\Brainy\Resources\Resource::$sources = array();

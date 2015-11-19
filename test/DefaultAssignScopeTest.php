@@ -10,9 +10,7 @@ namespace Box\Brainy\Tests;
 
 
 class DefaultAssignScopeTest extends Smarty_TestCase
-{    public function tearDown() {
-        \Box\Brainy\Brainy::$default_assign_scope = \Box\Brainy\Brainy::SCOPE_LOCAL;
-    }
+{
 
     public function testDefaultIsLocalScope() {
         $this->smarty->fetch('eval:{assign var="foo" value="bar"}');

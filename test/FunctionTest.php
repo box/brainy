@@ -11,23 +11,19 @@ namespace Box\Brainy\Tests;
 
 class FunctionTest extends Smarty_TestCase
 {
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->smarty->enableSecurity();
     }
 
     /**
-    * test unknown function error
-    */
-    public function testUnknownFunction() {
-        try {
-            $this->smarty->fetch('eval:{unknown()}');
-        } catch (Exception $e) {
-            $this->assertContains("PHP function 'unknown' not allowed by security setting", $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for unknown function has not been raised.');
+     * @expectedExceptionMessage PHP function 'unknown' not allowed by security setting
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
+     */
+    public function testUnknownFunction()
+    {
+        $this->smarty->fetch('eval:{unknown()}');
     }
 
     public function testTemplateFunctionDefaultParam() {
@@ -39,7 +35,7 @@ class FunctionTest extends Smarty_TestCase
 
     public function testTemplateFunctionDefaultParamOverridden() {
         $this->assertEquals(
-            $this->smarty->fetch('eval:{function name="bar" def="hello"}{$def}{/function}{bar def="goodbye"}'),
+            $this->smarty->fetch('string:{function name="bar" def="hello"}{$def}{/function}{bar def="goodbye"}'),
             'goodbye'
         );
     }

@@ -122,29 +122,29 @@ trait TemplateData
      * Returns a single or all assigned template variables
      *
      * @param  string $varname Name of variable to process, or null to return all
-     * @param  TemplateData $_ptr Optional reference to data object
+     * @param  TemplateData $ptr Optional reference to data object
      * @param  boolean $search_parents Whether to include results from parent scopes
      * @return string|array variable value or or array of variables
      */
-    public function getTemplateVars($varname = null, $_ptr = null, $search_parents = true)
+    public function getTemplateVars($varname = null, $ptr = null, $search_parents = true)
     {
         if (isset($varname)) {
-            $var = $this->getVariable($varname, $_ptr, $search_parents, false);
+            $var = $this->getVariable($varname, $ptr, $search_parents, false);
             return is_object($var) ? $var->value : null;
         }
 
         $output = array();
-        if ($_ptr === null) {
-            $_ptr = $this;
+        if ($ptr === null) {
+            $ptr = $this;
         }
-        while ($_ptr !== null) {
-            foreach ($_ptr->tpl_vars AS $key => $var) {
+        while ($ptr !== null) {
+            foreach ($ptr->tpl_vars AS $key => $var) {
                 if (!array_key_exists($key, $output)) {
                     $output[$key] = $var->value;
                 }
             }
             // not found, try at parent
-            $_ptr = $search_parents ? $_ptr->parent : null;
+            $ptr = $search_parents ? $ptr->parent : null;
         }
         if ($search_parents && isset(Brainy::$global_tpl_vars)) {
             foreach (Brainy::$global_tpl_vars as $key => $var) {
@@ -216,7 +216,7 @@ trait TemplateData
             // found it, return it
             return Brainy::$global_tpl_vars[$variable];
         }
-        if ($this->smarty->error_unassigned && $error_enable) {
+        if (isset($this->smarty) && $this->smarty->error_unassigned && $error_enable) {
             trigger_error('Undefined variable "' . $variable . '"', E_USER_NOTICE);
         }
 

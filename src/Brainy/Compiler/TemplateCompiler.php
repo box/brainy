@@ -324,72 +324,70 @@ class TemplateCompiler
             }
         }
 
+        if (isset($this->smarty->registered_plugins[Brainy::PLUGIN_FUNCTION][$tag])) {
+            $function = $this->smarty->registered_plugins[Brainy::PLUGIN_FUNCTION][$tag];
+            return (
+                'echo ' . $function .
+                '(' . $this->formatStaticArgs($args, false) . ', $_smarty_tpl)' .
+                ";\n"
+            );
+        }
+
         if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_FUNCTION, $tag, $this->smarty)) {
             return (
                 'echo ' .
                 \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_FUNCTION, $tag) .
-                '(' . $this->formatStaticArgs($args) . ', $_smarty_tpl)' .
+                '(' . $this->formatStaticArgs($args, false) . ', $_smarty_tpl)' .
                 ";\n"
             );
         }
 
 
-        if (strlen($tag) < 6 || substr($tag, -5) !== 'close') {
-
-            if (isset($this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag])) {
-                $function = $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag];
-                return call_user_func($function, $this->formatPluginArgs($args), $this);
-            }
-
-            // check plugins from plugins folder
-            if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_COMPILER, $tag, $this->smarty)) {
-                $plugin = \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_COMPILER, $tag);
-                if (!is_callable($plugin)) {
-                    throw new SmartyException("Plugin \"{$tag}\" not callable");
-                }
-                return call_user_func($plugin, $this->formatPluginArgs($args), $this->smarty);
-            }
-
-            $this->trigger_template_error("unknown compiler tag \"{$tag}\"", $this->lex->taglineno);
-
-        }
-
-        // registered compiler plugin ?
         if (isset($this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag])) {
             $function = $this->smarty->registered_plugins[Brainy::PLUGIN_COMPILER][$tag];
-            return call_user_func($function, array(), $this);
+            return call_user_func($function, $this->formatPluginArgs($args), $this);
         }
+
         if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_COMPILER, $tag, $this->smarty)) {
             $plugin = \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_COMPILER, $tag);
             if (!is_callable($plugin)) {
                 throw new SmartyException("Plugin \"{$tag}\" not callable");
             }
-            return call_user_func($plugin, $args, $this->smarty);
+            return call_user_func($plugin, $this->formatPluginArgs($args), $this->smarty);
         }
 
-        $this->trigger_template_error("unknown tag \"$tag\"", $this->lex->taglineno);
+        // Try treating it as a call
+        array_unshift($args, array('name' => var_export($tag, true)));
+        return Constructs\ConstructCall::compileOpen($this, $args);
     }
 
     /**
      * Formats args for old compiler plugins
      * @param  array $args
-     * @return array
+     * @param  bool|void $export Whether to use var_export or to manually construct an array
+     * @return string
      */
-    private function formatStaticArgs($args)
+    private function formatStaticArgs($args, $export = true)
     {
-        $params = array();
-        foreach ($args as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $key => $value) {
-                    $params[] = "'$key' => $value";
-                }
-            } elseif (is_int($key)) {
-                $params[] = "$key => $value";
-            } else {
-                $params[] = "'$key' => $value";
-            }
+        $args = $this->formatPluginArgs($args);
+        if ($export) {
+            return var_export($args, true);
         }
-        return 'array(' . implode(', ', $params) . ')';
+
+        $output = 'array(';
+        $first = true;
+        foreach ($args as $k => $v) {
+            if ($first) {
+                $first = false;
+            } else {
+                $output .= ', ';
+            }
+            $output .= var_export($k, true);
+            $output .= ' => ';
+            $output .= $v;
+        }
+        $output .= ')';
+        return $output;
     }
 
     /**
@@ -402,7 +400,15 @@ class TemplateCompiler
         $new_args = array();
         foreach ($args as $key => $mixed) {
             if (is_array($mixed)) {
-                $new_args = array_merge($new_args, $mixed);
+                foreach ($mixed as $k => $val) {
+                    if ($val instanceof Wrappers\StaticWrapper) {
+                        $new_args[$k] = (string) $val;
+                    } else {
+                        $new_args[$k] = $val;
+                    }
+                }
+            } elseif ($mixed instanceof Wrappers\StaticWrapper) {
+                $new_args[$key] = (string) $mixed;
             } else {
                 $new_args[$key] = $mixed;
             }
