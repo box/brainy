@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/box/brainy.svg?branch=master)](https://travis-ci.org/box/brainy)
 [![Latest Stable Version](https://poser.pugx.org/box/brainy/v/stable)](https://packagist.org/packages/box/brainy)
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Total Downloads](https://poser.pugx.org/box/brainy/downloads)](https://packagist.org/packages/box/brainy)
