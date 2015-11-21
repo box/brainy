@@ -11,6 +11,13 @@ namespace Box\Brainy\Tests;
 
 class LookupSafetyTest extends Smarty_TestCase
 {
+
+    public function setUp()
+    {
+        parent::setUp();
+        error_reporting(E_ALL);
+    }
+
     /**
      * @expectedException PHPUnit_Framework_Error_Notice
      */

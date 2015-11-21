@@ -827,6 +827,7 @@ varvar(res) ::= ID(s). {
 
 // sequence of identifier elements
 varvar(res) ::= LDEL expr(e) RDEL. {
+    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
     res = '('.e.')';
 }
 
