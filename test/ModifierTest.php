@@ -100,7 +100,7 @@ class ModifierTest extends Smarty_TestCase
      * @expectedExceptionMessage Unknown modifier: "unknown"
      */
     public function testUnknownModifier() {
-        $this->smarty->fetch('eval:{"hello world"|unknown}');
+        $this->smarty->display('eval:{"hello world"|unknown}');
     }
     /**
     * test default modifier

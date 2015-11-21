@@ -22,6 +22,5 @@ if (!\$_smarty_tpl->tpl_vars['smarty']->value) {
     \$_smarty_tpl->tpl_vars['smarty']->value['ls_loadables'] = array();
 }
 \$_smarty_tpl->tpl_vars['smarty']->value['ls_loadables'][\$tmp1] = \$tmp2;
-ob_start();
 DOC;
 }

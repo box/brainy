@@ -16,18 +16,7 @@ abstract class BaseConstruct
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
-        throw new \BadMethodCallException('Not implemented!');
-    }
-
-    /**
-     * Compiles the closing tag for a function
-     * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
-     * @return mixed
-     */
-    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
-    {
-        throw new \BadMethodCallException('Not implemented!');
+        throw new \Exception('Not Implemented!');
     }
 
     /**
@@ -83,6 +72,7 @@ abstract class BaseConstruct
             return $args[$name];
         }
         foreach ($args as $arg) {
+            if ($arg === $name) return true;
             if (!is_array($arg) || !isset($arg[$name])) {
                 continue;
             }

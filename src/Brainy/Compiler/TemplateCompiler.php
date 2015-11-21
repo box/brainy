@@ -231,20 +231,13 @@ class TemplateCompiler
         unset($save_source);
         // free memory
         unset($this->parser->root_buffer, $this->parser->current_buffer, $this->parser, $this->lex, $this->template);
-        // return compiled code to template object
-        $merged_code = '';
-        if (!$this->suppressMergedTemplates && !empty($this->merged_templates)) {
-            foreach ($this->merged_templates as $code) {
-                $merged_code .= $code;
-            }
-        }
 
         if ($this->suppressTemplatePropertyHeader) {
-            $code = $_compiled_code . $merged_code;
-        } else {
-            $code = $template_header . $template->createTemplateCodeFrame($_compiled_code) . $merged_code;
+            unset($template->source->content);
+            return $_compiled_code;
         }
-        // unset content because template inheritance could have replace source with parent code
+
+        $code = $template_header . $template->createTemplateCodeFrame($_compiled_code);
         unset($template->source->content);
 
         return $code;
@@ -263,24 +256,6 @@ class TemplateCompiler
         $this->has_code = true;
         $this->has_output = false;
 
-        if (isset($this->smarty->template_functions[$tag])) {
-            $_output = false;
-            // template defined by {template} tag
-            $args['_attr']['name'] = "'" . $tag . "'";
-            $_output = $this->callTagCompiler('call', $args, $parameter);
-            if ($_output !== false) {
-                if ($_output === true) {
-                    // tag did not produce compiled code
-                    return null;
-                }
-                // Does it create output?
-                if ($this->has_output) {
-                    $_output .= "\n";
-                }
-                // return compiled code
-                return $_output;
-            }
-        }
 
         if (isset($this->smarty->security_policy) &&
             !$this->smarty->security_policy->isTrustedTag($tag, $this)) {
@@ -327,7 +302,7 @@ class TemplateCompiler
             if (!is_callable($plugin)) {
                 throw new \Box\Brainy\Exceptions\SmartyException("Plugin \"{$tag}\" not callable");
             }
-            return call_user_func($plugin, $this->formatPluginArgs($args), $this->smarty);
+            return call_user_func($plugin, $this->formatPluginArgs($args), $this);
         }
 
         // Try treating it as a call
@@ -487,6 +462,22 @@ class TemplateCompiler
         if ($this->parser && $this->parser->isStrictMode()) {
             $this->trigger_template_error('Strict Mode: ' . $reason, null, '\Box\Brainy\Exceptions\BrainyStrictModeException');
         }
+    }
+
+    /**
+     * Asserts that a tag is open
+     * @param  string $name Name of the tag
+     * @return mixed Data associated with the tag
+     */
+    public function assertIsInTag($name)
+    {
+        foreach ($this->_tag_stack as $tag) {
+            list($tagName, $data) = $tag;
+            if ($tagName === $name) {
+                return $data;
+            }
+        }
+        $this->trigger_template_error('Expected to be inside {' . $name . '}, but was not');
     }
 
 }

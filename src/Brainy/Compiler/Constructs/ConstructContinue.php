@@ -25,14 +25,4 @@ class ConstructContinue extends BaseConstruct
 
         return "continue;\n";
     }
-
-    /**
-     * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
-     * @return mixed
-     */
-    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
-    {
-        throw new \Exception('Not implemented');
-    }
 }

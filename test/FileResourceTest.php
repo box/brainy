@@ -40,15 +40,12 @@ class FileResourceTest extends Smarty_TestCase
     public function testTemplateFileNotExists2() {
         $this->assertFalse($this->smarty->templateExists('notthere.tpl'));
     }
+    /**
+     * @expectedException \Box\Brainy\Exceptions\SmartyException
+     * @expectedExceptionMessage Unable to load template file 'notthere.tpl'
+     */
     public function testTemplateFileNotExists3() {
-        try {
-            $result = $this->smarty->fetch('notthere.tpl');
-        } catch (Exception $e) {
-            $this->assertContains('Unable to load template file \'notthere.tpl\'', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for not existing template is missing');
+        $this->smarty->display('notthere.tpl');
     }
 
     public function testGetTemplateTimestamp() {
@@ -60,11 +57,6 @@ class FileResourceTest extends Smarty_TestCase
     public function testGetTemplateSource() {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $this->assertEquals('hello world', $tpl->source->content);
-    }
-
-    public function testUsesCompiler() {
-        $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->assertFalse($tpl->source->uncompiled);
     }
 
     public function testIsEvaluated() {
@@ -124,27 +116,21 @@ class FileResourceTest extends Smarty_TestCase
         $this->assertContains('hello world', $result);
     }
 
+    /**
+     * @expectedException \Box\Brainy\Exceptions\SmartyException
+     * @expectedExceptionMessage Unable to load template
+     */
     public function testRelativeIncludeFail() {
-        try {
-            $this->smarty->fetch('relative_sub.tpl');
-        } catch (Exception $e) {
-            $this->assertContains(htmlentities("Unable to load template"), $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for unknown relative filepath has not been raised.');
+        $this->smarty->display('relative_sub.tpl');
     }
 
+    /**
+     * @expectedException \Box\Brainy\Exceptions\SmartyException
+     * @expectedExceptionMessage Unable to load template file './hello.tpl' in 'relative_notexist.tpl'
+     */
     public function testRelativeIncludeFailOtherDir() {
         $this->smarty->addTemplateDir('test/templates_2');
-        try {
-            $this->smarty->fetch('relative_notexist.tpl');
-        } catch (Exception $e) {
-            $this->assertContains("Unable to load template", $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for unknown relative filepath has not been raised.');
+        $this->smarty->display('relative_notexist.tpl');
     }
 
     public function testRelativeFetch() {

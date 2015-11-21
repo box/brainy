@@ -165,7 +165,6 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase
         }
         $compiler->template->properties['file_dependency'] = array_merge($compiler->template->properties['file_dependency'], $_tpl->properties['file_dependency']);
         $compiler->template->properties['function'] = array_merge($compiler->template->properties['function'], $_tpl->properties['function']);
-        $compiler->merged_templates = array_merge($compiler->merged_templates, $_tpl->compiler->merged_templates);
         foreach ($_tpl->required_plugins as $key => $tmp1) {
             $code = $key;
             foreach ($tmp1 as $name => $tmp) {

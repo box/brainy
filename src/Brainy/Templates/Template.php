@@ -25,22 +25,21 @@ class Template extends TemplateBase
      * special compiled template properties
      * @var array
      */
-    public $properties = array('file_dependency' => array(), 'function' => array());
+    public $properties = array('file_dependency' => array());
     /**
      * required plugins
      * @var array
      */
     public $required_plugins = array('compiled' => array());
     /**
-     * blocks for template inheritance
-     * @var array
-     */
-    public $block_data = array();
-    /**
      * internal flag to allow relative path in child template blocks
      * @var bool
      */
     public $allow_relative_path = false;
+
+
+    public $source;
+    public $compiled;
 
     /**
      * Create template data object
@@ -60,18 +59,17 @@ class Template extends TemplateBase
         $this->parent = $parent;
         // Template resource
         $this->template_resource = $template_resource;
-        // copy block data of template inheritance
-        if ($this->parent instanceof Template) {
-            $this->block_data = $this->parent->block_data;
-        }
 
         $this->smarty->fetchedTemplate($template_resource);
 
+        $this->source = \Box\Brainy\Resources\Resource::source($this);
+        $this->compiled = $this->source->getCompiled($this);
+
         if ($this->parent) {
             if (is_array($this->parent)) {
-                $this->applyDataFrom($this->parent);
+                $this->applyDataFrom($this->parent, false);
             } else {
-                $this->cloneDataFrom($this->parent);
+                $this->cloneDataFrom($this->parent, false);
             }
         }
     }
@@ -102,8 +100,7 @@ class Template extends TemplateBase
 
     /**
      * Compiles the template
-     *
-     * If the template is not evaluated the compiled template is saved on disk
+     * @return string The compiled template source
      */
     public function compileTemplateSource()
     {
@@ -120,12 +117,18 @@ class Template extends TemplateBase
             }
         }
         // call compiler
+        $compiler = null;
         try {
-            $code = $this->compiler->compileTemplate($this);
+            $compiler = new \Box\Brainy\Compiler\TemplateCompiler($this->smarty);
+            $code = $compiler->compileTemplate($this);
+            unset($compiler);
         } catch (Exception $e) {
             // restore old timestamp in case of error
             if ($this->smarty->compile_locking && !$this->source->recompiled && $saved_timestamp) {
                 touch($this->compiled->filepath, $saved_timestamp);
+            }
+            if ($compiler) {
+                unset($compiler);
             }
             throw $e;
         }
@@ -140,8 +143,8 @@ class Template extends TemplateBase
             $this->compiled->exists = true;
             $this->compiled->isCompiled = true;
         }
-        // release compiler object to free memory
-        unset($this->compiler);
+
+        return $code;
     }
 
     /**
@@ -258,10 +261,6 @@ PHPDOC;
         if (isset($properties['file_dependency'])) {
             $this->properties['file_dependency'] = array_merge($this->properties['file_dependency'], $properties['file_dependency']);
         }
-        if (!empty($properties['function'])) {
-            $this->properties['function'] = array_merge($this->properties['function'], $properties['function']);
-            $this->smarty->template_functions = array_merge($this->smarty->template_functions, $properties['function']);
-        }
         $this->properties['version'] = isset($properties['version']) ? $properties['version'] : '';
         $this->properties['unifunc'] = $properties['unifunc'];
         // check file dependencies at compiled code
@@ -319,66 +318,6 @@ PHPDOC;
         return null;
     }
 
-     /**
-     * set Smarty property in template context
-     *
-     * @param string $property_name property name
-     * @param mixed  $value         value
-     */
-    public function __set($property_name, $value)
-    {
-        switch ($property_name) {
-            case 'source':
-            case 'compiled':
-            case 'compiler':
-                $this->$property_name = $value;
-
-                return;
-
-            // FIXME: routing of template -> smarty attributes
-            default:
-                if (property_exists($this->smarty, $property_name)) {
-                    $this->smarty->$property_name = $value;
-
-                    return;
-                }
-        }
-
-        throw new SmartyException("invalid template property '$property_name'.");
-    }
-
-    /**
-     * get Smarty property in template context
-     *
-     * @param string $property_name property name
-     */
-    public function __get($property_name)
-    {
-        switch ($property_name) {
-            case 'source':
-                if (strlen($this->template_resource) == 0) {
-                    throw new SmartyException('Missing template name');
-                }
-                $this->source = \Box\Brainy\Resources\Resource::source($this);
-                return $this->source;
-
-            case 'compiled':
-                $this->compiled = $this->source->getCompiled($this);
-                return $this->compiled;
-
-            case 'compiler':
-                $this->compiler = new \Box\Brainy\Compiler\TemplateCompiler($this->smarty);
-                return $this->compiler;
-
-            // FIXME: routing of template -> smarty attributes
-            default:
-                if (property_exists($this->smarty, $property_name)) {
-                    return $this->smarty->$property_name;
-                }
-        }
-
-        throw new \Box\Brainy\Exceptions\SmartyException("template property '$property_name' does not exist.");
-    }
 
     /**
      * Writes file in a safe way to disk

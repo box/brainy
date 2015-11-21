@@ -36,6 +36,7 @@ class TemplateBase
 
     /**
      * @param \Box\Brainy\Brainy $brainyInstance
+     * @param bool|void $useRootScope Whether to clone data from the root scope
      */
     public function __construct(\Box\Brainy\Brainy $brainyInstance, $useRootScope = false)
     {
@@ -68,12 +69,10 @@ class TemplateBase
      * @param  string|void $template         the resource handle of the template file or template object
      * @param  mixed|void  $cache_id         no-op
      * @param  mixed|void  $compile_id       compile id to be used with this template
-     * @param  object|void $parent           next higher level of Brainy variables
-     * @param  bool|void   $display          noop
-     * @param  bool|void   $merge_tpl_vars   if true parent template variables merged in to local scope
      * @return string rendered template output
      */
-    public function fetch($template = null, $cache_id = null, $compile_id = null) {
+    public function fetch($template = null, $cache_id = null, $compile_id = null)
+    {
         ob_start();
         try {
             $this->display($template, null, $compile_id);
@@ -101,7 +100,10 @@ class TemplateBase
      * @param string|null|void  $compile_id compile id to be used with this template
      * @return void
      */
-    public function display($template = null, $cache_id = null, $compile_id = null) {
+    public function display($template = null, $cache_id = null, $compile_id = null)
+    {
+        $this->setUpTemplateData();
+
         if ($template === null && $this instanceof Template) {
             $template = $this;
         }
@@ -111,10 +113,16 @@ class TemplateBase
         }
 
         // dummy local smarty variable
-        $template->tpl_vars['smarty'] = new Variable(array());
+        if (!isset($template->tpl_vars['smarty'])) {
+            $template->tpl_vars['smarty'] = new Variable(array());
+        }
 
-        // must reset merge template date
-        $template->smarty->mergedtemplates_func = array();
+        if (!empty(Brainy::$global_tpl_vars)) {
+            foreach (Brainy::$global_tpl_vars as $key => $value) {
+                $template->tpl_vars[$key] = &$value;
+            }
+        }
+
         // get rendered template
         // checks if template exists
         if (!$template->source->exists) {
@@ -125,14 +133,13 @@ class TemplateBase
             throw new SmartyException("Unable to load template {$template->source->type} '{$template->source->name}'{$parent_resource}");
         }
 
+        $_smarty_tpl = $template;
         // read from cache or render
         if ($template->source->recompiled) { // recompiled === 'eval'
-            $_smarty_tpl = $template;
-            $code = $template->compiler->compileTemplate($template);
+            $code = $template->compileTemplateSource();
             eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
             unset($code);
         } else {
-            $_smarty_tpl = $template;
             if (!$template->compiled->exists || ($template->smarty->force_compile && !$template->compiled->isCompiled)) {
                 $template->compileTemplateSource();
             }
@@ -142,7 +149,7 @@ class TemplateBase
                 $template->decodeProperties($template->compiled->_properties, false);
             }
             if (empty($template->properties['unifunc']) || !is_callable($template->properties['unifunc'])) {
-                throw new SmartyException("Invalid compiled template for '{$template->template_resource}'");
+                throw new SmartyException("Invalid compiled template for '{$template->template_resource}': no unifunc found");
             }
 
             // render compiled template
@@ -179,5 +186,12 @@ class TemplateBase
         // Pass-through
         $this->assignSingleVar($var, $value, $scope);
     }
+
+    /**
+     * Hook to allow subclasses to initialize their data structures.
+     * @return void
+     */
+    protected function setUpTemplateData()
+    {}
 
 }

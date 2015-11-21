@@ -11,7 +11,7 @@ class AttributeTest extends Smarty_TestCase
      * @expectedExceptionMessage missing "var" attribute
      */
     public function testRequiredAttributeVar() {
-        $this->smarty->fetch('eval:{assign value=1}');
+        $this->smarty->display('eval:{assign value=1}');
     }
 
 }

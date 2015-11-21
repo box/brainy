@@ -38,14 +38,14 @@ class SecurityTest extends Smarty_TestCase
      */
     public function testNotTrustedPHPFunction() {
         $this->smarty->security_policy->php_functions = array('null');
-        $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{count($foo)}');
+        $this->smarty->display('eval:{assign var=foo value=[1,2,3,4, 5]}{count($foo)}');
     }
 
     /**
     * test trusted modifier
     */
     public function testTrustedModifier() {
-        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|@count}'));
+        $this->assertEquals("5", $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|count}'));
     }
 
     /**
@@ -54,7 +54,7 @@ class SecurityTest extends Smarty_TestCase
      */
     public function testNotTrustedModifier() {
         $this->smarty->security_policy->php_modifiers = array('null');
-        $this->smarty->fetch('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|count}');
+        $this->smarty->display('eval:{assign var=foo value=[1,2,3,4, 5]}{$foo|count}');
     }
 
     /**
@@ -72,7 +72,7 @@ class SecurityTest extends Smarty_TestCase
      */
     public function testNotAllowedTags2() {
         $this->smarty->security_policy->allowed_tags = array('counter');
-        $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
+        $this->smarty->display('eval:{counter}{cycle values="1, 2"}');
     }
 
     /**
@@ -81,7 +81,7 @@ class SecurityTest extends Smarty_TestCase
      */
     public function testDisabledTags() {
         $this->smarty->security_policy->disabled_tags = array('cycle');
-        $this->smarty->fetch('eval:{counter}{cycle values="1, 2"}');
+        $this->smarty->display('eval:{counter}{cycle values="1, 2"}');
     }
 
     /**
@@ -102,7 +102,7 @@ class SecurityTest extends Smarty_TestCase
      */
     public function testNotAllowedModifier() {
         $this->smarty->security_policy->allowed_modifiers = array('upper');
-        $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
+        $this->smarty->display('eval:{"hello"|upper}{"world"|lower}');
     }
 
     /**
@@ -111,7 +111,7 @@ class SecurityTest extends Smarty_TestCase
      */
     public function testDisabledModifier() {
         $this->smarty->security_policy->disabled_modifiers = array('lower');
-        $this->smarty->fetch('eval:{"hello"|upper}{"world"|lower}');
+        $this->smarty->display('eval:{"hello"|upper}{"world"|lower}');
     }
 
 }

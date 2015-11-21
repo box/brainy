@@ -20,8 +20,7 @@ class Lexer
     public $line;
     public $taglineno;
     public $state = 1;
-    private $heredoc_id_stack = array();
-    public $state_name = array (1 => 'TEXT', 2 => 'SMARTY', 3 => 'LITERAL', 4 => 'DOUBLEQUOTEDSTRING', 5 => 'CHILDBODY');
+    public $state_name = array (1 => 'TEXT', 2 => 'SMARTY', 3 => 'LITERAL', 4 => 'DOUBLEQUOTEDSTRING');
     public $smarty_token_names = array (   // Text for parser error messages
         'IDENTITY'  => '===',
         'NONEIDENTITY'  => '!==',
@@ -63,13 +62,18 @@ class Lexer
         'LITERALSTART'  => 'Literal start',
         'LITERALEND'    => 'Literal end',
         'LDELSLASH' => 'closing tag',
+        'LDELSLASHBLOCK' => 'closing tag',
         'SETSTRICT' => 'setstrict',
         'COMMENT' => 'comment',
         'AS' => 'as',
         'TO' => 'to',
     );
 
-    public function __construct($data,$compiler)
+    /**
+     * @param string $data
+     * @param TemplateCompiler $compiler
+     */
+    public function __construct($data, $compiler)
     {
         $this->data = $data;
         $this->counter = 0;
@@ -121,18 +125,22 @@ class Lexer
               5 => 0,
               6 => 0,
               7 => 0,
-              8 => 1,
-              10 => 0,
-              11 => 0,
+              8 => 0,
+              9 => 0,
+              10 => 1,
               12 => 0,
               13 => 0,
               14 => 0,
               15 => 0,
+              16 => 0,
+              17 => 0,
+              18 => 0,
+              19 => 0,
             );
         if ($this->counter >= strlen($this->data)) {
             return false; // end of input
         }
-        $yy_global_pattern = "/\G(\\{\\})|\G(".$this->ldel."\\*\\s*set strict\\s*\\*".$this->rdel.")|\G(".$this->ldel."\\*([\S\s]*?)\\*".$this->rdel.")|\G(".$this->ldel."\\s*strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*\/strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*literal\\s*".$this->rdel.")|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G(\\s*".$this->rdel.")|\G([\S\s])/iS";
+        $yy_global_pattern = "/\G(\\{\\})|\G(".$this->ldel."\\*\\s*set strict\\s*\\*".$this->rdel.")|\G(".$this->ldel."\\*([\S\s]*?)\\*".$this->rdel.")|\G(".$this->ldel."\\s*\/block\\s*".$this->rdel.")|\G(".$this->ldel."\\s*\/block\\s*".$this->rdel.")|\G(".$this->ldel."\\s*strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*\/strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*literal\\s*".$this->rdel.")|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*extends(?![^\s]))|\G(".$this->ldel."\\s*block)|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G(\\s*".$this->rdel.")|\G([\S\s])/iS";
 
         do {
             if (preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
@@ -200,13 +208,27 @@ class Lexer
     function yy_r1_5($yy_subpatterns)
     {
 
+  $this->token = Parser::TP_CLOSEBLOCK;
+     }
+    function yy_r1_6($yy_subpatterns)
+    {
+
+   if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false)  {
+     $this->token = Parser::TP_TEXT;
+   } else {
+     $this->token = Parser::TP_CLOSEBLOCK;
+   }
+     }
+    function yy_r1_7($yy_subpatterns)
+    {
+
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false)  {
      $this->token = Parser::TP_TEXT;
    } else {
      $this->token = Parser::TP_STRIPON;
    }
      }
-    function yy_r1_6($yy_subpatterns)
+    function yy_r1_8($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -215,7 +237,7 @@ class Lexer
      $this->token = Parser::TP_STRIPOFF;
    }
      }
-    function yy_r1_7($yy_subpatterns)
+    function yy_r1_9($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -225,7 +247,7 @@ class Lexer
      $this->yypushstate(self::LITERAL);
     }
      }
-    function yy_r1_8($yy_subpatterns)
+    function yy_r1_10($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -236,7 +258,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r1_10($yy_subpatterns)
+    function yy_r1_12($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -247,7 +269,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r1_11($yy_subpatterns)
+    function yy_r1_13($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -258,7 +280,29 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r1_12($yy_subpatterns)
+    function yy_r1_14($yy_subpatterns)
+    {
+
+   if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
+      $this->token = Parser::TP_TEXT;
+   } else {
+      $this->token = Parser::TP_LDELEXTENDS;
+      $this->yypushstate(self::SMARTY);
+      $this->taglineno = $this->line;
+   }
+     }
+    function yy_r1_15($yy_subpatterns)
+    {
+
+   if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
+      $this->token = Parser::TP_TEXT;
+   } else {
+      $this->token = Parser::TP_LDELBLOCK;
+      $this->yypushstate(self::SMARTY);
+      $this->taglineno = $this->line;
+   }
+     }
+    function yy_r1_16($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -269,7 +313,7 @@ class Lexer
      $this->taglineno = $this->line;
    }
      }
-    function yy_r1_13($yy_subpatterns)
+    function yy_r1_17($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -280,12 +324,12 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r1_14($yy_subpatterns)
+    function yy_r1_18($yy_subpatterns)
     {
 
    $this->token = Parser::TP_TEXT;
      }
-    function yy_r1_15($yy_subpatterns)
+    function yy_r1_19($yy_subpatterns)
     {
 
   $to = mb_strlen($this->data,'latin1');
@@ -303,7 +347,8 @@ class Lexer
         $tokenMap = array (
               1 => 0,
               2 => 0,
-              3 => 1,
+              3 => 0,
+              4 => 0,
               5 => 0,
               6 => 0,
               7 => 0,
@@ -311,11 +356,11 @@ class Lexer
               9 => 0,
               10 => 0,
               11 => 0,
-              12 => 0,
-              13 => 0,
+              12 => 1,
               14 => 1,
               16 => 1,
-              18 => 1,
+              18 => 0,
+              19 => 0,
               20 => 0,
               21 => 0,
               22 => 0,
@@ -324,19 +369,19 @@ class Lexer
               25 => 0,
               26 => 0,
               27 => 0,
-              28 => 0,
-              29 => 0,
-              30 => 3,
+              28 => 3,
+              32 => 0,
+              33 => 0,
               34 => 0,
               35 => 0,
               36 => 0,
               37 => 0,
               38 => 0,
               39 => 0,
-              40 => 0,
-              41 => 0,
+              40 => 1,
               42 => 1,
-              44 => 1,
+              44 => 0,
+              45 => 0,
               46 => 0,
               47 => 0,
               48 => 0,
@@ -346,19 +391,17 @@ class Lexer
               52 => 0,
               53 => 0,
               54 => 0,
-              55 => 0,
-              56 => 0,
-              57 => 1,
+              55 => 1,
+              57 => 0,
+              58 => 0,
               59 => 0,
               60 => 0,
               61 => 0,
-              62 => 0,
-              63 => 0,
             );
         if ($this->counter >= strlen($this->data)) {
             return false; // end of input
         }
-        $yy_global_pattern = "/\G(\")|\G('[^'\\\\]*(?:\\\\.[^'\\\\]*)*')|\G([$]smarty\\.block\\.(child|parent))|\G(\\$)|\G(\\s*".$this->rdel.")|\G(\\s+is\\s+in\\s+)|\G(\\s+as\\s+)|\G(\\s+to\\s+)|\G(\\s+step\\s+)|\G(\\s*===\\s*)|\G(\\s*!==\\s*)|\G(\\s*==\\s*|\\s+eq\\s+)|\G(\\s*!=\\s*|\\s*<>\\s*|\\s+(ne|neq)\\s+)|\G(\\s*>=\\s*|\\s+(ge|gte)\\s+)|\G(\\s*<=\\s*|\\s+(le|lte)\\s+)|\G(\\s*>\\s*|\\s+gt\\s+)|\G(\\s*<\\s*|\\s+lt\\s+)|\G(\\s+mod\\s+)|\G(!\\s*|not\\s+)|\G(\\s*&&\\s*|\\s*and\\s+)|\G(\\s*\\|\\|\\s*|\\s*or\\s+)|\G(\\s*xor\\s+)|\G(\\s+is\\s+odd)|\G(\\s+is\\s+even)|\G(\\s+is\\s+div\\s+by\\s+)|\G(\\((int(eger)?|bool(ean)?|float|double|real|string|binary|array|object)\\)\\s*)|\G(\\s*\\(\\s*)|\G(\\s*\\))|\G(\\[\\s*)|\G(\\s*\\])|\G(\\s*->\\s*)|\G(\\s*=>\\s*)|\G(\\s*=\\s*)|\G(\\+\\+|--)|\G(\\s*(\\+|-)\\s*)|\G(\\s*(\\*|\/|%)\\s*)|\G(@)|\G([0-9]*[a-zA-Z_]\\w*)|\G(\\d+)|\G(\\|)|\G(\\.)|\G(\\s*,\\s*)|\G(\\s*;)|\G(\\s*:\\s*)|\G(\\s*&\\s*)|\G(\\s*\\?\\s*)|\G(\\s+)|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G([\S\s])/iS";
+        $yy_global_pattern = "/\G(\")|\G('[^'\\\\]*(?:\\\\.[^'\\\\]*)*')|\G(\\$)|\G(\\s*".$this->rdel.")|\G(\\s+is\\s+in\\s+)|\G(\\s+as\\s+)|\G(\\s+to\\s+)|\G(\\s+step\\s+)|\G(\\s*===\\s*)|\G(\\s*!==\\s*)|\G(\\s*==\\s*|\\s+eq\\s+)|\G(\\s*!=\\s*|\\s*<>\\s*|\\s+(ne|neq)\\s+)|\G(\\s*>=\\s*|\\s+(ge|gte)\\s+)|\G(\\s*<=\\s*|\\s+(le|lte)\\s+)|\G(\\s*>\\s*|\\s+gt\\s+)|\G(\\s*<\\s*|\\s+lt\\s+)|\G(\\s+mod\\s+)|\G(!\\s*|not\\s+)|\G(\\s*&&\\s*|\\s*and\\s+)|\G(\\s*\\|\\|\\s*|\\s*or\\s+)|\G(\\s*xor\\s+)|\G(\\s+is\\s+odd)|\G(\\s+is\\s+even)|\G(\\s+is\\s+div\\s+by\\s+)|\G(\\((int(eger)?|bool(ean)?|float|double|real|string|binary|array|object)\\)\\s*)|\G(\\s*\\(\\s*)|\G(\\s*\\))|\G(\\[\\s*)|\G(\\s*\\])|\G(\\s*->\\s*)|\G(\\s*=>\\s*)|\G(\\s*=\\s*)|\G(\\+\\+|--)|\G(\\s*(\\+|-)\\s*)|\G(\\s*(\\*|\/|%)\\s*)|\G(@)|\G([0-9]*[a-zA-Z_]\\w*)|\G(\\d+)|\G(\\|)|\G(\\.)|\G(\\s*,\\s*)|\G(\\s*;)|\G(\\s*:\\s*)|\G(\\s*&\\s*)|\G(\\s*\\?\\s*)|\G(\\s+)|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G([\S\s])/iS";
 
         do {
             if (preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
@@ -422,231 +465,225 @@ class Lexer
     function yy_r2_3($yy_subpatterns)
     {
 
-      $this->token = Parser::TP_SMARTYBLOCKCHILDPARENT;
-      $this->taglineno = $this->line;
-     }
-    function yy_r2_5($yy_subpatterns)
-    {
-
    $this->token = Parser::TP_DOLLAR;
      }
-    function yy_r2_6($yy_subpatterns)
+    function yy_r2_4($yy_subpatterns)
     {
 
    $this->token = Parser::TP_RDEL;
    $this->yypopstate();
      }
-    function yy_r2_7($yy_subpatterns)
+    function yy_r2_5($yy_subpatterns)
     {
 
    $this->token = Parser::TP_ISIN;
      }
-    function yy_r2_8($yy_subpatterns)
+    function yy_r2_6($yy_subpatterns)
     {
 
    $this->token = Parser::TP_AS;
      }
-    function yy_r2_9($yy_subpatterns)
+    function yy_r2_7($yy_subpatterns)
     {
 
    $this->token = Parser::TP_TO;
      }
-    function yy_r2_10($yy_subpatterns)
+    function yy_r2_8($yy_subpatterns)
     {
 
    $this->token = Parser::TP_STEP;
      }
-    function yy_r2_11($yy_subpatterns)
+    function yy_r2_9($yy_subpatterns)
     {
 
    $this->token = Parser::TP_IDENTITY;
      }
-    function yy_r2_12($yy_subpatterns)
+    function yy_r2_10($yy_subpatterns)
     {
 
    $this->token = Parser::TP_NONEIDENTITY;
      }
-    function yy_r2_13($yy_subpatterns)
+    function yy_r2_11($yy_subpatterns)
     {
 
    $this->token = Parser::TP_EQUALS;
      }
-    function yy_r2_14($yy_subpatterns)
+    function yy_r2_12($yy_subpatterns)
     {
 
    $this->token = Parser::TP_NOTEQUALS;
      }
-    function yy_r2_16($yy_subpatterns)
+    function yy_r2_14($yy_subpatterns)
     {
 
    $this->token = Parser::TP_GREATEREQUAL;
      }
-    function yy_r2_18($yy_subpatterns)
+    function yy_r2_16($yy_subpatterns)
     {
 
    $this->token = Parser::TP_LESSEQUAL;
      }
-    function yy_r2_20($yy_subpatterns)
+    function yy_r2_18($yy_subpatterns)
     {
 
    $this->token = Parser::TP_GREATERTHAN;
      }
-    function yy_r2_21($yy_subpatterns)
+    function yy_r2_19($yy_subpatterns)
     {
 
    $this->token = Parser::TP_LESSTHAN;
      }
-    function yy_r2_22($yy_subpatterns)
+    function yy_r2_20($yy_subpatterns)
     {
 
    $this->token = Parser::TP_MOD;
      }
-    function yy_r2_23($yy_subpatterns)
+    function yy_r2_21($yy_subpatterns)
     {
 
    $this->token = Parser::TP_NOT;
      }
-    function yy_r2_24($yy_subpatterns)
+    function yy_r2_22($yy_subpatterns)
     {
 
    $this->token = Parser::TP_LAND;
      }
-    function yy_r2_25($yy_subpatterns)
+    function yy_r2_23($yy_subpatterns)
     {
 
    $this->token = Parser::TP_LOR;
      }
-    function yy_r2_26($yy_subpatterns)
+    function yy_r2_24($yy_subpatterns)
     {
 
    $this->token = Parser::TP_LXOR;
      }
-    function yy_r2_27($yy_subpatterns)
+    function yy_r2_25($yy_subpatterns)
     {
 
    $this->token = Parser::TP_ISODD;
      }
-    function yy_r2_28($yy_subpatterns)
+    function yy_r2_26($yy_subpatterns)
     {
 
    $this->token = Parser::TP_ISEVEN;
      }
-    function yy_r2_29($yy_subpatterns)
+    function yy_r2_27($yy_subpatterns)
     {
 
    $this->token = Parser::TP_ISDIVBY;
      }
-    function yy_r2_30($yy_subpatterns)
+    function yy_r2_28($yy_subpatterns)
     {
 
    $this->token = Parser::TP_TYPECAST;
      }
-    function yy_r2_34($yy_subpatterns)
+    function yy_r2_32($yy_subpatterns)
     {
 
    $this->token = Parser::TP_OPENP;
      }
-    function yy_r2_35($yy_subpatterns)
+    function yy_r2_33($yy_subpatterns)
     {
 
    $this->token = Parser::TP_CLOSEP;
      }
-    function yy_r2_36($yy_subpatterns)
+    function yy_r2_34($yy_subpatterns)
     {
 
    $this->token = Parser::TP_OPENB;
      }
-    function yy_r2_37($yy_subpatterns)
+    function yy_r2_35($yy_subpatterns)
     {
 
    $this->token = Parser::TP_CLOSEB;
      }
-    function yy_r2_38($yy_subpatterns)
+    function yy_r2_36($yy_subpatterns)
     {
 
    $this->token = Parser::TP_PTR;
      }
-    function yy_r2_39($yy_subpatterns)
+    function yy_r2_37($yy_subpatterns)
     {
 
    $this->token = Parser::TP_APTR;
      }
-    function yy_r2_40($yy_subpatterns)
+    function yy_r2_38($yy_subpatterns)
     {
 
    $this->token = Parser::TP_EQUAL;
      }
-    function yy_r2_41($yy_subpatterns)
+    function yy_r2_39($yy_subpatterns)
     {
 
    $this->token = Parser::TP_INCDEC;
      }
-    function yy_r2_42($yy_subpatterns)
+    function yy_r2_40($yy_subpatterns)
     {
 
    $this->token = Parser::TP_UNIMATH;
      }
-    function yy_r2_44($yy_subpatterns)
+    function yy_r2_42($yy_subpatterns)
     {
 
    $this->token = Parser::TP_MATH;
      }
-    function yy_r2_46($yy_subpatterns)
+    function yy_r2_44($yy_subpatterns)
     {
 
    $this->token = Parser::TP_AT;
      }
-    function yy_r2_47($yy_subpatterns)
+    function yy_r2_45($yy_subpatterns)
     {
 
    $this->token = Parser::TP_ID;
      }
-    function yy_r2_48($yy_subpatterns)
+    function yy_r2_46($yy_subpatterns)
     {
 
    $this->token = Parser::TP_INTEGER;
      }
-    function yy_r2_49($yy_subpatterns)
+    function yy_r2_47($yy_subpatterns)
     {
 
    $this->token = Parser::TP_VERT;
      }
-    function yy_r2_50($yy_subpatterns)
+    function yy_r2_48($yy_subpatterns)
     {
 
    $this->token = Parser::TP_DOT;
      }
-    function yy_r2_51($yy_subpatterns)
+    function yy_r2_49($yy_subpatterns)
     {
 
    $this->token = Parser::TP_COMMA;
      }
-    function yy_r2_52($yy_subpatterns)
+    function yy_r2_50($yy_subpatterns)
     {
 
    $this->token = Parser::TP_SEMICOLON;
      }
-    function yy_r2_53($yy_subpatterns)
+    function yy_r2_51($yy_subpatterns)
     {
 
    $this->token = Parser::TP_COLON;
      }
-    function yy_r2_54($yy_subpatterns)
+    function yy_r2_52($yy_subpatterns)
     {
 
    $this->token = Parser::TP_ANDSYM;
      }
-    function yy_r2_55($yy_subpatterns)
+    function yy_r2_53($yy_subpatterns)
     {
 
    $this->token = Parser::TP_QMARK;
      }
-    function yy_r2_56($yy_subpatterns)
+    function yy_r2_54($yy_subpatterns)
     {
 
    $this->token = Parser::TP_SPACE;
      }
-    function yy_r2_57($yy_subpatterns)
+    function yy_r2_55($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -657,7 +694,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r2_59($yy_subpatterns)
+    function yy_r2_57($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -668,7 +705,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r2_60($yy_subpatterns)
+    function yy_r2_58($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -679,7 +716,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r2_61($yy_subpatterns)
+    function yy_r2_59($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -690,7 +727,7 @@ class Lexer
      $this->taglineno = $this->line;
    }
      }
-    function yy_r2_62($yy_subpatterns)
+    function yy_r2_60($yy_subpatterns)
     {
 
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
@@ -701,7 +738,7 @@ class Lexer
       $this->taglineno = $this->line;
    }
      }
-    function yy_r2_63($yy_subpatterns)
+    function yy_r2_61($yy_subpatterns)
     {
 
    $this->token = Parser::TP_TEXT;

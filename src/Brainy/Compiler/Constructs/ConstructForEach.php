@@ -5,7 +5,7 @@ namespace Box\Brainy\Compiler\Constructs;
 use \Box\Brainy\Brainy;
 
 
-class ConstructForEach extends BaseConstruct
+class ConstructForEach extends ClosedBaseConstruct
 {
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference

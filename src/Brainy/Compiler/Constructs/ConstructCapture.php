@@ -3,7 +3,7 @@
 namespace Box\Brainy\Compiler\Constructs;
 
 
-class ConstructCapture extends BaseConstruct
+class ConstructCapture extends ClosedBaseConstruct
 {
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference

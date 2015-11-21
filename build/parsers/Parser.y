@@ -135,8 +135,7 @@
 %left VERT.
 %left COLON.
 
-// complete template
-start(res) ::= strictmode(strict) template. {
+start(res) ::= strictmode(strict) generic_template. {
     res = strict . $this->root_buffer->to_smarty_php();
 }
 
@@ -146,6 +145,92 @@ strictmode(res) ::= SETSTRICT(foo). {
 }
 strictmode(res) ::= . {
     res = '';
+}
+
+
+generic_template ::= template.
+generic_template ::= extended_template.
+
+
+extended_template ::= extended_template_header(h) extended_template_body(b). {
+
+    $this->current_buffer->append_subtree(new Helpers\Tag(b));
+
+    $header = Constructs\ConstructInclude::compileOpen($this->compiler, h);
+    $this->current_buffer->append_subtree(new Helpers\Tag($header));
+}
+extended_template_header(res) ::= LDELEXTENDS(lde) attributes(a) RDEL. {
+    res = a;
+}
+
+extended_template_body(res) ::= extended_template_body_element(e). {
+    res = e ?: '';
+}
+extended_template_body(res) ::= extended_template_body(base) extended_template_body_element(e). {
+    res = base . (e ?: '');
+}
+extended_template_body_element(res) ::= COMMENT. {
+    res = null;
+}
+extended_template_body_element(res) ::= STRIPON. {
+    $this->strip++;
+    res = null;
+}
+extended_template_body_element(res) ::= STRIPOFF. {
+    if (!$this->strip) {
+        $this->compiler->trigger_template_error('Unbalanced {strip} tags');
+    }
+    $this->strip--;
+    res = null;
+}
+extended_template_body_element(res) ::= extended_template_block(b). {
+    res = b;
+}
+
+extended_template_body_element(res) ::= TEXT(t). {
+    if (trim(t) !== '') {
+        $this->trigger_template_error('Unexpected string in template with {extends}: ' . t);
+    }
+    res = null;
+}
+
+extended_template_block(res) ::= nonterminal_template_block_head(head) template_block_content(content) nonterminal_template_block_close(foot). {
+    res = head . content->to_smarty_php() . foot;
+}
+extended_template_block(res) ::= nonterminal_template_block_head(head) nonterminal_template_block_close(foot). {
+    res = head . foot;
+}
+nonterminal_template_block_head(res) ::= LDELBLOCK attributes(a) RDEL. {
+    res = Constructs\ConstructBlockNonterminal::compileOpen($this->compiler, a);
+}
+nonterminal_template_block_close(res) ::= CLOSEBLOCK. {
+    res = Constructs\ConstructBlockNonterminal::compileClose($this->compiler, array());
+}
+template_block_content(res) ::= template_element(e). {
+    res = new Helpers\TemplateBuffer();
+    if (e) {
+        res->append_subtree(e);
+    }
+}
+template_block_content(res) ::= template_block_content(content) template_element(e). {
+    res = content;
+    if (e) {
+        res->append_subtree(e);
+    }
+}
+
+
+template_block(res) ::= terminal_template_block_head(head) terminal_template_block_close(foot). {
+    res = head . foot;
+}
+template_block(res) ::= terminal_template_block_head(head) template_block_content(content) terminal_template_block_close(foot). {
+    res = head . content->to_smarty_php() . foot;
+}
+terminal_template_block_head(res) ::= LDELBLOCK attributes(a) RDEL. {
+    res = Constructs\ConstructBlockTerminal::compileOpen($this->compiler, a);
+}
+terminal_template_block_close(res) ::= CLOSEBLOCK. {
+    res = Constructs\ConstructBlockTerminal::compileClose($this->compiler, array());
 }
 
 
@@ -177,6 +262,9 @@ template_element(res) ::= smartytag(st) RDEL. {
     }
 }
 
+template_element(res) ::= template_block(b). {
+    res = new Helpers\Tag(b);
+}
 // comments
 template_element(res) ::= COMMENT(c). {
     res = null;
@@ -197,11 +285,11 @@ template_element(res) ::= TEXT(o). {
 }
 
 // strip on
-template_element ::= STRIPON(d). {
+template_element ::= STRIPON. {
     $this->strip++;
 }
 // strip off
-template_element ::= STRIPOFF(d). {
+template_element ::= STRIPOFF. {
     if (!$this->strip) {
         $this->compiler->trigger_template_error('Unbalanced {strip} tags');
     }
@@ -410,19 +498,6 @@ smartytag(res) ::= LDELFOREACH SPACE expr(e) AS DOLLAR varvar(v1) APTR DOLLAR va
             )
         )
     );
-}
-
-
-// {$smarty.block.child} or {$smarty.block.parent}
-smartytag(res) ::= LDEL SMARTYBLOCKCHILDPARENT(i). {
-    $j = strrpos(i, '.');
-    if (i[$j + 1] == 'c') {
-// {$smarty.block.child}
-        // res = SMARTY_INTERNAL_COMPILE_BLOCK::compileChildBlock($this->compiler);
-    } else {
-// {$smarty.block.parent}
-        // res = SMARTY_INTERNAL_COMPILE_BLOCK::compileParentBlock($this->compiler);
-    }
 }
 
 
@@ -684,6 +759,7 @@ variable(res) ::= variable(a1) indexdef(a2). {
                 break;
             case 'foreach':
             case 'capture':
+            case 'block':
                 res = new Wrappers\SmartyVarPoisonWrapper($decompiled);
                 break;
             default:
@@ -691,7 +767,22 @@ variable(res) ::= variable(a1) indexdef(a2). {
         }
 
     } elseif (a1 instanceof Wrappers\SmartyVarPoisonWrapper) {
-        res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value[" . var_export(a1->type, true) . "][" . a2 . "]");
+        if (a1->type === 'block') {
+            $decompiled = Decompile::decompileString(a2);
+            switch ($decompiled) {
+                case 'child':
+                    $data = $this->compiler->assertIsInTag('block');
+                    $childBlockVar = $data['childVar'];
+
+                    res = "($childBlockVar ? $childBlockVar(\$_smarty_tpl) ?: '' : '')";
+                    break;
+                default:
+                    $this->compiler->trigger_template_error('$smarty.block[' . a2 . '] is invalid');
+            }
+        } else {
+            // foreach and capture
+            res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value[" . var_export(a1->type, true) . "][" . a2 . "]");
+        }
 
     } else {
         res = $this->compileSafeLookupWithBase(a1, a2);

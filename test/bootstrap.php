@@ -32,7 +32,6 @@ class Smarty_TestCase extends \PHPUnit_Framework_TestCase
         $smarty->setTemplateDir(realpath('test' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR));
         $smarty->setCompileDir(realpath('test' . DIRECTORY_SEPARATOR . 'compiled' . DIRECTORY_SEPARATOR));
         $smarty->setPluginsDir(SMARTY_PLUGINS_DIR);
-        $smarty->template_functions = array();
         $smarty->tpl_vars = array();
         $smarty->force_compile = false;
         $smarty->auto_literal = true;

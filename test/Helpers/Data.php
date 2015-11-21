@@ -22,18 +22,15 @@ class Data
      */
     public function __construct($_parent = null, $smarty = null)
     {
+        $this->parent = $_parent;
         $this->smarty = $smarty;
-        if (is_object($_parent)) {
-            // when object set up back pointer
-            $this->parent = $_parent;
-        } elseif (is_array($_parent)) {
-            // set up variable values
-            foreach ($_parent as $_key => $_val) {
-                $this->tpl_vars[$_key] = new Smarty_variable($_val);
-            }
-        } elseif ($_parent != null) {
-            throw new SmartyException("Wrong type for template variables");
-        }
     }
+
+    /**
+     * Hook to allow subclasses to initialize their data structures.
+     * @return void
+     */
+    protected function setUpTemplateData()
+    {}
 
 }

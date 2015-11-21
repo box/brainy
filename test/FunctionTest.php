@@ -23,7 +23,7 @@ class FunctionTest extends Smarty_TestCase
      */
     public function testUnknownFunction()
     {
-        $this->smarty->fetch('eval:{unknown()}');
+        $this->smarty->display('eval:{unknown()}');
     }
 
     public function testTemplateFunctionDefaultParam() {

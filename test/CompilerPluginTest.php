@@ -15,7 +15,7 @@ class CompilerPluginTest extends Smarty_TestCase
     * test compiler plugin
     */
     public function testCompilerPlugin() {
-        $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
+        $this->smarty->addPluginsDir(dirname(__FILE__) . "/PHPunitplugins/");
         $this->assertEquals('test output', $this->smarty->fetch('eval:{test data="test output"}{/test}'));
     }
 

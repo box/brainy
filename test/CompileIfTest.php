@@ -210,41 +210,13 @@ class CompileIfTest extends Smarty_TestCase
         $tpl = $this->smarty->createTemplate('eval:{if 6 is div by 3}yes{else}no{/if}');
         $this->assertEquals("yes", $this->smarty->fetch($tpl));
     }
-    public function testIfIsNotDivBy() {
-        $tpl = $this->smarty->createTemplate('eval:{if 6 is not div by 3}yes{else}no{/if}');
-        $this->assertEquals("no", $this->smarty->fetch($tpl));
-    }
     public function testIfIsEven() {
         $tpl = $this->smarty->createTemplate('eval:{if 6 is even}yes{else}no{/if}');
         $this->assertEquals("yes", $this->smarty->fetch($tpl));
     }
-    public function testIfIsNotEven() {
-        $tpl = $this->smarty->createTemplate('eval:{if 6 is not even}yes{else}no{/if}');
-        $this->assertEquals("no", $this->smarty->fetch($tpl));
-    }
     public function testIfIsOdd() {
         $tpl = $this->smarty->createTemplate('eval:{if 3 is odd}yes{else}no{/if}');
         $this->assertEquals("yes", $this->smarty->fetch($tpl));
-    }
-    public function testIfIsNotOdd() {
-        $tpl = $this->smarty->createTemplate('eval:{if 3 is not odd}yes{else}no{/if}');
-        $this->assertEquals("no", $this->smarty->fetch($tpl));
-    }
-    public function testIfIsOddBy() {
-        $tpl = $this->smarty->createTemplate('eval:{if 3 is odd by 3}yes{else}no{/if}');
-        $this->assertEquals("yes", $this->smarty->fetch($tpl));
-    }
-    public function testIfIsNotOddBy() {
-        $tpl = $this->smarty->createTemplate('eval:{if 6 is odd by 3}yes{else}no{/if}');
-        $this->assertEquals("no", $this->smarty->fetch($tpl));
-    }
-    public function testIfIsEvenBy() {
-        $tpl = $this->smarty->createTemplate('eval:{if 6 is even by 3}yes{else}no{/if}');
-        $this->assertEquals("yes", $this->smarty->fetch($tpl));
-    }
-    public function testIfIsNotEvenBy() {
-        $tpl = $this->smarty->createTemplate('eval:{if 6 is not even by 3}yes{else}no{/if}');
-        $this->assertEquals("no", $this->smarty->fetch($tpl));
     }
     public function testIfFunc1() {
         $this->smarty->security_policy->php_functions = array('strlen');

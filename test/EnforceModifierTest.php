@@ -85,7 +85,7 @@ class EnforceModifierTest extends Smarty_TestCase
     public function testBareSmartyVariablesThrow()
     {
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array('escape');
-        $this->smarty->fetch('eval:{foreach [] as $foo name="foo"}{/foreach}{$smarty.foreach.foo.first}');
+        $this->smarty->display('eval:{foreach [] as $foo name="foo"}{/foreach}{$smarty.foreach.foo.first}');
     }
 
     public function testProtectedSmartyVariablesThrow()

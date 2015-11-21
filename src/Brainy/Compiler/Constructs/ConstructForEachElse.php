@@ -2,8 +2,6 @@
 
 namespace Box\Brainy\Compiler\Constructs;
 
-use \Box\Brainy\Brainy;
-
 
 class ConstructForEachElse extends BaseConstruct
 {

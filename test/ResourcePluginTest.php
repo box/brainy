@@ -39,30 +39,4 @@ class ResourcePluginTest extends Smarty_TestCase
         $this->assertTrue(is_integer($tpl->source->timestamp));
         $this->assertEquals(10, strlen($tpl->source->timestamp));
     }
-
-    public function testResourcePluginExtendsall() {
-        $this->smarty->registerResource('extendsall', new ResourcePlugins\ResourceExtendsAll());
-        $this->smarty->setTemplateDir( array(
-            'root' => 'test/templates',
-            'test/templates_2',
-            'test/templates_3',
-            'test/templates_4',
-        ));
-
-        $expected = "templates\n\ntemplates_3\ntemplates\n\ntemplates_4";
-        $this->assertEquals($expected, $this->smarty->fetch('extendsall:extendsall.tpl'));
-    }
-
-    public function testResourcePluginExtendsallOne() {
-        $this->smarty->registerResource('extendsall', new ResourcePlugins\ResourceExtendsAll());
-        $this->smarty->setTemplateDir( array(
-            'root' => 'test/templates',
-            'test/templates_2',
-            'test/templates_3',
-            'test/templates_4',
-        ));
-
-        $expected = "templates\ntemplates";
-        $this->assertEquals($expected, $this->smarty->fetch('extendsall:extendsall2.tpl'));
-    }
 }

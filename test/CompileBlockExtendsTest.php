@@ -13,7 +13,7 @@ class CompileBlockExtendsTest extends Smarty_TestCase
 {
     public function setUp() {
         parent::setUp();
-        $this->smarty->setTemplateDir(array('test/templates/compileblockextends/','test/templates/'));
+        $this->smarty->setTemplateDir(array('test/templates/compileblockextends/', 'test/templates/'));
     }
 
     /**
@@ -44,39 +44,11 @@ class CompileBlockExtendsTest extends Smarty_TestCase
         $this->assertContains('Page Title', $result);
     }
     /**
-    * test  child/parent template chain with prepend
-    */
-    public function testCompileBlockChildPrepend_003() {
-        $result = $this->smarty->fetch('003_child_prepend.tpl');
-        $this->assertContains("prepend - Default Title", $result);
-    }
-    /**
-    * test  child/parent template chain with apppend
-    */
-    public function testCompileBlockChildAppend_004() {
-        $result = $this->smarty->fetch('004_child_append.tpl');
-        $this->assertContains("Default Title - append", $result);
-    }
-    /**
-    * test  child/parent template chain with apppend and shorttags
-    */
-    public function testCompileBlockChildAppendShortag_005() {
-        $result = $this->smarty->fetch('005_child_append_shorttag.tpl');
-        $this->assertContains("Default Title - append", $result);
-    }
-    /**
     * test  child/parent template chain with {$this->smarty.block.child)
     */
     public function testCompileBlockChildSmartyChild_006() {
         $result = $this->smarty->fetch('006_child_smartychild.tpl');
         $this->assertContains('here is >child text< included', $result);
-    }
-    /**
-    * test  child/parent template chain with {$this->smarty.block.parent)
-    */
-    public function testCompileBlockChildSmartyParent_007() {
-        $result = $this->smarty->fetch('007_child_smartyparent.tpl');
-        $this->assertContains('parent block Default Title is here', $result);
     }
     /**
     * test  child/parent template chain loading plugin
@@ -126,13 +98,6 @@ class CompileBlockExtendsTest extends Smarty_TestCase
     public function testCompileBlockGrandChildSmartyChild_014() {
         $result = $this->smarty->fetch('014_grandchild_smartychild.tpl');
         $this->assertContains('child title with - grandchild content - here', $result);
-    }
-    /**
-    * test  grandchild/child/parent template chain append
-    */
-    public function testCompileBlockGrandChildAppend_015() {
-        $result = $this->smarty->fetch('015_grandchild_append.tpl');
-        $this->assertContains('Page Title - grandchild append', $result);
     }
     /**
     * test  grandchild/child/parent template chain with nested block
@@ -230,11 +195,10 @@ class CompileBlockExtendsTest extends Smarty_TestCase
     }
 
     /**
-     * test dirt in child templates
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
      */
     public function testDirt_022() {
-        $result = $this->smarty->fetch('022_child.tpl');
-        $this->assertEquals('Page Title', $result);
+        $this->smarty->display('eval:foo{extends file="hello"}');
     }
 
     /**
@@ -254,60 +218,11 @@ class CompileBlockExtendsTest extends Smarty_TestCase
     }
 
     /**
-     * test {$this->smarty.block.child} outside {block]
+     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
+     * @expectedExceptionMessage Expected to be inside {block}, but was not
      */
     public function testSmartyBlockChildOutsideBlock_025() {
-        try {
-            $result = $this->smarty->fetch('025_parent.tpl');
-        } catch (Exception $e) {
-            $this->assertContains('used outside', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for {$this->smarty.block.child} used outside {block} has not been raised.');
-    }
-
-    /**
-     * test {$this->smarty.block.parent} outside {block]
-     */
-    public function testSmartyBlockParentOutsideBlock_026() {
-        try {
-            $result = $this->smarty->fetch('026_parent.tpl');
-        } catch (Exception $e) {
-            $this->assertContains('used outside', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for {$this->smarty.block.parent} used outside {block} has not been raised.');
-    }
-
-    /**
-     * test {$this->smarty.block.parent} in parent template
-     */
-    public function testSmartyBlockParentInParent_027() {
-        try {
-            $result = $this->smarty->fetch('027_parent.tpl');
-        } catch (Exception $e) {
-            $this->assertContains('in parent template', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for illegal {$this->smarty.block.parent} in parent template has not been raised.');
-    }
-
-    /**
-     * test variable file name in {include}
-     */
-    public function testVariableExtends_029() {
-        $this->smarty->assign('foo','helloworld.tpl');
-        try {
-            $result = $this->smarty->fetch('029_parent.tpl');
-        } catch (Exception $e) {
-            $this->assertContains('variable template file names not allow within {block} tags', $e->getMessage());
-
-            return;
-        }
-        $this->fail('Exception for illegal variable template file name not been raised.');
+        $this->smarty->display('025_parent.tpl');
     }
 
 }

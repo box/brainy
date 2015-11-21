@@ -5,7 +5,7 @@ namespace Box\Brainy\Compiler\Constructs;
 use \Box\Brainy\Brainy;
 
 
-class ConstructFor extends BaseConstruct
+class ConstructFor extends ClosedBaseConstruct
 {
     /**
      * Compiles the opening tag for a function

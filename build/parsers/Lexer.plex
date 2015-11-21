@@ -20,8 +20,7 @@ class Lexer
     public $line;
     public $taglineno;
     public $state = 1;
-    private $heredoc_id_stack = array();
-    public $state_name = array (1 => 'TEXT', 2 => 'SMARTY', 3 => 'LITERAL', 4 => 'DOUBLEQUOTEDSTRING', 5 => 'CHILDBODY');
+    public $state_name = array (1 => 'TEXT', 2 => 'SMARTY', 3 => 'LITERAL', 4 => 'DOUBLEQUOTEDSTRING');
     public $smarty_token_names = array (   // Text for parser error messages
         'IDENTITY'  => '===',
         'NONEIDENTITY'  => '!==',
@@ -63,13 +62,18 @@ class Lexer
         'LITERALSTART'  => 'Literal start',
         'LITERALEND'    => 'Literal end',
         'LDELSLASH' => 'closing tag',
+        'LDELSLASHBLOCK' => 'closing tag',
         'SETSTRICT' => 'setstrict',
         'COMMENT' => 'comment',
         'AS' => 'as',
         'TO' => 'to',
     );
 
-    public function __construct($data,$compiler)
+    /**
+     * @param string $data
+     * @param TemplateCompiler $compiler
+     */
+    public function __construct($data, $compiler)
     {
         $this->data = $data;
         $this->counter = 0;
@@ -99,11 +103,11 @@ class Lexer
  slash = /\//
  ldel = /SMARTYldel\s*/
  rdel = /\s*SMARTYrdel/
- smartyblockchildparent = /[\$]smarty\.block\.(child|parent)/
  integer = /\d+/
  math = /\s*(\*|\/|\%)\s*/
  setstrict = /SMARTYldel\*\s*set strict\s*\*SMARTYrdel/
  comment = /SMARTYldel\*([\S\s]*?)\*SMARTYrdel/
+ closeblock = /SMARTYldel\s*\/block\s*SMARTYrdel/
  incdec = /\+\+|\-\-/
  unimath = /\s*(\+|\-)\s*/
  openP = /\s*\(\s*/
@@ -126,6 +130,7 @@ class Lexer
  qmark = /\s*\?\s*/
  constant = /([_]+[A-Z0-9][0-9A-Z_]*|[A-Z][0-9A-Z_]*)(?![0-9A-Z_]*[a-z])/
  id = /[0-9]*[a-zA-Z_]\w*/
+ block = /block/
  literal = /literal/
  strip = /strip/
  equals = /\s*==\s*|\s+eq\s+/
@@ -147,6 +152,7 @@ class Lexer
  if = /(if|elseif|else if|while)\s+/
  for = /for\s+/
  foreach = /foreach(?![^\s])/
+ extends = /extends(?![^\s])/
  not = /!\s*|not\s+/
  land = /\s*\&\&\s*|\s*and\s+/
  lor = /\s*\|\|\s*|\s*or\s+/
@@ -165,6 +171,16 @@ class Lexer
  }
  comment {
    $this->token = Parser::TP_COMMENT;
+ }
+ closeblock {
+  $this->token = Parser::TP_CLOSEBLOCK;
+ }
+ closeblock {
+   if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false)  {
+     $this->token = Parser::TP_TEXT;
+   } else {
+     $this->token = Parser::TP_CLOSEBLOCK;
+   }
  }
  ldel strip rdel {
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false)  {
@@ -215,6 +231,24 @@ class Lexer
       $this->taglineno = $this->line;
    }
  }
+ ldel extends {
+   if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
+      $this->token = Parser::TP_TEXT;
+   } else {
+      $this->token = Parser::TP_LDELEXTENDS;
+      $this->yypushstate(self::SMARTY);
+      $this->taglineno = $this->line;
+   }
+ }
+ ldel block {
+   if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
+      $this->token = Parser::TP_TEXT;
+   } else {
+      $this->token = Parser::TP_LDELBLOCK;
+      $this->yypushstate(self::SMARTY);
+      $this->taglineno = $this->line;
+   }
+ }
  ldel slash {
    if ($this->smarty->auto_literal && isset($this->value[$this->ldel_length]) ? strpos(" \n\t\r", $this->value[$this->ldel_length]) !== false : false) {
      $this->token = Parser::TP_TEXT;
@@ -256,10 +290,6 @@ class Lexer
  }
  singlequotestring {
    $this->token = Parser::TP_SINGLEQUOTESTRING;
- }
- smartyblockchildparent {
-      $this->token = Parser::TP_SMARTYBLOCKCHILDPARENT;
-      $this->taglineno = $this->line;
  }
  dollar {
    $this->token = Parser::TP_DOLLAR;

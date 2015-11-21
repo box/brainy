@@ -24,13 +24,6 @@ class LiteralTest extends Smarty_TestCase
         $this->assertEquals(' {block "foo"}{$foo}{/block} ', $this->smarty->fetch($tpl));
     }
 
-    public function testBlockInLiteralTagInInheritedTemplate() {
-        $this->smarty->clearCompiledTemplate();
-        $this->smarty->setTemplateDir(array('test/templates/extendsresource/', 'test/templates/'));
-        $result = $this->smarty->fetch('extends:eval:{literal} {block "title"}{$foo}{/block} {/literal}|004_parent.tpl');
-        $this->assertEquals(' {block "title"}{$foo}{/block} ', $result);
-    }
-
     /*
     *  Test auto literal space
     */

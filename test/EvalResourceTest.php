@@ -43,13 +43,6 @@ class EvalResourceTest extends Smarty_TestCase
         $this->assertEquals('hello world{$foo}', $tpl->source->content);
     }
     /**
-    * test usesCompiler
-    */
-    public function testUsesCompiler() {
-        $tpl = $this->smarty->createTemplate('eval:hello world');
-        $this->assertFalse($tpl->source->uncompiled);
-    }
-    /**
     * test isEvaluated
     */
     public function testIsEvaluated() {

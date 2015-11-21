@@ -2,8 +2,6 @@
 
 namespace Box\Brainy\Compiler\Constructs;
 
-use \Box\Brainy\Brainy;
-
 
 class ConstructCall extends BaseConstruct
 {
@@ -41,14 +39,5 @@ class ConstructCall extends BaseConstruct
         }
 
         return $output;
-    }
-
-    /**
-     * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
-     * @return mixed
-     */
-    public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
-    {
     }
 }

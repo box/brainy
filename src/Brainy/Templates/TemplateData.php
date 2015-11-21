@@ -128,6 +128,7 @@ trait TemplateData
      */
     public function getTemplateVars($varname = null, $ptr = null, $search_parents = true)
     {
+
         if (isset($varname)) {
             $var = $this->getVariable($varname, $ptr, $search_parents, false);
             return is_object($var) ? $var->value : null;
@@ -183,6 +184,9 @@ trait TemplateData
     public function clearAllAssign()
     {
         $this->tpl_vars = array();
+        if ($this->parent) {
+            $this->applyDataFrom($this->parent->getTemplateVars());
+        }
         return $this;
     }
 
@@ -228,11 +232,13 @@ trait TemplateData
      * Copies each variable from the source into this object, creating new
      * `Variable` objects along the way.
      * @param  TemplateData $source
+     * @param  bool|void $override Whether to override existing values
      * @return void
      */
-    public function cloneDataFrom(&$source)
+    public function cloneDataFrom(&$source, $override = true)
     {
         foreach ($source->tpl_vars as $name => $var) {
+            if (!$override && isset($this->tpl_vars[$name])) continue;
             $this->tpl_vars[$name] = new Variable($var->value);
         }
     }
@@ -240,11 +246,13 @@ trait TemplateData
     /**
      * Applies all of the data to the current object
      * @param  TemplateData $target
+     * @param  bool|void $override Whether to override existing values
      * @return void
      */
-    public function applyDataFrom(array $source)
+    public function applyDataFrom(array $source, $override = true)
     {
         foreach ($source as $name => &$value) {
+            if (!$override && isset($this->tpl_vars[$name])) continue;
             $this->tpl_vars[$name] = new Variable($value);
         }
     }

@@ -350,12 +350,6 @@ class Brainy
 
 
     /**
-     * global template functions
-     * @var array
-     * @internal
-     */
-    public $template_functions = array();
-    /**
      * internal config properties
      * @var array
      * @internal

@@ -25,7 +25,7 @@ class AssignGlobalTest extends Smarty_TestCase
 
     public function testAssignGlobalTag() {
         $this->smarty->assignGlobal('foo', 'bar');
-        $this->assertEquals('bar', $this->smarty->fetch('string:{$foo}'));
+        $this->assertEquals('bar', $this->smarty->fetch('eval:{$foo}'));
         $this->assertEquals('buh', $this->smarty->fetch('eval:{assign var=foo value=buh scope=global}{$foo}'));
         $this->assertEquals('buh', $this->smarty->fetch('eval:{$foo}'));
         $this->assertEquals('buh', $this->smarty->getGlobal('foo'));

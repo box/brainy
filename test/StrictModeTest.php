@@ -39,6 +39,7 @@ class StrictModeTest extends Smarty_TestCase
             array('{$smarty.template}'),
 
             // Banned shorthand:
+            array('{block "foo"}{/block}'),
             array('{include "foo"}'),
             array('{capture "foo"}{/capture}'),
         );
@@ -50,7 +51,7 @@ class StrictModeTest extends Smarty_TestCase
      * @expectedExceptionMessage Strict Mode:
      */
     public function test_banned_constructs_are_not_allowed($source) {
-        $this->smarty->createTemplate('eval:{* set strict *}' . $source)->compileTemplateSource();
+        $this->smarty->createTemplate("eval:{* set strict *}\n" . $source)->compileTemplateSource();
     }
 
     /**
@@ -102,7 +103,7 @@ class StrictModeTest extends Smarty_TestCase
      * @expectedExceptionMessage Strict Mode:
      */
     public function test_banned_plugins_are_not_allowed($source) {
-        $this->smarty->fetch('eval:{* set strict *}' . $source);
+        $this->smarty->display('eval:{* set strict *}' . $source);
     }
 
     /**
