@@ -14,11 +14,11 @@ src/Brainy/Compiler/Parser.php: build/parsers/Parser.y
 	mv build/parsers/Parser.php src/Brainy/Compiler/Parser.php
 
 
-test: clean autoload
+test: clean
 	mkdir -p test/compiled
 	./vendor/bin/phpunit
 
-test-hhvm: clean autoload
+test-hhvm: clean
 	mkdir -p test/compiled
 	./phpunit-hhvm
 
