@@ -76,7 +76,7 @@ class CompileBlockExtendsTest extends Smarty_TestCase
     */
     public function testCompileBlockChildNestedInclude_011() {
         $result = $this->smarty->fetch('011_grandchild_nested_include.tpl');
-        $this->assertContains('hello world', $result);
+        $this->assertContains('some content', $result);
     }
     /**
     * test  grandchild/child/parent template chain
@@ -84,13 +84,6 @@ class CompileBlockExtendsTest extends Smarty_TestCase
     public function testCompileBlockGrandChild_012() {
         $result = $this->smarty->fetch('012_grandchild.tpl');
         $this->assertContains('Grandchild Page Title', $result);
-    }
-    /**
-    * test  grandchild/child/parent template chain prepend
-    */
-    public function testCompileBlockGrandChildPrepend_013() {
-        $result = $this->smarty->fetch('013_grandchild_prepend.tpl');
-        $this->assertContains('grandchild prepend - Page Title', $result);
     }
     /**
     * test  grandchild/child/parent template chain with {$this->smarty.block.child}
@@ -114,21 +107,12 @@ class CompileBlockExtendsTest extends Smarty_TestCase
         $this->assertContains('child pre -grandchild content- child post', $result);
     }
     /**
-    * test  nested child block with hide
-    */
-    public function testCompileBlockChildNestedHide_018() {
-        $result = $this->smarty->fetch('018_child_nested_hide.tpl');
-        $this->assertContains('nested block', $result);
-        $this->assertNotContains('should be hidden', $result);
-    }
-    /**
     * test  nested child block with hide and auto_literal = false
     */
     public function testCompileBlockChildNestedHideAutoLiteralFalse_019() {
         $this->smarty->auto_literal = false;
         $result = $this->smarty->fetch('019_child_nested_hide_autoliteral.tpl');
         $this->assertContains('nested block', $result);
-        $this->assertNotContains('should be hidden', $result);
     }
     /**
     * test  child/parent template chain starting in subtempates
@@ -213,7 +197,7 @@ class CompileBlockExtendsTest extends Smarty_TestCase
      * test {$this->smarty.block.child} for not existing child {block]
      */
     public function testNotExistingChildBlock_024() {
-        $result = $this->smarty->fetch('024_parent.tpl');
+        $result = $this->smarty->fetch("eval:{block 'b1'}no >{\$smarty.block.child}< child{/block}");
         $this->assertContains('no >< child', $result);
     }
 

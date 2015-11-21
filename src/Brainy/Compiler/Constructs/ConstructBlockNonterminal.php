@@ -24,15 +24,12 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
         ));
 
         if ($forced) {
-            return self::compileForced($compiler, $childBlockVar);
+            return self::compileForced($compiler, $name, $childBlockVar);
         }
 
         $nameVar = '$' . $compiler->getUniqueVarName();
 
-        $output = "if (!array_key_exists('blocks', \$_smarty_tpl->tpl_vars['smarty']->value)) {\n";
-        $output .= "  \$_smarty_tpl->tpl_vars['smarty']->value['blocks'] = array();\n";
-        $output .= "}\n";
-        $output .= "$nameVar = $name;\n";
+        $output = "$nameVar = $name;\n";
         $output .= "if (!array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']->value['blocks'])) {\n";
         $output .= "  $childBlockVar = null;\n";
         $output .= "  \$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar] = function (\$_smarty_tpl) use ($childBlockVar) {\n";
@@ -73,15 +70,15 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
 
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler
+     * @param  string $name
      * @param  string $childBlockVar
      * @return string
      */
-    protected static function compileForced($compiler, $childBlockVar)
+    protected static function compileForced($compiler, $name, $childBlockVar)
     {
-        $output = "if (!array_key_exists('blocks', \$_smarty_tpl->tpl_vars['smarty']->value)) {\n";
-        $output .= "  \$_smarty_tpl->tpl_vars['smarty']->value['blocks'] = array();\n";
-        $output .= "  $childBlockVar = null;\n";
-        $output .= "} else $childBlockVar = \$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar] ?: null;\n";
+        $nameVar = '$' . $compiler->getUniqueVarName();
+        $output = "$nameVar = $name;\n";
+        $output .= "$childBlockVar = \$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar] ?: null;\n";
         $output .= "\$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar] = function (\$_smarty_tpl) use ($childBlockVar) {\n";
         return $output;
     }

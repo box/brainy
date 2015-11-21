@@ -114,7 +114,7 @@ class TemplateBase
 
         // dummy local smarty variable
         if (!isset($template->tpl_vars['smarty'])) {
-            $template->tpl_vars['smarty'] = new Variable(array());
+            $template->tpl_vars['smarty'] = new Variable(array('blocks' => array()));
         }
 
         if (!empty(Brainy::$global_tpl_vars)) {

@@ -192,8 +192,7 @@ class TemplateCompiler
         // template header code
         $template_header = '';
         if (!$this->suppressHeader) {
-            $template_header .= "<?php\n/* Brainy version " . Brainy::SMARTY_VERSION . ", created on " . strftime("%Y-%m-%d %H:%M:%S");
-            $template_header .= " compiled from \"" . $this->template->source->filepath . "\" */\n";
+            $template_header .= "<?php\n";
         }
 
         if (empty($this->template->source->components)) {
@@ -471,7 +470,7 @@ class TemplateCompiler
      */
     public function assertIsInTag($name)
     {
-        foreach ($this->_tag_stack as $tag) {
+        foreach (array_reverse($this->_tag_stack) as $tag) {
             list($tagName, $data) = $tag;
             if ($tagName === $name) {
                 return $data;

@@ -157,6 +157,7 @@ extended_template ::= extended_template_header(h) extended_template_body(b). {
     $this->current_buffer->append_subtree(new Helpers\Tag(b));
 
     $header = Constructs\ConstructInclude::compileOpen($this->compiler, h);
+    $header .= "\$_smarty_tpl->tpl_vars['smarty']->value['blocks'] = array();\n";
     $this->current_buffer->append_subtree(new Helpers\Tag($header));
 }
 extended_template_header(res) ::= LDELEXTENDS(lde) attributes(a) RDEL. {

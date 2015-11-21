@@ -1,1 +1,1 @@
-{block name='title'}here is >{$smarty.block.child}< included{/block}
+{block name='title' force}here is >{$smarty.block.child}< included{/block}

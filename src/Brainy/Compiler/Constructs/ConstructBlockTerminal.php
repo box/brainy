@@ -23,14 +23,20 @@ class ConstructBlockTerminal extends ConstructBlockNonterminal
             'forced' => $forced,
         ));
 
+        $nameVar = '$' . $compiler->getUniqueVarName();
+        $output = "$nameVar = $name;\n"; // Guaranteed once execution
+
         if ($forced) {
-            return self::compileForced($compiler, $childBlockVar);
+            $output .= "if (array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']->value['blocks'])) {\n";
+            $output .= "  $childBlockVar = \$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar];\n";
+            $output .= "} else {\n";
+            $output .= "  $childBlockVar = null;\n";
+            $output .= "}\n";
+            return $output;
         }
 
-        $nameVar = '$' . $compiler->getUniqueVarName();
 
-        $output = "$nameVar = $name;\n"; // Guaranteed once execution
-        $output .= "if (array_key_exists('blocks', \$_smarty_tpl->tpl_vars['smarty']->value) && array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']->value['blocks'])) {\n";
+        $output .= "if (array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']->value['blocks'])) {\n";
         $output .= "  \$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar](\$_smarty_tpl);\n";
         $output .= "} else {\n";
         $output .= "  $childBlockVar = null;\n";
@@ -39,7 +45,8 @@ class ConstructBlockTerminal extends ConstructBlockNonterminal
 
     public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
-        self::closeTag($compiler, 'block');
+        $data = self::closeTag($compiler, 'block');
+        if ($data['forced']) return '';
         return "}\n";
     }
 
