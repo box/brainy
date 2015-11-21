@@ -41,8 +41,8 @@ class TemplateBase
     public function __construct(\Box\Brainy\Brainy $brainyInstance, $useRootScope = false)
     {
         $this->smarty = &$brainyInstance;
-        if ($useRootScope) {
-            $this->tpl_vars = $brainyInstance->tpl_vars;
+        if ($useRootScope || Brainy::$default_assign_scope === Brainy::SCOPE_ROOT) {
+            $this->tpl_vars = &$brainyInstance->tpl_vars;
         } else {
             $this->cloneDataFrom($brainyInstance);
         }
