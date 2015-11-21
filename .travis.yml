@@ -5,3 +5,4 @@ php:
   - 5.6
 install: composer install
 script: make install
+sudo: false
