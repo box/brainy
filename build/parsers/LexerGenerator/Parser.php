@@ -279,8 +279,13 @@ class PHP_LexerGenerator_Parser#line 171 "Parser.php"
                     $match = false;
                     foreach ($yy_yymore_patterns[' . $this->token . '] as $index => $rule) {
                         if (preg_match(\'/\' . $rule . \'/' . $this->patternFlags . '\',
-                                ' . $this->input . ', $yymatches, null, ' . $this->counter . ')) {
-                            $yymatches = array_filter($yymatches, \'strlen\'); // remove empty sub-patterns
+                                ' . $this->input . ', $tmpMatches, null, ' . $this->counter . ')) {
+                            $yymatches = array();
+                            foreach ($tmpMatches as $tmpMatch) {
+                                if ($tmpMatch !== \'\') {
+                                    $yymatches[] = $tmpMatch;
+                                }
+                            }
                             if ($match) {
                                 if (strlen($yymatches[0]) > strlen($match[0][0])) {
                                     $match = array($yymatches, $index); // matches, token
@@ -352,13 +357,18 @@ class PHP_LexerGenerator_Parser#line 171 "Parser.php"
             $pattern . 'iS";' . "\n");
         fwrite($this->out, '
         do {
-            if (preg_match($yy_global_pattern,' . $this->input . ', $yymatches, null, ' .
+            if (preg_match($yy_global_pattern,' . $this->input . ', $tmpMatches, null, ' .
              $this->counter .
                     ')) {
-                $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, \'strlen\'); // remove empty sub-patterns
+                $yysubmatches = $tmpMatches;
+                $yymatches = array();
+                foreach ($tmpMatches as $tmpKey => $tmpMatch) {
+                    if ($tmpMatch !== \'\') {
+                        $yymatches[$tmpKey] = $tmpMatch;
+                    }
+                }
                 if (!count($yymatches)) {
-                    throw new Exception(\'Error: lexing failed because a rule matched\' .
+                    throw new \Exception(\'Error: lexing failed because a rule matched\' .
                         \' an empty string.  Input "\' . substr(' . $this->input . ',
                         ' . $this->counter . ', 5) . \'... state ' . $statename . '\');
                 }
@@ -385,69 +395,12 @@ class PHP_LexerGenerator_Parser#line 171 "Parser.php"
                 } elseif ($r === false) {
                     ' . $this->counter . ' += strlen(' . $this->value . ');
                     ' . $this->line . ' += substr_count(' . $this->value . ', "\n");
-                    if (' . $this->counter . ' >= ($this->mbstring_overload ? mb_strlen(' . $this->input . ',\'latin1\'): strlen(' . $this->input . '))) {
+                    if (' . $this->counter . ' >= mb_strlen(' . $this->input . ', \'latin1\')) {
                         return false; // end of input
                     }
                     // skip this token
                     continue;
                 }');
-//                } else {');
-/**        fwrite($this->out, '                    $yy_yymore_patterns = array(' . "\n");
-        $extra = 0;
-        for ($i = 0; count($patterns); $i++) {
-            unset($patterns[$i]);
-            $extra += $tokencount[0];
-            array_shift($tokencount);
-            fwrite($this->out, '        ' . $ruleMap[$i] . ' => array(' . $extra . ', "' .
-                implode('|', $patterns) . "\"),\n");
-        }
-        fwrite($this->out, '    );' . "\n");
-        fwrite($this->out, '
-                    // yymore is needed
-                    do {
-                        if (!strlen($yy_yymore_patterns[' . $this->token . '][1])) {
-                            throw new Exception(\'cannot do yymore for the last token\');
-                        }
-                        $yysubmatches = array();
-                        if (preg_match(\'/\' . $yy_yymore_patterns[' . $this->token . '][1] . \'/' . $this->patternFlags . '\',
-                              ' . $this->input . ', $yymatches, null, ' . $this->counter .')) {
-                            $yysubmatches = $yymatches;
-                            $yymatches = array_filter($yymatches, \'strlen\'); // remove empty sub-patterns
-                            next($yymatches); // skip global match
-                            ' . $this->token . ' += key($yymatches) + $yy_yymore_patterns[' . $this->token . '][0]; // token number
-                            ' . $this->value . ' = current($yymatches); // token value
-                            ' . $this->line . ' = substr_count(' . $this->value . ', "\n");
-                            if ($tokenMap[' . $this->token . ']) {
-                                // extract sub-patterns for passing to lex function
-                                $yysubmatches = array_slice($yysubmatches, ' . $this->token . ' + 1,
-                                    $tokenMap[' . $this->token . ']);
-                            } else {
-                                $yysubmatches = array();
-                            }
-                        }
-                        $r = $this->{\'yy_r' . $ruleindex . '_\' . ' . $this->token . '}($yysubmatches);
-                    } while ($r !== null && !is_bool($r));
-                    if ($r === true) {
-                        // we have changed state
-                        // process this token in the new state
-                        return $this->yylex();
-                    } elseif ($r === false) {
-                        ' . $this->counter . ' += strlen(' . $this->value . ');
-                        ' . $this->line . ' += substr_count(' . $this->value . ', "\n");
-                        if (' . $this->counter . ' >=  strlen(' . $this->input . ')) {
-                            return false; // end of input
-                        }
-                        // skip this token
-                        continue;
-                    } else {
-                        // accept
-                        ' . $this->counter . ' += strlen(' . $this->value . ');
-                        ' . $this->line . ' += substr_count(' . $this->value . ', "\n");
-
-                        return true;
-                    }
-                }
-*/
        fwrite($this->out, '            } else {
                 throw new Exception(\'Unexpected input at line\' . ' . $this->line . ' .
                     \': \' . ' . $this->input . '[' . $this->counter . ']);

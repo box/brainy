@@ -143,11 +143,16 @@ class Lexer
         $yy_global_pattern = "/\G(\\{\\})|\G(".$this->ldel."\\*\\s*set strict\\s*\\*".$this->rdel.")|\G(".$this->ldel."\\*([\S\s]*?)\\*".$this->rdel.")|\G(".$this->ldel."\\s*\/block\\s*".$this->rdel.")|\G(".$this->ldel."\\s*\/block\\s*".$this->rdel.")|\G(".$this->ldel."\\s*strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*\/strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*literal\\s*".$this->rdel.")|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*extends(?![^\s]))|\G(".$this->ldel."\\s*block)|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G(\\s*".$this->rdel.")|\G([\S\s])/iS";
 
         do {
-            if (preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
-                $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+            if (preg_match($yy_global_pattern,$this->data, $tmpMatches, null, $this->counter)) {
+                $yysubmatches = $tmpMatches;
+                $yymatches = array();
+                foreach ($tmpMatches as $tmpKey => $tmpMatch) {
+                    if ($tmpMatch !== '') {
+                        $yymatches[$tmpKey] = $tmpMatch;
+                    }
+                }
                 if (!count($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new \Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state TEXT');
                 }
@@ -174,7 +179,7 @@ class Lexer
                 } elseif ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
-                    if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
+                    if ($this->counter >= mb_strlen($this->data, 'latin1')) {
                         return false; // end of input
                     }
                     // skip this token
@@ -404,11 +409,16 @@ class Lexer
         $yy_global_pattern = "/\G(\")|\G('[^'\\\\]*(?:\\\\.[^'\\\\]*)*')|\G(\\$)|\G(\\s*".$this->rdel.")|\G(\\s+is\\s+in\\s+)|\G(\\s+as\\s+)|\G(\\s+to\\s+)|\G(\\s+step\\s+)|\G(\\s*===\\s*)|\G(\\s*!==\\s*)|\G(\\s*==\\s*|\\s+eq\\s+)|\G(\\s*!=\\s*|\\s*<>\\s*|\\s+(ne|neq)\\s+)|\G(\\s*>=\\s*|\\s+(ge|gte)\\s+)|\G(\\s*<=\\s*|\\s+(le|lte)\\s+)|\G(\\s*>\\s*|\\s+gt\\s+)|\G(\\s*<\\s*|\\s+lt\\s+)|\G(\\s+mod\\s+)|\G(!\\s*|not\\s+)|\G(\\s*&&\\s*|\\s*and\\s+)|\G(\\s*\\|\\|\\s*|\\s*or\\s+)|\G(\\s*xor\\s+)|\G(\\s+is\\s+odd)|\G(\\s+is\\s+even)|\G(\\s+is\\s+div\\s+by\\s+)|\G(\\((int(eger)?|bool(ean)?|float|double|real|string|binary|array|object)\\)\\s*)|\G(\\s*\\(\\s*)|\G(\\s*\\))|\G(\\[\\s*)|\G(\\s*\\])|\G(\\s*->\\s*)|\G(\\s*=>\\s*)|\G(\\s*=\\s*)|\G(\\+\\+|--)|\G(\\s*(\\+|-)\\s*)|\G(\\s*(\\*|\/|%)\\s*)|\G(@)|\G([0-9]*[a-zA-Z_]\\w*)|\G(\\d+)|\G(\\|)|\G(\\.)|\G(\\s*,\\s*)|\G(\\s*;)|\G(\\s*:\\s*)|\G(\\s*&\\s*)|\G(\\s*\\?\\s*)|\G(\\s+)|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G([\S\s])/iS";
 
         do {
-            if (preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
-                $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+            if (preg_match($yy_global_pattern,$this->data, $tmpMatches, null, $this->counter)) {
+                $yysubmatches = $tmpMatches;
+                $yymatches = array();
+                foreach ($tmpMatches as $tmpKey => $tmpMatch) {
+                    if ($tmpMatch !== '') {
+                        $yymatches[$tmpKey] = $tmpMatch;
+                    }
+                }
                 if (!count($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new \Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state SMARTY');
                 }
@@ -435,7 +445,7 @@ class Lexer
                 } elseif ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
-                    if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
+                    if ($this->counter >= mb_strlen($this->data, 'latin1')) {
                         return false; // end of input
                     }
                     // skip this token
@@ -759,11 +769,16 @@ class Lexer
         $yy_global_pattern = "/\G(".$this->ldel."\\s*literal\\s*".$this->rdel.")|\G(".$this->ldel."\\s*\/literal\\s*".$this->rdel.")|\G([\S\s])/iS";
 
         do {
-            if (preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
-                $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+            if (preg_match($yy_global_pattern,$this->data, $tmpMatches, null, $this->counter)) {
+                $yysubmatches = $tmpMatches;
+                $yymatches = array();
+                foreach ($tmpMatches as $tmpKey => $tmpMatch) {
+                    if ($tmpMatch !== '') {
+                        $yymatches[$tmpKey] = $tmpMatch;
+                    }
+                }
                 if (!count($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new \Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state LITERAL');
                 }
@@ -790,7 +805,7 @@ class Lexer
                 } elseif ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
-                    if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
+                    if ($this->counter >= mb_strlen($this->data, 'latin1')) {
                         return false; // end of input
                     }
                     // skip this token
@@ -861,11 +876,16 @@ class Lexer
         $yy_global_pattern = "/\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G(\")|\G(\\$[0-9]*[a-zA-Z_]\\w*)|\G(\\$)|\G(([^\"\\\\]*?)((?:\\\\.[^\"\\\\]*?)*?)(?=(".$this->ldel."|\\$|\")))|\G([\S\s])/iS";
 
         do {
-            if (preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
-                $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+            if (preg_match($yy_global_pattern,$this->data, $tmpMatches, null, $this->counter)) {
+                $yysubmatches = $tmpMatches;
+                $yymatches = array();
+                foreach ($tmpMatches as $tmpKey => $tmpMatch) {
+                    if ($tmpMatch !== '') {
+                        $yymatches[$tmpKey] = $tmpMatch;
+                    }
+                }
                 if (!count($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new \Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state DOUBLEQUOTEDSTRING');
                 }
@@ -892,7 +912,7 @@ class Lexer
                 } elseif ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
-                    if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
+                    if ($this->counter >= mb_strlen($this->data, 'latin1')) {
                         return false; // end of input
                     }
                     // skip this token

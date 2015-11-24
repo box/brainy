@@ -75,7 +75,7 @@ class TemplateBase
         ob_start();
         try {
             $this->display($template, $compile_id);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             ob_end_clean();
             throw $e;
         }
@@ -194,7 +194,7 @@ class TemplateBase
      * @param mixed   $compile_id     compile id to be used with this template
      * @param array   $vars           optional  variables to assign
      * @param int     $parent_scope   scope in which {include} should execute
-     * @return string template content
+     * @return void
      */
     public function renderSubTemplate($template, $compile_id, $data, $parent_scope)
     {
@@ -219,13 +219,12 @@ class TemplateBase
         } else {
             $tpl->tpl_vars = &$scope_ptr->tpl_vars;
         }
-        // $tpl->tpl_vars['smarty'] = &$this->tpl_vars['smarty'];
 
         if (!empty($data)) {
             $tpl->applyDataFrom($data);
         }
 
-        return $tpl->display();
+        $tpl->display();
     }
 
 }
