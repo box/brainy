@@ -7,6 +7,7 @@ class OverlayScope implements \ArrayAccess
 {
     protected $overlaid = array();
     protected $base;
+    protected $written = false;
 
     public function __construct(&$base)
     {
@@ -16,15 +17,17 @@ class OverlayScope implements \ArrayAccess
     public function offsetSet($offset, $value)
     {
         $this->overlaid[$offset] = $value;
+        $this->written = true;
     }
 
     public function offsetExists($offset)
     {
-        return isset($this->overlaid[$offset]) || isset($this->base[$offset]);
+        return isset($this->base[$offset]) || $this->written && isset($this->overlaid[$offset]);
     }
 
     public function offsetUnset($offset)
     {
+        if (!$this->written) return;
         if (isset($this->overlaid[$offset])) {
             $this->overlaid[$offset] = null;
         }
@@ -32,7 +35,7 @@ class OverlayScope implements \ArrayAccess
 
     public function offsetGet($offset)
     {
-        if (isset($this->overlaid[$offset])) return $this->overlaid[$offset];
+        if ($this->written && isset($this->overlaid[$offset])) return $this->overlaid[$offset];
         if (isset($this->base[$offset])) return $this->base[$offset];
         return null;
     }
