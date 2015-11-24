@@ -39,7 +39,7 @@ class ClearCompiledTest extends Smarty_TestCase
 
         foreach ($templates as $template => $compile_ids) {
             foreach ($compile_ids as $compile_id) {
-                $tpl = $this->smarty->createTemplate($template, null, $compile_id);
+                $tpl = $this->smarty->createTemplate($template, $compile_id);
                 $tpl->fetch(); // Force a compile and render
                 $this->_files[$template . '#' . $compile_id] = substr($tpl->compiled->filepath, $directory_length - 1);
             }

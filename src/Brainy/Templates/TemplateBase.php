@@ -67,15 +67,14 @@ class TemplateBase
      * This returns the template output instead of displaying it.
      *
      * @param  string|void $template         the resource handle of the template file or template object
-     * @param  mixed|void  $cache_id         no-op
      * @param  mixed|void  $compile_id       compile id to be used with this template
      * @return string rendered template output
      */
-    public function fetch($template = null, $cache_id = null, $compile_id = null)
+    public function fetch($template = null, $compile_id = null)
     {
         ob_start();
         try {
-            $this->display($template, null, $compile_id);
+            $this->display($template, $compile_id);
         } catch (Exception $e) {
             ob_end_clean();
             throw $e;
@@ -96,20 +95,18 @@ class TemplateBase
      * template should use.
      *
      * @param string|null|void $template   the resource handle of the template file or template object
-     * @param mixed|null|void  $cache_id   no-op
      * @param string|null|void  $compile_id compile id to be used with this template
      * @return void
      */
-    public function display($template = null, $cache_id = null, $compile_id = null)
+    public function display($template = null, $compile_id = null)
     {
-        $this->setUpTemplateData();
 
         if ($template === null && $this instanceof Template) {
             $template = $this;
         }
         // create template object if necessary
         if (!($template instanceof Template)) {
-            $template = $this->smarty->createTemplate($template, $cache_id, $compile_id, $this);
+            $template = $this->smarty->createTemplate($template, $compile_id, $this);
         }
 
         // dummy local smarty variable
@@ -188,10 +185,45 @@ class TemplateBase
     }
 
     /**
-     * Hook to allow subclasses to initialize their data structures.
-     * @return void
+     * Template code runtime function to get subtemplate content
+     *
+     * @param string  $template       the resource handle of the template file
+     * @param mixed   $compile_id     compile id to be used with this template
+     * @param array   $vars           optional  variables to assign
+     * @param int     $parent_scope   scope in which {include} should execute
+     * @return string template content
      */
-    protected function setUpTemplateData()
-    {}
+    public function renderSubTemplate($template, $compile_id, $data, $parent_scope)
+    {
+        // already in template cache?
+        $tpl = \Box\Brainy\Runtime\TemplateCache::get($template, $this->smarty, $compile_id);
+        if ($tpl) {
+            // clone cached template object because of possible recursive call
+            $tpl = clone $tpl;
+            $tpl->parent = $this;
+        } else {
+            $tpl = new Template($template, $this->smarty, $this, $compile_id);
+        }
+        // get variables from calling scope
+        if ($parent_scope == Brainy::SCOPE_LOCAL) {
+            $tpl->tpl_vars = array();
+            $tpl->cloneDataFrom($this);
+        } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
+            $tpl->tpl_vars = &$this->tpl_vars;
+        } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {
+            $tpl->tpl_vars = &Brainy::$global_tpl_vars;
+        } elseif (($scope_ptr = $this->getScopePointer($parent_scope)) == null) {
+            $tpl->tpl_vars = &$this->tpl_vars;
+        } else {
+            $tpl->tpl_vars = &$scope_ptr->tpl_vars;
+        }
+        $tpl->tpl_vars['smarty'] = &$this->tpl_vars['smarty'];
+
+        if (!empty($data)) {
+            $tpl->applyDataFrom($data);
+        }
+
+        return $tpl->display();
+    }
 
 }

@@ -148,55 +148,12 @@ class Template extends TemplateBase
     }
 
     /**
-     * Template code runtime function to get subtemplate content
-     *
-     * @param string  $template       the resource handle of the template file
-     * @param mixed   $compile_id     compile id to be used with this template
-     * @param array   $vars           optional  variables to assign
-     * @param int     $parent_scope   scope in which {include} should execute
-     * @return string template content
-     */
-    public function renderSubTemplate($template, $compile_id, $data, $parent_scope)
-    {
-        // already in template cache?
-        $tpl = \Box\Brainy\Runtime\TemplateCache::get($template, $this->smarty, $compile_id);
-        if ($tpl) {
-            // clone cached template object because of possible recursive call
-            $tpl = clone $tpl;
-            $tpl->parent = $this;
-        } else {
-            $tpl = new Template($template, $this->smarty, $this, $compile_id);
-        }
-        // get variables from calling scope
-        if ($parent_scope == Brainy::SCOPE_LOCAL) {
-            $tpl->tpl_vars = array();
-            $tpl->cloneDataFrom($this);
-        } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
-            $tpl->tpl_vars = &$this->tpl_vars;
-        } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {
-            $tpl->tpl_vars = &Brainy::$global_tpl_vars;
-        } elseif (($scope_ptr = $this->getScopePointer($parent_scope)) == null) {
-            $tpl->tpl_vars = &$this->tpl_vars;
-        } else {
-            $tpl->tpl_vars = &$scope_ptr->tpl_vars;
-        }
-        $tpl->tpl_vars['smarty'] = &$this->tpl_vars['smarty'];
-
-        if (!empty($data)) {
-            $tpl->applyDataFrom($data);
-        }
-
-        return $tpl->display();
-    }
-
-    /**
      * Create code frame for compiled and cached templates
      *
      * @param  string $content optional template content
-     * @param  bool   $cache   flag for cache file
      * @return string
      */
-    public function createTemplateCodeFrame($content = '', $cache = false)
+    public function createTemplateCodeFrame($content = '')
     {
         $plugins_string = '';
         // include code for plugins
@@ -214,16 +171,12 @@ class Template extends TemplateBase
         }
         // build property code
         $output = '';
-        if ($cache) {
-            // remove compiled code of{function} definition
-            unset($this->properties['function']);
-        }
         $this->properties['version'] = Brainy::SMARTY_VERSION;
         if (!isset($this->properties['unifunc'])) {
             $this->properties['unifunc'] = 'content_' . str_replace(array('.',','), '_', uniqid('', true));
         }
         if (!$this->source->recompiled) {
-            $decode = "\$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ',' . ($cache ? 'true' : 'false') . ")";
+            $decode = "\$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ', false)';
             $output .= 'if (' . $decode . ' && !is_callable(\'' . $this->properties['unifunc'] . "')) {\n";
 
             // Output a proper PHPDoc for Augmented Types users.

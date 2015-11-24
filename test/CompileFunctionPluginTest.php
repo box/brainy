@@ -12,17 +12,17 @@ namespace Box\Brainy\Tests;
 class CompileFunctionPluginTest extends Smarty_TestCase
 {
     public function testFunctionPluginFromTemplateFile() {
-        $tpl = $this->smarty->createTemplate('functionplugintest.tpl', $this->smarty);
+        $tpl = $this->smarty->createTemplate('functionplugintest.tpl', null, $this->smarty);
         $this->assertEquals("10", $this->smarty->fetch($tpl));
     }
     public function testFunctionPluginFromCompiledTemplateFile() {
         $this->smarty->force_compile = false;
-        $tpl = $this->smarty->createTemplate('functionplugintest.tpl', $this->smarty);
+        $tpl = $this->smarty->createTemplate('functionplugintest.tpl', null, $this->smarty);
         $this->assertEquals("10", $this->smarty->fetch($tpl));
     }
     public function testFunctionPluginRegisteredFunction() {
         $this->smarty->registerPlugin(\Box\Brainy\Brainy::PLUGIN_FUNCTION, 'plugintest', '\Box\Brainy\Tests\CompileFunctionPluginTest::myplugintest');
-        $tpl = $this->smarty->createTemplate('eval:{plugintest foo=bar}', $this->smarty);
+        $tpl = $this->smarty->createTemplate('eval:{plugintest foo=bar}', null, $this->smarty);
         $this->assertEquals("plugin test called bar", $this->smarty->fetch($tpl));
     }
 

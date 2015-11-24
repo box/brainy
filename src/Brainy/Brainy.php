@@ -672,13 +672,12 @@ class Brainy
      * Brainy::display() or Brainy::fetch() method.
      *
      * @param  string  $template   the resource handle of the template file
-     * @param  mixed|void   $cache_id   cache id to be used with this template
      * @param  mixed|void   $compile_id compile id to be used with this template
      * @param  object|null|void  $parent     Parent scope to assign to the template
      * @param  boolean|void $do_clone   When true, the Smarty object will be cloned
      * @return Template
      */
-    public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null)
+    public function createTemplate($template, $compile_id = null, $parent = null)
     {
 
         // already in template cache?

@@ -76,7 +76,7 @@ class CompileIncludeTest extends Smarty_TestCase
 
     public function testIncludeRootScope2() {
         $this->smarty->assign('foo', 1);
-        $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\' scope = root} after include {$foo}', null, null, $this->smarty);
+        $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\' scope = root} after include {$foo}', null, $this->smarty);
         $content = $this->smarty->fetch($tpl);
         $content2 = $this->smarty->fetch('eval: smarty value {$foo}');
         $this->assertContains('befor include 1', $content);
