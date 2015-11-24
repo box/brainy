@@ -3,7 +3,7 @@
 namespace Box\Brainy\Tests;
 
 
-class CompileErrorTest extends Smarty_TestCase
+class GenericErrorTest extends Smarty_TestCase
 {
     /**
      * @expectedException \Box\Brainy\Exceptions\SmartyException
@@ -16,7 +16,7 @@ class CompileErrorTest extends Smarty_TestCase
 
     /**
      * @expectedException \Box\Brainy\Exceptions\SmartyException
-     * @expectedExceptionMessage Call to undefined function 'unknown'. No defined functions.
+     * @expectedExceptionMessage Call to undefined function 'unknown'. Defined functions: <none>
      */
     public function testUnknownTagError()
     {

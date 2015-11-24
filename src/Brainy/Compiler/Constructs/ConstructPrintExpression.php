@@ -33,8 +33,6 @@ class ConstructPrintExpression extends BaseConstruct
             $output = "htmlspecialchars({$output}, ENT_QUOTES, 'UTF-8')";
         }
 
-        $compiler->has_output = true;
-
         return "echo $output;\n";
     }
 

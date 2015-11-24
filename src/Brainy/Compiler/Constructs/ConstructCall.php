@@ -23,11 +23,9 @@ class ConstructCall extends BaseConstruct
         // Evaluate the function name dynamically at runtime
         $output = "$tmpVar = $name;\n";
         // Safety Dance
-        $output .= "if (!array_key_exists('functions', \$_smarty_tpl->tpl_vars['smarty']->value)) {\n";
-        $output .= "  throw new \\Box\\Brainy\\Exceptions\\SmartyException('Call to undefined function \\'' . $tmpVar . '\\'. No defined functions.');\n";
-        $output .= "}\n";
         $output .= "if (!array_key_exists($tmpVar, \$_smarty_tpl->tpl_vars['smarty']->value['functions'])) {\n";
-        $output .= "  throw new \\Box\\Brainy\\Exceptions\\SmartyException('Call to undefined function \\'' . $tmpVar . '\\'. Defined functions: ' . implode(', ', array_keys(\$_smarty_tpl->tpl_vars['smarty']->value['functions'])));\n";
+        $output .= "  \$funcs = implode(', ', array_keys(\$_smarty_tpl->tpl_vars['smarty']->value['functions'])) ?: '<none>';\n";
+        $output .= "  throw new \\Box\\Brainy\\Exceptions\\SmartyException('Call to undefined function \\'' . $tmpVar . '\\'. Defined functions: ' . \$funcs);\n";
         $output .= "}\n";
 
         if ($assign) {

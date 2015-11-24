@@ -111,7 +111,10 @@ class TemplateBase
 
         // dummy local smarty variable
         if (!isset($template->tpl_vars['smarty'])) {
-            $template->tpl_vars['smarty'] = new Variable(array('blocks' => array()));
+            $template->tpl_vars['smarty'] = new Variable(array(
+                'blocks' => array(),
+                'functions' => array(),
+            ));
         }
 
         if (!empty(Brainy::$global_tpl_vars)) {
@@ -206,8 +209,7 @@ class TemplateBase
         }
         // get variables from calling scope
         if ($parent_scope == Brainy::SCOPE_LOCAL) {
-            $tpl->tpl_vars = array();
-            $tpl->cloneDataFrom($this);
+            $tpl->tpl_vars = new \Box\Brainy\Runtime\OverlayScope($this->tpl_vars);
         } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
             $tpl->tpl_vars = &$this->tpl_vars;
         } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {
@@ -217,7 +219,7 @@ class TemplateBase
         } else {
             $tpl->tpl_vars = &$scope_ptr->tpl_vars;
         }
-        $tpl->tpl_vars['smarty'] = &$this->tpl_vars['smarty'];
+        // $tpl->tpl_vars['smarty'] = &$this->tpl_vars['smarty'];
 
         if (!empty($data)) {
             $tpl->applyDataFrom($data);

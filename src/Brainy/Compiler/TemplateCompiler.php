@@ -171,7 +171,6 @@ class TemplateCompiler
         // $args contains the attributes parsed and compiled by the lexer/parser
         // assume that tag does compile into code, but creates no HTML output
         $this->has_code = true;
-        $this->has_output = false;
 
 
         if (isset($this->smarty->security_policy) &&

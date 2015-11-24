@@ -29,11 +29,13 @@ class ConstructFunction extends ClosedBaseConstruct
 
         $output = "if (!array_key_exists('functions', \$_smarty_tpl->tpl_vars['smarty']->value)) \$_smarty_tpl->tpl_vars['smarty']->value['functions'] = array();\n";
         $output .= "\$_smarty_tpl->tpl_vars['smarty']->value['functions'][" . $name . "] = function (\$params) use (\$_smarty_tpl) {\n";
-        $output .= "  \$tmp = new \\Box\\Brainy\\Templates\\TemplateBase(\$_smarty_tpl->smarty);\n";
+        // We pass `true` to $useRootScope because it avoids doing an iteration
+        // over the whole scope. It's a sloppy optimization but it saves good
+        // time.
+        $output .= "  \$tmp = new \\Box\\Brainy\\Templates\\TemplateBase(\$_smarty_tpl->smarty, true);\n";
         $output .= "  \$tmp->parent = &\$_smarty_tpl;\n";
-        $output .= "  \$tmp->cloneDataFrom(\$_smarty_tpl);\n";
+        $output .= "  \$tmp->tpl_vars = new \Box\Brainy\Runtime\OverlayScope(\$_smarty_tpl->tpl_vars);\n";
         $output .= "  \$tmp->applyDataFrom(\$params);\n";
-        $output .= "  \$tmp->tpl_vars['smarty'] = &\$_smarty_tpl->tpl_vars['smarty'];\n";
         $output .= implode('', $paramConstructionArray);
         $output .= "  \$_smarty_tpl = \$tmp;\n";
 
