@@ -61,4 +61,11 @@ class CompileFunctionTest extends Smarty_TestCase
         $tpl->assign('foo', 'foo');
         $this->assertContains('foo', $this->smarty->fetch($tpl));
     }
+
+
+    public function testIncludesInFunction()
+    {
+        $out = $this->smarty->fetch('eval:{function name="foo"}{include file="eval:temp"}{/function}{call name="foo"}');
+        $this->assertEquals('temp', $out);
+    }
 }

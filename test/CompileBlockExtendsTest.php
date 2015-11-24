@@ -209,4 +209,11 @@ class CompileBlockExtendsTest extends Smarty_TestCase
         $this->smarty->display('025_parent.tpl');
     }
 
+
+    public function testIncludesInBlock()
+    {
+        $out = $this->smarty->fetch('eval:{block name="foo"}{include file="eval:temp"}{/block}');
+        $this->assertEquals('temp', $out);
+    }
+
 }
