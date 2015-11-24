@@ -28,8 +28,7 @@ class ConstructCapture extends ClosedBaseConstruct
             throw new \Box\Brainy\Exceptions\SmartyCompilerException('{capture} tags may not set both `name` and `assign`');
         }
 
-        $compiler->_capture_stack[0][] = array($name, $assign);
-        self::openTag($compiler, 'capture');
+        self::openTag($compiler, 'capture', array($name, $assign));
         return "ob_start();\n";
     }
 
@@ -40,9 +39,7 @@ class ConstructCapture extends ClosedBaseConstruct
      */
     public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
-        self::closeTag($compiler, array('capture'));
-
-        list($name, $assign) = array_pop($compiler->_capture_stack[0]);
+        list($name, $assign) = self::closeTag($compiler, array('capture'));
 
         if (isset($assign)) {
             return '$_smarty_tpl->setVariable(' . $assign . ', ob_get_clean());';

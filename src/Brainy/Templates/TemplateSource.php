@@ -54,12 +54,6 @@ class TemplateSource
     public $recompiled = null;
 
     /**
-     * The Components an extended template is made of
-     * @var array
-     */
-    public $components = null;
-
-    /**
      * Resource Handler
      * @var \Box\Brainy\Resources\Resource
      */

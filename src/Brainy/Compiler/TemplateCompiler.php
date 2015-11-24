@@ -21,13 +21,6 @@ class TemplateCompiler
 {
 
     /**
-     * suppress generation of merged template code
-     *
-     * @var bool
-     */
-    public $suppressMergedTemplates = false;
-
-    /**
      * tag stack
      *
      * @var array
@@ -35,31 +28,11 @@ class TemplateCompiler
     public $_tag_stack = array();
 
     /**
-     * internal capture runtime stack
-     * @var array
-     */
-    public $_capture_stack = array(0 => array());
-
-    /**
      * current template
      *
      * @var Template
      */
     public $template = null;
-
-    /**
-     * merged templates
-     *
-     * @var array
-     */
-    public $merged_templates = array();
-
-    /**
-     * sources which must be compiled
-     *
-     * @var array
-     */
-    public $sources = array();
 
     /**
      * saved preprocessed modifier list
@@ -74,30 +47,6 @@ class TemplateCompiler
      */
     public $suppressHeader = false;
 
-    /**
-     * suppress template property header code in compiled template
-     * @var bool
-     */
-    public $suppressTemplatePropertyHeader = false;
-
-
-    /**
-     * flag if currently a template function is compiled
-     * @var bool
-     */
-    public $compiles_template_function = false;
-
-    /**
-     * called subfuntions from template function
-     * @var array
-     */
-    public $called_functions = array();
-
-    /**
-     * type of already compiled modifier
-     * @var array
-     */
-    public $known_modifier_type = array();
 
     /**
      * @var boolean
@@ -108,26 +57,29 @@ class TemplateCompiler
     /**
      * Lexer object
      *
-     * @var object
+     * @var \Box\Brainy\Compiler\Lexer
      */
     public $lex;
 
     /**
      * Parser object
      *
-     * @var object
+     * @var \Box\Brainy\Compiler\Parser
      */
     public $parser;
 
     /**
      * Smarty object
      *
-     * @var object
+     * @var \Box\Brainy\Brainy
      */
     public $smarty;
 
 
-
+    /**
+     * @see getUniqueVarName()
+     * @var integer
+     */
     private $idInc = 0;
 
 
@@ -175,7 +127,9 @@ class TemplateCompiler
             $this->trigger_template_error("unclosed {$this->smarty->left_delimiter}" . $openTag . "{$this->smarty->right_delimiter} tag");
         }
 
-        return $this->parser->retvalue;
+        $output = $this->parser->retvalue;
+        unset($this->lex, $this->parser);
+        return $output;
     }
 
     /**
@@ -188,56 +142,20 @@ class TemplateCompiler
     {
         // save template object in compiler class
         $this->template = $template;
-        $save_source = $this->template->source;
         // template header code
         $template_header = '';
         if (!$this->suppressHeader) {
             $template_header .= "<?php\n";
         }
 
-        if (empty($this->template->source->components)) {
-            $this->sources = array($template->source);
-        } else {
-            // we have array of inheritance templates by extends: resource
-            $this->sources = array_reverse($template->source->components);
-        }
+        $this->template->properties['file_dependency'][$this->template->source->uid] = array($this->template->source->filepath, $this->template->source->timestamp, $this->template->source->type);
 
-        array_unshift($this->_capture_stack, array());
+        $compiledCode = $this->doCompile($this->template->source->content ?: '');
 
-        $loop = 0;
-        // the $this->sources array can get additional elements while compiling by the {extends} tag
-        while ($this->template->source = array_shift($this->sources)) {
-            $no_sources = count($this->sources);
-            if ($loop || $no_sources) {
-                $this->template->properties['file_dependency'][$this->template->source->uid] = array($this->template->source->filepath, $this->template->source->timestamp, $this->template->source->type);
-            }
-            $loop++;
-            $_compiled_code = '';
-            // get template source
-            if ($this->template->source->content) {
-                $_compiled_code = $this->doCompile($this->template->source->content);
-            }
-        }
-
-        // any unclosed {capture} tags ?
-        if (isset($this->_capture_stack[0][0])) {
-            throw new SmartyException("Unbalanced {capture} tags in \"{$this->template_resource}\"");
-        }
-        array_shift($this->_capture_stack);
-
-        // restore source
-        $this->template->source = $save_source;
-        unset($save_source);
         // free memory
-        unset($this->parser->root_buffer, $this->parser->current_buffer, $this->parser, $this->lex, $this->template);
+        unset($this->template);
 
-        if ($this->suppressTemplatePropertyHeader) {
-            unset($template->source->content);
-            return $_compiled_code;
-        }
-
-        $code = $template_header . $template->createTemplateCodeFrame($_compiled_code);
-        unset($template->source->content);
+        $code = $template_header . $template->createTemplateCodeFrame($compiledCode);
 
         return $code;
     }

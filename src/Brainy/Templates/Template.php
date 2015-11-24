@@ -106,9 +106,7 @@ class Template extends TemplateBase
     {
         if (!$this->source->recompiled) {
             $this->properties['file_dependency'] = array();
-            if (!$this->source->components) {
-                $this->properties['file_dependency'][$this->source->uid] = array($this->source->filepath, $this->source->timestamp, $this->source->type);
-            }
+            $this->properties['file_dependency'][$this->source->uid] = array($this->source->filepath, $this->source->timestamp, $this->source->type);
         }
         // compile locking
         if ($this->smarty->compile_locking && !$this->source->recompiled) {
