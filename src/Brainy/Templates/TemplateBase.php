@@ -114,6 +114,7 @@ class TemplateBase
             $template->tpl_vars['smarty'] = new Variable(array(
                 'blocks' => array(),
                 'functions' => array(),
+                'foreach' => array(),
             ));
         }
 

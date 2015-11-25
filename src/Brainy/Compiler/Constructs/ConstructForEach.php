@@ -24,7 +24,6 @@ class ConstructForEach extends ClosedBaseConstruct
 
         $innerVarVar = '$' . $compiler->getUniqueVarName();
         $output = "$innerVarVar = array('source' => $from);\n";
-        $output .= "if (!array_key_exists('foreach', \$_smarty_tpl->tpl_vars['smarty']->value)) \$_smarty_tpl->tpl_vars['smarty']->value['foreach'] = array();\n";
         if ($name) {
             $output .= "\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][$name] = &$innerVarVar;\n";
         }
