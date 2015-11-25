@@ -36,7 +36,19 @@ class OverlayScope implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return isset($this->base[$offset]) || $this->written && isset($this->overlaid[$offset]);
+        // This might seem kind of wasteful in terms of perf. I.e., you might
+        // assume something like this would be faster:
+        //
+        // return isset($this->base[$offset]) || $this->written && isset($this->overlaid[$offset])
+        //
+        // In actual fact, it's not very good in practice. This is because more
+        // often than not, $this->base is another OverlayScope object. That
+        // causes this weird cascade to happen on every single lookup.
+        if ($this->written) {
+            return isset($this->overlaid[$offset]) || isset($this->base[$offset]);
+        } else {
+            return isset($this->base[$offset]);
+        }
     }
 
     /**
@@ -60,8 +72,13 @@ class OverlayScope implements \ArrayAccess
     public function offsetGet($offset)
     {
         if ($this->written && isset($this->overlaid[$offset])) return $this->overlaid[$offset];
-        if (isset($this->base[$offset])) return $this->base[$offset];
-        return null;
+        // We don't test with isset() because that should have been done outside of this.
+        $out = $this->base[$offset];
+        if ($out !== null) {
+            // Cache the value for future lookups.
+            $this->offsetSet($offset, $out);
+        }
+        return $out;
     }
 
 }
