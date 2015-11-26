@@ -60,7 +60,7 @@ class PHP_LexerGenerator_Regex_Lexer
 
     public function yypushstate($state)
     {
-        array_push($this->_yy_stack, $this->_yy_state);
+        $this->_yy_stack[] = $this->_yy_state;
         $this->_yy_state = $state;
     }
 

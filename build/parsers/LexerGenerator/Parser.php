@@ -1689,7 +1689,7 @@ static public $yy_action = array(
         $yymsp = $this->yystack[$this->yyidx];
 
         $this->_retvalue = $yy_lefthand_side = null;
-        if (array_key_exists($yyruleno, self::$yyReduceMap)) {
+        if (isset(self::$yyReduceMap[$yyruleno])) {
             // call the action
             $this->_retvalue = null;
             $this->{'yy_r' . self::$yyReduceMap[$yyruleno]}();
