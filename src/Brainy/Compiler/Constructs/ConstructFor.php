@@ -38,7 +38,7 @@ class ConstructFor extends ClosedBaseConstruct
             $output .= "\$_smarty_tpl->setVariable({$stmt['var']}, {$stmt['value']});\n";
         }
         $output .= "if ($ifexp) {\n";
-        $output .= "  for (\$_foo=true; {$ifexp}; \$_smarty_tpl->tpl_vars[{$var}]->value{$step}) {\n";
+        $output .= "  for (\$_foo=true; {$ifexp}; \$_smarty_tpl->tpl_vars[{$var}]{$step}) {\n";
 
         self::openTag($compiler, 'for');
 
@@ -75,7 +75,7 @@ class ConstructFor extends ClosedBaseConstruct
         $output .= "if ($totalVar > 0) {\n";
         $output .= "  \$_smarty_tpl->setVariable($var, 0);\n";
 
-        $varVar = "\$_smarty_tpl->tpl_vars[$var]->value";
+        $varVar = "\$_smarty_tpl->tpl_vars[$var]";
         $output .= "  for ($varVar = $value, $iterationVar = 1; $iterationVar <= $totalVar; $varVar += $stepVar, $iterationVar++) {\n";
 
         self::openTag($compiler, 'for', array('for'));

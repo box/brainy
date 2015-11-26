@@ -111,13 +111,11 @@ class TemplateBase
         // We check is_array() because tpl_vars might be an OverlayScope, which
         // will always have its parent's smarty variable.
         if (is_array($template->tpl_vars) && !isset($template->tpl_vars['smarty'])) {
-            $template->tpl_vars['smarty'] = new Variable(
-                array(
+            $template->tpl_vars['smarty'] = array(
                 'blocks' => array(),
                 'functions' => array(),
                 'foreach' => array(),
                 'ls_loadables' => array(),
-                )
             );
         }
 
@@ -218,12 +216,11 @@ class TemplateBase
         // get variables from calling scope
         if ($parent_scope == Brainy::SCOPE_LOCAL) {
             if (empty($data)) {
-                $tpl->tpl_vars = new \Box\Brainy\Runtime\OverlayScope($this->tpl_vars);
-            } elseif (is_array($this->tpl_vars)) {
                 $tpl->tpl_vars = $this->tpl_vars; // assign by value array
             } else {
                 $tpl->cloneDataFrom($this);
             }
+            $tpl->tpl_vars['smarty'] = &$this->tpl_vars['smarty'];
         } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
             $tpl->tpl_vars = &$this->tpl_vars;
         } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {

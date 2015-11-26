@@ -33,9 +33,9 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
         $nameVar = '$' . $compiler->getUniqueVarName();
 
         $output = "$nameVar = $name;\n";
-        $output .= "if (!array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']->value['blocks'])) {\n";
+        $output .= "if (!array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']['blocks'])) {\n";
         $output .= "  $childBlockVar = null;\n";
-        $output .= "  \$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar] = function (\$_smarty_tpl) use ($childBlockVar) {\n";
+        $output .= "  \$_smarty_tpl->tpl_vars['smarty']['blocks'][$nameVar] = function (\$_smarty_tpl) use ($childBlockVar) {\n";
         return $output;
     }
 
@@ -81,8 +81,8 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
     {
         $nameVar = '$' . $compiler->getUniqueVarName();
         $output = "$nameVar = $name;\n";
-        $output .= "$childBlockVar = \$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar] ?: null;\n";
-        $output .= "\$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar] = function (\$_smarty_tpl) use ($childBlockVar) {\n";
+        $output .= "$childBlockVar = \$_smarty_tpl->tpl_vars['smarty']['blocks'][$nameVar] ?: null;\n";
+        $output .= "\$_smarty_tpl->tpl_vars['smarty']['blocks'][$nameVar] = function (\$_smarty_tpl) use ($childBlockVar) {\n";
         return $output;
     }
 }

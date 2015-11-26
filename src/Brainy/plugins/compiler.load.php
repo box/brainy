@@ -14,6 +14,6 @@
 function smarty_compiler_load($params, $compiler)
 {
     return <<<OUT
-echo \$_smarty_tpl->tpl_vars['smarty']->value['ls_loadables'][{$params['from']}];
+echo \$_smarty_tpl->tpl_vars['smarty']['ls_loadables'][{$params['from']}];
 OUT;
 }

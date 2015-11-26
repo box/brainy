@@ -30,8 +30,8 @@ class ConstructBlockTerminal extends ConstructBlockNonterminal
         $output = "$nameVar = $name;\n"; // Guaranteed once execution
 
         if ($forced) {
-            $output .= "if (array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']->value['blocks'])) {\n";
-            $output .= "  $childBlockVar = \$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar];\n";
+            $output .= "if (array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']['blocks'])) {\n";
+            $output .= "  $childBlockVar = \$_smarty_tpl->tpl_vars['smarty']['blocks'][$nameVar];\n";
             $output .= "} else {\n";
             $output .= "  $childBlockVar = null;\n";
             $output .= "}\n";
@@ -39,8 +39,8 @@ class ConstructBlockTerminal extends ConstructBlockNonterminal
         }
 
 
-        $output .= "if (array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']->value['blocks'])) {\n";
-        $output .= "  \$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar](\$_smarty_tpl);\n";
+        $output .= "if (array_key_exists($nameVar, \$_smarty_tpl->tpl_vars['smarty']['blocks'])) {\n";
+        $output .= "  \$_smarty_tpl->tpl_vars['smarty']['blocks'][$nameVar](\$_smarty_tpl);\n";
         $output .= "} else {\n";
         $output .= "  $childBlockVar = null;\n";
         return $output;

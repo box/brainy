@@ -23,9 +23,7 @@ class ConstructAssign extends BaseConstruct
         // implement Smarty2's behaviour of variables assigned by reference
         if ($compiler->template->smarty instanceof SmartyBC && Brainy::$assignment_compat === Brainy::ASSIGN_COMPAT) {
             $output = "if (isset(\$_smarty_tpl->tpl_vars[$var])) {\n";
-            $output .= "  \$_smarty_tpl->tpl_vars[$var] = clone \$_smarty_tpl->tpl_vars[$var];\n";
-            $output .= "  \$_smarty_tpl->tpl_vars[$var]->value = $value;\n";
-            $output .= "  \$_smarty_tpl->tpl_vars[$var]->scope = $scope;\n";
+            $output .= "  \$_smarty_tpl->tpl_vars[$var] = &$value;\n";
             $output .= "} else {\$_smarty_tpl->setVariable($var, $value, $scope);}\n";
         } else {
             $output = "\$_smarty_tpl->setVariable($var, $value, $scope);\n";

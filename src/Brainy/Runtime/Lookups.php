@@ -24,7 +24,7 @@ class Lookups
         if ($safety === Brainy::LOOKUP_SAFE_WARN) {
             trigger_error('Could not find variable "' . $key . '" in Brainy template.', E_USER_WARNING);
         }
-        return $arr[$key] = new \Box\Brainy\Templates\Variable();
+        return null;
     }
 
     /**

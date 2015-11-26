@@ -81,16 +81,15 @@
 
     /**
      * @param string $variable The name of the variable to look up
-     * @param string|void $value The member of the SmartyVariable to access
      * @return string|Wrappers\SafeLookupWrapper
      */
-    public function compileVariable($variable, $value = 'value')
+    public function compileVariable($variable)
     {
-        $unsafe = '$_smarty_tpl->tpl_vars[' . $variable . ']->' . $value;
+        $unsafe = '$_smarty_tpl->tpl_vars[' . $variable . ']';
         if ($this->safe_lookups === 0) { // Unsafe lookups
             return $unsafe;
         }
-        $safe = '\Box\Brainy\Runtime\Lookups::safeVarLookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')->' . $value;
+        $safe = '\Box\Brainy\Runtime\Lookups::safeVarLookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')';
         return new Wrappers\SafeLookupWrapper($unsafe, $safe);
     }
 
@@ -157,7 +156,7 @@ extended_template ::= extended_template_header(h) extended_template_body(b). {
     $this->current_buffer->appendSubtree(new Helpers\Tag(b));
 
     $header = Constructs\ConstructInclude::compileOpen($this->compiler, h);
-    $header .= "\$_smarty_tpl->tpl_vars['smarty']->value['blocks'] = array();\n";
+    $header .= "\$_smarty_tpl->tpl_vars['smarty']['blocks'] = array();\n"; // Clear existing blocks when starting a new template chain
     $this->current_buffer->appendSubtree(new Helpers\Tag($header));
 }
 extended_template_header(res) ::= LDELEXTENDS(lde) attributes(a) RDEL. {
@@ -782,7 +781,7 @@ variable(res) ::= variable(a1) indexdef(a2). {
             }
         } else {
             // foreach and capture
-            res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty']->value[" . var_export(a1->type, true) . "][" . a2 . "]");
+            res = new Wrappers\StaticWrapper("\$_smarty_tpl->tpl_vars['smarty'][" . var_export(a1->type, true) . "][" . a2 . "]");
         }
 
     } else {
@@ -882,7 +881,7 @@ function(res) ::= ID(f) OPENP params(p) CLOSEP. {
         if (count($combined_params) !== 1) {
             $this->compiler->trigger_template_error('Illegal number of paramer in "isset()"');
         }
-        $isset_par = str_replace("')->value", "',null,true,false)->value", $par);
+        $isset_par = str_replace("')", "',null,true,false)", $par);
         res = f . "(". $isset_par .")";
 
     } elseif (in_array($func_name, array('empty', 'reset', 'current', 'end', 'prev', 'next'))) {
@@ -895,7 +894,7 @@ function(res) ::= ID(f) OPENP params(p) CLOSEP. {
             $this->compiler->trigger_template_error('Illegal number of paramer in "' . $func_name . '()"');
         }
         if ($func_name == 'empty') {
-            res = $func_name.'('.str_replace("')->value", "',null,true,false)->value",$combined_params[0]).')';
+            res = $func_name.'('.str_replace("')", "',null,true,false)",$combined_params[0]).')';
         } else {
             res = $func_name.'('.$combined_params[0].')';
         }

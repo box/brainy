@@ -420,11 +420,11 @@ class Brainy
             if (!isset(self::$global_tpl_vars[$varname])) {
                 return '';
             }
-            return self::$global_tpl_vars[$varname]->value;
+            return self::$global_tpl_vars[$varname];
         }
         $output = array();
-        foreach (self::$global_tpl_vars as $key => $var) {
-            $output[$key] = $var->value;
+        foreach (self::$global_tpl_vars as $key => &$var) {
+            $output[$key] = $var;
         }
 
         return $output;

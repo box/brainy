@@ -24,17 +24,17 @@ class ConstructForEach extends ClosedBaseConstruct
         $innerVarVar = '$' . $compiler->getUniqueVarName();
         $output = "$innerVarVar = array('source' => $from);\n";
         if ($name) {
-            $output .= "\$_smarty_tpl->tpl_vars['smarty']->value['foreach'][$name] = &$innerVarVar;\n";
+            $output .= "\$_smarty_tpl->tpl_vars['smarty']['foreach'][$name] = &$innerVarVar;\n";
         }
 
         $output .= "if (!empty({$innerVarVar}['source'])) {\n";
 
-        $output .= "\$_smarty_tpl->tpl_vars[$item] = new \\Box\\Brainy\\Templates\\Variable();\n";
-        $itemVar = "\$_smarty_tpl->tpl_vars[$item]->value";
+        $output .= "\$_smarty_tpl->tpl_vars[$item] = null;\n";
+        $itemVar = "\$_smarty_tpl->tpl_vars[$item]";
 
         if ($key) {
-            $output .= "\$_smarty_tpl->tpl_vars[$key] = new \\Box\\Brainy\\Templates\\Variable();\n";
-            $keyVar = "\$_smarty_tpl->tpl_vars[$key]->value";
+            $output .= "\$_smarty_tpl->tpl_vars[$key] = null;\n";
+            $keyVar = "\$_smarty_tpl->tpl_vars[$key]";
         }
 
         if ($usages['total'] || $usages['last'] || $usages['show']) {

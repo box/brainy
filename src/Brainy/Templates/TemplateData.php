@@ -62,14 +62,13 @@ trait TemplateData
      * @param  int    $scope the scope to associate with the Smarty_Variable
      * @return void
      */
-    protected function assignSingleVar($var, $value, $scope = -1)
+    protected function assignSingleVar($var, &$value, $scope = -1)
     {
         if ($scope === -1) {
             $scope = Brainy::$default_assign_scope;
         }
 
-        $variable = new Variable($value);
-        $this->tpl_vars[$var] = $variable;
+        $this->tpl_vars[$var] = $value;
 
         if ($scope === Brainy::SCOPE_LOCAL) {
             return;
@@ -77,18 +76,18 @@ trait TemplateData
 
         if ($scope === Brainy::SCOPE_PARENT) {
             if ($this->parent != null) {
-                $this->parent->tpl_vars[$var] = clone $variable;
+                $this->parent->tpl_vars[$var] = $value;
             }
         } elseif ($scope === Brainy::SCOPE_ROOT || $scope === Brainy::SCOPE_GLOBAL) {
             $pointer = $this->parent;
             while ($pointer != null) {
-                $pointer->tpl_vars[$var] = clone $variable;
+                $pointer->tpl_vars[$var] = $value;
                 $pointer = $pointer->parent;
             }
         }
 
         if ($scope === Brainy::SCOPE_GLOBAL) {
-            Brainy::$global_tpl_vars[$var] = clone $variable;
+            Brainy::$global_tpl_vars[$var] = $value;
         }
     }
 
@@ -106,7 +105,7 @@ trait TemplateData
             return $this;
         }
 
-        Brainy::$global_tpl_vars[$varname] = new Variable($value);
+        Brainy::$global_tpl_vars[$varname] = $value;
 
         $ptr = $this;
         while ($ptr instanceof Template) {
@@ -129,8 +128,7 @@ trait TemplateData
     {
 
         if (isset($varname)) {
-            $var = $this->getVariable($varname, $ptr, $search_parents, false);
-            return is_object($var) ? $var->value : null;
+            return $this->getVariable($varname, $ptr, $search_parents, false);
         }
 
         $output = array();
@@ -140,7 +138,7 @@ trait TemplateData
         while ($ptr !== null) {
             foreach ($ptr->tpl_vars as $key => $var) {
                 if (!array_key_exists($key, $output)) {
-                    $output[$key] = $var->value;
+                    $output[$key] = $var;
                 }
             }
             // not found, try at parent
@@ -149,7 +147,7 @@ trait TemplateData
         if ($search_parents && isset(Brainy::$global_tpl_vars)) {
             foreach (Brainy::$global_tpl_vars as $key => $var) {
                 if (!array_key_exists($key, $output)) {
-                    $output[$key] = $var->value;
+                    $output[$key] = $var;
                 }
             }
         }
@@ -220,7 +218,7 @@ trait TemplateData
             return Brainy::$global_tpl_vars[$variable];
         }
 
-        return new UndefinedVariable;
+        return null;
     }
 
 
@@ -233,11 +231,11 @@ trait TemplateData
      */
     public function cloneDataFrom(&$source, $override = true)
     {
-        foreach ($source->tpl_vars as $name => $var) {
+        foreach ($source->tpl_vars as $name => &$var) {
             if (!$override && isset($this->tpl_vars[$name])) {
                 continue;
             }
-            $this->tpl_vars[$name] = new Variable($var->value);
+            $this->tpl_vars[$name] = $var;
         }
     }
 
@@ -253,7 +251,7 @@ trait TemplateData
             if (!$override && isset($this->tpl_vars[$name])) {
                 continue;
             }
-            $this->tpl_vars[$name] = new Variable($value);
+            $this->tpl_vars[$name] = $value;
         }
     }
 }

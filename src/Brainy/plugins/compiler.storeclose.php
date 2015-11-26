@@ -19,5 +19,5 @@ function smarty_compiler_storeclose($params, $compiler)
         $compiler->trigger_template_error('Got {/' . $openTag . '}, but expected {/store}', $compiler->lex->taglineno);
     }
 
-    return "\$_smarty_tpl->tpl_vars['smarty']->value['ls_loadables'][$to] = ob_get_clean();\n";
+    return "\$_smarty_tpl->tpl_vars['smarty']['ls_loadables'][$to] = ob_get_clean();\n";
 }
