@@ -22,22 +22,17 @@ abstract class Resource
      * cache for TemplateSource instances
      * @var array
      */
-    public static $sources = array();
-    /**
-     * cache for CompiledTemplate instances
-     * @var array
-     */
-    public static $compileds = array();
+    private static $sources = array();
     /**
      * cache for \Box\Brainy\Resources\Resource instances
      * @var array
      */
-    public static $resources = array();
+    private static $resources = array();
     /**
      * resource types provided by the core
      * @var array
      */
-    protected static $sysplugins = array(
+    private static $sysplugins = array(
         'file' => '\Box\Brainy\Resources\ResourceFile',
         'string' => '\Box\Brainy\Resources\ResourceString',
         'eval' => '\Box\Brainy\Resources\ResourceEval',
@@ -45,8 +40,6 @@ abstract class Resource
 
     /**
      * Load template's source into current template object
-     *
-     * {@internal The loaded source is assigned to $tpl->source->content directly.}}
      *
      * @param  TemplateSource $source source object
      * @return string                 template source
@@ -239,6 +232,12 @@ abstract class Resource
         self::$sources[$cacheKey] = $source;
 
         return $source;
+    }
+
+    public static function reset()
+    {
+        self::$resources = array();
+        self::$sources = array();
     }
 
 }

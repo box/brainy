@@ -150,7 +150,7 @@ class TemplateCompiler
 
         $this->template->properties['file_dependency'][$this->template->source->uid] = array($this->template->source->filepath, $this->template->source->timestamp, $this->template->source->type);
 
-        $compiledCode = $this->doCompile($this->template->source->content ?: '');
+        $compiledCode = $this->doCompile($this->template->source->getContent());
 
         // free memory
         unset($this->template);

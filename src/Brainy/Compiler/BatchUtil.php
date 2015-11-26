@@ -169,8 +169,7 @@ class BatchUtil
             }
         }
         // clear compiled cache
-        \Box\Brainy\Resources\Resource::$sources = array();
-        \Box\Brainy\Resources\Resource::$compileds = array();
+        \Box\Brainy\Resources\Resource::reset();
 
         return $_count;
     }

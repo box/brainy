@@ -45,7 +45,7 @@ class ClearCompiledTest extends Smarty_TestCase
             }
         }
 
-        \Box\Brainy\Resources\Resource::$sources = array();
+        \Box\Brainy\Resources\Resource::reset();
 
         return $this->_files;
     }

@@ -49,7 +49,7 @@ class TemplateSource
 
     /**
      * Resource Handler
-     * @var \Box\Brainy\Resources\Resource
+     * @var Resource
      */
     public $handler = null;
 
@@ -58,6 +58,18 @@ class TemplateSource
      * @var \Box\Brainy\Brainy
      */
     public $smarty = null;
+
+    /**
+     * Cache of the CompiledTemplate
+     * @var CompiledTemplate|null
+     */
+    private $compiledCache = null;
+
+    /**
+     * Cache of the template's content
+     * @var string|null
+     */
+    private $contentCache = null;
 
     /**
      * @param Resource $handler         Resource Handler this source object communicates with
@@ -81,16 +93,13 @@ class TemplateSource
      * get a Compiled Object of this source
      *
      * @param  Template $_template template objet
-     * @return Smarty_Template_Compiled compiled object
+     * @return CompiledTemplate compiled object
      */
     public function getCompiled(Template $_template)
     {
-        // check runtime cache
-        $cacheKey = $this->unique_resource . '#' . $_template->compile_id;
-        if (isset(Resource::$compileds[$cacheKey])) {
-            return Resource::$compileds[$cacheKey];
+        if ($this->compiledCache) {
+            return $this->compiledCache;
         }
-
         $compiled = new CompiledTemplate($this);
         $this->handler->populateCompiledFilepath($compiled, $_template);
         $compiled->timestamp = false;
@@ -102,10 +111,21 @@ class TemplateSource
         }
         $compiled->exists = (bool) $compiled->timestamp;
 
-        // runtime cache
-        Resource::$compileds[$cacheKey] = $compiled;
+        $this->compiledCache = $compiled;
 
         return $compiled;
+    }
+
+    /**
+     * Returns the raw content of the template
+     * @return string
+     */
+    public function getContent()
+    {
+        if ($this->contentCache === null) {
+            $this->contentCache = $this->handler->getContent($this);
+        }
+        return $this->contentCache;
     }
 
     /**
@@ -113,15 +133,13 @@ class TemplateSource
      * @return mixed
      * @throws SmartyException if $property_name is not valid
      */
-    public function __get($property_name) {
+    public function __get($property_name)
+    {
         switch ($property_name) {
             case 'timestamp':
             case 'exists':
                 $this->handler->populateTimestamp($this);
                 return $this->exists;
-
-            case 'content':
-                return $this->content = $this->handler->getContent($this);
 
             default:
                 throw new SmartyException("source property '$property_name' does not exist.");

@@ -40,7 +40,7 @@ class EvalResourceTest extends Smarty_TestCase
     */
     public function testGetTemplateSource() {
         $tpl = $this->smarty->createTemplate('eval:hello world{$foo}');
-        $this->assertEquals('hello world{$foo}', $tpl->source->content);
+        $this->assertEquals('hello world{$foo}', $tpl->source->getContent());
     }
     /**
     * test isEvaluated

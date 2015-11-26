@@ -20,8 +20,7 @@ class Smarty_TestCase extends \PHPUnit_Framework_TestCase
         \Box\Brainy\Brainy::$default_assign_scope = \Box\Brainy\Brainy::SCOPE_LOCAL;
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array();
         \Box\Brainy\Brainy::$global_tpl_vars = array();
-        \Box\Brainy\Resources\Resource::$sources = array();
-        \Box\Brainy\Resources\Resource::$compileds = array();
+        \Box\Brainy\Resources\Resource::reset();
 
         $this->clearFiles();
         parent::setUp();

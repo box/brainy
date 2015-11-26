@@ -11,11 +11,6 @@ namespace Box\Brainy\Tests;
 
 class ResourcePluginTest extends Smarty_TestCase
 {
-    public function setUp() {
-        parent::setUp();
-        \Box\Brainy\Resources\Resource::$resources = array();
-    }
-
     public function testResourcePluginRegisteredInstance() {
         $this->smarty->registerResource('db2', new ResourcePlugins\ResourceDB2());
         $this->assertEquals('hello world', $this->smarty->fetch('db2:test'));

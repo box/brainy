@@ -67,12 +67,16 @@ class ResourceRegistered extends Resource
      */
     public function getContent(TemplateSource $source) {
         // return template string
-        $t = call_user_func_array($source->smarty->registered_resources[$source->type][0][0], array($source->name, &$source->content, $source->smarty));
+        $content;
+        $t = call_user_func_array(
+            $source->smarty->registered_resources[$source->type][0][0],
+            array($source->name, &$content, $source->smarty)
+        );
         if (is_bool($t) && !$t) {
             throw new SmartyException("Unable to read template {$source->type} '{$source->name}'");
         }
 
-        return $source->content;
+        return $content;
     }
 
     /**

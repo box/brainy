@@ -50,7 +50,7 @@ class StringResourceTest extends Smarty_TestCase
     */
     public function testGetTemplateSource() {
         $tpl = $this->smarty->createTemplate('string:hello world{$foo}');
-        $this->assertEquals('hello world{$foo}', $tpl->source->content);
+        $this->assertEquals('hello world{$foo}', $tpl->source->getContent());
     }
     /**
     * test isEvaluated
