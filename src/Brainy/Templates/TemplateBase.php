@@ -209,6 +209,7 @@ class TemplateBase
             $tpl->parent = $this;
         } else {
             $tpl = new Template($template, $this->smarty, $this, $compile_id);
+            \Box\Brainy\Runtime\TemplateCache::set($tpl);
         }
         // get variables from calling scope
         if ($parent_scope == Brainy::SCOPE_LOCAL) {

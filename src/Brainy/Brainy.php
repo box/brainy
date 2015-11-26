@@ -690,7 +690,9 @@ class Brainy
             return $tpl;
         }
 
-        return new Templates\Template($template, $this, $parent, $compile_id);
+        $tpl = new Templates\Template($template, $this, $parent, $compile_id);
+        Runtime\TemplateCache::set($tpl);
+        return $tpl;
     }
 
     /**
