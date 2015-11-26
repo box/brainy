@@ -24,7 +24,8 @@ class ResourceRegistered extends Resource
      * @param  Template $_template template object
      * @return void
      */
-    public function populate(TemplateSource $source, Template $_template = null) {
+    public function populate(TemplateSource $source, Template $_template = null)
+    {
         $source->filepath = $source->type . ':' . $source->name;
         $source->uid = sha1($source->filepath);
         if ($source->smarty->compile_check) {
@@ -39,7 +40,8 @@ class ResourceRegistered extends Resource
      * @param  TemplateSource $source source object
      * @return void
      */
-    public function populateTimestamp(TemplateSource $source) {
+    public function populateTimestamp(TemplateSource $source)
+    {
         $source->timestamp = $this->getTemplateTimestamp($source);
         $source->exists = !!$source->timestamp;
     }
@@ -50,7 +52,8 @@ class ResourceRegistered extends Resource
      * @param  TemplateSource $source source object
      * @return integer|boolean        timestamp (epoch) the template was modified, false if resources has no timestamp
      */
-    public function getTemplateTimestamp(TemplateSource $source) {
+    public function getTemplateTimestamp(TemplateSource $source)
+    {
         // return timestamp
         $time_stamp = false;
         call_user_func_array($source->smarty->registered_resources[$source->type][0][1], array($source->name, &$time_stamp, $source->smarty));
@@ -65,7 +68,8 @@ class ResourceRegistered extends Resource
      * @return string                 template source
      * @throws SmartyException        if source cannot be loaded
      */
-    public function getContent(TemplateSource $source) {
+    public function getContent(TemplateSource $source)
+    {
         // return template string
         $content;
         $t = call_user_func_array(
@@ -85,7 +89,8 @@ class ResourceRegistered extends Resource
      * @param  TemplateSource $source source object
      * @return string                 resource's basename
      */
-    protected function getBasename(TemplateSource $source) {
+    protected function getBasename(TemplateSource $source)
+    {
         return basename($source->name);
     }
 

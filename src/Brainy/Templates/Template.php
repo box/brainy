@@ -33,6 +33,12 @@ class Template extends TemplateBase
      */
     public $required_plugins = array('compiled' => array());
 
+    /**
+     * Full template resource
+     * @var string
+     */
+    public $template_resource;
+
 
     public $source;
     public $compiled;
@@ -43,25 +49,31 @@ class Template extends TemplateBase
      * Some of the global Smarty settings copied to template scope
      * It load the required template resources and cacher plugins
      *
-     * @param string                   $template_resource template resource string
-     * @param Brainy                   $smarty            Smarty instance
-     * @param Template $parent           back pointer to parent object with variables or null
-     * @param mixed                    $compileID       compile id or null
+     * @param string     $tplResource       template resource string
+     * @param Brainy     $brainy            Brainy instance
+     * @param Template   $parent            back pointer to parent object with variables or null
+     * @param mixed      $compileID         compile id or null
+     * @param bool|void  $suppressData      Prevents data from being copied into the variable scope
      */
-    public function __construct($template_resource, $smarty, $parent = null, $compileID = null)
+    public function __construct($tplResource, $brainy, $parent = null, $compileID = null, $suppressData = false)
     {
-        parent::__construct($smarty);
+        if ($parent === null || !$suppressData) {
+            parent::__construct($brainy);
+        } else {
+            // Copied from the TemplateBase constructor
+            $this->smarty = $brainy;
+        }
         $this->compile_id = $compileID ?: $this->smarty->compile_id;
         $this->parent = $parent;
         // Template resource
-        $this->template_resource = $template_resource;
+        $this->template_resource = $tplResource;
 
-        $this->smarty->fetchedTemplate($template_resource);
+        $this->smarty->fetchedTemplate($tplResource);
 
         $this->source = \Box\Brainy\Resources\Resource::source($this);
         $this->compiled = $this->source->getCompiled($this);
 
-        if ($this->parent) {
+        if (!$suppressData && $this->parent) {
             if (is_array($this->parent)) {
                 $this->applyDataFrom($this->parent, false);
             } else {

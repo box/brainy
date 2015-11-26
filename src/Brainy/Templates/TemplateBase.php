@@ -201,7 +201,8 @@ class TemplateBase
      */
     public function renderSubTemplate($template, $compile_id, $data, $parent_scope)
     {
-        $tpl = new Template($template, $this->smarty, $this, $compile_id);
+        // Pass `true` for $suppressData; we're going to manage the scope setup ourselves
+        $tpl = new Template($template, $this->smarty, $this, $compile_id, true);
         // get variables from calling scope
         if ($parent_scope == Brainy::SCOPE_LOCAL) {
             if (empty($data)) {
