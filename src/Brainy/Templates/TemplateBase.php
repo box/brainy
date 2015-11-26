@@ -38,7 +38,7 @@ class TemplateBase
      * @param \Box\Brainy\Brainy $brainyInstance
      * @param bool|void $useRootScope Whether to clone data from the root scope
      */
-    public function __construct(\Box\Brainy\Brainy $brainyInstance, $useRootScope = false)
+    public function __construct(Brainy $brainyInstance, $useRootScope = false)
     {
         $this->smarty = &$brainyInstance;
         if ($useRootScope || Brainy::$default_assign_scope === Brainy::SCOPE_ROOT) {
@@ -109,8 +109,10 @@ class TemplateBase
             $template = $this->smarty->createTemplate($template, $compile_id, $this);
         }
 
-        // dummy local smarty variable
-        if (!isset($template->tpl_vars['smarty'])) {
+        // Add the smarty variable, if needed.
+        // We check is_array() because tpl_vars might be an OverlayScope, which
+        // will always have its parent's smarty variable.
+        if (is_array($template->tpl_vars) && !isset($template->tpl_vars['smarty'])) {
             $template->tpl_vars['smarty'] = new Variable(array(
                 'blocks' => array(),
                 'functions' => array(),

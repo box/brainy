@@ -3,11 +3,17 @@
 namespace Box\Brainy\Runtime;
 
 
-class OverlayScope implements \ArrayAccess
+class OverlayScope implements \ArrayAccess, \IteratorAggregate
 {
     protected $overlaid = array();
     protected $base;
     protected $written = false;
+    protected $flattened = false;
+    protected $misses = 0;
+
+    protected $arrayIteratorCache = null;
+
+    const MISS_LIMIT = 5;
 
     /**
      * @param \Box\Brainy\Templates\Variable[] &$base
@@ -44,7 +50,9 @@ class OverlayScope implements \ArrayAccess
         // In actual fact, it's not very good in practice. This is because more
         // often than not, $this->base is another OverlayScope object. That
         // causes this weird cascade to happen on every single lookup.
-        if ($this->written) {
+        if ($this->flattened) {
+            return isset($this->overlaid[$offset]);
+        } elseif ($this->written) {
             return isset($this->overlaid[$offset]) || isset($this->base[$offset]);
         } else {
             return isset($this->base[$offset]);
@@ -71,14 +79,49 @@ class OverlayScope implements \ArrayAccess
      */
     public function offsetGet($offset)
     {
+        if ($this->flattened) return $this->overlaid[$offset];
         if ($this->written && isset($this->overlaid[$offset])) return $this->overlaid[$offset];
         // We don't test with isset() because that should have been done outside of this.
         $out = $this->base[$offset];
         if ($out !== null) {
             // Cache the value for future lookups.
             $this->offsetSet($offset, $out);
+            $this->misses++;
+            if ($this->misses > self::MISS_LIMIT) {
+                $this->flatten();
+            }
         }
         return $out;
+    }
+
+    /**
+     * Return an iterator representing the scope's context
+     * @return \Traversable
+     */
+    public function getIterator()
+    {
+        if (!$this->flattened) {
+            $this->flatten();
+        }
+        if (!$this->arrayIteratorCache) {
+            $this->arrayIteratorCache = new \ArrayIterator($this->overlaid);
+        }
+        return $this->arrayIteratorCache;
+    }
+
+    /**
+     * Flattens the scope
+     * @return void
+     */
+    private function flatten()
+    {
+        $overlaid = &$this->overlaid;
+        foreach ($this->base as $key => $val) {
+            if (isset($overlaid[$key])) continue;
+            $overlaid[$key] = $val;
+        }
+        $this->flattened = true;
+        $this->written = true;
     }
 
 }
