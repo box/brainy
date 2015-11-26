@@ -100,7 +100,6 @@ class TemplateBase
      */
     public function display($template = null, $compile_id = null)
     {
-
         if ($template === null && $this instanceof Template) {
             $template = $this;
         }

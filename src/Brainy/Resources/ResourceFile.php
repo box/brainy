@@ -17,6 +17,8 @@ use \Box\Brainy\Templates\TemplateSource;
 
 class ResourceFile extends Resource
 {
+    const NAME = 'file';
+
     /**
      * populate Source Object with meta data from Resource
      *

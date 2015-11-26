@@ -173,20 +173,13 @@ abstract class Resource
     /**
      * initialize Source Object for given resource
      *
-     * Either [$tpl] or [$brainy, $template_resource] must be specified
-     *
-     * @param  Template $tpl         template object
+     * @param  Template                 $tpl               template object
      * @param  Brainy                   $brainy            smarty object
      * @param  string                   $template_resource resource identifier
-     * @return TemplateSource   Source Object
+     * @return TemplateSource
      */
-    public static function source(Template $tpl = null, Brainy $brainy = null, $template_resource = null)
+    public static function source(Template $tpl, Brainy $brainy, $template_resource = null)
     {
-        if ($tpl) {
-            $brainy = $tpl->smarty;
-            $template_resource = $tpl->template_resource;
-        }
-
         $parts = explode(':', $template_resource, 2);
         if (!isset($parts[1]) || !isset($parts[0][1])) {
             // no resource given, use default
@@ -218,7 +211,7 @@ abstract class Resource
 
         // check runtime cache
         $cacheKey = 'template|' . $unique_resource_name;
-        $compileID = isset($tpl) ? $tpl->compile_id ?: $brainy->compile_id : $brainy->compile_id;
+        $compileID = $tpl ? $tpl->compile_id ?: $brainy->compile_id : $brainy->compile_id;
         if ($compileID) {
             $cacheKey .= '|' . $compileID;
         }

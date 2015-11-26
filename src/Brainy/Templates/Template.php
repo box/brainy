@@ -70,7 +70,7 @@ class Template extends TemplateBase
 
         $this->smarty->fetchedTemplate($tplResource);
 
-        $this->source = \Box\Brainy\Resources\Resource::source($this);
+        $this->source = \Box\Brainy\Resources\Resource::source($this, $brainy, $this->template_resource);
         $this->compiled = $this->source->getCompiled($this);
 
         if (!$suppressData && $this->parent) {
@@ -182,7 +182,7 @@ class Template extends TemplateBase
             $this->properties['unifunc'] = 'content_' . str_replace(array('.',','), '_', uniqid('', true));
         }
         if (!$this->source->recompiled) {
-            $decode = "\$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ', false)';
+            $decode = "\$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ')';
             $output .= 'if (' . $decode . ' && !is_callable(\'' . $this->properties['unifunc'] . "')) {\n";
 
             // Output a proper PHPDoc for Augmented Types users.
@@ -209,16 +209,15 @@ PHPDOC;
     /**
      * This function is executed automatically when a compiled or cached template file is included
      *
-     * - Decode saved properties from compiled template and cache files
-     * - Check if compiled or cache file is valid
-     *
      * @param  array $properties special template properties
      * @return bool  flag if compiled or cache file is valid
      */
-    public function decodeProperties($properties, $cache = false)
+    public function decodeProperties($properties)
     {
         if (isset($properties['file_dependency'])) {
-            $this->properties['file_dependency'] = array_merge($this->properties['file_dependency'], $properties['file_dependency']);
+            foreach ($properties['file_dependency'] as $key => $val) {
+                $this->properties['file_dependency'][$key] = $val;
+            }
         }
         $this->properties['version'] = isset($properties['version']) ? $properties['version'] : '';
         $this->properties['unifunc'] = $properties['unifunc'];
@@ -227,7 +226,11 @@ PHPDOC;
             return false;
         }
 
-        if ($this->smarty->compile_check && empty($this->compiled->_properties) && !$this->compiled->isCompiled && !empty($this->properties['file_dependency'])) {
+        if ($this->smarty->compile_check &&
+                empty($this->compiled->_properties) &&
+                !$this->compiled->isCompiled &&
+                !empty($this->properties['file_dependency'])) {
+
             foreach ($this->properties['file_dependency'] as $_file_to_check) {
                 if ($_file_to_check[2] == 'file') {
                     if ($this->source->filepath == $_file_to_check[0] && isset($this->source->timestamp)) {
