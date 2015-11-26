@@ -212,7 +212,13 @@ class TemplateBase
         }
         // get variables from calling scope
         if ($parent_scope == Brainy::SCOPE_LOCAL) {
-            $tpl->tpl_vars = new \Box\Brainy\Runtime\OverlayScope($this->tpl_vars);
+            if (empty($data)) {
+                $tpl->tpl_vars = new \Box\Brainy\Runtime\OverlayScope($this->tpl_vars);
+            } elseif (is_array($this->tpl_vars)) {
+                $tpl->tpl_vars = $this->tpl_vars; // assign by value array
+            } else {
+                $tpl->cloneDataFrom($this);
+            }
         } elseif ($parent_scope == Brainy::SCOPE_PARENT) {
             $tpl->tpl_vars = &$this->tpl_vars;
         } elseif ($parent_scope == Brainy::SCOPE_GLOBAL) {
