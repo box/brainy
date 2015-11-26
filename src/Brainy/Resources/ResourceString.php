@@ -47,7 +47,7 @@ class ResourceString extends Resource
      * @param  string $resource_name resource_name to make unique
      * @return string unique resource name
      */
-    protected function buildUniqueResourceName($smarty, $resource_name) {
+    protected function buildUniqueResourceName(\Box\Brainy\Brainy $smarty, $resource_name) {
         return get_class($this) . '#' . $resource_name;
     }
 

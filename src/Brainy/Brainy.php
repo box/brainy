@@ -424,10 +424,8 @@ class Brainy
      */
     public function templateExists($resource_name)
     {
-        Runtime\TemplateCache::lock();
         $tpl = new Templates\Template($resource_name, $this);
         $result = $tpl->source->exists;
-        Runtime\TemplateCache::unlock();
         return $result;
     }
 
@@ -679,20 +677,7 @@ class Brainy
      */
     public function createTemplate($template, $compile_id = null, $parent = null)
     {
-
-        // already in template cache?
-        $tpl = Runtime\TemplateCache::get($template, $this, $compile_id);
-        if ($tpl) {
-            // return cached template object
-            $tpl = clone $tpl;
-            $tpl->parent = $parent;
-            $tpl->tpl_vars = clone $this->tpl_vars;
-            return $tpl;
-        }
-
-        $tpl = new Templates\Template($template, $this, $parent, $compile_id);
-        Runtime\TemplateCache::set($tpl);
-        return $tpl;
+        return new Templates\Template($template, $this, $parent, $compile_id ?: $this->compile_id);
     }
 
     /**
@@ -727,7 +712,7 @@ class Brainy
      */
     public function clearCompiledTemplate($resource_name = null, $compile_id = null, $exp_time = null)
     {
-        return \Box\Brainy\Compiler\BatchUtil::clearCompiledTemplate($resource_name, $compile_id, $exp_time, $this);
+        return Compiler\BatchUtil::clearCompiledTemplate($resource_name, $compile_id, $exp_time, $this);
     }
 
     /**

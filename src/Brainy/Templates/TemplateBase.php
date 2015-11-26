@@ -201,16 +201,7 @@ class TemplateBase
      */
     public function renderSubTemplate($template, $compile_id, $data, $parent_scope)
     {
-        // already in template cache?
-        $tpl = \Box\Brainy\Runtime\TemplateCache::get($template, $this->smarty, $compile_id);
-        if ($tpl) {
-            // clone cached template object because of possible recursive call
-            $tpl = clone $tpl;
-            $tpl->parent = $this;
-        } else {
-            $tpl = new Template($template, $this->smarty, $this, $compile_id);
-            \Box\Brainy\Runtime\TemplateCache::set($tpl);
-        }
+        $tpl = new Template($template, $this->smarty, $this, $compile_id);
         // get variables from calling scope
         if ($parent_scope == Brainy::SCOPE_LOCAL) {
             if (empty($data)) {

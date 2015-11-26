@@ -18,12 +18,6 @@ class TemplateSource
     public $uid = null;
 
     /**
-     * Template Resource (Template::$template_resource)
-     * @var string
-     */
-    public $resource = null;
-
-    /**
      * Resource Type
      * @var string
      */
@@ -68,17 +62,16 @@ class TemplateSource
     /**
      * @param Resource $handler         Resource Handler this source object communicates with
      * @param \Box\Brainy\Brainy $smarty          Smarty instance this source object belongs to
-     * @param string          $resource        full template_resource
      * @param string          $type            type of resource
      * @param string          $name            resource name
      * @param string          $unique_resource unqiue resource name
      */
-    public function __construct(Resource $handler, \Box\Brainy\Brainy $smarty, $resource, $type, $name, $unique_resource) {
+    public function __construct(Resource $handler, \Box\Brainy\Brainy $smarty, $type, $name, $unique_resource)
+    {
         $this->handler = $handler; // Note: prone to circular references
         $this->recompiled = $this->handler instanceof \Box\Brainy\Resources\ResourceRecompiled;
 
         $this->smarty = $smarty;
-        $this->resource = $resource;
         $this->type = $type;
         $this->name = $name;
         $this->unique_resource = $unique_resource;
@@ -90,11 +83,12 @@ class TemplateSource
      * @param  Template $_template template objet
      * @return Smarty_Template_Compiled compiled object
      */
-    public function getCompiled(Template $_template) {
+    public function getCompiled(Template $_template)
+    {
         // check runtime cache
-        $_cache_key = $this->unique_resource . '#' . $_template->compile_id;
-        if (isset(Resource::$compileds[$_cache_key])) {
-            return Resource::$compileds[$_cache_key];
+        $cacheKey = $this->unique_resource . '#' . $_template->compile_id;
+        if (isset(Resource::$compileds[$cacheKey])) {
+            return Resource::$compileds[$cacheKey];
         }
 
         $compiled = new CompiledTemplate($this);
@@ -104,48 +98,17 @@ class TemplateSource
         if ($compiled->filepath && file_exists($compiled->filepath)) {
             try {
                 $compiled->timestamp = filemtime($compiled->filepath);
-            } catch (Exception $e) {}
+            } catch (\Exception $e) {}
         }
         $compiled->exists = (bool) $compiled->timestamp;
 
         // runtime cache
-        \Box\Brainy\Resources\Resource::$compileds[$_cache_key] = $compiled;
+        Resource::$compileds[$cacheKey] = $compiled;
 
         return $compiled;
     }
 
     /**
-     * <<magic>> Generic Setter.
-     *
-     * @param  string          $property_name valid: timestamp, exists, content, template
-     * @param  mixed           $value         new value (is not checked)
-     * @throws SmartyException if $property_name is not valid
-     */
-    public function __set($property_name, $value) {
-        switch ($property_name) {
-            // regular attributes
-            case 'timestamp':
-                $this->timestamp = $value;
-                return;
-            case 'exists':
-                $this->exists = $value;
-                return;
-            case 'content':
-                $this->content = $value;
-                return;
-            // required for extends: only
-            case 'template':
-                $this->template = $value;
-                break;
-
-            default:
-                throw new SmartyException("invalid source property '$property_name'.");
-        }
-    }
-
-    /**
-     * <<magic>> Generic getter.
-     *
      * @param  string          $property_name valid: timestamp, exists, content
      * @return mixed
      * @throws SmartyException if $property_name is not valid
@@ -153,8 +116,6 @@ class TemplateSource
     public function __get($property_name) {
         switch ($property_name) {
             case 'timestamp':
-                $this->handler->populateTimestamp($this);
-                return $this->timestamp;
             case 'exists':
                 $this->handler->populateTimestamp($this);
                 return $this->exists;

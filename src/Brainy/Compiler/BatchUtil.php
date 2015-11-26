@@ -86,7 +86,6 @@ class BatchUtil
                     $_error_count++;
                 }
                 // free memory
-                \Box\Brainy\Runtime\TemplateCache::clear();
                 $_tpl = null;
                 if ($max_errors !== null && $_error_count == $max_errors) {
                     echo '<br><br>too many errors';
@@ -116,7 +115,6 @@ class BatchUtil
             $tpl = new \Box\Brainy\Templates\Template($resource_name, $smarty);
 
             // remove from template cache
-            \Box\Brainy\Runtime\TemplateCache::clearTemplate($tpl);
             if (!$tpl->source->exists) {
                 return 0;
             }

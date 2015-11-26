@@ -12,6 +12,7 @@
 namespace Box\Brainy\Templates;
 
 use \Box\Brainy\Brainy;
+use \Box\Brainy\Exceptions\SmartyException;
 
 
 class Template extends TemplateBase
@@ -31,11 +32,6 @@ class Template extends TemplateBase
      * @var array
      */
     public $required_plugins = array('compiled' => array());
-    /**
-     * internal flag to allow relative path in child template blocks
-     * @var bool
-     */
-    public $allow_relative_path = false;
 
 
     public $source;
@@ -221,7 +217,7 @@ PHPDOC;
 
         if ($this->smarty->compile_check && empty($this->compiled->_properties) && !$this->compiled->isCompiled && !empty($this->properties['file_dependency'])) {
             foreach ($this->properties['file_dependency'] as $_file_to_check) {
-                if ($_file_to_check[2] == 'file' || $_file_to_check[2] == 'php') {
+                if ($_file_to_check[2] == 'file') {
                     if ($this->source->filepath == $_file_to_check[0] && isset($this->source->timestamp)) {
                         // do not recheck current template
                         $mtime = $this->source->timestamp;

@@ -11,7 +11,7 @@ class ResourceDB2 extends \Box\Brainy\Resources\ResourceRecompiled
     public function populate(TemplateSource $source, Template $_template = null)
     {
         $source->filepath = 'db2:';
-        $source->uid = sha1($source->resource);
+        $source->uid = sha1($source->name);
         $source->timestamp = time();
         $source->exists = true;
     }
