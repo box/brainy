@@ -116,6 +116,7 @@ class TemplateBase
                 'blocks' => array(),
                 'functions' => array(),
                 'foreach' => array(),
+                'ls_loadables' => array(),
             ));
         }
 

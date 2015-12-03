@@ -1,9 +1,4 @@
 <?php
-/**
- * Brainy plugin
- * @package Brainy
- * @subpackage PluginsBlockCompiler
- */
 
 /**
  * @author Matt Basta
@@ -12,15 +7,16 @@
  * @return string
  */
 function smarty_compiler_storeclose($params, $compiler) {
-    return <<<DOC
-\$tmp1 = array_pop(\$_smarty_tpl->tpl_vars['smarty']->value['ls_stores']);
-\$tmp2 = ob_get_clean();
+    if (count($compiler->_tag_stack) === 0) {
+        $compiler->trigger_template_error('unexpected closing tag', $compiler->lex->taglineno);
+    }
 
-if (!\$_smarty_tpl->tpl_vars['smarty']->value) {
-    \$_smarty_tpl->tpl_vars['smarty']->value = array('ls_loadables' => array());
-} elseif (!array_key_exists('ls_loadables', \$_smarty_tpl->tpl_vars['smarty']->value)) {
-    \$_smarty_tpl->tpl_vars['smarty']->value['ls_loadables'] = array();
-}
-\$_smarty_tpl->tpl_vars['smarty']->value['ls_loadables'][\$tmp1] = \$tmp2;
-DOC;
+    // get stacked info
+    list($openTag, $to) = array_pop($compiler->_tag_stack);
+
+    if ($openTag !== 'store') {
+        $compiler->trigger_template_error('Got {/' . $openTag . '}, but expected {/store}', $compiler->lex->taglineno);
+    }
+
+    return "\$_smarty_tpl->tpl_vars['smarty']->value['ls_loadables'][$to] = ob_get_clean();\n";
 }
