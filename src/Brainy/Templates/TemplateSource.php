@@ -1,5 +1,4 @@
 <?php
-
 namespace Box\Brainy\Templates;
 
 use \Box\Brainy\Exceptions\SmartyException;

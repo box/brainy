@@ -27,8 +27,7 @@ coverage: clean
 	./vendor/bin/phpunit --coverage-html ./coverage
 
 lint:
-	# find src -name "*.php" -exec php -l {} \; | grep "^(?!No syntax errors)"
-	phpcs -v --standard=build/phpcs-ruleset.xml src/
+	vendor/bin/phpcs -v --standard=build/psr2-ruleset.xml src/
 
 clean:
 	rm -rf test/compiled/*
