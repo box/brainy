@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/Box.html">\Box</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">547</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">5</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">3</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2103618361"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-2103618361" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-84223945"></a>
+                                <a href="../namespaces/Box.html" style="margin-left: 30px; padding-left: 0">Box</a>
+            </div>
+            <div id="namespace-84223945" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-199614538"></a>
+                                <a href="../namespaces/Box.Brainy.html" style="margin-left: 30px; padding-left: 0">Brainy</a>
+            </div>
+            <div id="namespace-199614538" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-669851615"></a>
+                                <a href="../namespaces/Box.Brainy.Compiler.html" style="margin-left: 30px; padding-left: 0">Compiler</a>
+            </div>
+            <div id="namespace-669851615" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1093243537"></a>
+                                <a href="../namespaces/Box.Brainy.Compiler.Constructs.html" style="margin-left: 30px; padding-left: 0">Constructs</a>
+            </div>
+            <div id="namespace-1093243537" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html">BaseConstruct</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ClosedBaseConstruct.html">ClosedBaseConstruct</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructAssign.html">ConstructAssign</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructBlockNonterminal.html">ConstructBlockNonterminal</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructBlockTerminal.html">ConstructBlockTerminal</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructBreak.html">ConstructBreak</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructCall.html">ConstructCall</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructCapture.html">ConstructCapture</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructContinue.html">ConstructContinue</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructElse.html">ConstructElse</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructElseIf.html">ConstructElseIf</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructFor.html">ConstructFor</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructForEach.html">ConstructForEach</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructForEachElse.html">ConstructForEachElse</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructForElse.html">ConstructForElse</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructFunction.html">ConstructFunction</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructIf.html">ConstructIf</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructInclude.html">ConstructInclude</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructModifier.html">ConstructModifier</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructPrintExpression.html">ConstructPrintExpression</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructWhile.html">ConstructWhile</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2002206514"></a>
+                                <a href="../namespaces/Box.Brainy.Compiler.Helpers.html" style="margin-left: 30px; padding-left: 0">Helpers</a>
+            </div>
+            <div id="namespace-2002206514" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.DoubleQuoted.html">DoubleQuoted</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.DoubleQuotedContent.html">DoubleQuotedContent</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.Expression.html">Expression</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.ParseTree.html">ParseTree</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.Tag.html">Tag</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.TemplateBuffer.html">TemplateBuffer</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.Text.html">Text</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-150175466"></a>
+                                <a href="../namespaces/Box.Brainy.Compiler.Wrappers.html" style="margin-left: 30px; padding-left: 0">Wrappers</a>
+            </div>
+            <div id="namespace-150175466" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Wrappers.SafeLookupWrapper.html">SafeLookupWrapper</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Wrappers.SmartyVarLookupWrapper.html">SmartyVarLookupWrapper</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Wrappers.SmartyVarPoisonWrapper.html">SmartyVarPoisonWrapper</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Wrappers.StaticWrapper.html">StaticWrapper</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.BatchUtil.html">BatchUtil</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Decompile.html">Decompile</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Lexer.html">Lexer</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Parser.html">Parser</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.TemplateCompiler.html">TemplateCompiler</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.TP_yyStackEntry.html">TP_yyStackEntry</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1809382614"></a>
+                                <a href="../namespaces/Box.Brainy.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-1809382614" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Exceptions.BrainyModifierEnforcementException.html">BrainyModifierEnforcementException</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Exceptions.BrainyStrictModeException.html">BrainyStrictModeException</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Exceptions.SmartyCompilerException.html">SmartyCompilerException</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Exceptions.SmartyException.html">SmartyException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1357106976"></a>
+                                <a href="../namespaces/Box.Brainy.Resources.html" style="margin-left: 30px; padding-left: 0">Resources</a>
+            </div>
+            <div id="namespace-1357106976" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.Resource.html">Resource</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceEval.html">ResourceEval</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceFile.html">ResourceFile</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceRecompiled.html">ResourceRecompiled</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceRegistered.html">ResourceRegistered</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceString.html">ResourceString</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-886577879"></a>
+                                <a href="../namespaces/Box.Brainy.Runtime.html" style="margin-left: 30px; padding-left: 0">Runtime</a>
+            </div>
+            <div id="namespace-886577879" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Runtime.Lookups.html">Lookups</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Runtime.Loops.html">Loops</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Runtime.OverlayScope.html">OverlayScope</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Runtime.PluginLoader.html">PluginLoader</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-503792602"></a>
+                                <a href="../namespaces/Box.Brainy.Templates.html" style="margin-left: 30px; padding-left: 0">Templates</a>
+            </div>
+            <div id="namespace-503792602" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/Box.Brainy.Templates.TemplateData.html">TemplateData</a></li>
+                                                                            <li class="class"><a href="../classes/Box.Brainy.Templates.CompiledTemplate.html">CompiledTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.Security.html">Security</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.Template.html">Template</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.TemplateBase.html">TemplateBase</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.TemplateSource.html">TemplateSource</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.UndefinedVariable.html">UndefinedVariable</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.Variable.html">Variable</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Brainy.html">Brainy</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.SmartyBC.html">SmartyBC</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/Box.Brainy.Templates.html">\Box\Brainy\Templates</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\Box\Brainy\Templates</small>Template</h1>
+                    <p><em></em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateBase.html#method_assert_is_not_strict" class="">assert_is_not_strict()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateBase.html#method_fetch" class="">fetch()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateBase.html#method_display" class="">display()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateBase.html#method_setVariable" class="">setVariable()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateBase.html#method_renderSubTemplate" class="">renderSubTemplate()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateData.html#method_assign" class="">assign()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateData.html#method_assignGlobal" class="">assignGlobal()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateData.html#method_getTemplateVars" class="">getTemplateVars()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateData.html#method_clearAssign" class="">clearAssign()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateData.html#method_clearAllAssign" class="">clearAllAssign()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateData.html#method_getVariable" class="">getVariable()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateData.html#method_cloneDataFrom" class="">cloneDataFrom()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateData.html#method_applyDataFrom" class="">applyDataFrom()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#method_mustCompile" class="">mustCompile()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#method_compileTemplateSource" class="">compileTemplateSource()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#method_createTemplateCodeFrame" class="">createTemplateCodeFrame()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#method_decodeProperties" class="">decodeProperties()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#method_getScopePointer" class="">getScopePointer()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#method_writeFile" class="">writeFile()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#property_template_resource" class="">$template_resource</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateBase.html#property_strict_mode" class="">$strict_mode</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateBase.html#property_smarty" class="">$smarty</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#property_compile_id" class="">$compile_id</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#property_properties" class="">$properties</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#property_required_plugins" class="">$required_plugins</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#property_source" class="">$source</a><br />
+                                                                    <a href="../classes/Box.Brainy.Templates.Template.html#property_compiled" class="">$compiled</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/Box.Brainy.Templates.TemplateData.html#method_assignSingleVar" class="">assignSingleVar()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/Templates.Template.html"><div class="path-wrapper">Templates/Template.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Brainy</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                
+                                        <div class="namespace-wrapper"><a href="../classes/Box.Brainy.Templates.TemplateBase.html">\Box\Brainy\Templates\TemplateBase</a></div>
+                                                                                                    <div class="namespace-wrapper">\Box\Brainy\Templates\Template</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_template_resource" name="property_template_resource" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$template_resource</h3>
+                <pre class="signature">$template_resource : string</pre>
+                <p><em>Full template resource</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_strict_mode" name="property_strict_mode" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$strict_mode</h3>
+                <pre class="signature">$strict_mode : boolean</pre>
+                <p><em>Flag indicating that the template is running in strict mode</em></p>
+                
+
+                                <h4>Type</h4>
+                boolean
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateBase.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateBase</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_smarty" name="property_smarty" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$smarty</h3>
+                <pre class="signature">$smarty : \Box\Brainy\Templates\Smarty</pre>
+                <p><em>Global smarty instance</em></p>
+                
+
+                                <h4>Type</h4>
+                \Box\Brainy\Templates\Smarty
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateBase.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateBase</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_compile_id" name="property_compile_id" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$compile_id</h3>
+                <pre class="signature">$compile_id : string</pre>
+                <p><em>$compile_id</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_properties" name="property_properties" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$properties</h3>
+                <pre class="signature">$properties : array</pre>
+                <p><em>special compiled template properties</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_required_plugins" name="property_required_plugins" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$required_plugins</h3>
+                <pre class="signature">$required_plugins : array</pre>
+                <p><em>required plugins</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_source" name="property_source" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$source</h3>
+                <pre class="signature">$source : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_compiled" name="property_compiled" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$compiled</h3>
+                <pre class="signature">$compiled : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(string  <span class="argument">$tplResource</span>, \Box\Brainy\Brainy  <span class="argument">$brainy</span>, \Box\Brainy\Templates\Template  <span class="argument">$parent = null</span>, mixed  <span class="argument">$compileID = null</span>, boolean|void  <span class="argument">$suppressData = false</span>) </pre>
+                <p><em>Create template data object</em></p>
+                <p>Some of the global Smarty settings copied to template scope
+It load the required template resources and cacher plugins</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$tplResource </td>
+                                <td><p>template resource string</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/Box.Brainy.Brainy.html">\Box\Brainy\Brainy</a></td>
+                                <td>$brainy </td>
+                                <td><p>Brainy instance</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/Box.Brainy.Templates.Template.html">\Box\Brainy\Templates\Template</a></td>
+                                <td>$parent </td>
+                                <td><p>back pointer to parent object with variables or null</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$compileID </td>
+                                <td><p>compile id or null</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean|void</td>
+                                <td>$suppressData </td>
+                                <td><p>Prevents data from being copied into the variable scope</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_assert_is_not_strict" name="method_assert_is_not_strict" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">assert_is_not_strict()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">assert_is_not_strict(string  <span class="argument">$reason</span>) : void</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$reason </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Box\Brainy\Exceptions\BrainyStrictModeException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateBase.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateBase</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fetch" name="method_fetch" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">fetch()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fetch(string|void  <span class="argument">$template = null</span>, mixed|void  <span class="argument">$compile_id = null</span>) : string</pre>
+                <p><em>Renders and returns a template.</em></p>
+                <p>This returns the template output instead of displaying it.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|void</td>
+                                <td>$template </td>
+                                <td><p>the resource handle of the template file or template object</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed|void</td>
+                                <td>$compile_id </td>
+                                <td><p>compile id to be used with this template</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>rendered template output</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateBase.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateBase</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_display" name="method_display" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">display()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">display(string|null|void  <span class="argument">$template = null</span>, string|null|void  <span class="argument">$compile_id = null</span>) : void</pre>
+                <p><em>Renders the template.</em></p>
+                <p>This displays the contents of a template. To return the contents of a
+template into a variable, use the fetch() method instead.</p>
+<p>As an optional second and third parameter, you can pass a cache ID and
+compile ID.</p>
+<p>A fourth parameter can be passed which passes the parent scope that the
+template should use.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|null|void</td>
+                                <td>$template </td>
+                                <td><p>the resource handle of the template file or template object</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null|void</td>
+                                <td>$compile_id </td>
+                                <td><p>compile id to be used with this template</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateBase.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateBase</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setVariable" name="method_setVariable" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setVariable()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setVariable(string  <span class="argument">$var</span>, mixed  <span class="argument">$value</span>, integer  <span class="argument">$scope = -1</span>) : void</pre>
+                <p><em>Assigns $value to the variale $var.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$var </td>
+                                <td><p>the template variable name</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$value </td>
+                                <td><p>the value to assign</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$scope </td>
+                                <td><p>the scope to associate with the Smarty_Variable</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateBase.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateBase</div></a></dd>
+                                                                            <dt>See also</dt>
+                                                                <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html#method_assignSingleVar"><span class="namespace-wrapper"></span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_renderSubTemplate" name="method_renderSubTemplate" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">renderSubTemplate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">renderSubTemplate(string  <span class="argument">$template</span>, mixed  <span class="argument">$compile_id</span>,   <span class="argument">$data</span>, integer  <span class="argument">$parent_scope</span>) : void</pre>
+                <p><em>Template code runtime function to get subtemplate content</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$template </td>
+                                <td><p>the resource handle of the template file</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$compile_id </td>
+                                <td><p>compile id to be used with this template</p></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$parent_scope </td>
+                                <td><p>scope in which {include} should execute</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateBase.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateBase</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_assign" name="method_assign" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">assign()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">assign(array|string  <span class="argument">$var</span>, mixed|null|void  <span class="argument">$value = null</span>, integer|void  <span class="argument">$scope = -1</span>) : \Box\Brainy\Templates\TemplateData</pre>
+                <p><em>Assigns $value to the variable in $var. If an associative array is
+passed as the only parameter, it is a mapping of variables to assign to
+the values to assign to them.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array|string</td>
+                                <td>$var </td>
+                                <td><p>the template variable name(s)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed|null|void</td>
+                                <td>$value </td>
+                                <td><p>the value to assign</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer|void</td>
+                                <td>$scope </td>
+                                <td><p>the scope to associate with the Smarty_Variable instance</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Box.Brainy.Templates.TemplateData.html">\Box\Brainy\Templates\TemplateData</a>
+                                            &mdash; <p>current TemplateData (or Smarty or Template) instance for chaining</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateData</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_assignGlobal" name="method_assignGlobal" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">assignGlobal()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">assignGlobal(string  <span class="argument">$varname</span>, mixed  <span class="argument">$value = null</span>) : \Box\Brainy\Templates\TemplateData</pre>
+                <p><em>Assigns a global Smarty variable to the global scope.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$varname </td>
+                                <td><p>the global variable name</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$value </td>
+                                <td><p>the value to assign</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Box.Brainy.Templates.TemplateData.html">\Box\Brainy\Templates\TemplateData</a>
+                                            &mdash; <p>current TemplateData (or Smarty or Template) instance for chaining</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateData</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                                                            <p>This may not work with multiple Brainy instances.</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTemplateVars" name="method_getTemplateVars" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTemplateVars()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTemplateVars(string  <span class="argument">$varname = null</span>, \Box\Brainy\Templates\TemplateData  <span class="argument">$ptr = null</span>, boolean  <span class="argument">$search_parents = true</span>) : string|array</pre>
+                <p><em>Returns a single or all assigned template variables</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$varname </td>
+                                <td><p>Name of variable to process, or null to return all</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/Box.Brainy.Templates.TemplateData.html">\Box\Brainy\Templates\TemplateData</a></td>
+                                <td>$ptr </td>
+                                <td><p>Optional reference to data object</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$search_parents </td>
+                                <td><p>Whether to include results from parent scopes</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string|array
+                                            &mdash; <p>variable value or or array of variables</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateData</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_clearAssign" name="method_clearAssign" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">clearAssign()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">clearAssign(string|array&lt;mixed,string&gt;  <span class="argument">$varName</span>) : \Box\Brainy\Templates\TemplateData</pre>
+                <p><em>Clear the given assigned template variable.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|array&lt;mixed,string&gt;</td>
+                                <td>$varName </td>
+                                <td><p>The template variable(s) to clear</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Box.Brainy.Templates.TemplateData.html">\Box\Brainy\Templates\TemplateData</a>
+                                            &mdash; <p>current TemplateData (or Smarty or Template) instance for chaining</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateData</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_clearAllAssign" name="method_clearAllAssign" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">clearAllAssign()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">clearAllAssign() : \Box\Brainy\Templates\TemplateData</pre>
+                <p><em>Clear all the assigned template variables.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Box.Brainy.Templates.TemplateData.html">\Box\Brainy\Templates\TemplateData</a>
+                                            &mdash; <p>current TemplateData instance for chaining</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateData</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getVariable" name="method_getVariable" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getVariable()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getVariable(string  <span class="argument">$variable</span>, \Box\Brainy\Templates\TemplateData|null  <span class="argument">$_ptr = null</span>, boolean  <span class="argument">$search_parents = true</span>, boolean  <span class="argument">$error_enable = true</span>) : mixed</pre>
+                <p><em>Return the contents of an assigned variable.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$variable </td>
+                                <td><p>the name of the Smarty variable</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/Box.Brainy.Templates.TemplateData.html">\Box\Brainy\Templates\TemplateData</a>|null</td>
+                                <td>$_ptr </td>
+                                <td><p>Optional reference to the data object</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$search_parents </td>
+                                <td><p>Whether to search in the parent scope</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$error_enable </td>
+                                <td><p>Whether to raise an error when the variable is not found.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>The contents of the variable.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateData</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_cloneDataFrom" name="method_cloneDataFrom" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">cloneDataFrom()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">cloneDataFrom(\Box\Brainy\Templates\TemplateData  <span class="argument">$source</span>, boolean|void  <span class="argument">$override = true</span>) : void</pre>
+                <p><em>Copies each variable from the source into this object, creating new
+`Variable` objects along the way.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/Box.Brainy.Templates.TemplateData.html">\Box\Brainy\Templates\TemplateData</a></td>
+                                <td>$source </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean|void</td>
+                                <td>$override </td>
+                                <td><p>Whether to override existing values</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateData</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_applyDataFrom" name="method_applyDataFrom" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">applyDataFrom()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">applyDataFrom(array  <span class="argument">$source</span>, boolean|void  <span class="argument">$override = true</span>) : void</pre>
+                <p><em>Applies all of the data to the current object</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$source </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean|void</td>
+                                <td>$override </td>
+                                <td><p>Whether to override existing values</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateData</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_mustCompile" name="method_mustCompile" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">mustCompile()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">mustCompile() : boolean</pre>
+                <p><em>Returns if the current template must be compiled by the Smarty compiler</em></p>
+                <p>It does compare the timestamps of template source and the compiled templates</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>true if the template must be compiled</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_compileTemplateSource" name="method_compileTemplateSource" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">compileTemplateSource()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">compileTemplateSource() : string</pre>
+                <p><em>Compiles the template</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The compiled template source</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createTemplateCodeFrame" name="method_createTemplateCodeFrame" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createTemplateCodeFrame()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createTemplateCodeFrame(string  <span class="argument">$content = &#039;&#039;</span>) : string</pre>
+                <p><em>Create code frame for compiled and cached templates</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$content </td>
+                                <td><p>optional template content</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_decodeProperties" name="method_decodeProperties" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">decodeProperties()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">decodeProperties(array  <span class="argument">$properties</span>) : boolean</pre>
+                <p><em>This function is executed automatically when a compiled or cached template file is included</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$properties </td>
+                                <td><p>special template properties</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>flag if compiled or cache file is valid</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getScopePointer" name="method_getScopePointer" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getScopePointer()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getScopePointer(integer  <span class="argument">$scope</span>) : mixed</pre>
+                <p><em>Get parent or root of template parent chain</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$scope </td>
+                                <td><p>pqrent or root scope</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>object</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_writeFile" name="method_writeFile" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">writeFile()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">writeFile(string  <span class="argument">$_filepath</span>, string  <span class="argument">$_contents</span>, \Box\Brainy\Templates\Smarty  <span class="argument">$smarty</span>) : boolean</pre>
+                <p><em>Writes file in a safe way to disk</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$_filepath </td>
+                                <td><p>complete filepath</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$_contents </td>
+                                <td><p>file content</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>\Box\Brainy\Templates\Smarty</td>
+                                <td>$smarty </td>
+                                <td><p>smarty instance</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>true</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_assignSingleVar" name="method_assignSingleVar" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">assignSingleVar()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">assignSingleVar(string  <span class="argument">$var</span>, mixed  <span class="argument">$value</span>, integer  <span class="argument">$scope = -1</span>) : void</pre>
+                <p><em>Assigns $value to the variale $var.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$var </td>
+                                <td><p>the template variable name</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$value </td>
+                                <td><p>the value to assign</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$scope </td>
+                                <td><p>the scope to associate with the Smarty_Variable</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Templates.TemplateData.html"><div class="path-wrapper">\Box\Brainy\Templates\TemplateData</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">Template.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/Templates/Template.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/Box.html">\Box</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on December 7th, 2015 at 14:21.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

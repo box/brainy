@@ -38,13 +38,12 @@ clean:
 docs: clean
 	vendor/bin/phpdoc -d src/Brainy -t docs/ --ignore "*_internal_compile_*,*_internal_*parser.php,*_internal_*lexer.php,*/plugins/*"
 
-docs-branch: coverage docs
+docs-branch: docs
 	git branch -D gh-pages
 	git checkout -b gh-pages
 	git rm -rf build src test
 	mv docs/* .
 	git add .
-	git add -f coverage
 	git commit -a -u -m "Docs update"
 	git checkout master
 	git clean -f -d

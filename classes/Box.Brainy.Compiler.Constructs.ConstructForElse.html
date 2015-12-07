@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/Box.html">\Box</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">547</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">5</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">3</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-435085744"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-435085744" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-878711897"></a>
+                                <a href="../namespaces/Box.html" style="margin-left: 30px; padding-left: 0">Box</a>
+            </div>
+            <div id="namespace-878711897" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-951937421"></a>
+                                <a href="../namespaces/Box.Brainy.html" style="margin-left: 30px; padding-left: 0">Brainy</a>
+            </div>
+            <div id="namespace-951937421" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-514190887"></a>
+                                <a href="../namespaces/Box.Brainy.Compiler.html" style="margin-left: 30px; padding-left: 0">Compiler</a>
+            </div>
+            <div id="namespace-514190887" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1550872735"></a>
+                                <a href="../namespaces/Box.Brainy.Compiler.Constructs.html" style="margin-left: 30px; padding-left: 0">Constructs</a>
+            </div>
+            <div id="namespace-1550872735" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html">BaseConstruct</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ClosedBaseConstruct.html">ClosedBaseConstruct</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructAssign.html">ConstructAssign</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructBlockNonterminal.html">ConstructBlockNonterminal</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructBlockTerminal.html">ConstructBlockTerminal</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructBreak.html">ConstructBreak</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructCall.html">ConstructCall</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructCapture.html">ConstructCapture</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructContinue.html">ConstructContinue</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructElse.html">ConstructElse</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructElseIf.html">ConstructElseIf</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructFor.html">ConstructFor</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructForEach.html">ConstructForEach</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructForEachElse.html">ConstructForEachElse</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructForElse.html">ConstructForElse</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructFunction.html">ConstructFunction</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructIf.html">ConstructIf</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructInclude.html">ConstructInclude</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructModifier.html">ConstructModifier</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructPrintExpression.html">ConstructPrintExpression</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Constructs.ConstructWhile.html">ConstructWhile</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-422113492"></a>
+                                <a href="../namespaces/Box.Brainy.Compiler.Helpers.html" style="margin-left: 30px; padding-left: 0">Helpers</a>
+            </div>
+            <div id="namespace-422113492" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.DoubleQuoted.html">DoubleQuoted</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.DoubleQuotedContent.html">DoubleQuotedContent</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.Expression.html">Expression</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.ParseTree.html">ParseTree</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.Tag.html">Tag</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.TemplateBuffer.html">TemplateBuffer</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Helpers.Text.html">Text</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-674414772"></a>
+                                <a href="../namespaces/Box.Brainy.Compiler.Wrappers.html" style="margin-left: 30px; padding-left: 0">Wrappers</a>
+            </div>
+            <div id="namespace-674414772" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Wrappers.SafeLookupWrapper.html">SafeLookupWrapper</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Wrappers.SmartyVarLookupWrapper.html">SmartyVarLookupWrapper</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Wrappers.SmartyVarPoisonWrapper.html">SmartyVarPoisonWrapper</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Wrappers.StaticWrapper.html">StaticWrapper</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.BatchUtil.html">BatchUtil</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Decompile.html">Decompile</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Lexer.html">Lexer</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.Parser.html">Parser</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.TemplateCompiler.html">TemplateCompiler</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Compiler.TP_yyStackEntry.html">TP_yyStackEntry</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-891333608"></a>
+                                <a href="../namespaces/Box.Brainy.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-891333608" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Exceptions.BrainyModifierEnforcementException.html">BrainyModifierEnforcementException</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Exceptions.BrainyStrictModeException.html">BrainyStrictModeException</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Exceptions.SmartyCompilerException.html">SmartyCompilerException</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Exceptions.SmartyException.html">SmartyException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-690658267"></a>
+                                <a href="../namespaces/Box.Brainy.Resources.html" style="margin-left: 30px; padding-left: 0">Resources</a>
+            </div>
+            <div id="namespace-690658267" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.Resource.html">Resource</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceEval.html">ResourceEval</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceFile.html">ResourceFile</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceRecompiled.html">ResourceRecompiled</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceRegistered.html">ResourceRegistered</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Resources.ResourceString.html">ResourceString</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-659415581"></a>
+                                <a href="../namespaces/Box.Brainy.Runtime.html" style="margin-left: 30px; padding-left: 0">Runtime</a>
+            </div>
+            <div id="namespace-659415581" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Runtime.Lookups.html">Lookups</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Runtime.Loops.html">Loops</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Runtime.OverlayScope.html">OverlayScope</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Runtime.PluginLoader.html">PluginLoader</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2130097079"></a>
+                                <a href="../namespaces/Box.Brainy.Templates.html" style="margin-left: 30px; padding-left: 0">Templates</a>
+            </div>
+            <div id="namespace-2130097079" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/Box.Brainy.Templates.TemplateData.html">TemplateData</a></li>
+                                                                            <li class="class"><a href="../classes/Box.Brainy.Templates.CompiledTemplate.html">CompiledTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.Security.html">Security</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.Template.html">Template</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.TemplateBase.html">TemplateBase</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.TemplateSource.html">TemplateSource</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.UndefinedVariable.html">UndefinedVariable</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.Templates.Variable.html">Variable</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Box.Brainy.Brainy.html">Brainy</a></li>
+                                                    <li class="class"><a href="../classes/Box.Brainy.SmartyBC.html">SmartyBC</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/Box.Brainy.Compiler.Constructs.html">\Box\Brainy\Compiler\Constructs</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\Box\Brainy\Compiler\Constructs</small>ConstructForElse</h1>
+                    <p><em></em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/Box.Brainy.Compiler.Constructs.ConstructForElse.html#method_compileOpen" class="">compileOpen()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html#method_hasArg" class="">hasArg()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html#method_getRequiredArg" class="">getRequiredArg()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html#method_getOptionalArg" class="">getOptionalArg()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html#method_openTag" class="">openTag()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html#method_closeTag" class="">closeTag()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html#method_flattenCompiledArray" class="">flattenCompiledArray()</a><br />
+                                                                    <a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html#method_exportArray" class="">exportArray()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/Compiler.Constructs.ConstructForElse.html"><div class="path-wrapper">Compiler/Constructs/ConstructForElse.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                
+                                        <div class="namespace-wrapper"><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html">\Box\Brainy\Compiler\Constructs\BaseConstruct</a></div>
+                                                                                                    <div class="namespace-wrapper">\Box\Brainy\Compiler\Constructs\ConstructForElse</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                        
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_compileOpen" name="method_compileOpen" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">compileOpen()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">compileOpen(\Box\Brainy\Compiler\TemplateCompiler  <span class="argument">$compiler</span>, array|null  <span class="argument">$args</span>) : mixed</pre>
+                <p><em>Compiles the opening tag for a function</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/Box.Brainy.Compiler.TemplateCompiler.html">\Box\Brainy\Compiler\TemplateCompiler</a></td>
+                                <td>$compiler </td>
+                                <td><p>A compiler reference</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$args </td>
+                                <td><p>Arguments</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_hasArg" name="method_hasArg" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">hasArg()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">hasArg(array|null  <span class="argument">$args</span>, string  <span class="argument">$name</span>) : boolean</pre>
+                <p><em>Returns whether an argument is present or not</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$args </td>
+                                <td><p>The argument list</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>The argument name</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html"><div class="path-wrapper">\Box\Brainy\Compiler\Constructs\BaseConstruct</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRequiredArg" name="method_getRequiredArg" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRequiredArg()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRequiredArg(array|null  <span class="argument">$args</span>, string  <span class="argument">$name</span>) : mixed</pre>
+                <p><em>Returns an argument from the args array</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$args </td>
+                                <td><p>The argument list</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>The argument name</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html"><div class="path-wrapper">\Box\Brainy\Compiler\Constructs\BaseConstruct</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOptionalArg" name="method_getOptionalArg" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOptionalArg()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOptionalArg(array|null  <span class="argument">$args</span>, string  <span class="argument">$name</span>, mixed|null|void  <span class="argument">$default = null</span>) : mixed</pre>
+                <p><em>Returns an argument from the args array or a default</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$args </td>
+                                <td><p>The argument list</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>The argument name</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed|null|void</td>
+                                <td>$default </td>
+                                <td><p>The default value</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html"><div class="path-wrapper">\Box\Brainy\Compiler\Constructs\BaseConstruct</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_openTag" name="method_openTag" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">openTag()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">openTag(object  <span class="argument">$compiler</span>, string  <span class="argument">$openTag</span>, mixed  <span class="argument">$data = null</span>) </pre>
+                <p><em>Push opening tag name on stack</em></p>
+                <p>Optionally additional data can be saved on stack</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>object</td>
+                                <td>$compiler </td>
+                                <td><p>compiler object</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$openTag </td>
+                                <td><p>the opening tag's name</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$data </td>
+                                <td><p>optional data saved</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html"><div class="path-wrapper">\Box\Brainy\Compiler\Constructs\BaseConstruct</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_closeTag" name="method_closeTag" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">closeTag()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">closeTag(\Box\Brainy\Compiler\TemplateCompiler  <span class="argument">$compiler</span>, array|string  <span class="argument">$expectedTag</span>) : mixed</pre>
+                <p><em>Pop closing tag</em></p>
+                <p>Raise an error if this stack-top doesn't match with expected opening tags</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/Box.Brainy.Compiler.TemplateCompiler.html">\Box\Brainy\Compiler\TemplateCompiler</a></td>
+                                <td>$compiler </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|string</td>
+                                <td>$expectedTag </td>
+                                <td><p>the expected opening tag names</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>any type the opening tag's name or saved data</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html"><div class="path-wrapper">\Box\Brainy\Compiler\Constructs\BaseConstruct</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_flattenCompiledArray" name="method_flattenCompiledArray" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">flattenCompiledArray()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">flattenCompiledArray(array  <span class="argument">$arr</span>) : array</pre>
+                <p><em>Flattens an associative array of arrays into an associative array of strings</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$arr </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html"><div class="path-wrapper">\Box\Brainy\Compiler\Constructs\BaseConstruct</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_exportArray" name="method_exportArray" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">exportArray()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">exportArray(array&lt;mixed,string&gt;  <span class="argument">$arr</span>) : string</pre>
+                <p><em>Collapse an array of strings into an array with pre-encoded values.</em></p>
+                <p>This is very similar to var_export($arr, true), but the values of the
+associative array are not changed.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array&lt;mixed,string&gt;</td>
+                                <td>$arr </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Box.Brainy.Compiler.Constructs.BaseConstruct.html"><div class="path-wrapper">\Box\Brainy\Compiler\Constructs\BaseConstruct</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">ConstructForElse.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/Compiler/Constructs/ConstructForElse.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/Box.html">\Box</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on December 7th, 2015 at 14:21.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
