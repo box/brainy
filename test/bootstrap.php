@@ -42,7 +42,6 @@ class Smarty_TestCase extends \PHPUnit_Framework_TestCase
         $smarty->left_delimiter = '{';
         $smarty->right_delimiter = '}';
         $smarty->enableSecurity();
-        $smarty->error_unassigned = false;
         $smarty->compile_id = null;
         $smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
     }

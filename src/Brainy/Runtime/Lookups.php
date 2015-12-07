@@ -1,5 +1,4 @@
 <?php
-
 namespace Box\Brainy\Runtime;
 
 use \Box\Brainy\Brainy;

@@ -86,13 +86,6 @@ class Brainy
      * @see Brainy::$compile_check Usage Information
      */
     const COMPILECHECK_ON = 1;
-    /**
-     * Enables checking templates of compiled files to detect changes when a
-     * cache miss occurs.
-     * @var int
-     * @see Brainy::$compile_check Usage Information
-     */
-    const COMPILECHECK_CACHEMISS = 2;
 
 
     /**
@@ -176,6 +169,7 @@ class Brainy
      * * The `assign()` method on any TemplateData instance
      * * The `{assign}` function
      * * The `{capture}` function (it uses `assign()`)
+     * * The `{include}` function when `assign=""` is used
      *
      * @var int
      * @uses Brainy::SCOPE_LOCAL
@@ -226,11 +220,6 @@ class Brainy
      */
     public $auto_literal = true;
     /**
-     * When `true`, an error will be displayed when accessing undefined variables.
-     * @var boolean
-     */
-    public $error_unassigned = false;
-    /**
      * Directory that templates are stored in. See the following
      * methods instead:
      *
@@ -273,7 +262,7 @@ class Brainy
      */
     public $force_compile = false;
     /**
-     * When true or Brainy::COMPILECHECK_ON, templates are checked
+     * When `true` or `Brainy::COMPILECHECK_ON`, templates are checked
      * for changes. If changes exist, the template will be recompiled
      * regardless of whether it has been compiled or cached. Disabling this
      * in production may yield performance improvements if templates
@@ -292,20 +281,6 @@ class Brainy
      */
     public $use_sub_dirs = false;
     /**
-     * When true, included templates will be compiled into the templates that
-     * they are included in. The {include} function has an attribute that
-     * allows this to be performed on a case-by-case basis.
-     * @var boolean
-     * @see The {include} function
-     */
-    public $merge_compiled_includes = false;
-    /**
-     * When true, templates will be compiled into the templates that they
-     * inherit from.
-     * @var boolean
-     */
-    public $inheritance_merge_compiled_includes = true;
-    /**
      * Set this if you want different sets of compiled files for the same
      * templates.
      *
@@ -314,9 +289,9 @@ class Brainy
     public $compile_id = null;
     /**
      * Indicates whether to perform only safe variable and member lookups.
-     * If set to LOOKUP_SAFE, lookups referring to missing variables or
-     * members will return a falsey value. LOOKUP_SAFE_WARN will log a warning
-     * when the member does not exist.
+     * If set to `Brainy::LOOKUP_SAFE`, lookups referring to missing variables
+     * or members will return a falsey value. LOOKUP_SAFE_WARN will log a
+     * warning when the member does not exist.
      *
      * @var int
      * @uses Brainy::LOOKUP_UNSAFE
@@ -328,17 +303,17 @@ class Brainy
      * The left delimiter string
      * @var string
      */
-    public $left_delimiter = "{";
+    public $left_delimiter = '{';
     /**
      * The right delimiter string
      * @var string
      */
-    public $right_delimiter = "}";
+    public $right_delimiter = '}';
 
     /**
      * The Security instance to use as a security policy.
      *
-     * @var Security
+     * @var Templates\Security
      */
     public $security_policy = null;
 
@@ -349,12 +324,6 @@ class Brainy
     public $compile_locking = true;
 
 
-    /**
-     * internal config properties
-     * @var array
-     * @internal
-     */
-    public $properties = array();
     /**
      * registered plugins
      * @var array
@@ -425,8 +394,7 @@ class Brainy
     public function templateExists($resource_name)
     {
         $tpl = new Templates\Template($resource_name, $this);
-        $result = $tpl->source->exists;
-        return $result;
+        return $tpl->source->exists;
     }
 
     /**

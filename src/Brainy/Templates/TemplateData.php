@@ -220,9 +220,6 @@ trait TemplateData
             // found it, return it
             return Brainy::$global_tpl_vars[$variable];
         }
-        if (isset($this->smarty) && $this->smarty->error_unassigned && $error_enable) {
-            trigger_error('Undefined variable "' . $variable . '"', E_USER_NOTICE);
-        }
 
         return new UndefinedVariable;
     }
