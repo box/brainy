@@ -2,10 +2,10 @@
 /**
  * Smarty Internal Plugin Resource File
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage TemplateResources
- * @author Uwe Tews
- * @author Rodney Rehm
+ * @author     Uwe Tews
+ * @author     Rodney Rehm
  */
 
 namespace Box\Brainy\Resources;
@@ -22,8 +22,8 @@ class ResourceFile extends Resource
     /**
      * populate Source Object with meta data from Resource
      *
-     * @param TemplateSource   $source    source object
-     * @param Template $_template template object
+     * @param TemplateSource $source    source object
+     * @param Template       $_template template object
      */
     public function populate(TemplateSource $source, Template $_template = null)
     {
@@ -73,7 +73,7 @@ class ResourceFile extends Resource
      * Normalize Paths "foo/../bar" to "bar"
      *
      * @param  string  $path path to normalize
-     * @param  boolean $ds    respect windows directory separator
+     * @param  boolean $ds   respect windows directory separator
      * @return string  normalized path
      */
     protected function normalizePath($path, $ds = true)
@@ -140,7 +140,7 @@ class ResourceFile extends Resource
 
     /**
      * @param  TemplateSource $source source object
-     * @param  string                 $file   file name
+     * @param  string         $file   file name
      * @return bool                   true if file exists
      */
     protected function fileExists(TemplateSource $source, $file)
@@ -152,8 +152,8 @@ class ResourceFile extends Resource
     /**
      * build template filepath by traversing the template_dir array
      *
-     * @param  TemplateSource   $source    source object
-     * @param  Template $tpl template object
+     * @param  TemplateSource $source source object
+     * @param  Template       $tpl    template object
      * @return string                   fully qualified filepath
      * @throws SmartyException          if default template handler is registered but not callable
      */

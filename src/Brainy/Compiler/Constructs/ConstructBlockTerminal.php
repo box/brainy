@@ -7,7 +7,7 @@ class ConstructBlockTerminal extends ConstructBlockNonterminal
 {
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -17,11 +17,13 @@ class ConstructBlockTerminal extends ConstructBlockNonterminal
 
         $childBlockVar = '$' . $compiler->getUniqueVarName();
 
-        self::openTag($compiler, 'block', array(
+        self::openTag(
+            $compiler, 'block', array(
             'name' => $name,
             'childVar' => $childBlockVar,
             'forced' => $forced,
-        ));
+            )
+        );
 
         $nameVar = '$' . $compiler->getUniqueVarName();
         $output = "$nameVar = $name;\n"; // Guaranteed once execution
@@ -46,7 +48,8 @@ class ConstructBlockTerminal extends ConstructBlockNonterminal
     public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
     {
         $data = self::closeTag($compiler, 'block');
-        if ($data['forced']) return '';
+        if ($data['forced']) { return ''; 
+        }
         return "}\n";
     }
 

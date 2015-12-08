@@ -11,7 +11,7 @@ abstract class BaseConstruct
     /**
      * Compiles the opening tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -21,8 +21,8 @@ abstract class BaseConstruct
 
     /**
      * Returns whether an argument is present or not
-     * @param  array|null  $args The argument list
-     * @param  string $name The argument name
+     * @param  array|null $args The argument list
+     * @param  string     $name The argument name
      * @return bool
      */
     public static function hasArg(array $args, $name)
@@ -41,8 +41,8 @@ abstract class BaseConstruct
 
     /**
      * Returns an argument from the args array
-     * @param  array|null  $args The argument list
-     * @param  string $name The argument name
+     * @param  array|null $args The argument list
+     * @param  string     $name The argument name
      * @return mixed
      */
     public static function getRequiredArg(array $args, $name)
@@ -61,8 +61,8 @@ abstract class BaseConstruct
 
     /**
      * Returns an argument from the args array or a default
-     * @param  array|null  $args The argument list
-     * @param  string $name The argument name
+     * @param  array|null      $args    The argument list
+     * @param  string          $name    The argument name
      * @param  mixed|null|void $default The default value
      * @return mixed
      */
@@ -72,8 +72,10 @@ abstract class BaseConstruct
             return $args[$name];
         }
         foreach ($args as $arg) {
-            if (is_string($arg) && $arg === $name) return true;
-            if ($arg instanceof \Box\Brainy\Compiler\Wrappers\StaticWrapper && (string) $arg === var_export($name, true)) return true;
+            if (is_string($arg) && $arg === $name) { return true; 
+            }
+            if ($arg instanceof \Box\Brainy\Compiler\Wrappers\StaticWrapper && (string) $arg === var_export($name, true)) { return true; 
+            }
             if (!is_array($arg) || !isset($arg[$name])) {
                 continue;
             }
@@ -102,7 +104,7 @@ abstract class BaseConstruct
      * Raise an error if this stack-top doesn't match with expected opening tags
      *
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler
-     * @param  array|string $expectedTag the expected opening tag names
+     * @param  array|string                          $expectedTag the expected opening tag names
      * @return mixed        any type the opening tag's name or saved data
      */
     public static function closeTag($compiler, $expectedTag)

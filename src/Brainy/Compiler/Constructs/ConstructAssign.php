@@ -11,7 +11,7 @@ class ConstructAssign extends BaseConstruct
     /**
      * Compiles the opening tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -36,7 +36,7 @@ class ConstructAssign extends BaseConstruct
 
     /**
      * Returns the scope, given the raw scope string
-     * @param  string $raw
+     * @param  string        $raw
      * @param  int|null|void $default The default scope, or null
      * @return int
      */
@@ -44,16 +44,16 @@ class ConstructAssign extends BaseConstruct
     {
         $scopeRaw = self::getOptionalArg($args, 'scope', self::getDefaultScope($default));
         switch (\Box\Brainy\Compiler\Decompile::decompileString($scopeRaw)) {
-            case 'local':
-                return Brainy::SCOPE_LOCAL;
-            case 'parent':
-                return Brainy::SCOPE_PARENT;
-            case 'root':
-                return Brainy::SCOPE_ROOT;
-            case 'global':
-                return Brainy::SCOPE_GLOBAL;
-            default:
-                $compiler->trigger_template_error('illegal value for "scope" attribute: ' . $scopeRaw, $compiler->lex->taglineno);
+        case 'local':
+            return Brainy::SCOPE_LOCAL;
+        case 'parent':
+            return Brainy::SCOPE_PARENT;
+        case 'root':
+            return Brainy::SCOPE_ROOT;
+        case 'global':
+            return Brainy::SCOPE_GLOBAL;
+        default:
+            $compiler->trigger_template_error('illegal value for "scope" attribute: ' . $scopeRaw, $compiler->lex->taglineno);
         }
     }
 
@@ -64,14 +64,14 @@ class ConstructAssign extends BaseConstruct
     private static function getDefaultScope($default)
     {
         switch ($default ?: Brainy::$default_assign_scope) {
-            case Brainy::SCOPE_LOCAL:
-                return '"local"';
-            case Brainy::SCOPE_PARENT:
-                return '"parent"';
-            case Brainy::SCOPE_ROOT:
-                return '"root"';
-            case Brainy::SCOPE_GLOBAL:
-                return '"global"';
+        case Brainy::SCOPE_LOCAL:
+            return '"local"';
+        case Brainy::SCOPE_PARENT:
+            return '"parent"';
+        case Brainy::SCOPE_ROOT:
+            return '"root"';
+        case Brainy::SCOPE_GLOBAL:
+            return '"global"';
         }
     }
 

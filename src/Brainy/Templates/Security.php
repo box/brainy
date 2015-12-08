@@ -2,9 +2,9 @@
 /**
  * Security API for Smarty
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage Security
- * @author Uwe Tews
+ * @author     Uwe Tews
  */
 
 namespace Box\Brainy\Templates;
@@ -22,6 +22,7 @@ class Security
      * This is an array of trusted PHP functions.
      *
      * If empty all functions are allowed. If null, no functions are allowed.
+     *
      * @var string[]|null
      */
     public $php_functions = array(
@@ -35,6 +36,7 @@ class Security
      * This is an array of trusted PHP modifiers.
      *
      * If empty all modifiers are allowed. If null, no modifiers are allowed.
+     *
      * @var string[]|null
      */
     public $php_modifiers = array(
@@ -59,6 +61,7 @@ class Security
      * This is an array of allowed tags.
      *
      * If empty no restriction by allowed_tags.
+     *
      * @var string[]
      */
     public $allowed_tags = array();
@@ -66,6 +69,7 @@ class Security
      * This is an array of disabled tags.
      *
      * If empty no restriction by disabled_tags.
+     *
      * @var string[]
      */
     public $disabled_tags = array();
@@ -73,6 +77,7 @@ class Security
      * This is an array of allowed modifier plugins.
      *
      * If empty no restriction by allowed_modifiers.
+     *
      * @var string[]
      */
     public $allowed_modifiers = array();
@@ -80,21 +85,25 @@ class Security
      * This is an array of disabled modifier plugins.
      *
      * If empty no restriction by disabled_modifiers.
+     *
      * @var string[]
      */
     public $disabled_modifiers = array();
     /**
      * Cache for $resource_dir lookups
+     *
      * @internal
      */
     protected $_resource_dir = null;
     /**
      * Cache for $template_dir lookups
+     *
      * @internal
      */
     protected $_template_dir = null;
     /**
      * Cache for $secure_dir lookups
+     *
      * @internal
      */
     protected $_secure_dir = null;
@@ -107,22 +116,25 @@ class Security
      * Constructs a new security policy
      * @param \Box\Brainy\Brainy $smarty An instance of Brainy
      */
-    public function __construct($smarty) {
+    public function __construct($smarty) 
+    {
         $this->smarty = $smarty;
     }
 
     /**
      * Check if PHP function is trusted.
      *
-     * @param  string                  $function_name The name of the PHP function
-     * @param  object                  $compiler      compiler object
+     * @param  string $function_name The name of the PHP function
+     * @param  object $compiler      compiler object
      * @return boolean                 true if function is trusted
      * @throws SmartyCompilerException if php function is not trusted
      */
-    public function isTrustedPhpFunction($function_name, $compiler) {
-        if (isset($this->php_functions) &&
-            (empty($this->php_functions) ||
-             in_array($function_name, $this->php_functions))) {
+    public function isTrustedPhpFunction($function_name, $compiler) 
+    {
+        if (isset($this->php_functions) 
+            && (empty($this->php_functions) 
+            || in_array($function_name, $this->php_functions))
+        ) {
             return true;
         }
 
@@ -134,12 +146,13 @@ class Security
     /**
      * Check if PHP modifier is trusted.
      *
-     * @param  string                  $modifier_name The name of the PHP function
-     * @param  object                  $compiler      compiler object
+     * @param  string $modifier_name The name of the PHP function
+     * @param  object $compiler      compiler object
      * @return boolean                 true if modifier is trusted
      * @throws SmartyCompilerException if modifier is not trusted
      */
-    public function isTrustedPhpModifier($modifier_name, $compiler) {
+    public function isTrustedPhpModifier($modifier_name, $compiler) 
+    {
         if (isset($this->php_modifiers) && (empty($this->php_modifiers) || in_array($modifier_name, $this->php_modifiers))) {
             return true;
         }
@@ -152,12 +165,13 @@ class Security
     /**
      * Check if tag is trusted.
      *
-     * @param  string                  $tag_name The name of the tag
-     * @param  object                  $compiler compiler object
+     * @param  string $tag_name The name of the tag
+     * @param  object $compiler compiler object
      * @return boolean                 true if tag is trusted
      * @throws SmartyCompilerException if modifier is not trusted
      */
-    public function isTrustedTag($tag_name, $compiler) {
+    public function isTrustedTag($tag_name, $compiler) 
+    {
         // check for internal always required tags
         if (in_array($tag_name, array('assign', 'call', 'private_block_plugin', 'private_function_plugin', 'private_registered_function', 'private_registered_block', 'private_special_variable', 'private_print_expression', 'private_modifier'))) {
             return true;
@@ -179,12 +193,13 @@ class Security
     /**
      * Check if modifier plugin is trusted.
      *
-     * @param  string                  $modifier_name The name of the modifier
-     * @param  object                  $compiler      compiler object
+     * @param  string $modifier_name The name of the modifier
+     * @param  object $compiler      compiler object
      * @return boolean                 true if tag is trusted
      * @throws SmartyCompilerException if modifier is not trusted
      */
-    public function isTrustedModifier($modifier_name, $compiler) {
+    public function isTrustedModifier($modifier_name, $compiler) 
+    {
         // check for internal always allowed modifier
         if (in_array($modifier_name, array('default'))) {
             return true;
@@ -206,11 +221,12 @@ class Security
     /**
      * Check if directory of file resource is trusted.
      *
-     * @param  string          $filepath The file path to test
+     * @param  string $filepath The file path to test
      * @return boolean         true if directory is trusted
      * @throws SmartyException if directory is not trusted
      */
-    public function isTrustedResourceDir($filepath) {
+    public function isTrustedResourceDir($filepath) 
+    {
         $_template = false;
         $_secure = false;
 
@@ -218,7 +234,7 @@ class Security
 
         // check if index is outdated
         if ((!$this->_template_dir || $this->_template_dir !== $_template_dir)
-                || (!empty($this->secure_dir) && (!$this->_secure_dir || $this->_secure_dir !== $this->secure_dir))
+            || (!empty($this->secure_dir) && (!$this->_secure_dir || $this->_secure_dir !== $this->secure_dir))
         ) {
             $this->_resource_dir = array();
             $_template = true;

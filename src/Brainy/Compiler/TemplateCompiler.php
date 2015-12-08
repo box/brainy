@@ -5,9 +5,9 @@
  *
  * This file contains the basic classes and methods for compiling Smarty templates with lexer/parser
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage Compiler
- * @author Uwe Tews
+ * @author     Uwe Tews
  */
 
 namespace Box\Brainy\Compiler;
@@ -84,7 +84,7 @@ class TemplateCompiler
 
 
     /**
-     * @param \Box\Brainy\Brainy $smarty       global instance
+     * @param \Box\Brainy\Brainy $smarty global instance
      */
     public function __construct(\Box\Brainy\Brainy $smarty)
     {
@@ -173,8 +173,9 @@ class TemplateCompiler
         $this->has_code = true;
 
 
-        if (isset($this->smarty->security_policy) &&
-            !$this->smarty->security_policy->isTrustedTag($tag, $this)) {
+        if (isset($this->smarty->security_policy) 
+            && !$this->smarty->security_policy->isTrustedTag($tag, $this)
+        ) {
             $this->trigger_template_error("Use of disallowed tag: \"{$tag}\"", $this->lex->taglineno);
             return; // unreachable
         }
@@ -228,7 +229,7 @@ class TemplateCompiler
 
     /**
      * Formats args for old compiler plugins
-     * @param  array $args
+     * @param  array     $args
      * @param  bool|void $export Whether to use var_export or to manually construct an array
      * @return string
      */
@@ -289,8 +290,8 @@ class TemplateCompiler
      *
      * If parameter $args contains a string this is used as error message
      *
-     * @param  string $args individual error message or null
-     * @param  string $line line-number
+     * @param  string      $args            individual error message or null
+     * @param  string      $line            line-number
      * @param  string|void $exception_class The name of the exception class to raise
      * @throws SmartyCompilerException when an unexpected token is found
      */
@@ -333,7 +334,7 @@ class TemplateCompiler
     /**
      * Show an error related to Brainy::$enforce_expression_modifiers
      *
-     * @see Brainy::$enforce_expression_modifiers
+     * @see    Brainy::$enforce_expression_modifiers
      * @return void
      * @throws SmartyCompilerException
      */
@@ -350,8 +351,8 @@ class TemplateCompiler
     /**
      * Show an error related to Brainy::$enforce_expression_modifiers
      *
-     * @see Brainy::$enforce_expression_modifiers
-     * @param bool|void $static When true, the expression is static.
+     * @see    Brainy::$enforce_expression_modifiers
+     * @param  bool|void $static When true, the expression is static.
      * @return void
      */
     public function assert_no_enforced_modifiers($static = false)
@@ -365,7 +366,7 @@ class TemplateCompiler
     }
 
     /**
-     * @param string $reason
+     * @param string             $reason
      * @param Template|null|void $template
      * @return void
      * @throws BrainyStrictModeException

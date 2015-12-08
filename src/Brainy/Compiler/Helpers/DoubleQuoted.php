@@ -7,19 +7,21 @@ class DoubleQuoted extends ParseTree
 {
 
     private $parser;
+    private $subtrees = array();
 
     /**
-     * @param object            $parser  parser object
+     * @param object $parser parser object
      */
-    public function __construct($parser) {
+    public function __construct($parser)
+    {
         $this->parser = $parser;
-        $this->subtrees = [];
     }
 
     /**
      * @param ParseTree $subtree parsetree buffer
      */
-    public function append_subtree(ParseTree $subtree) {
+    public function append_subtree(ParseTree $subtree)
+    {
         if ($subtree instanceof Tag) {
             throw new \Box\Brainy\Exceptions\SmartyCompilerException('Cannot use tags inside double quoted strings');
         }
@@ -29,14 +31,16 @@ class DoubleQuoted extends ParseTree
     /**
      * @return string
      */
-    public function to_inline_data() {
+    public function to_inline_data()
+    {
         return $this->to_smarty_php();
     }
 
     /**
      * @return string compiled template code
      */
-    public function to_smarty_php() {
+    public function to_smarty_php()
+    {
         $code = '';
         $buffer = '';
         foreach ($this->subtrees as $subtree) {
@@ -71,7 +75,8 @@ class DoubleQuoted extends ParseTree
     /**
      * @return bool
      */
-    public function can_combine_inline_data() {
+    public function can_combine_inline_data()
+    {
         return false;
     }
 

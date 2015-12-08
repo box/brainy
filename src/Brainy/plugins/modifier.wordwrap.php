@@ -3,7 +3,7 @@
 /**
  * Wrap a string to a given number of characters
  *
- * @link http://php.net/manual/en/function.wordwrap.php for similarity
+ * @link   http://php.net/manual/en/function.wordwrap.php for similarity
  * @param  string  $str   the string to wrap
  * @param  int     $width the width of the output
  * @param  string  $break the character used to break the line
@@ -11,7 +11,8 @@
  * @return string  wrapped string
  * @author Rodney Rehm
  */
-function smarty_modifier_wordwrap($str, $width = 75, $break = "\n", $cut = false) {
+function smarty_modifier_wordwrap($str, $width = 75, $break = "\n", $cut = false) 
+{
     // break words into tokens using white space as a delimiter
     $tokens = preg_split('!(\s)!Su', $str, -1, PREG_SPLIT_NO_EMPTY + PREG_SPLIT_DELIM_CAPTURE);
     $length = 0;

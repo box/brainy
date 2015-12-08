@@ -2,7 +2,7 @@
 /**
  * Smarty plugin
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage PluginsModifierCompiler
  */
 
@@ -16,12 +16,13 @@
  * Input:    string to catenate<br>
  * Example:  {$var|cat:"foo"}
  *
- * @link http://smarty.php.net/manual/en/language.modifier.cat.php cat
+ * @link   http://smarty.php.net/manual/en/language.modifier.cat.php cat
  *          (Smarty online manual)
- * @author   Uwe Tews
- * @param array $params parameters
+ * @author Uwe Tews
+ * @param  array $params parameters
  * @return string with compiled code
  */
-function smarty_modifiercompiler_cat($params, $compiler) {
+function smarty_modifiercompiler_cat($params, $compiler) 
+{
     return '(' . implode(').(', $params) . ')';
 }

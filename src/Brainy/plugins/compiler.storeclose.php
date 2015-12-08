@@ -2,11 +2,12 @@
 
 /**
  * @author Matt Basta
- * @param string[] $params parameters
+ * @param string[]           $params   parameters
  * @param \Box\Brainy\Brainy $compiler template object
  * @return string
  */
-function smarty_compiler_storeclose($params, $compiler) {
+function smarty_compiler_storeclose($params, $compiler) 
+{
     if (count($compiler->_tag_stack) === 0) {
         $compiler->trigger_template_error('unexpected closing tag', $compiler->lex->taglineno);
     }

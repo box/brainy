@@ -7,11 +7,12 @@
 
 /**
  * @author Matt Basta
- * @param string[] $params parameters
+ * @param string[]           $params   parameters
  * @param \Box\Brainy\Brainy $compiler template object
  * @return string
  */
-function smarty_compiler_load($params, $compiler) {
+function smarty_compiler_load($params, $compiler) 
+{
     return <<<OUT
 echo \$_smarty_tpl->tpl_vars['smarty']->value['ls_loadables'][{$params['from']}];
 OUT;

@@ -12,15 +12,16 @@
  * Name:     replace<br>
  * Purpose:  simple search/replace
  *
- * @link http://smarty.php.net/manual/en/language.modifier.replace.php replace (Smarty online manual)
+ * @link   http://smarty.php.net/manual/en/language.modifier.replace.php replace (Smarty online manual)
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Uwe Tews
- * @param string $string  input string
- * @param string $search  text to search for
- * @param string $replace replacement text
+ * @param  string $string  input string
+ * @param  string $search  text to search for
+ * @param  string $replace replacement text
  * @return string
  */
-function smarty_modifier_replace($subject, $search, $replace) {
+function smarty_modifier_replace($subject, $search, $replace) 
+{
     if (!is_array($search) && is_array($replace)) {
         return false;
     }

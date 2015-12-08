@@ -8,7 +8,8 @@ class SmartyCompilerException extends SmartyException
     /**
      * @internal
      */
-    public function __toString() {
+    public function __toString() 
+    {
         return ' --> Smarty Compiler: ' . $this->message . ' <-- ';
     }
     /**

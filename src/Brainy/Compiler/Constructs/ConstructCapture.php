@@ -7,7 +7,7 @@ class ConstructCapture extends ClosedBaseConstruct
 {
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -34,7 +34,7 @@ class ConstructCapture extends ClosedBaseConstruct
 
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)

@@ -4,9 +4,9 @@
  *
  * This file contains the Smarty template engine
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage Template
- * @author Uwe Tews
+ * @author     Uwe Tews
  */
 
 namespace Box\Brainy\Templates;
@@ -49,11 +49,11 @@ class Template extends TemplateBase
      * Some of the global Smarty settings copied to template scope
      * It load the required template resources and cacher plugins
      *
-     * @param string     $tplResource       template resource string
-     * @param Brainy     $brainy            Brainy instance
-     * @param Template   $parent            back pointer to parent object with variables or null
-     * @param mixed      $compileID         compile id or null
-     * @param bool|void  $suppressData      Prevents data from being copied into the variable scope
+     * @param string    $tplResource  template resource string
+     * @param Brainy    $brainy       Brainy instance
+     * @param Template  $parent       back pointer to parent object with variables or null
+     * @param mixed     $compileID    compile id or null
+     * @param bool|void $suppressData Prevents data from being copied into the variable scope
      */
     public function __construct($tplResource, $brainy, $parent = null, $compileID = null, $suppressData = false)
     {
@@ -226,10 +226,11 @@ PHPDOC;
             return false;
         }
 
-        if ($this->smarty->compile_check &&
-                empty($this->compiled->_properties) &&
-                !$this->compiled->isCompiled &&
-                !empty($this->properties['file_dependency'])) {
+        if ($this->smarty->compile_check 
+            && empty($this->compiled->_properties) 
+            && !$this->compiled->isCompiled 
+            && !empty($this->properties['file_dependency'])
+        ) {
 
             foreach ($this->properties['file_dependency'] as $_file_to_check) {
                 if ($_file_to_check[2] == 'file') {
@@ -260,7 +261,7 @@ PHPDOC;
     /**
      * Get parent or root of template parent chain
      *
-     * @param  int   $scope pqrent or root scope
+     * @param  int $scope pqrent or root scope
      * @return mixed object
      */
     public function getScopePointer($scope)
@@ -284,9 +285,9 @@ PHPDOC;
     /**
      * Writes file in a safe way to disk
      *
-     * @param  string  $_filepath complete filepath
-     * @param  string  $_contents file content
-     * @param  Smarty  $smarty    smarty instance
+     * @param  string $_filepath complete filepath
+     * @param  string $_contents file content
+     * @param  Smarty $smarty    smarty instance
      * @return boolean true
      */
     public static function writeFile($_filepath, $_contents, Brainy $smarty)

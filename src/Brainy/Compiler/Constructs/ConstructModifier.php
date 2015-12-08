@@ -11,7 +11,7 @@ class ConstructModifier extends BaseConstruct
 {
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -47,8 +47,9 @@ class ConstructModifier extends BaseConstruct
 
             } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIERCOMPILER, $modifier, $compiler->smarty)) {
 
-                if (is_object($compiler->smarty->security_policy) &&
-                    !$compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
+                if (is_object($compiler->smarty->security_policy) 
+                    && !$compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)
+                ) {
                     $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
                     return null;
                 }
@@ -58,8 +59,9 @@ class ConstructModifier extends BaseConstruct
 
             } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIER, $modifier, $compiler->smarty)) {
 
-                if (is_object($compiler->smarty->security_policy) &&
-                    !$compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)) {
+                if (is_object($compiler->smarty->security_policy) 
+                    && !$compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)
+                ) {
                     $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
                     return null;
                 }
@@ -69,8 +71,9 @@ class ConstructModifier extends BaseConstruct
 
             } elseif (is_callable($modifier)) {
 
-                if (is_object($compiler->smarty->security_policy) &&
-                    !$compiler->smarty->security_policy->isTrustedPhpModifier($modifier, $compiler)) {
+                if (is_object($compiler->smarty->security_policy) 
+                    && !$compiler->smarty->security_policy->isTrustedPhpModifier($modifier, $compiler)
+                ) {
                     $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
                     return null;
                 }

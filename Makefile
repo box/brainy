@@ -27,7 +27,7 @@ coverage: clean
 	./vendor/bin/phpunit --coverage-html ./coverage
 
 lint:
-	vendor/bin/phpcs -v --standard=build/psr2-ruleset.xml src/
+	vendor/bin/phpcs -v src/
 
 clean:
 	rm -rf test/compiled/*

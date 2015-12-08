@@ -2,7 +2,7 @@
 /**
  * Smarty plugin
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage PluginsFunction
  */
 
@@ -32,21 +32,22 @@
  * {html_radios values=$ids checked=$checked separator='<br>' output=$names}
  * </pre>
  *
- * @link http://smarty.php.net/manual/en/language.function.html.radios.php {html_radios}
+ * @link    http://smarty.php.net/manual/en/language.function.html.radios.php {html_radios}
  *      (Smarty online manual)
- * @author Christopher Kvarme <christopher.kvarme@flashjab.com>
- * @author credits to Monte Ohrt <monte at ohrt dot com>
+ * @author  Christopher Kvarme <christopher.kvarme@flashjab.com>
+ * @author  credits to Monte Ohrt <monte at ohrt dot com>
  * @version 1.0
- * @param array                    $params   parameters
- * @param Template $template template object
- * @return string
- * @uses smarty_function_escape_special_chars()
+ * @param   array    $params   parameters
+ * @param   Template $template template object
+ * @return  string
+ * @uses    smarty_function_escape_special_chars()
  */
-function smarty_function_html_radios($params, $template) {
+function smarty_function_html_radios($params, $template) 
+{
 
     $template->assert_is_not_strict('`{html_radios}` is a deprecated plugin and is not allowed in strict mode');
 
-    require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
+    include_once SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php';
 
     $options = array(
         'name' => 'radio',
@@ -63,73 +64,74 @@ function smarty_function_html_radios($params, $template) {
 
     foreach ($params as $_key => $_val) {
         switch ($_key) {
-            case 'name':
-            case 'separator':
-                $options[$_key] = (string) $_val;
-                break;
+        case 'name':
+        case 'separator':
+            $options[$_key] = (string) $_val;
+            break;
 
-            case 'checked':
-            case 'selected':
-                if (is_array($_val)) {
-                    trigger_error('html_radios: the "' . $_key . '" attribute cannot be an array', E_USER_WARNING);
-                } elseif (is_object($_val)) {
-                    if (method_exists($_val, "__toString")) {
-                        $options['selected'] = smarty_function_escape_special_chars((string) $_val->__toString());
-                    } else {
-                        trigger_error("html_radios: selected attribute is an object of class '". get_class($_val) ."' without __toString() method", E_USER_NOTICE);
-                    }
+        case 'checked':
+        case 'selected':
+            if (is_array($_val)) {
+                trigger_error('html_radios: the "' . $_key . '" attribute cannot be an array', E_USER_WARNING);
+            } elseif (is_object($_val)) {
+                if (method_exists($_val, "__toString")) {
+                    $options['selected'] = smarty_function_escape_special_chars((string) $_val->__toString());
                 } else {
-                    $options['selected'] = (string) $_val;
+                    trigger_error("html_radios: selected attribute is an object of class '". get_class($_val) ."' without __toString() method", E_USER_NOTICE);
                 }
-                break;
+            } else {
+                $options['selected'] = (string) $_val;
+            }
+            break;
 
-            case 'escape':
-            case 'labels':
-            case 'label_ids':
-                $options[$_key] = (bool) $_val;
-                break;
+        case 'escape':
+        case 'labels':
+        case 'label_ids':
+            $options[$_key] = (bool) $_val;
+            break;
 
-            case 'options':
-                $options[$_key] = (array) $_val;
-                break;
+        case 'options':
+            $options[$_key] = (array) $_val;
+            break;
 
-            case 'values':
-            case 'output':
-                $options[$_key] = array_values((array) $_val);
-                break;
+        case 'values':
+        case 'output':
+            $options[$_key] = array_values((array) $_val);
+            break;
 
-            case 'radios':
-                trigger_error('html_radios: the use of the "radios" attribute is deprecated, use "options" instead', E_USER_WARNING);
-                $options = (array) $_val;
-                break;
+        case 'radios':
+            trigger_error('html_radios: the use of the "radios" attribute is deprecated, use "options" instead', E_USER_WARNING);
+            $options = (array) $_val;
+            break;
 
-            case 'assign':
-                break;
+        case 'assign':
+            break;
 
-            case 'strict': break;
+        case 'strict': 
+            break;
 
-            case 'disabled':
-            case 'readonly':
-                if (!empty($params['strict'])) {
-                    if (!is_scalar($_val)) {
-                        trigger_error("html_options: $_key attribute must be a scalar, only boolean true or string '$_key' will actually add the attribute", E_USER_NOTICE);
-                    }
-
-                    if ($_val === true || $_val === $_key) {
-                        $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_key) . '"';
-                    }
-
-                    break;
+        case 'disabled':
+        case 'readonly':
+            if (!empty($params['strict'])) {
+                if (!is_scalar($_val)) {
+                    trigger_error("html_options: $_key attribute must be a scalar, only boolean true or string '$_key' will actually add the attribute", E_USER_NOTICE);
                 }
-                // omit break; to fall through!
 
-            default:
-                if (!is_array($_val)) {
-                    $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
-                } else {
-                    trigger_error("html_radios: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
+                if ($_val === true || $_val === $_key) {
+                    $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_key) . '"';
                 }
+
                 break;
+            }
+            // omit break; to fall through!
+
+        default:
+            if (!is_array($_val)) {
+                $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
+            } else {
+                trigger_error("html_radios: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
+            }
+            break;
         }
     }
 
@@ -159,7 +161,8 @@ function smarty_function_html_radios($params, $template) {
     }
 }
 
-function smarty_function_html_radios_output($options, $value, $output) {
+function smarty_function_html_radios_output($options, $value, $output) 
+{
     $_output = '';
 
     if (is_object($value)) {

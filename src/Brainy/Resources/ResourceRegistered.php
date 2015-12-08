@@ -2,10 +2,10 @@
 /**
  * Smarty Internal Plugin Resource Registered
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage TemplateResources
- * @author Uwe Tews
- * @author Rodney Rehm
+ * @author     Uwe Tews
+ * @author     Rodney Rehm
  */
 
 namespace Box\Brainy\Resources;
@@ -20,8 +20,8 @@ class ResourceRegistered extends Resource
     /**
      * populate Source Object with meta data from Resource
      *
-     * @param  TemplateSource   $source    source object
-     * @param  Template $_template template object
+     * @param  TemplateSource $source    source object
+     * @param  Template       $_template template object
      * @return void
      */
     public function populate(TemplateSource $source, Template $_template = null)

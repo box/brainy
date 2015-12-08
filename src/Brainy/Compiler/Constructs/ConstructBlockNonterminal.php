@@ -7,7 +7,7 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
 {
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -17,11 +17,13 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
 
         $childBlockVar = '$' . $compiler->getUniqueVarName();
 
-        self::openTag($compiler, 'block', array(
+        self::openTag(
+            $compiler, 'block', array(
             'name' => $name,
             'childVar' => $childBlockVar,
             'forced' => $forced,
-        ));
+            )
+        );
 
         if ($forced) {
             return self::compileForced($compiler, $name, $childBlockVar);
@@ -38,7 +40,7 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
 
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -52,7 +54,7 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
 
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     protected static function getName($compiler, $args)
@@ -70,8 +72,8 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
 
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler
-     * @param  string $name
-     * @param  string $childBlockVar
+     * @param  string                                $name
+     * @param  string                                $childBlockVar
      * @return string
      */
     protected static function compileForced($compiler, $name, $childBlockVar)

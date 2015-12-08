@@ -71,11 +71,11 @@ class TemplateSource
     private $contentCache = null;
 
     /**
-     * @param Resource $handler         Resource Handler this source object communicates with
+     * @param Resource           $handler         Resource Handler this source object communicates with
      * @param \Box\Brainy\Brainy $smarty          Smarty instance this source object belongs to
-     * @param string          $type            type of resource
-     * @param string          $name            resource name
-     * @param string          $unique_resource unqiue resource name
+     * @param string             $type            type of resource
+     * @param string             $name            resource name
+     * @param string             $unique_resource unqiue resource name
      */
     public function __construct(Resource $handler, \Box\Brainy\Brainy $smarty, $type, $name, $unique_resource)
     {
@@ -106,7 +106,8 @@ class TemplateSource
         if ($compiled->filepath && file_exists($compiled->filepath)) {
             try {
                 $compiled->timestamp = filemtime($compiled->filepath);
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
         }
         $compiled->exists = (bool) $compiled->timestamp;
 
@@ -128,20 +129,20 @@ class TemplateSource
     }
 
     /**
-     * @param  string          $property_name valid: timestamp, exists, content
+     * @param  string $property_name valid: timestamp, exists, content
      * @return mixed
      * @throws SmartyException if $property_name is not valid
      */
     public function __get($property_name)
     {
         switch ($property_name) {
-            case 'timestamp':
-            case 'exists':
-                $this->handler->populateTimestamp($this);
-                return $this->exists;
+        case 'timestamp':
+        case 'exists':
+            $this->handler->populateTimestamp($this);
+            return $this->exists;
 
-            default:
-                throw new SmartyException("source property '$property_name' does not exist.");
+        default:
+            throw new SmartyException("source property '$property_name' does not exist.");
         }
     }
 

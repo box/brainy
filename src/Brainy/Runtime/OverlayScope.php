@@ -26,7 +26,7 @@ class OverlayScope implements \ArrayAccess, \IteratorAggregate
     /**
      * Set the value of a variable in the scope
      * @param  string|int $offset
-     * @param  mixed $value
+     * @param  mixed      $value
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -66,7 +66,8 @@ class OverlayScope implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetUnset($offset)
     {
-        if (!$this->written) return;
+        if (!$this->written) { return; 
+        }
         if (isset($this->overlaid[$offset])) {
             $this->overlaid[$offset] = null;
         }
@@ -79,8 +80,10 @@ class OverlayScope implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetGet($offset)
     {
-        if ($this->flattened) return $this->overlaid[$offset];
-        if ($this->written && isset($this->overlaid[$offset])) return $this->overlaid[$offset];
+        if ($this->flattened) { return $this->overlaid[$offset]; 
+        }
+        if ($this->written && isset($this->overlaid[$offset])) { return $this->overlaid[$offset]; 
+        }
         // We don't test with isset() because that should have been done outside of this.
         $out = $this->base[$offset];
         if ($out !== null) {
@@ -117,7 +120,8 @@ class OverlayScope implements \ArrayAccess, \IteratorAggregate
     {
         $overlaid = &$this->overlaid;
         foreach ($this->base as $key => $val) {
-            if (isset($overlaid[$key])) continue;
+            if (isset($overlaid[$key])) { continue; 
+            }
             $overlaid[$key] = $val;
         }
         $this->flattened = true;

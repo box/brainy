@@ -18,11 +18,11 @@
  * Smarty mailing list. Send a blank e-mail to
  * smarty-discussion-subscribe@googlegroups.com
  *
- * @link http://www.smarty.net/
+ * @link      http://www.smarty.net/
  * @copyright 2008 New Digital Group, Inc.
- * @author Monte Ohrt <monte at ohrt dot com>
- * @author Uwe Tews
- * @package Brainy
+ * @author    Monte Ohrt <monte at ohrt dot com>
+ * @author    Uwe Tews
+ * @package   Brainy
  */
 
 namespace Box\Brainy\Compiler;
@@ -33,16 +33,18 @@ class BatchUtil
     /**
      * private constructor to prevent calls creation of new instances
      */
-    final private function __construct() {}
+    final private function __construct() 
+    {
+    }
 
     /**
      * Compile all template files
      *
-     * @param  string  $extension     template file name extension
-     * @param  bool    $force_compile force all to recompile
-     * @param  int     $time_limit    set maximum execution time
-     * @param  int     $max_errors    set maximum allowed errors
-     * @param  \Box\Brainy\Brainy  $smarty        \Box\Brainy\Brainy instance
+     * @param  string             $extension     template file name extension
+     * @param  bool               $force_compile force all to recompile
+     * @param  int                $time_limit    set maximum execution time
+     * @param  int                $max_errors    set maximum allowed errors
+     * @param  \Box\Brainy\Brainy $smarty        \Box\Brainy\Brainy instance
      * @return integer number of template files compiled
      */
     public static function compileAllTemplates($extension, $force_compile, $time_limit, $max_errors, \Box\Brainy\Brainy $smarty)
@@ -60,8 +62,10 @@ class BatchUtil
             $_compile = new \RecursiveIteratorIterator($_compileDirs);
             foreach ($_compile as $_fileinfo) {
                 $_file = $_fileinfo->getFilename();
-                if (substr(basename($_fileinfo->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false) continue;
-                if (!substr_compare($_file, $extension, - strlen($extension)) == 0) continue;
+                if (substr(basename($_fileinfo->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false) { continue; 
+                }
+                if (!substr_compare($_file, $extension, - strlen($extension)) == 0) { continue; 
+                }
                 if ($_fileinfo->getPath() == substr($_dir, 0, -1)) {
                     $_template_file = $_file;
                 } else {
@@ -100,10 +104,10 @@ class BatchUtil
     /**
      * Delete compiled template file
      *
-     * @param  string  $resource_name template name
-     * @param  string  $compile_id    compile id
-     * @param  integer $exp_time      expiration time
-     * @param  \Box\Brainy\Brainy  $smarty        \Box\Brainy\Brainy instance
+     * @param  string             $resource_name template name
+     * @param  string             $compile_id    compile id
+     * @param  integer            $exp_time      expiration time
+     * @param  \Box\Brainy\Brainy $smarty        \Box\Brainy\Brainy instance
      * @return integer number of template files deleted
      */
     public static function clearCompiledTemplate($resource_name, $compile_id, $exp_time, \Box\Brainy\Brainy $smarty)
@@ -138,8 +142,9 @@ class BatchUtil
         }
         $_compile = new \RecursiveIteratorIterator($_compileDirs, \RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($_compile as $_file) {
-            if (substr(basename($_file->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false)
-                continue;
+            if (substr(basename($_file->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false) {
+                continue; 
+            }
 
             $_filepath = str_replace('\\', '/', (string) $_file);
 
@@ -152,8 +157,9 @@ class BatchUtil
                 $unlink = false;
                 if ((!isset($_compile_id) || (isset($_filepath[$_compile_id_part_length]) && $a = !strncmp($_filepath, $_compile_id_part, $_compile_id_part_length)))
                     && (!isset($resource_name)
-                        || (isset($_filepath[$_resource_part_1_length])
-                            && substr_compare($_filepath, $_resource_part_1, -$_resource_part_1_length, $_resource_part_1_length) == 0))) {
+                    || (isset($_filepath[$_resource_part_1_length])
+                    && substr_compare($_filepath, $_resource_part_1, -$_resource_part_1_length, $_resource_part_1_length) == 0))
+                ) {
                     if (isset($exp_time)) {
                         if (time() - @filemtime($_filepath) >= $exp_time) {
                             $unlink = true;

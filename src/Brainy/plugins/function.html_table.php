@@ -2,7 +2,7 @@
 /**
  * Smarty plugin
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage PluginsFunction
  */
 
@@ -37,17 +37,18 @@
  * {table loop=$data cols="first,second,third" tr_attr=$colors}
  * </pre>
  *
- * @author Monte Ohrt <monte at ohrt dot com>
- * @author credit to Messju Mohr <messju at lammfellpuschen dot de>
- * @author credit to boots <boots dot smarty at yahoo dot com>
+ * @author  Monte Ohrt <monte at ohrt dot com>
+ * @author  credit to Messju Mohr <messju at lammfellpuschen dot de>
+ * @author  credit to boots <boots dot smarty at yahoo dot com>
  * @version 1.1
- * @link http://www.smarty.net/manual/en/language.function.html.table.php {html_table}
+ * @link    http://www.smarty.net/manual/en/language.function.html.table.php {html_table}
  *          (Smarty online manual)
- * @param array                    $params   parameters
- * @param Template $template template object
- * @return string
+ * @param   array    $params   parameters
+ * @param   Template $template template object
+ * @return  string
  */
-function smarty_function_html_table($params, $template) {
+function smarty_function_html_table($params, $template) 
+{
 
     $template->assert_is_not_strict('`{html_table}` is a deprecated plugin and is not allowed in strict mode');
 
@@ -75,42 +76,42 @@ function smarty_function_html_table($params, $template) {
 
     foreach ($params as $_key => $_value) {
         switch ($_key) {
-            case 'loop':
-                $options[$_key] = (array) $_value;
-                break;
+        case 'loop':
+            $options[$_key] = (array) $_value;
+            break;
 
-            case 'cols':
-                if (is_array($_value) && !empty($_value)) {
-                    $options['cols'] = $_value;
-                    $cols_count = count($_value);
-                } elseif (!is_numeric($_value) && is_string($_value) && !empty($_value)) {
-                    $options['cols'] = explode(',', $_value);
-                    $cols_count = count($options['cols']);
-                } elseif (!empty($_value)) {
-                    $cols_count = (int) $_value;
-                } else {
-                    $cols_count = $options['cols'];
-                }
-                break;
+        case 'cols':
+            if (is_array($_value) && !empty($_value)) {
+                $options['cols'] = $_value;
+                $cols_count = count($_value);
+            } elseif (!is_numeric($_value) && is_string($_value) && !empty($_value)) {
+                $options['cols'] = explode(',', $_value);
+                $cols_count = count($options['cols']);
+            } elseif (!empty($_value)) {
+                $cols_count = (int) $_value;
+            } else {
+                $cols_count = $options['cols'];
+            }
+            break;
 
-            case 'rows':
-                $options[$_key] = (int) $_value;
-                break;
+        case 'rows':
+            $options[$_key] = (int) $_value;
+            break;
 
-            case 'table_attr':
-            case 'trailpad':
-            case 'hdir':
-            case 'vdir':
-            case 'inner':
-            case 'caption':
-                $options[$_key] = (string) $_value;
-                break;
+        case 'table_attr':
+        case 'trailpad':
+        case 'hdir':
+        case 'vdir':
+        case 'inner':
+        case 'caption':
+            $options[$_key] = (string) $_value;
+            break;
 
-            case 'tr_attr':
-            case 'td_attr':
-            case 'th_attr':
-                $options[$_key] = $_value;
-                break;
+        case 'tr_attr':
+        case 'td_attr':
+        case 'th_attr':
+            $options[$_key] = $_value;
+            break;
         }
     }
 
@@ -169,7 +170,8 @@ function smarty_function_html_table($params, $template) {
     return $output;
 }
 
-function smarty_function_html_table_cycle($name, $var, $no) {
+function smarty_function_html_table_cycle($name, $var, $no) 
+{
     if (!is_array($var)) {
         $ret = $var;
     } else {

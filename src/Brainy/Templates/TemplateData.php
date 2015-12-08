@@ -15,16 +15,16 @@ trait TemplateData
     /**
      * template variables
      *
-     * @var array
+     * @var      array
      * @internal
      */
     public $tpl_vars = array();
     /**
      * Parent template (if any)
      *
-     * @var Template
+     * @var      Template
      * @internal
-     * @todo This should probably be moved to TemplateBase
+     * @todo     This should probably be moved to TemplateBase
      */
     public $parent = null;
 
@@ -33,9 +33,9 @@ trait TemplateData
      * passed as the only parameter, it is a mapping of variables to assign to
      * the values to assign to them.
      *
-     * @param  array|string         $var the template variable name(s)
-     * @param  mixed|null|void      $value   the value to assign
-     * @param  int|void             $scope   the scope to associate with the Smarty_Variable instance
+     * @param  array|string    $var   the template variable name(s)
+     * @param  mixed|null|void $value the value to assign
+     * @param  int|void        $scope the scope to associate with the Smarty_Variable instance
      * @return TemplateData current TemplateData (or Smarty or Template) instance for chaining
      */
     public function assign($var, $value = null, $scope = -1)
@@ -58,9 +58,9 @@ trait TemplateData
     /**
      * Assigns $value to the variale $var.
      *
-     * @param  string $var the template variable name
-     * @param  mixed $value the value to assign
-     * @param  int $scope the scope to associate with the Smarty_Variable
+     * @param  string $var   the template variable name
+     * @param  mixed  $value the value to assign
+     * @param  int    $scope the scope to associate with the Smarty_Variable
      * @return void
      */
     protected function assignSingleVar($var, $value, $scope = -1)
@@ -96,10 +96,10 @@ trait TemplateData
     /**
      * Assigns a global Smarty variable to the global scope.
      *
-     * @param  string               $varname the global variable name
-     * @param  mixed                $value   the value to assign
+     * @param  string $varname the global variable name
+     * @param  mixed  $value   the value to assign
      * @return TemplateData current TemplateData (or Smarty or Template) instance for chaining
-     * @todo This may not work with multiple Brainy instances.
+     * @todo   This may not work with multiple Brainy instances.
      */
     public function assignGlobal($varname, $value = null)
     {
@@ -121,9 +121,9 @@ trait TemplateData
     /**
      * Returns a single or all assigned template variables
      *
-     * @param  string $varname Name of variable to process, or null to return all
-     * @param  TemplateData $ptr Optional reference to data object
-     * @param  boolean $search_parents Whether to include results from parent scopes
+     * @param  string       $varname        Name of variable to process, or null to return all
+     * @param  TemplateData $ptr            Optional reference to data object
+     * @param  boolean      $search_parents Whether to include results from parent scopes
      * @return string|array variable value or or array of variables
      */
     public function getTemplateVars($varname = null, $ptr = null, $search_parents = true)
@@ -161,7 +161,7 @@ trait TemplateData
     /**
      * Clear the given assigned template variable.
      *
-     * @param  string|string[]         $varName The template variable(s) to clear
+     * @param  string|string[] $varName The template variable(s) to clear
      * @return TemplateData current TemplateData (or Smarty or Template) instance for chaining
      */
     public function clearAssign($varName)
@@ -193,10 +193,10 @@ trait TemplateData
     /**
      * Return the contents of an assigned variable.
      *
-     * @param  string  $variable       the name of the Smarty variable
-     * @param  TemplateData|null $_ptr Optional reference to the data object
-     * @param  boolean $search_parents Whether to search in the parent scope
-     * @param  boolean $error_enable Whether to raise an error when the variable is not found.
+     * @param  string            $variable       the name of the Smarty variable
+     * @param  TemplateData|null $_ptr           Optional reference to the data object
+     * @param  boolean           $search_parents Whether to search in the parent scope
+     * @param  boolean           $error_enable   Whether to raise an error when the variable is not found.
      * @return mixed The contents of the variable.
      */
     public function getVariable($variable, $_ptr = null, $search_parents = true, $error_enable = true)
@@ -229,13 +229,14 @@ trait TemplateData
      * Copies each variable from the source into this object, creating new
      * `Variable` objects along the way.
      * @param  TemplateData $source
-     * @param  bool|void $override Whether to override existing values
+     * @param  bool|void    $override Whether to override existing values
      * @return void
      */
     public function cloneDataFrom(&$source, $override = true)
     {
         foreach ($source->tpl_vars as $name => $var) {
-            if (!$override && isset($this->tpl_vars[$name])) continue;
+            if (!$override && isset($this->tpl_vars[$name])) { continue; 
+            }
             $this->tpl_vars[$name] = new Variable($var->value);
         }
     }
@@ -243,13 +244,14 @@ trait TemplateData
     /**
      * Applies all of the data to the current object
      * @param  TemplateData $target
-     * @param  bool|void $override Whether to override existing values
+     * @param  bool|void    $override Whether to override existing values
      * @return void
      */
     public function applyDataFrom(array $source, $override = true)
     {
         foreach ($source as $name => &$value) {
-            if (!$override && isset($this->tpl_vars[$name])) continue;
+            if (!$override && isset($this->tpl_vars[$name])) { continue; 
+            }
             $this->tpl_vars[$name] = new Variable($value);
         }
     }

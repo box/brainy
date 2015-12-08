@@ -48,6 +48,7 @@ class CompiledTemplate
      * Metadata properties
      *
      * populated by Template::decodeProperties()
+     *
      * @var array
      */
     public $_properties = null;
@@ -69,7 +70,7 @@ class CompiledTemplate
      */
     public function load($_smarty_tpl)
     {
-        require $this->filepath;
+        include $this->filepath;
         $this->loaded = true;
         $this->isCompiled = true;
     }

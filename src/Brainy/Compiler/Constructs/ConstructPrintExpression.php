@@ -10,7 +10,7 @@ class ConstructPrintExpression extends BaseConstruct
     /**
      * Compiles the opening tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -22,10 +22,12 @@ class ConstructPrintExpression extends BaseConstruct
             if (empty($compiler->default_modifier_list)) {
                 self::populateCompilerDefaultMethods($compiler);
             }
-            $output = ConstructModifier::compileOpen($compiler, array(
+            $output = ConstructModifier::compileOpen(
+                $compiler, array(
                 'value' => $output,
                 'modifierlist' => $compiler->default_modifier_list,
-            ), null);
+                ), null
+            );
         }
 
         // autoescape html

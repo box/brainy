@@ -8,12 +8,13 @@ class Lookups
 {
     /**
      * Performs a safe lookup of a variable.
-     * @param array $arr
-     * @param string|int $key
-     * @param int $safety
-     * @return mixed
-     * @throws InvalidArgumentException
-     * @see \Box\Brainy\Brainy::$safe_lookups
+     *
+     * @param    array      $arr
+     * @param    string|int $key
+     * @param    int        $safety
+     * @return   mixed
+     * @throws   InvalidArgumentException
+     * @see      \Box\Brainy\Brainy::$safe_lookups
      * @internal
      */
     public static function safeVarLookup($arr, $key, $safety)
@@ -29,12 +30,13 @@ class Lookups
 
     /**
      * Performs a safe lookup of an array member with a safety value.
-     * @param array $arr
-     * @param string|int $key
-     * @param int $safety
-     * @return mixed
-     * @throws InvalidArgumentException
-     * @see \Box\Brainy\Brainy::$safe_lookups
+     *
+     * @param    array      $arr
+     * @param    string|int $key
+     * @param    int        $safety
+     * @return   mixed
+     * @throws   InvalidArgumentException
+     * @see      \Box\Brainy\Brainy::$safe_lookups
      * @internal
      */
     public static function safeArrayLookup($arr, $key, $safety)

@@ -13,16 +13,18 @@ class Variable
     /**
      * create Smarty variable object
      *
-     * @param mixed   $value   the value to assign
+     * @param mixed $value the value to assign
      */
-    public function __construct($value = null) {
+    public function __construct($value = null)
+    {
         $this->value = $value;
     }
 
     /**
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return (string) $this->value;
     }
 

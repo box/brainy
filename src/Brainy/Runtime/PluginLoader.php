@@ -6,8 +6,8 @@ class PluginLoader
 {
     /**
      * Loads a plugin
-     * @param  string $type The type of the plugin
-     * @param  string $name The plugin name
+     * @param  string             $type   The type of the plugin
+     * @param  string             $name   The plugin name
      * @param  \Box\Brainy\Brainy $brainy The instance of Brainy to load it for
      * @return bool Whether the plugin was loaded successfully
      */
@@ -26,7 +26,7 @@ class PluginLoader
             if (!file_exists($ffile)) {
                 continue;
             }
-            require $ffile;
+            include $ffile;
             return true;
         }
 

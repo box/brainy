@@ -12,13 +12,14 @@
  * Name:     lower<br>
  * Purpose:  convert string to lowercase
  *
- * @link http://www.smarty.net/manual/en/language.modifier.lower.php lower (Smarty online manual)
+ * @link   http://www.smarty.net/manual/en/language.modifier.lower.php lower (Smarty online manual)
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Uwe Tews
- * @param array $params parameters
+ * @param  array $params parameters
  * @return string with compiled code
  */
 
-function smarty_modifiercompiler_lower($params, $compiler) {
+function smarty_modifiercompiler_lower($params, $compiler) 
+{
     return 'mb_strtolower(' . $params[0] . ', \'UTF-8\')' ;
 }

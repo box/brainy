@@ -2,7 +2,7 @@
 /**
  * Smarty plugin
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage PluginsModifier
  */
 
@@ -15,20 +15,21 @@
  *
  * {@internal {$string|capitalize:true:true} is the fastest option for MBString enabled systems }}
  *
- * @param string  $string    string to capitalize
- * @param boolean $uc_digits also capitalize "x123" to "X123"
- * @param boolean $lc_rest   capitalize first letters, lowercase all following letters "aAa" to "Aaa"
+ * @param  string  $string    string to capitalize
+ * @param  boolean $uc_digits also capitalize "x123" to "X123"
+ * @param  boolean $lc_rest   capitalize first letters, lowercase all following letters "aAa" to "Aaa"
  * @return string capitalized string
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Rodney Rehm
  */
-function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = false) {
+function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = false) 
+{
     if ($lc_rest) {
         // uppercase (including hyphenated words)
-        $upper_string = mb_convert_case( $string, MB_CASE_TITLE, 'UTF-8');
+        $upper_string = mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
     } else {
         // uppercase word breaks
-      $upper_string = preg_replace_callback("!(^|[^\p{L}'])([\p{Ll}])!Su", 'smarty_mod_cap_mbconvert_cb', $string);
+        $upper_string = preg_replace_callback("!(^|[^\p{L}'])([\p{Ll}])!Su", 'smarty_mod_cap_mbconvert_cb', $string);
     }
     // check uc_digits case
     if (!$uc_digits) {
@@ -50,18 +51,22 @@ function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = fals
  *
  * @author Kyle Renfrow
  */
-function smarty_mod_cap_mbconvert_cb($matches){
-  return stripslashes($matches[1]).mb_convert_case(stripslashes($matches[2]), MB_CASE_UPPER, 'UTF-8');
+function smarty_mod_cap_mbconvert_cb($matches)
+{
+    return stripslashes($matches[1]).mb_convert_case(stripslashes($matches[2]), MB_CASE_UPPER, 'UTF-8');
 }
 
-function smarty_mod_cap_mbconvert2_cb($matches){
-  return stripslashes($matches[1]).mb_convert_case(stripslashes($matches[3]), MB_CASE_UPPER, 'UTF-8');
+function smarty_mod_cap_mbconvert2_cb($matches)
+{
+    return stripslashes($matches[1]).mb_convert_case(stripslashes($matches[3]), MB_CASE_UPPER, 'UTF-8');
 }
 
-function smarty_mod_cap_ucfirst_cb($matches){
-  return stripslashes($matches[1]).ucfirst(stripslashes($matches[2]));
+function smarty_mod_cap_ucfirst_cb($matches)
+{
+    return stripslashes($matches[1]).ucfirst(stripslashes($matches[2]));
 }
 
-function smarty_mod_cap_ucfirst2_cb($matches){
-  return stripslashes($matches[1]).ucfirst(stripslashes($matches[3]));
+function smarty_mod_cap_ucfirst2_cb($matches)
+{
+    return stripslashes($matches[1]).ucfirst(stripslashes($matches[3]));
 }

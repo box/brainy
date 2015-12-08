@@ -9,7 +9,7 @@ class ConstructForEach extends ClosedBaseConstruct
 {
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -78,7 +78,7 @@ class ConstructForEach extends ClosedBaseConstruct
     /**
      * Compiles the closing tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileClose(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -94,7 +94,7 @@ class ConstructForEach extends ClosedBaseConstruct
 
     /**
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler
-     * @param  string $name
+     * @param  string                                $name
      * @return array
      */
     private static function getUsages($compiler, $name)

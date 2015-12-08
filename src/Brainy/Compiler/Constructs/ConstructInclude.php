@@ -11,7 +11,7 @@ class ConstructInclude extends BaseConstruct
     /**
      * Compiles the opening tag for a function
      * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
-     * @param  array|null  $args     Arguments
+     * @param  array|null                            $args     Arguments
      * @return mixed
      */
     public static function compileOpen(\Box\Brainy\Compiler\TemplateCompiler $compiler, $args)
@@ -47,9 +47,9 @@ class ConstructInclude extends BaseConstruct
 
     /**
      * Gets the PHP code to execute the included template
-     * @param  string $templatePath
+     * @param  string      $templatePath
      * @param  string|null $compileID
-     * @param  int $scope
+     * @param  int         $scope
      * @return string
      */
     protected static function getDisplayCode($templatePath, $compileID, $scope, $data)

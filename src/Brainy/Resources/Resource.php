@@ -2,9 +2,9 @@
 /**
  * Smarty Resource Plugin
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage TemplateResources
- * @author Rodney Rehm
+ * @author     Rodney Rehm
  */
 
 namespace Box\Brainy\Resources;
@@ -50,8 +50,8 @@ abstract class Resource
     /**
      * populate Source Object with meta data from Resource
      *
-     * @param TemplateSource   $source    source object
-     * @param Template $tpl template object
+     * @param TemplateSource $source source object
+     * @param Template       $tpl    template object
      */
     abstract public function populate(TemplateSource $source, Template $tpl = null);
 
@@ -61,12 +61,13 @@ abstract class Resource
      * @param TemplateSource $source source object
      */
     public function populateTimestamp(TemplateSource $source)
-    {} // intentionally left blank
+    {
+    } // intentionally left blank
 
     /**
      * modify resource_name according to resource handlers specifications
      *
-     * @param  Brainy $brainy        Smarty instance
+     * @param  Brainy $brainy       Smarty instance
      * @param  string $resourceName
      * @return string unique resource name
      */
@@ -77,9 +78,9 @@ abstract class Resource
 
     /**
      * Builds a unique resource name
-     * @param  Brainy $brainy
+     * @param  Brainy   $brainy
      * @param  Resource $resource
-     * @param  string $resourceName
+     * @param  string   $resourceName
      * @return string
      */
     public static function buildUniqueNameForResource(Brainy $brainy, $resource, $resourceName)
@@ -90,8 +91,8 @@ abstract class Resource
     /**
      * populate Compiled Object with compiled filepath
      *
-     * @param CompiledTemplate $compiled  compiled object
-     * @param Template $tpl template object
+     * @param CompiledTemplate $compiled compiled object
+     * @param Template         $tpl      template object
      */
     public function populateCompiledFilepath(CompiledTemplate $compiled, Template $tpl)
     {
@@ -138,8 +139,8 @@ abstract class Resource
     /**
      * Load Resource Handler
      *
-     * @param  Brainy          $brainy smarty object
-     * @param  string          $type   name of the resource
+     * @param  Brainy $brainy smarty object
+     * @param  string $type   name of the resource
      * @return Resource Resource Handler
      */
     public static function load(Brainy $brainy, $type)
@@ -173,9 +174,9 @@ abstract class Resource
     /**
      * initialize Source Object for given resource
      *
-     * @param  Template                 $tpl               template object
-     * @param  Brainy                   $brainy            smarty object
-     * @param  string                   $template_resource resource identifier
+     * @param  Template $tpl               template object
+     * @param  Brainy   $brainy            smarty object
+     * @param  string   $template_resource resource identifier
      * @return TemplateSource
      */
     public static function source(Template $tpl, Brainy $brainy, $template_resource = null)
@@ -199,10 +200,11 @@ abstract class Resource
             isset($name[1]) &&
             ($name[1] === '.' || $name[1] === DIRECTORY_SEPARATOR)
         );
-        if ($fileIsRelative &&
-                isset($tpl) &&
-                $tpl->parent instanceof Template &&
-                $tpl->parent->source->type == 'file') {
+        if ($fileIsRelative 
+            && isset($tpl) 
+            && $tpl->parent instanceof Template 
+            && $tpl->parent->source->type == 'file'
+        ) {
             $name2 = dirname($tpl->parent->source->filepath) . DIRECTORY_SEPARATOR . $name;
         } else {
             $name2 = $name;

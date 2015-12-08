@@ -2,7 +2,7 @@
 /**
  * Smarty plugin
  *
- * @package Brainy
+ * @package    Brainy
  * @subpackage PluginsFunction
  */
 
@@ -31,19 +31,20 @@
  * {cycle name=row}
  * </pre>
  *
- * @link http://www.smarty.net/manual/en/language.function.cycle.php {cycle}
+ * @link    http://www.smarty.net/manual/en/language.function.cycle.php {cycle}
  *       (Smarty online manual)
- * @author Monte Ohrt <monte at ohrt dot com>
- * @author credit to Mark Priatel <mpriatel@rogers.com>
- * @author credit to Gerard <gerard@interfold.com>
- * @author credit to Jason Sweat <jsweat_php@yahoo.com>
- * @version  1.3
- * @param array                    $params   parameters
- * @param Template $template template object
- * @return string|null
+ * @author  Monte Ohrt <monte at ohrt dot com>
+ * @author  credit to Mark Priatel <mpriatel@rogers.com>
+ * @author  credit to Gerard <gerard@interfold.com>
+ * @author  credit to Jason Sweat <jsweat_php@yahoo.com>
+ * @version 1.3
+ * @param   array    $params   parameters
+ * @param   Template $template template object
+ * @return  string|null
  */
 
-function smarty_function_cycle($params, $template) {
+function smarty_function_cycle($params, $template) 
+{
     static $cycle_vars;
 
     $name = (empty($params['name'])) ? 'default' : $params['name'];
@@ -59,7 +60,8 @@ function smarty_function_cycle($params, $template) {
         }
     } else {
         if(isset($cycle_vars[$name]['values'])
-            && $cycle_vars[$name]['values'] != $params['values'] ) {
+            && $cycle_vars[$name]['values'] != $params['values'] 
+        ) {
             $cycle_vars[$name]['index'] = 0;
         }
         $cycle_vars[$name]['values'] = $params['values'];
@@ -74,7 +76,7 @@ function smarty_function_cycle($params, $template) {
     if (is_array($cycle_vars[$name]['values'])) {
         $cycle_array = $cycle_vars[$name]['values'];
     } else {
-        $cycle_array = explode($cycle_vars[$name]['delimiter'],$cycle_vars[$name]['values']);
+        $cycle_array = explode($cycle_vars[$name]['delimiter'], $cycle_vars[$name]['values']);
     }
 
     if (!isset($cycle_vars[$name]['index']) || $reset ) {
@@ -93,7 +95,7 @@ function smarty_function_cycle($params, $template) {
     }
 
     if ($advance) {
-        if ( $cycle_vars[$name]['index'] >= count($cycle_array) -1 ) {
+        if ($cycle_vars[$name]['index'] >= count($cycle_array) -1 ) {
             $cycle_vars[$name]['index'] = 0;
         } else {
             $cycle_vars[$name]['index']++;

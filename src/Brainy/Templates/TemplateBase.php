@@ -36,7 +36,7 @@ class TemplateBase
 
     /**
      * @param \Box\Brainy\Brainy $brainyInstance
-     * @param bool|void $useRootScope Whether to clone data from the root scope
+     * @param bool|void          $useRootScope   Whether to clone data from the root scope
      */
     public function __construct(Brainy $brainyInstance, $useRootScope = false)
     {
@@ -66,8 +66,8 @@ class TemplateBase
      *
      * This returns the template output instead of displaying it.
      *
-     * @param  string|void $template         the resource handle of the template file or template object
-     * @param  mixed|void  $compile_id       compile id to be used with this template
+     * @param  string|void $template   the resource handle of the template file or template object
+     * @param  mixed|void  $compile_id compile id to be used with this template
      * @return string rendered template output
      */
     public function fetch($template = null, $compile_id = null)
@@ -94,8 +94,8 @@ class TemplateBase
      * A fourth parameter can be passed which passes the parent scope that the
      * template should use.
      *
-     * @param string|null|void $template   the resource handle of the template file or template object
-     * @param string|null|void  $compile_id compile id to be used with this template
+     * @param  string|null|void $template   the resource handle of the template file or template object
+     * @param  string|null|void $compile_id compile id to be used with this template
      * @return void
      */
     public function display($template = null, $compile_id = null)
@@ -112,12 +112,14 @@ class TemplateBase
         // We check is_array() because tpl_vars might be an OverlayScope, which
         // will always have its parent's smarty variable.
         if (is_array($template->tpl_vars) && !isset($template->tpl_vars['smarty'])) {
-            $template->tpl_vars['smarty'] = new Variable(array(
+            $template->tpl_vars['smarty'] = new Variable(
+                array(
                 'blocks' => array(),
                 'functions' => array(),
                 'foreach' => array(),
                 'ls_loadables' => array(),
-            ));
+                )
+            );
         }
 
         if (!empty(Brainy::$global_tpl_vars)) {
@@ -178,10 +180,10 @@ class TemplateBase
     /**
      * Assigns $value to the variale $var.
      *
-     * @param  string $var the template variable name
-     * @param  mixed $value the value to assign
-     * @param  int $scope the scope to associate with the Smarty_Variable
-     * @see TemplateData::assignSingleVar()
+     * @param  string $var   the template variable name
+     * @param  mixed  $value the value to assign
+     * @param  int    $scope the scope to associate with the Smarty_Variable
+     * @see    TemplateData::assignSingleVar()
      * @return void
      */
     public function setVariable($var, $value, $scope = -1)
@@ -193,10 +195,10 @@ class TemplateBase
     /**
      * Template code runtime function to get subtemplate content
      *
-     * @param string  $template       the resource handle of the template file
-     * @param mixed   $compile_id     compile id to be used with this template
-     * @param array   $vars           optional  variables to assign
-     * @param int     $parent_scope   scope in which {include} should execute
+     * @param  string $template     the resource handle of the template file
+     * @param  mixed  $compile_id   compile id to be used with this template
+     * @param  array  $vars         optional  variables to assign
+     * @param  int    $parent_scope scope in which {include} should execute
      * @return void
      */
     public function renderSubTemplate($template, $compile_id, $data, $parent_scope)

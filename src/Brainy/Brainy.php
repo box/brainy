@@ -16,14 +16,14 @@
  *
  * More information is available on the Brainy GitHub page.
  *
- * @link https://github.com/box/brainy
+ * @link      https://github.com/box/brainy
  * @copyright 2008 New Digital Group, Inc.
  * @copyright 2014 Box, Inc.
- * @author Monte Ohrt <monte at ohrt dot com>
- * @author Uwe Tews
- * @author Rodney Rehm
- * @author Matt Basta
- * @package Brainy
+ * @author    Monte Ohrt <monte at ohrt dot com>
+ * @author    Uwe Tews
+ * @author    Rodney Rehm
+ * @author    Matt Basta
+ * @package   Brainy
  */
 
 namespace Box\Brainy;
@@ -148,6 +148,7 @@ class Brainy
 
     /**
      * assigned global tpl vars
+     *
      * @internal
      */
     public static $global_tpl_vars = array();
@@ -155,6 +156,7 @@ class Brainy
     /**
      * The date format to be used internally
      * (accepts date() and strftime())
+     *
      * @internal
      */
     public static $_DATE_FORMAT = '%b %e, %Y';
@@ -171,7 +173,7 @@ class Brainy
      * * The `{capture}` function (it uses `assign()`)
      * * The `{include}` function when `assign=""` is used
      *
-     * @var int
+     * @var  int
      * @uses Brainy::SCOPE_LOCAL
      * @uses Brainy::SCOPE_PARENT
      * @uses Brainy::SCOPE_ROOT
@@ -189,10 +191,10 @@ class Brainy
      *
      * This is considered at compile time and not at runtime.
      *
-     * @var int
+     * @var  int
      * @uses Brainy::ASSIGN_COMPAT
      * @uses Brainy::ASSIGN_NO_COMPAT
-     * @see Smarty_Internal_Compile_Assign
+     * @see  Smarty_Internal_Compile_Assign
      */
     public static $assignment_compat = Brainy::ASSIGN_COMPAT;
     /**
@@ -226,12 +228,14 @@ class Brainy
      * * Brainy::setTemplateDir()
      * * Brainy::getTemplateDir()
      * * Brainy::addTemplateDir()
+     *
      * @var array|null
      */
     private $template_dir = array();
     /**
      * joined template directory string used in cache keys
-     * @var string
+     *
+     * @var        string
      * @internal
      * @deprecated This should not be used, as it should be private.
      */
@@ -242,6 +246,7 @@ class Brainy
      *
      * * Brainy::setCompileDir()
      * * Brainy::getCompileDir()
+     *
      * @var string|null
      */
     private $compile_dir = null;
@@ -251,6 +256,7 @@ class Brainy
      * * Brainy::setPluginsDir()
      * * Brainy::getPluginsDir()
      * * Brainy::addPluginsDir()
+     *
      * @var string|array|null
      */
     private $plugins_dir = array();
@@ -293,7 +299,7 @@ class Brainy
      * or members will return a falsey value. LOOKUP_SAFE_WARN will log a
      * warning when the member does not exist.
      *
-     * @var int
+     * @var  int
      * @uses Brainy::LOOKUP_UNSAFE
      * @uses Brainy::LOOKUP_SAFE
      * @uses Brainy::LOOKUP_SAFE_WARN
@@ -326,13 +332,15 @@ class Brainy
 
     /**
      * registered plugins
-     * @var array
+     *
+     * @var      array
      * @internal
      */
     public $registered_plugins = array();
     /**
      * registered resources
-     * @var array
+     *
+     * @var      array
      * @internal
      */
     public $registered_resources = array();
@@ -347,28 +355,32 @@ class Brainy
      * ```
      * htmlspecialchars({$variable}, ENT_QUOTES, 'UTF-8')
      * ```
+     *
      * @var boolean
      */
     public $escape_html = false;
     /**
      * default file permissions
-     * @var int
-     * @todo Make this a constant
+     *
+     * @var      int
+     * @todo     Make this a constant
      * @internal
      */
     public $_file_perms = 0644;
     /**
      * default dir permissions
-     * @var int
-     * @todo Make this a constant
+     *
+     * @var      int
+     * @todo     Make this a constant
      * @internal
      */
     public $_dir_perms = 0771;
     /**
      * self pointer to Smarty object
-     * @var Smarty
+     *
+     * @var      Smarty
      * @internal
-     * @todo Investigate whether this is necessary.
+     * @todo     Investigate whether this is necessary.
      */
     public $smarty;
 
@@ -388,7 +400,7 @@ class Brainy
     /**
      * Returns whether a template with the given name exists
      *
-     * @param  string  $resource_name template name
+     * @param  string $resource_name template name
      * @return boolean Whether the template exists
      */
     public function templateExists($resource_name)
@@ -441,7 +453,7 @@ class Brainy
     /**
      * Set template directory
      *
-     * @param string|string[] $template_dir directory(s) of template sources
+     * @param  string|string[] $template_dir directory(s) of template sources
      * @return Brainy The current Smarty instance for chaining
      */
     public function setTemplateDir($template_dir)
@@ -459,8 +471,8 @@ class Brainy
     /**
      * Add a directory to the list of directories where templates are stored
      *
-     * @param  string|array    $template_dir directory(s) of template sources
-     * @param  string|null     $key          of the array element to assign the template dir to
+     * @param  string|array $template_dir directory(s) of template sources
+     * @param  string|null  $key          of the array element to assign the template dir to
      * @return Brainy          The current Smarty instance for chaining
      * @throws SmartyException when the given template directory is not valid
      */
@@ -498,7 +510,7 @@ class Brainy
     /**
      * Get template directories
      *
-     * @param int|null $index of directory to get, null to get all
+     * @param  int|null $index of directory to get, null to get all
      * @return array|string list of template directories, or directory of $index
      */
     public function getTemplateDir($index = null)
@@ -513,7 +525,7 @@ class Brainy
     /**
      * Set plugins directory
      *
-     * @param string|array $plugins_dir directory(s) of plugins
+     * @param  string|array $plugins_dir directory(s) of plugins
      * @return Brainy current Smarty instance for chaining
      */
     public function setPluginsDir($plugins_dir)
@@ -529,7 +541,7 @@ class Brainy
     /**
      * Add a directory to the list of directories where plugins are stored
      *
-     * @param string|array $plugins_dir plugins folder
+     * @param  string|array $plugins_dir plugins folder
      * @return Brainy current Smarty instance for chaining
      */
     public function addPluginsDir($plugins_dir)
@@ -637,10 +649,10 @@ class Brainy
      * This creates a template object which later can be rendered by the
      * Brainy::display() or Brainy::fetch() method.
      *
-     * @param  string  $template   the resource handle of the template file
-     * @param  mixed|void   $compile_id compile id to be used with this template
-     * @param  object|null|void  $parent     Parent scope to assign to the template
-     * @param  boolean|void $do_clone   When true, the Smarty object will be cloned
+     * @param  string           $template   the resource handle of the template file
+     * @param  mixed|void       $compile_id compile id to be used with this template
+     * @param  object|null|void $parent     Parent scope to assign to the template
+     * @param  boolean|void     $do_clone   When true, the Smarty object will be cloned
      * @return Template
      */
     public function createTemplate($template, $compile_id = null, $parent = null)
@@ -651,10 +663,10 @@ class Brainy
     /**
      * Compile all template files
      *
-     * @param  string  $extension Optional file extension
-     * @param  bool    $force_compile Optional boolean that compiles all files instead of modified files
-     * @param  int     $time_limit Optional integer to specify a runtime limit in seconds for the compilation process
-     * @param  int     $max_errors Optional integer to set an error limit. If more errors occur, the function will abort
+     * @param  string $extension     Optional file extension
+     * @param  bool   $force_compile Optional boolean that compiles all files instead of modified files
+     * @param  int    $time_limit    Optional integer to specify a runtime limit in seconds for the compilation process
+     * @param  int    $max_errors    Optional integer to set an error limit. If more errors occur, the function will abort
      * @return integer number of template files recompiled
      */
     public function compileAllTemplates($extension = '.tpl', $force_compile = false, $time_limit = 0, $max_errors = null)
@@ -691,14 +703,15 @@ class Brainy
      * @return void
      */
     public function fetchedTemplate($templatePath)
-    {}
+    {
+    }
 
     /**
      * Registers plugin to be used in templates
      *
-     * @param  string                       $type       plugin type
-     * @param  string                       $tag        name of template tag
-     * @param  callable                     $callback   PHP callback to register
+     * @param  string   $type     plugin type
+     * @param  string   $tag      name of template tag
+     * @param  callable $callback PHP callback to register
      * @return Brainy Self-reference to facilitate chaining
      * @throws SmartyException              when the plugin tag is invalid
      */
@@ -717,8 +730,8 @@ class Brainy
     /**
      * Unregister Plugin
      *
-     * @param  string                       $type of plugin
-     * @param  string                       $tag  name of plugin
+     * @param  string $type of plugin
+     * @param  string $tag  name of plugin
      * @return Brainy Self-reference to facilitate chaining
      */
     public function unregisterPlugin($type, $tag)
@@ -732,7 +745,7 @@ class Brainy
 
     /**
      * Registers a resource to fetch a template
-     * @param  string                       $type     name of resource type
+     * @param  string                                                          $type     name of resource type
      * @param  \Box\Brainy\Resources\Resource|\Box\Brainy\Resources\Resource[] $callback Instance of \Box\Brainy\Resources\Resource, or array of callbacks to handle resource (deprecated)
      * @return Brainy Self-reference to facilitate chaining
      */
@@ -745,7 +758,7 @@ class Brainy
 
     /**
      * Unregisters a resource
-     * @param  string                       $type name of resource type
+     * @param  string $type name of resource type
      * @return Brainy Self-reference to facilitate chaining
      */
     public function unregisterResource($type)

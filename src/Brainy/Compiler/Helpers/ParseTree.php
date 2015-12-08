@@ -29,17 +29,19 @@ abstract class ParseTree
      * @param string $data
      * @return string
      */
-    public function echo_data($data) {
+    public function echo_data($data) 
+    {
         return "echo $data;\n";
     }
 
     /**
      * Return escaped data
      *
-     * @param string $toEscape
+     * @param  string $toEscape
      * @return string escaped string
      */
-    protected function escape_data($toEscape) {
+    protected function escape_data($toEscape) 
+    {
         $toEscape = (string) $toEscape;
         // Escape the data
         $data = var_export($toEscape, true);
