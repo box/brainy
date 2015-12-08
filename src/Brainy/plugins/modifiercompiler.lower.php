@@ -19,7 +19,7 @@
  * @return string with compiled code
  */
 
-function smarty_modifiercompiler_lower($params, $compiler) 
+function smarty_modifiercompiler_lower($params, $compiler)
 {
     return 'mb_strtolower(' . $params[0] . ', \'UTF-8\')' ;
 }

@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler;
 
-
 class Decompile
 {
     /**
@@ -36,5 +35,4 @@ class Decompile
         }
         return json_decode($value);
     }
-
 }

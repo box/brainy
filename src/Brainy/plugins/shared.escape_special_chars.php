@@ -17,7 +17,7 @@
  * @param  string $string text that should by escaped
  * @return string
  */
-function smarty_function_escape_special_chars($string) 
+function smarty_function_escape_special_chars($string)
 {
     return htmlspecialchars($string, ENT_COMPAT, 'UTF-8', false);
 }

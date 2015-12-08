@@ -14,7 +14,6 @@ use \Box\Brainy\Exceptions\SmartyException;
 use \Box\Brainy\Templates\Template;
 use \Box\Brainy\Templates\TemplateSource;
 
-
 class ResourceFile extends Resource
 {
     const NAME = 'file';
@@ -244,5 +243,4 @@ class ResourceFile extends Resource
         // give up
         return false;
     }
-
 }

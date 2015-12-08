@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Constructs;
 
-
 class ConstructCall extends BaseConstruct
 {
     /**

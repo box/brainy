@@ -54,5 +54,4 @@ class PluginLoader
     {
         return 'smarty_' . $type . '_' . $name;
     }
-
 }

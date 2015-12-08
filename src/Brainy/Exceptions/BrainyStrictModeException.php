@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Exceptions;
 
-
 /**
  * Exception used to indicate a violation of Strict Mode.
  *

@@ -3,7 +3,6 @@ namespace Box\Brainy\Runtime;
 
 use \Box\Brainy\Brainy;
 
-
 class Lookups
 {
     /**

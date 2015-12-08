@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Helpers;
 
-
 abstract class ParseTree
 {
     /**
@@ -29,7 +28,7 @@ abstract class ParseTree
      * @param string $data
      * @return string
      */
-    public function echo_data($data) 
+    public function echo_data($data)
     {
         return "echo $data;\n";
     }
@@ -40,7 +39,7 @@ abstract class ParseTree
      * @param  string $toEscape
      * @return string escaped string
      */
-    protected function escape_data($toEscape) 
+    protected function escape_data($toEscape)
     {
         $toEscape = (string) $toEscape;
         // Escape the data
@@ -53,5 +52,4 @@ abstract class ParseTree
      * @return bool
      */
     abstract public function can_combine_inline_data();
-
 }

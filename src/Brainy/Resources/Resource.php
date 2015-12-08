@@ -15,7 +15,6 @@ use \Box\Brainy\Templates\CompiledTemplate;
 use \Box\Brainy\Templates\Template;
 use \Box\Brainy\Templates\TemplateSource;
 
-
 abstract class Resource
 {
     /**
@@ -200,9 +199,9 @@ abstract class Resource
             isset($name[1]) &&
             ($name[1] === '.' || $name[1] === DIRECTORY_SEPARATOR)
         );
-        if ($fileIsRelative 
-            && isset($tpl) 
-            && $tpl->parent instanceof Template 
+        if ($fileIsRelative
+            && isset($tpl)
+            && $tpl->parent instanceof Template
             && $tpl->parent->source->type == 'file'
         ) {
             $name2 = dirname($tpl->parent->source->filepath) . DIRECTORY_SEPARATOR . $name;
@@ -234,5 +233,4 @@ abstract class Resource
         self::$resources = array();
         self::$sources = array();
     }
-
 }

@@ -12,7 +12,6 @@ namespace Box\Brainy\Resources;
 use \Box\Brainy\Templates\CompiledTemplate;
 use \Box\Brainy\Templates\Template;
 
-
 abstract class ResourceRecompiled extends Resource
 {
     /**
@@ -22,11 +21,10 @@ abstract class ResourceRecompiled extends Resource
      * @param  Template         $_template template object
      * @return void
      */
-    public function populateCompiledFilepath(CompiledTemplate $compiled, Template $_template) 
+    public function populateCompiledFilepath(CompiledTemplate $compiled, Template $_template)
     {
         $compiled->filepath = false;
         $compiled->timestamp = false;
         $compiled->exists = false;
     }
-
 }

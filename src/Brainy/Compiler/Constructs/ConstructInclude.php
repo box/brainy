@@ -5,7 +5,6 @@ namespace Box\Brainy\Compiler\Constructs;
 use \Box\Brainy\Brainy;
 use \Box\Brainy\Exceptions\SmartyCompilerException;
 
-
 class ConstructInclude extends BaseConstruct
 {
     /**
@@ -77,5 +76,4 @@ class ConstructInclude extends BaseConstruct
             var_export($scope, true) .
             ");\n";
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Constructs;
 
-
 class ConstructBlockNonterminal extends ClosedBaseConstruct
 {
     /**
@@ -18,7 +17,9 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
         $childBlockVar = '$' . $compiler->getUniqueVarName();
 
         self::openTag(
-            $compiler, 'block', array(
+            $compiler,
+            'block',
+            array(
             'name' => $name,
             'childVar' => $childBlockVar,
             'forced' => $forced,
@@ -84,5 +85,4 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
         $output .= "\$_smarty_tpl->tpl_vars['smarty']->value['blocks'][$nameVar] = function (\$_smarty_tpl) use ($childBlockVar) {\n";
         return $output;
     }
-
 }

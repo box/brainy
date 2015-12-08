@@ -13,7 +13,6 @@ namespace Box\Brainy\Resources;
 use Box\Brainy\Templates\Template;
 use Box\Brainy\Templates\TemplateSource;
 
-
 class ResourceEval extends ResourceRecompiled
 {
     /**
@@ -23,7 +22,7 @@ class ResourceEval extends ResourceRecompiled
      * @param  Template       $_template template object
      * @return void
      */
-    public function populate(TemplateSource $source, Template $_template = null) 
+    public function populate(TemplateSource $source, Template $_template = null)
     {
         $source->uid = $source->filepath = sha1($source->name);
         $source->timestamp = false;
@@ -37,7 +36,7 @@ class ResourceEval extends ResourceRecompiled
      * @param  TemplateSource $source source object
      * @return string                 template source
      */
-    public function getContent(TemplateSource $source) 
+    public function getContent(TemplateSource $source)
     {
         return $source->name;
     }
@@ -49,7 +48,7 @@ class ResourceEval extends ResourceRecompiled
      * @param  string             $resource_name resource_name to make unique
      * @return string unique resource name
      */
-    protected function buildUniqueResourceName(\Box\Brainy\Brainy $brainy, $resource_name) 
+    protected function buildUniqueResourceName(\Box\Brainy\Brainy $brainy, $resource_name)
     {
         return get_class($this) . '#' . $resource_name;
     }
@@ -60,9 +59,8 @@ class ResourceEval extends ResourceRecompiled
      * @param  TemplateSource $source source object
      * @return string                 resource's basename
      */
-    protected function getBasename(TemplateSource $source) 
+    protected function getBasename(TemplateSource $source)
     {
         return '';
     }
-
 }

@@ -11,7 +11,6 @@ use \Box\Brainy\Brainy;
 use \Box\Brainy\Exceptions\BrainyStrictModeException;
 use \Box\Brainy\Exceptions\SmartyException;
 
-
 class TemplateBase
 {
     use TemplateData;
@@ -230,5 +229,4 @@ class TemplateBase
 
         $tpl->display();
     }
-
 }

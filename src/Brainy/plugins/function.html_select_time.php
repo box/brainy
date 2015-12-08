@@ -31,7 +31,7 @@ require_once SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php';
  * @return string
  * @uses   smarty_make_timestamp()
  */
-function smarty_function_html_select_time($params, $template) 
+function smarty_function_html_select_time($params, $template)
 {
 
     $template->assert_is_not_strict('`{html_select_time}` is a deprecated plugin and is not allowed in strict mode');
@@ -86,70 +86,64 @@ function smarty_function_html_select_time($params, $template)
 
     foreach ($params as $_key => $_value) {
         switch ($_key) {
-        case 'time':
-            if (!is_array($_value) && $_value !== null) {
-                $options['time'] = smarty_make_timestamp($_value);
-            }
-            break;
+            case 'time':
+                if (!is_array($_value) && $_value !== null) {
+                    $options['time'] = smarty_make_timestamp($_value);
+                }
+                break;
 
-        case 'prefix':
-        case 'field_array':
+            case 'prefix':
+            case 'field_array':
+            case 'field_separator':
+            case 'option_separator':
+            case 'all_extra':
+            case 'hour_extra':
+            case 'minute_extra':
+            case 'second_extra':
+            case 'meridian_extra':
+            case 'all_empty':
+            case 'hour_empty':
+            case 'minute_empty':
+            case 'second_empty':
+            case 'meridian_empty':
+            case 'all_id':
+            case 'hour_id':
+            case 'minute_id':
+            case 'second_id':
+            case 'meridian_id':
+            case 'hour_format':
+            case 'hour_value_format':
+            case 'minute_format':
+            case 'minute_value_format':
+            case 'second_format':
+            case 'second_value_format':
+                $options[$_key] = (string) $_value;
+                break;
 
-        case 'field_separator':
-        case 'option_separator':
+            case 'display_hours':
+            case 'display_minutes':
+            case 'display_seconds':
+            case 'display_meridian':
+            case 'use_24_hours':
+                $options[$_key] = (bool) $_value;
+                break;
 
-        case 'all_extra':
-        case 'hour_extra':
-        case 'minute_extra':
-        case 'second_extra':
-        case 'meridian_extra':
+            case 'minute_interval':
+            case 'second_interval':
+            case 'hour_size':
+            case 'minute_size':
+            case 'second_size':
+            case 'meridian_size':
+                $options[$_key] = (int) $_value;
+                break;
 
-        case 'all_empty':
-        case 'hour_empty':
-        case 'minute_empty':
-        case 'second_empty':
-        case 'meridian_empty':
-
-        case 'all_id':
-        case 'hour_id':
-        case 'minute_id':
-        case 'second_id':
-        case 'meridian_id':
-
-        case 'hour_format':
-        case 'hour_value_format':
-        case 'minute_format':
-        case 'minute_value_format':
-        case 'second_format':
-        case 'second_value_format':
-            $options[$_key] = (string) $_value;
-            break;
-
-        case 'display_hours':
-        case 'display_minutes':
-        case 'display_seconds':
-        case 'display_meridian':
-        case 'use_24_hours':
-            $options[$_key] = (bool) $_value;
-            break;
-
-        case 'minute_interval':
-        case 'second_interval':
-
-        case 'hour_size':
-        case 'minute_size':
-        case 'second_size':
-        case 'meridian_size':
-            $options[$_key] = (int) $_value;
-            break;
-
-        default:
-            if (!is_array($_value)) {
-                $options['extra_attrs'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_value) . '"';
-            } else {
-                trigger_error("html_select_date: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
-            }
-            break;
+            default:
+                if (!is_array($_value)) {
+                    $options['extra_attrs'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_value) . '"';
+                } else {
+                    trigger_error("html_select_date: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
+                }
+                break;
         }
     }
 

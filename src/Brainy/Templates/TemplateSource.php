@@ -4,7 +4,6 @@ namespace Box\Brainy\Templates;
 use \Box\Brainy\Exceptions\SmartyException;
 use \Box\Brainy\Resources\Resource;
 
-
 /**
  * @author Rodney Rehm
  */
@@ -136,14 +135,13 @@ class TemplateSource
     public function __get($property_name)
     {
         switch ($property_name) {
-        case 'timestamp':
-        case 'exists':
-            $this->handler->populateTimestamp($this);
-            return $this->exists;
+            case 'timestamp':
+            case 'exists':
+                $this->handler->populateTimestamp($this);
+                return $this->exists;
 
-        default:
-            throw new SmartyException("source property '$property_name' does not exist.");
+            default:
+                throw new SmartyException("source property '$property_name' does not exist.");
         }
     }
-
 }

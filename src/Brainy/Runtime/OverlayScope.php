@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Runtime;
 
-
 class OverlayScope implements \ArrayAccess, \IteratorAggregate
 {
     protected $overlaid = array();
@@ -66,7 +65,8 @@ class OverlayScope implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetUnset($offset)
     {
-        if (!$this->written) { return; 
+        if (!$this->written) {
+            return;
         }
         if (isset($this->overlaid[$offset])) {
             $this->overlaid[$offset] = null;
@@ -80,9 +80,11 @@ class OverlayScope implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetGet($offset)
     {
-        if ($this->flattened) { return $this->overlaid[$offset]; 
+        if ($this->flattened) {
+            return $this->overlaid[$offset];
         }
-        if ($this->written && isset($this->overlaid[$offset])) { return $this->overlaid[$offset]; 
+        if ($this->written && isset($this->overlaid[$offset])) {
+            return $this->overlaid[$offset];
         }
         // We don't test with isset() because that should have been done outside of this.
         $out = $this->base[$offset];
@@ -120,12 +122,12 @@ class OverlayScope implements \ArrayAccess, \IteratorAggregate
     {
         $overlaid = &$this->overlaid;
         foreach ($this->base as $key => $val) {
-            if (isset($overlaid[$key])) { continue; 
+            if (isset($overlaid[$key])) {
+                continue;
             }
             $overlaid[$key] = $val;
         }
         $this->flattened = true;
         $this->written = true;
     }
-
 }

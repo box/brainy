@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Wrappers;
 
-
 class SafeLookupWrapper
 {
     private $unsafeVersion;
@@ -12,7 +11,7 @@ class SafeLookupWrapper
      * @param string $unsafe
      * @param string $safe
      */
-    public function __construct($unsafe, $safe) 
+    public function __construct($unsafe, $safe)
     {
         $this->unsafeVersion = $unsafe;
         $this->safeVersion = $safe;
@@ -21,7 +20,7 @@ class SafeLookupWrapper
     /**
      * @return string
      */
-    public function getUnsafe() 
+    public function getUnsafe()
     {
         return $this->unsafeVersion;
     }
@@ -30,7 +29,7 @@ class SafeLookupWrapper
      * The __toString() method should always return the safe version.
      * @return string
      */
-    public function __toString() 
+    public function __toString()
     {
         return $this->safeVersion;
     }

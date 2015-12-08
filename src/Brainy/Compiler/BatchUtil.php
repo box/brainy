@@ -27,13 +27,12 @@
 
 namespace Box\Brainy\Compiler;
 
-
 class BatchUtil
 {
     /**
      * private constructor to prevent calls creation of new instances
      */
-    final private function __construct() 
+    final private function __construct()
     {
     }
 
@@ -62,9 +61,11 @@ class BatchUtil
             $_compile = new \RecursiveIteratorIterator($_compileDirs);
             foreach ($_compile as $_fileinfo) {
                 $_file = $_fileinfo->getFilename();
-                if (substr(basename($_fileinfo->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false) { continue; 
+                if (substr(basename($_fileinfo->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false) {
+                    continue;
                 }
-                if (!substr_compare($_file, $extension, - strlen($extension)) == 0) { continue; 
+                if (!substr_compare($_file, $extension, - strlen($extension)) == 0) {
+                    continue;
                 }
                 if ($_fileinfo->getPath() == substr($_dir, 0, -1)) {
                     $_template_file = $_file;
@@ -143,7 +144,7 @@ class BatchUtil
         $_compile = new \RecursiveIteratorIterator($_compileDirs, \RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($_compile as $_file) {
             if (substr(basename($_file->getPathname()), 0, 1) == '.' || strpos($_file, '.svn') !== false) {
-                continue; 
+                continue;
             }
 
             $_filepath = str_replace('\\', '/', (string) $_file);
@@ -179,5 +180,4 @@ class BatchUtil
 
         return $_count;
     }
-
 }

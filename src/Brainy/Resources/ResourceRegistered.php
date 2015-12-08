@@ -14,7 +14,6 @@ use Box\Brainy\Exceptions\SmartyException;
 use Box\Brainy\Templates\TemplateSource;
 use Box\Brainy\Templates\Template;
 
-
 class ResourceRegistered extends Resource
 {
     /**
@@ -93,5 +92,4 @@ class ResourceRegistered extends Resource
     {
         return basename($source->name);
     }
-
 }

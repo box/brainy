@@ -16,7 +16,6 @@ use \Box\Brainy\Brainy;
 use \Box\Brainy\Exceptions\SmartyCompilerException;
 use \Box\Brainy\Templates\Template;
 
-
 class TemplateCompiler
 {
 
@@ -173,7 +172,7 @@ class TemplateCompiler
         $this->has_code = true;
 
 
-        if (isset($this->smarty->security_policy) 
+        if (isset($this->smarty->security_policy)
             && !$this->smarty->security_policy->isTrustedTag($tag, $this)
         ) {
             $this->trigger_template_error("Use of disallowed tag: \"{$tag}\"", $this->lex->taglineno);
@@ -396,5 +395,4 @@ class TemplateCompiler
         }
         $this->trigger_template_error('Expected to be inside {' . $name . '}, but was not');
     }
-
 }

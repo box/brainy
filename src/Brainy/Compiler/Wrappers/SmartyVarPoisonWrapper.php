@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Wrappers;
 
-
 class SmartyVarPoisonWrapper
 {
 

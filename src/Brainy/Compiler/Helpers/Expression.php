@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Helpers;
 
-
 class Expression extends ParseTree
 {
     /**
@@ -10,7 +9,7 @@ class Expression extends ParseTree
      *
      * @param string $data content
      */
-    public function __construct($data) 
+    public function __construct($data)
     {
         $this->data = $data;
     }
@@ -18,7 +17,7 @@ class Expression extends ParseTree
     /**
      * @return string
      */
-    public function to_inline_data() 
+    public function to_inline_data()
     {
         throw new \Box\Brainy\Exceptions\SmartyException('PHP Expression cast to inline template data');
     }
@@ -28,7 +27,7 @@ class Expression extends ParseTree
      *
      * @return string content
      */
-    public function to_smarty_php() 
+    public function to_smarty_php()
     {
         return sprintf("(%s)", $this->data);
     }
@@ -36,9 +35,8 @@ class Expression extends ParseTree
     /**
      * @return bool
      */
-    public function can_combine_inline_data() 
+    public function can_combine_inline_data()
     {
         return false;
     }
-
 }

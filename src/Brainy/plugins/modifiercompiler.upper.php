@@ -12,7 +12,7 @@
  * @param  array $params parameters
  * @return string with compiled code
  */
-function smarty_modifiercompiler_upper($params, $compiler) 
+function smarty_modifiercompiler_upper($params, $compiler)
 {
     return 'mb_strtoupper(' . $params[0] . ', \'UTF-8\')';
 }

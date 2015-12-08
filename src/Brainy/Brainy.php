@@ -28,7 +28,6 @@
 
 namespace Box\Brainy;
 
-
 /**
  * set SMARTY_DIR to absolute path to Smarty library files.
  * Sets SMARTY_DIR only if user application has not already defined it.
@@ -827,5 +826,4 @@ class Brainy
         $template = new Templates\TemplateBase($this, true);
         return call_user_func_array(array($template, 'display'), $args);
     }
-
 }

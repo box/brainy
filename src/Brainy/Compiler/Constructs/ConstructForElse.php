@@ -4,7 +4,6 @@ namespace Box\Brainy\Compiler\Constructs;
 
 use \Box\Brainy\Brainy;
 
-
 class ConstructForElse extends BaseConstruct
 {
     /**
@@ -19,5 +18,4 @@ class ConstructForElse extends BaseConstruct
 
         return "}\n} else {\n";
     }
-
 }

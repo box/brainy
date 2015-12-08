@@ -20,7 +20,7 @@
  * @param  string $replace replacement text
  * @return string
  */
-function smarty_modifier_replace($subject, $search, $replace) 
+function smarty_modifier_replace($subject, $search, $replace)
 {
     if (!is_array($search) && is_array($replace)) {
         return false;

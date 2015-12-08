@@ -4,7 +4,6 @@ namespace Box\Brainy\Compiler\Constructs;
 
 use \Box\Brainy\Exceptions\SmartyCompilerException;
 
-
 abstract class ClosedBaseConstruct extends BaseConstruct
 {
     /**
@@ -17,5 +16,4 @@ abstract class ClosedBaseConstruct extends BaseConstruct
     {
         throw new \Exception('Not Implemented!');
     }
-
 }

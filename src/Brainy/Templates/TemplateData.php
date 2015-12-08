@@ -9,7 +9,6 @@ namespace Box\Brainy\Templates;
 
 use Box\Brainy\Brainy;
 
-
 trait TemplateData
 {
     /**
@@ -139,7 +138,7 @@ trait TemplateData
             $ptr = $this;
         }
         while ($ptr !== null) {
-            foreach ($ptr->tpl_vars AS $key => $var) {
+            foreach ($ptr->tpl_vars as $key => $var) {
                 if (!array_key_exists($key, $output)) {
                     $output[$key] = $var->value;
                 }
@@ -235,7 +234,8 @@ trait TemplateData
     public function cloneDataFrom(&$source, $override = true)
     {
         foreach ($source->tpl_vars as $name => $var) {
-            if (!$override && isset($this->tpl_vars[$name])) { continue; 
+            if (!$override && isset($this->tpl_vars[$name])) {
+                continue;
             }
             $this->tpl_vars[$name] = new Variable($var->value);
         }
@@ -250,10 +250,10 @@ trait TemplateData
     public function applyDataFrom(array $source, $override = true)
     {
         foreach ($source as $name => &$value) {
-            if (!$override && isset($this->tpl_vars[$name])) { continue; 
+            if (!$override && isset($this->tpl_vars[$name])) {
+                continue;
             }
             $this->tpl_vars[$name] = new Variable($value);
         }
     }
-
 }

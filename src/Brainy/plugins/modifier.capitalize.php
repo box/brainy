@@ -22,7 +22,7 @@
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Rodney Rehm
  */
-function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = false) 
+function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = false)
 {
     if ($lc_rest) {
         // uppercase (including hyphenated words)
@@ -34,7 +34,7 @@ function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = fals
     // check uc_digits case
     if (!$uc_digits) {
         if (preg_match_all("!\b([\p{L}]*[\p{N}]+[\p{L}]*)\b!u", $string, $matches, PREG_OFFSET_CAPTURE)) {
-            foreach($matches[1] as $match) {
+            foreach ($matches[1] as $match) {
                 $upper_string = substr_replace($upper_string, mb_strtolower($match[0], 'UTF-8'), $match[1], strlen($match[0]));
             }
         }

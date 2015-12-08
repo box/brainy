@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Constructs;
 
-
 class ConstructContinue extends BaseConstruct
 {
     /**

@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Helpers;
 
-
 class DoubleQuoted extends ParseTree
 {
 
@@ -79,5 +78,4 @@ class DoubleQuoted extends ParseTree
     {
         return false;
     }
-
 }

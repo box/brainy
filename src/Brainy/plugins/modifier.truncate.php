@@ -24,10 +24,10 @@
  * @param  boolean $middle      truncate in the middle of text
  * @return string truncated string
  */
-function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false) 
+function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false)
 {
     if ($length == 0) {
-        return ''; 
+        return '';
     }
 
     if (mb_strlen($string, 'UTF-8') > $length) {

@@ -6,7 +6,6 @@ use \Box\Brainy\Brainy;
 use \Box\Brainy\Compiler\Wrappers\StaticWrapper;
 use \Box\Brainy\Runtime\PluginLoader;
 
-
 class ConstructModifier extends BaseConstruct
 {
     /**
@@ -47,7 +46,7 @@ class ConstructModifier extends BaseConstruct
 
             } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIERCOMPILER, $modifier, $compiler->smarty)) {
 
-                if (is_object($compiler->smarty->security_policy) 
+                if (is_object($compiler->smarty->security_policy)
                     && !$compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)
                 ) {
                     $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
@@ -59,7 +58,7 @@ class ConstructModifier extends BaseConstruct
 
             } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIER, $modifier, $compiler->smarty)) {
 
-                if (is_object($compiler->smarty->security_policy) 
+                if (is_object($compiler->smarty->security_policy)
                     && !$compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)
                 ) {
                     $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
@@ -71,7 +70,7 @@ class ConstructModifier extends BaseConstruct
 
             } elseif (is_callable($modifier)) {
 
-                if (is_object($compiler->smarty->security_policy) 
+                if (is_object($compiler->smarty->security_policy)
                     && !$compiler->smarty->security_policy->isTrustedPhpModifier($modifier, $compiler)
                 ) {
                     $compiler->trigger_template_error('Could not use modifier "' . $modifier . '" in template due to security policy');
@@ -93,5 +92,4 @@ class ConstructModifier extends BaseConstruct
 
         return $output;
     }
-
 }

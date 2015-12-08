@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Wrappers;
 
-
 class StaticWrapper
 {
     private $code;
@@ -10,7 +9,7 @@ class StaticWrapper
     /**
      * @param string $code
      */
-    public function __construct($code) 
+    public function __construct($code)
     {
         $this->code = $code;
     }
@@ -19,7 +18,7 @@ class StaticWrapper
      * The __toString() method un-statics the contents
      * @return string
      */
-    public function __toString() 
+    public function __toString()
     {
         return $this->code;
     }
@@ -31,7 +30,7 @@ class StaticWrapper
      * @param string|StaticWrapper $right
      * @return string|StaticWrapper
      */
-    public static function concat($left, $right) 
+    public static function concat($left, $right)
     {
         if ($left instanceof StaticWrapper && $right instanceof StaticWrapper) {
             return new StaticWrapper($left . $right);
@@ -48,7 +47,7 @@ class StaticWrapper
      * @param string|StaticWrapper $right
      * @return string|StaticWrapper
      */
-    public static function static_concat($left, $right) 
+    public static function static_concat($left, $right)
     {
         if ($left instanceof StaticWrapper || $right instanceof StaticWrapper) {
             return new StaticWrapper($left . $right);
@@ -63,7 +62,7 @@ class StaticWrapper
      * @param array  $conditions
      * @return string|StaticWrapper
      */
-    public static function static_if_all($code, $conditions) 
+    public static function static_if_all($code, $conditions)
     {
         foreach ($conditions as $cond) {
             if (!($cond instanceof StaticWrapper)) {

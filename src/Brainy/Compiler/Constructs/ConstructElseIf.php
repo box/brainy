@@ -4,7 +4,6 @@ namespace Box\Brainy\Compiler\Constructs;
 
 use \Box\Brainy\Brainy;
 
-
 class ConstructElseIf extends BaseConstruct
 {
     /**

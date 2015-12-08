@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Exceptions;
 
-
 /**
  * Exception used to indicate a failure to properly wrap expressions with
  * a modifier.

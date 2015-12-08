@@ -19,7 +19,7 @@
  * @param  Template $template template object
  * @return string|null
  */
-function smarty_function_counter($params, $template) 
+function smarty_function_counter($params, $template)
 {
     static $counters = array();
 
@@ -63,10 +63,9 @@ function smarty_function_counter($params, $template)
     }
 
     if ($counter['direction'] == "down") {
-        $counter['count'] -= $counter['skip']; 
-    }
-    else {
-        $counter['count'] += $counter['skip']; 
+        $counter['count'] -= $counter['skip'];
+    } else {
+        $counter['count'] += $counter['skip'];
     }
 
     return (string) $retval;

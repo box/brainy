@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Templates;
 
-
 /**
  * @author Rodney Rehm
  */
@@ -74,5 +73,4 @@ class CompiledTemplate
         $this->loaded = true;
         $this->isCompiled = true;
     }
-
 }

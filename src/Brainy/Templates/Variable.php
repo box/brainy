@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Templates;
 
-
 class Variable
 {
     /**
@@ -27,5 +26,4 @@ class Variable
     {
         return (string) $this->value;
     }
-
 }

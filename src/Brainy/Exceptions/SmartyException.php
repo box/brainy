@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Exceptions;
 
-
 /**
  * Smarty exception class
  * @package Brainy
@@ -18,7 +17,7 @@ class SmartyException extends \Exception
     /**
      * @internal
      */
-    public function __toString() 
+    public function __toString()
     {
         return ' --> Smarty: ' . (self::$escape ? htmlentities($this->message) : $this->message)  . ' <-- ';
     }

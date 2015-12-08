@@ -33,5 +33,4 @@ class Loops
         }
         return 0;
     }
-
 }

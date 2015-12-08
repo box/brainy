@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Constructs;
 
-
 class ConstructCapture extends ClosedBaseConstruct
 {
     /**
@@ -43,7 +42,7 @@ class ConstructCapture extends ClosedBaseConstruct
 
         if (isset($assign)) {
             return '$_smarty_tpl->setVariable(' . $assign . ', ob_get_clean());';
-        } else if (isset($name)) {
+        } elseif (isset($name)) {
             $output = '';
             $output .= "if (!array_key_exists('capture', \$_smarty_tpl->tpl_vars['smarty']->value)) \$_smarty_tpl->tpl_vars['smarty']->value['capture'] = array();\n";
             $output .= '$_smarty_tpl->tpl_vars[\'smarty\']->value[\'capture\'][' . $name . '] = ob_get_clean();';

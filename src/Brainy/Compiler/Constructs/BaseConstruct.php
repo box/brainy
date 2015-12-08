@@ -4,7 +4,6 @@ namespace Box\Brainy\Compiler\Constructs;
 
 use \Box\Brainy\Exceptions\SmartyCompilerException;
 
-
 abstract class BaseConstruct
 {
 
@@ -72,9 +71,11 @@ abstract class BaseConstruct
             return $args[$name];
         }
         foreach ($args as $arg) {
-            if (is_string($arg) && $arg === $name) { return true; 
+            if (is_string($arg) && $arg === $name) {
+                return true;
             }
-            if ($arg instanceof \Box\Brainy\Compiler\Wrappers\StaticWrapper && (string) $arg === var_export($name, true)) { return true; 
+            if ($arg instanceof \Box\Brainy\Compiler\Wrappers\StaticWrapper && (string) $arg === var_export($name, true)) {
+                return true;
             }
             if (!is_array($arg) || !isset($arg[$name])) {
                 continue;
@@ -173,5 +174,4 @@ abstract class BaseConstruct
         $out .= ')';
         return $out;
     }
-
 }

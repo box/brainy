@@ -13,7 +13,6 @@ namespace Box\Brainy\Resources;
 use Box\Brainy\Templates\Template;
 use Box\Brainy\Templates\TemplateSource;
 
-
 class ResourceString extends Resource
 {
     /**
@@ -23,7 +22,7 @@ class ResourceString extends Resource
      * @param  Template       $_template template object
      * @return void
      */
-    public function populate(TemplateSource $source, Template $_template=null) 
+    public function populate(TemplateSource $source, Template $_template = null)
     {
         $source->uid = $source->filepath = sha1($source->name);
         $source->timestamp = 0;
@@ -37,7 +36,7 @@ class ResourceString extends Resource
      * @param  TemplateSource $source source object
      * @return string                 template source
      */
-    public function getContent(TemplateSource $source) 
+    public function getContent(TemplateSource $source)
     {
         return $source->name;
     }
@@ -49,7 +48,7 @@ class ResourceString extends Resource
      * @param  string             $resource_name resource_name to make unique
      * @return string unique resource name
      */
-    protected function buildUniqueResourceName(\Box\Brainy\Brainy $smarty, $resource_name) 
+    protected function buildUniqueResourceName(\Box\Brainy\Brainy $smarty, $resource_name)
     {
         return get_class($this) . '#' . $resource_name;
     }
@@ -62,9 +61,8 @@ class ResourceString extends Resource
      * @param  TemplateSource $source source object
      * @return string                 resource's basename
      */
-    protected function getBasename(TemplateSource $source) 
+    protected function getBasename(TemplateSource $source)
     {
         return '';
     }
-
 }

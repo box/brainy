@@ -4,7 +4,6 @@ namespace Box\Brainy\Compiler\Constructs;
 
 use \Box\Brainy\Brainy;
 
-
 class ConstructPrintExpression extends BaseConstruct
 {
     /**
@@ -23,10 +22,12 @@ class ConstructPrintExpression extends BaseConstruct
                 self::populateCompilerDefaultMethods($compiler);
             }
             $output = ConstructModifier::compileOpen(
-                $compiler, array(
+                $compiler,
+                array(
                 'value' => $output,
                 'modifierlist' => $compiler->default_modifier_list,
-                ), null
+                ),
+                null
             );
         }
 
@@ -48,7 +49,7 @@ class ConstructPrintExpression extends BaseConstruct
         $modifierlist = array();
         foreach ($compiler->smarty->default_modifiers as $key => $single_default_modifier) {
             preg_match_all('/(\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'|"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"|:|[^:]+)/', $single_default_modifier, $mod_array);
-            for ($i = 0, $count = count($mod_array[0]);$i < $count;$i++) {
+            for ($i = 0, $count = count($mod_array[0]); $i < $count; $i++) {
                 if ($mod_array[0][$i] !== ':') {
                     $modifierlist[$key][] = $mod_array[0][$i];
                 }
@@ -56,5 +57,4 @@ class ConstructPrintExpression extends BaseConstruct
         }
         $compiler->default_modifier_list = $modifierlist;
     }
-
 }

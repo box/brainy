@@ -2,7 +2,6 @@
 
 namespace Box\Brainy\Compiler\Helpers;
 
-
 class TemplateBuffer extends ParseTree
 {
     /**
@@ -17,7 +16,7 @@ class TemplateBuffer extends ParseTree
      *
      * @param _smarty_parsetree $subtree
      */
-    public function append_subtree(ParseTree $subtree) 
+    public function append_subtree(ParseTree $subtree)
     {
         $this->subtrees[] = $subtree;
     }
@@ -25,7 +24,7 @@ class TemplateBuffer extends ParseTree
     /**
      * @return string
      */
-    public function to_inline_data() 
+    public function to_inline_data()
     {
         throw new \Box\Brainy\Exceptions\SmartyException('Template buffer cast to inline template data');
     }
@@ -35,7 +34,7 @@ class TemplateBuffer extends ParseTree
      *
      * @return string template code content
      */
-    public function to_smarty_php() 
+    public function to_smarty_php()
     {
         $code = '';
         $buffer = '';
@@ -63,9 +62,8 @@ class TemplateBuffer extends ParseTree
     /**
      * @return bool
      */
-    public function can_combine_inline_data() 
+    public function can_combine_inline_data()
     {
         return false;
     }
-
 }

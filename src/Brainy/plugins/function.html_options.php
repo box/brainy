@@ -33,7 +33,7 @@
  * @return string
  * @uses   smarty_function_escape_special_chars()
  */
-function smarty_function_html_options($params, $template) 
+function smarty_function_html_options($params, $template)
 {
 
     $template->assert_is_not_strict('`{html_options}` is a deprecated plugin and is not allowed in strict mode');
@@ -54,73 +54,73 @@ function smarty_function_html_options($params, $template)
 
     foreach ($params as $_key => $_val) {
         switch ($_key) {
-        case 'name':
-        case 'class':
-        case 'id':
-            $options[$_key] = (string) $_val;
-            break;
-
-        case 'options':
-            $options['options'] = (array) $_val;
-            break;
-
-        case 'values':
-        case 'output':
-            $options[$_key] = array_values((array) $_val);
-            break;
-
-        case 'selected':
-            if (is_array($_val)) {
-                $options['selected'] = array();
-                foreach ($_val as $_sel) {
-                    if (is_object($_sel)) {
-                        if (method_exists($_sel, "__toString")) {
-                            $_sel = smarty_function_escape_special_chars((string) $_sel->__toString());
-                        } else {
-                            trigger_error("html_options: selected attribute contains an object of class '". get_class($_sel) ."' without __toString() method", E_USER_NOTICE);
-                            continue;
-                        }
-                    } else {
-                        $_sel = smarty_function_escape_special_chars((string) $_sel);
-                    }
-                    $options['selected'][$_sel] = true;
-                }
-            } elseif (is_object($_val)) {
-                if (method_exists($_val, "__toString")) {
-                    $options['selected'] = smarty_function_escape_special_chars((string) $_val->__toString());
-                } else {
-                    trigger_error("html_options: selected attribute is an object of class '". get_class($_val) ."' without __toString() method", E_USER_NOTICE);
-                }
-            } else {
-                $options['selected'] = smarty_function_escape_special_chars((string) $_val);
-            }
-            break;
-
-        case 'strict': 
-            break;
-
-        case 'disabled':
-        case 'readonly':
-            if (!empty($params['strict'])) {
-                if (!is_scalar($_val)) {
-                    trigger_error("html_options: $_key attribute must be a scalar, only boolean true or string '$_key' will actually add the attribute", E_USER_NOTICE);
-                }
-
-                if ($_val === true || $_val === $_key) {
-                    $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_key) . '"';
-                }
-
+            case 'name':
+            case 'class':
+            case 'id':
+                $options[$_key] = (string) $_val;
                 break;
-            }
-            // omit break; to fall through!
 
-        default:
-            if (!is_array($_val)) {
-                $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
-            } else {
-                trigger_error("html_options: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
-            }
-            break;
+            case 'options':
+                $options['options'] = (array) $_val;
+                break;
+
+            case 'values':
+            case 'output':
+                $options[$_key] = array_values((array) $_val);
+                break;
+
+            case 'selected':
+                if (is_array($_val)) {
+                    $options['selected'] = array();
+                    foreach ($_val as $_sel) {
+                        if (is_object($_sel)) {
+                            if (method_exists($_sel, "__toString")) {
+                                $_sel = smarty_function_escape_special_chars((string) $_sel->__toString());
+                            } else {
+                                trigger_error("html_options: selected attribute contains an object of class '". get_class($_sel) ."' without __toString() method", E_USER_NOTICE);
+                                continue;
+                            }
+                        } else {
+                            $_sel = smarty_function_escape_special_chars((string) $_sel);
+                        }
+                        $options['selected'][$_sel] = true;
+                    }
+                } elseif (is_object($_val)) {
+                    if (method_exists($_val, "__toString")) {
+                        $options['selected'] = smarty_function_escape_special_chars((string) $_val->__toString());
+                    } else {
+                        trigger_error("html_options: selected attribute is an object of class '". get_class($_val) ."' without __toString() method", E_USER_NOTICE);
+                    }
+                } else {
+                    $options['selected'] = smarty_function_escape_special_chars((string) $_val);
+                }
+                break;
+
+            case 'strict':
+                break;
+
+            case 'disabled':
+            case 'readonly':
+                if (!empty($params['strict'])) {
+                    if (!is_scalar($_val)) {
+                        trigger_error("html_options: $_key attribute must be a scalar, only boolean true or string '$_key' will actually add the attribute", E_USER_NOTICE);
+                    }
+
+                    if ($_val === true || $_val === $_key) {
+                        $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_key) . '"';
+                    }
+
+                    break;
+                }
+                // omit break; to fall through!
+
+            default:
+                if (!is_array($_val)) {
+                    $options['extra'] .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
+                } else {
+                    trigger_error("html_options: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
+                }
+                break;
         }
     }
 
@@ -153,7 +153,7 @@ function smarty_function_html_options($params, $template)
     return $_html_result;
 }
 
-function smarty_function_html_options_optoutput($key, $value, $selected, $id, $class, &$idx) 
+function smarty_function_html_options_optoutput($key, $value, $selected, $id, $class, &$idx)
 {
     if (!is_array($value)) {
         $_key = smarty_function_escape_special_chars($key);
@@ -189,7 +189,7 @@ function smarty_function_html_options_optoutput($key, $value, $selected, $id, $c
     return $_html_result;
 }
 
-function smarty_function_html_options_optgroup($key, $values, $selected, $id, $class, &$idx) 
+function smarty_function_html_options_optgroup($key, $values, $selected, $id, $class, &$idx)
 {
     $optgroup_html = '<optgroup label="' . smarty_function_escape_special_chars($key) . '">' . "\n";
     foreach ($values as $key => $value) {

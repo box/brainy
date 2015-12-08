@@ -9,7 +9,6 @@
 
 namespace Box\Brainy\Templates;
 
-
 /**
  * @todo getter and setter instead of public properties would allow cultivating an internal cache properly
  * @todo current implementation of isTrustedResourceDir() assumes that Brainy::$template_dir are immutable
@@ -116,7 +115,7 @@ class Security
      * Constructs a new security policy
      * @param \Box\Brainy\Brainy $smarty An instance of Brainy
      */
-    public function __construct($smarty) 
+    public function __construct($smarty)
     {
         $this->smarty = $smarty;
     }
@@ -129,10 +128,10 @@ class Security
      * @return boolean                 true if function is trusted
      * @throws SmartyCompilerException if php function is not trusted
      */
-    public function isTrustedPhpFunction($function_name, $compiler) 
+    public function isTrustedPhpFunction($function_name, $compiler)
     {
-        if (isset($this->php_functions) 
-            && (empty($this->php_functions) 
+        if (isset($this->php_functions)
+            && (empty($this->php_functions)
             || in_array($function_name, $this->php_functions))
         ) {
             return true;
@@ -151,7 +150,7 @@ class Security
      * @return boolean                 true if modifier is trusted
      * @throws SmartyCompilerException if modifier is not trusted
      */
-    public function isTrustedPhpModifier($modifier_name, $compiler) 
+    public function isTrustedPhpModifier($modifier_name, $compiler)
     {
         if (isset($this->php_modifiers) && (empty($this->php_modifiers) || in_array($modifier_name, $this->php_modifiers))) {
             return true;
@@ -170,7 +169,7 @@ class Security
      * @return boolean                 true if tag is trusted
      * @throws SmartyCompilerException if modifier is not trusted
      */
-    public function isTrustedTag($tag_name, $compiler) 
+    public function isTrustedTag($tag_name, $compiler)
     {
         // check for internal always required tags
         if (in_array($tag_name, array('assign', 'call', 'private_block_plugin', 'private_function_plugin', 'private_registered_function', 'private_registered_block', 'private_special_variable', 'private_print_expression', 'private_modifier'))) {
@@ -198,7 +197,7 @@ class Security
      * @return boolean                 true if tag is trusted
      * @throws SmartyCompilerException if modifier is not trusted
      */
-    public function isTrustedModifier($modifier_name, $compiler) 
+    public function isTrustedModifier($modifier_name, $compiler)
     {
         // check for internal always allowed modifier
         if (in_array($modifier_name, array('default'))) {
@@ -225,7 +224,7 @@ class Security
      * @return boolean         true if directory is trusted
      * @throws SmartyException if directory is not trusted
      */
-    public function isTrustedResourceDir($filepath) 
+    public function isTrustedResourceDir($filepath)
     {
         $_template = false;
         $_secure = false;
@@ -285,5 +284,4 @@ class Security
         // give up
         throw new \Box\Brainy\Exceptions\SmartyException("directory '{$_filepath}' not allowed by security setting");
     }
-
 }

@@ -14,7 +14,6 @@ namespace Box\Brainy\Templates;
 use \Box\Brainy\Brainy;
 use \Box\Brainy\Exceptions\SmartyException;
 
-
 class Template extends TemplateBase
 {
     /**
@@ -226,9 +225,9 @@ PHPDOC;
             return false;
         }
 
-        if ($this->smarty->compile_check 
-            && empty($this->compiled->_properties) 
-            && !$this->compiled->isCompiled 
+        if ($this->smarty->compile_check
+            && empty($this->compiled->_properties)
+            && !$this->compiled->isCompiled
             && !empty($this->properties['file_dependency'])
         ) {
 
@@ -331,7 +330,7 @@ PHPDOC;
                     $success = rename($_tmp_file, $_filepath);
                 }
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $success = false;
         }
 
@@ -347,5 +346,4 @@ PHPDOC;
 
         return true;
     }
-
 }
