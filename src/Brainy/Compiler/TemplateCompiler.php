@@ -337,7 +337,7 @@ class TemplateCompiler
      * @return void
      * @throws SmartyCompilerException
      */
-    public function trigger_expression_modifiers_error()
+    public function triggerExpressionModifiersError()
     {
         $this->trigger_template_error(
             'Modifier Enforcement: All expressions must be suffixed with one of the following modifiers: ' .
@@ -354,13 +354,13 @@ class TemplateCompiler
      * @param  bool|void $static When true, the expression is static.
      * @return void
      */
-    public function assert_no_enforced_modifiers($static = false)
+    public function assertNoEnforcedModifiers($static = false)
     {
         if (!empty(Brainy::$enforce_expression_modifiers)) {
             if ($static) {
                 return;
             }
-            $this->trigger_expression_modifiers_error();
+            $this->triggerExpressionModifiersError();
         }
     }
 
@@ -370,7 +370,7 @@ class TemplateCompiler
      * @return void
      * @throws BrainyStrictModeException
      */
-    public function assert_is_not_strict($reason, $template = null)
+    public function assertIsNotStrict($reason, $template = null)
     {
         if (Brainy::$strict_mode || $template && $template->isStrictMode()) {
             $this->trigger_template_error('Strict Mode: ' . $reason, null, '\Box\Brainy\Exceptions\BrainyStrictModeException');

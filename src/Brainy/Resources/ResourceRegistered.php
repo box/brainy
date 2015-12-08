@@ -55,7 +55,10 @@ class ResourceRegistered extends Resource
     {
         // return timestamp
         $time_stamp = false;
-        call_user_func_array($source->smarty->registered_resources[$source->type][0][1], array($source->name, &$time_stamp, $source->smarty));
+        call_user_func_array(
+            $source->smarty->registered_resources[$source->type][0][1],
+            array($source->name, &$time_stamp, $source->smarty)
+        );
 
         return is_numeric($time_stamp) ? (int) $time_stamp : $time_stamp;
     }

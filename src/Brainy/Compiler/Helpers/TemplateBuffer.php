@@ -16,7 +16,7 @@ class TemplateBuffer extends ParseTree
      *
      * @param _smarty_parsetree $subtree
      */
-    public function append_subtree(ParseTree $subtree)
+    public function appendSubtree(ParseTree $subtree)
     {
         $this->subtrees[] = $subtree;
     }
@@ -24,7 +24,7 @@ class TemplateBuffer extends ParseTree
     /**
      * @return string
      */
-    public function to_inline_data()
+    public function toInlineData()
     {
         throw new \Box\Brainy\Exceptions\SmartyException('Template buffer cast to inline template data');
     }
@@ -34,26 +34,26 @@ class TemplateBuffer extends ParseTree
      *
      * @return string template code content
      */
-    public function to_smarty_php()
+    public function toSmartyPHP()
     {
         $code = '';
         $buffer = '';
         foreach ($this->subtrees as $node) {
-            if ($node->can_combine_inline_data()) {
-                $buffer .= $node->to_inline_data();
+            if ($node->canCombineInlineData()) {
+                $buffer .= $node->toInlineData();
                 continue;
             }
 
             if ($buffer !== '') {
-                $code .= $this->echo_data(var_export($buffer, true));
+                $code .= $this->echoData(var_export($buffer, true));
                 $buffer = '';
             }
 
-            $code .= $node->to_smarty_php();
+            $code .= $node->toSmartyPHP();
         }
 
         if ($buffer !== '') {
-            $code .= $this->echo_data(var_export($buffer, true));
+            $code .= $this->echoData(var_export($buffer, true));
         }
 
         return $code;
@@ -62,7 +62,7 @@ class TemplateBuffer extends ParseTree
     /**
      * @return bool
      */
-    public function can_combine_inline_data()
+    public function canCombineInlineData()
     {
         return false;
     }

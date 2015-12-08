@@ -19,6 +19,6 @@
  */
 function smarty_modifiercompiler_noprint($params, $compiler)
 {
-    $compiler->assert_is_not_strict('noprint is not allowed in strict mode');
+    $compiler->assertIsNotStrict('noprint is not allowed in strict mode');
     return "''";
 }

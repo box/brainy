@@ -15,7 +15,7 @@ class Text extends ParseTree
     /**
      * @return string
      */
-    public function to_inline_data()
+    public function toInlineData()
     {
         return $this->data;
     }
@@ -23,7 +23,7 @@ class Text extends ParseTree
     /**
      * @return strint text
      */
-    public function to_smarty_php()
+    public function toSmartyPHP()
     {
         return var_export($this->data, true);
     }
@@ -31,7 +31,7 @@ class Text extends ParseTree
     /**
      * @return bool
      */
-    public function can_combine_inline_data()
+    public function canCombineInlineData()
     {
         return true;
     }

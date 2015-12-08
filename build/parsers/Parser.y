@@ -136,7 +136,7 @@
 %left COLON.
 
 start(res) ::= strictmode(strict) generic_template. {
-    res = strict . $this->root_buffer->to_smarty_php();
+    res = strict . $this->root_buffer->toSmartyPHP();
 }
 
 strictmode(res) ::= SETSTRICT(foo). {
@@ -154,11 +154,11 @@ generic_template ::= extended_template.
 
 extended_template ::= extended_template_header(h) extended_template_body(b). {
 
-    $this->current_buffer->append_subtree(new Helpers\Tag(b));
+    $this->current_buffer->appendSubtree(new Helpers\Tag(b));
 
     $header = Constructs\ConstructInclude::compileOpen($this->compiler, h);
     $header .= "\$_smarty_tpl->tpl_vars['smarty']->value['blocks'] = array();\n";
-    $this->current_buffer->append_subtree(new Helpers\Tag($header));
+    $this->current_buffer->appendSubtree(new Helpers\Tag($header));
 }
 extended_template_header(res) ::= LDELEXTENDS(lde) attributes(a) RDEL. {
     res = a;
@@ -196,7 +196,7 @@ extended_template_body_element(res) ::= TEXT(t). {
 }
 
 extended_template_block(res) ::= nonterminal_template_block_head(head) template_block_content(content) nonterminal_template_block_close(foot). {
-    res = head . content->to_smarty_php() . foot;
+    res = head . content->toSmartyPHP() . foot;
 }
 extended_template_block(res) ::= nonterminal_template_block_head(head) nonterminal_template_block_close(foot). {
     res = head . foot;
@@ -210,13 +210,13 @@ nonterminal_template_block_close(res) ::= CLOSEBLOCK. {
 template_block_content(res) ::= template_element(e). {
     res = new Helpers\TemplateBuffer();
     if (e) {
-        res->append_subtree(e);
+        res->appendSubtree(e);
     }
 }
 template_block_content(res) ::= template_block_content(content) template_element(e). {
     res = content;
     if (e) {
-        res->append_subtree(e);
+        res->appendSubtree(e);
     }
 }
 
@@ -225,7 +225,7 @@ template_block(res) ::= terminal_template_block_head(head) terminal_template_blo
     res = head . foot;
 }
 template_block(res) ::= terminal_template_block_head(head) template_block_content(content) terminal_template_block_close(foot). {
-    res = head . content->to_smarty_php() . foot;
+    res = head . content->toSmartyPHP() . foot;
 }
 terminal_template_block_head(res) ::= LDELBLOCK attributes(a) RDEL. {
     res = Constructs\ConstructBlockTerminal::compileOpen($this->compiler, a);
@@ -238,14 +238,14 @@ terminal_template_block_close(res) ::= CLOSEBLOCK. {
 // single template element
 template ::= template_element(e). {
     if (e !== null) {
-        $this->current_buffer->append_subtree(e);
+        $this->current_buffer->appendSubtree(e);
     }
 }
 
 // loop of elements
 template ::= template template_element(e). {
     if (e !== null) {
-        $this->current_buffer->append_subtree(e);
+        $this->current_buffer->appendSubtree(e);
     }
 }
 
@@ -326,7 +326,7 @@ literal_element(res) ::= LITERAL(l). {
 
 // output with optional attributes
 smartytag(res) ::= LDEL expr(e). {
-    $this->compiler->assert_no_enforced_modifiers(e instanceof Wrappers\StaticWrapper);
+    $this->compiler->assertNoEnforcedModifiers(e instanceof Wrappers\StaticWrapper);
     if (e instanceof Wrappers\StaticWrapper) {
         e = (string) e;
     }
@@ -596,16 +596,16 @@ expr(res) ::= ternary(v). {
 
 // arithmetic expression
 expr(res) ::= expr(e) MATH(m) value(v). {
-    res = Wrappers\StaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
+    res = Wrappers\StaticWrapper::staticIfAll(e . trim(m) . v, array(e, v));
 }
 
 expr(res) ::= expr(e) UNIMATH(m) value(v). {
-    res = Wrappers\StaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
+    res = Wrappers\StaticWrapper::staticIfAll(e . trim(m) . v, array(e, v));
 }
 
 // bit operation
 expr(res) ::= expr(e) ANDSYM(m) value(v). {
-    res = Wrappers\StaticWrapper::static_if_all(e . trim(m) . v, array(e, v));
+    res = Wrappers\StaticWrapper::staticIfAll(e . trim(m) . v, array(e, v));
 }
 
 // array
@@ -657,7 +657,7 @@ expr(res) ::= expr(e1) ISODD.  {
 //
 
 ternary(res) ::= OPENP expr(v) CLOSEP QMARK expr(e1) COLON expr(e2). {
-    res = Wrappers\StaticWrapper::static_if_all(v . ' ? ' . e1 . ' : ' . e2, array(e1, e2));
+    res = Wrappers\StaticWrapper::staticIfAll(v . ' ? ' . e1 . ' : ' . e2, array(e1, e2));
 }
 
 // value
@@ -667,12 +667,12 @@ value(res) ::= variable(v). {
 
 // +/- value
 value(res) ::= UNIMATH(m) value(v). {
-    res = Wrappers\StaticWrapper::static_concat(m, v);
+    res = Wrappers\StaticWrapper::staticConcat(m, v);
 }
 
 // logical negation
 value(res) ::= NOT value(v). {
-    res = Wrappers\StaticWrapper::static_concat('!', v);
+    res = Wrappers\StaticWrapper::staticConcat('!', v);
 }
 
 value(res) ::= TYPECAST(t) value(v). {
@@ -712,7 +712,7 @@ value(res) ::= function(f). {
 
 // expression
 value(res) ::= OPENP expr(e) CLOSEP. {
-    res = Wrappers\StaticWrapper::static_if_all("(". e .")", array(e));
+    res = Wrappers\StaticWrapper::staticIfAll("(". e .")", array(e));
 }
 
 // singele quoted string
@@ -746,7 +746,7 @@ variable(res) ::= variable(a1) indexdef(a2). {
                 res = new Wrappers\StaticWrapper('time()');
                 break;
             case 'template':
-                $this->compiler->assert_is_not_strict('$smarty.template is not supported in strict mode', $this);
+                $this->compiler->assertIsNotStrict('$smarty.template is not supported in strict mode', $this);
                 res = new Wrappers\StaticWrapper('basename($_smarty_tpl->source->filepath)');
                 break;
             case 'version':
@@ -797,7 +797,7 @@ variable(res) ::= variable(a1) objectelement(a2). {
 // single index definition
 // Smarty2 style index
 indexdef(res) ::= DOT DOLLAR varvar(v).  {
-    $this->compiler->assert_is_not_strict('Variable indicies with dot syntax is not supported in strict mode', $this);
+    $this->compiler->assertIsNotStrict('Variable indicies with dot syntax is not supported in strict mode', $this);
     res = $this->compileVariable(v);
 }
 
@@ -810,7 +810,7 @@ indexdef(res) ::= DOT INTEGER(n). {
 }
 
 indexdef(res) ::= DOT LDEL expr(e) RDEL. {
-    $this->compiler->assert_is_not_strict('Dot syntax with expressions is not supported in strict mode', $this);
+    $this->compiler->assertIsNotStrict('Dot syntax with expressions is not supported in strict mode', $this);
     res = e;
 }
 
@@ -828,7 +828,7 @@ varvar(res) ::= ID(s). {
 
 // sequence of identifier elements
 varvar(res) ::= LDEL expr(e) RDEL. {
-    $this->compiler->assert_is_not_strict('Variable variables are not supported in strict mode', $this);
+    $this->compiler->assertIsNotStrict('Variable variables are not supported in strict mode', $this);
     res = '('.e.')';
 }
 
@@ -888,7 +888,7 @@ function(res) ::= ID(f) OPENP params(p) CLOSEP. {
     } elseif (in_array($func_name, array('empty', 'reset', 'current', 'end', 'prev', 'next'))) {
 
         if ($func_name !== 'empty') {
-            $this->compiler->assert_is_not_strict($func_name . ' is not allowed in strict mode', $this);
+            $this->compiler->assertIsNotStrict($func_name . ' is not allowed in strict mode', $this);
         }
 
         if (count($combined_params) != 1) {
@@ -934,7 +934,7 @@ modifierlist(res) ::= modifier(m) modparameters(p). {
 }
 
 modifier(res) ::= VERT AT ID(m). {
-    $this->compiler->assert_is_not_strict('@ is not allowed in templates', $this);
+    $this->compiler->assertIsNotStrict('@ is not allowed in templates', $this);
     res = array(m);
 }
 
@@ -1008,7 +1008,7 @@ lop(res) ::= LOR. {
 }
 
 lop(res) ::= LXOR. {
-    $this->compiler->assert_is_not_strict('XOR is not supported in strict mode', $this);
+    $this->compiler->assertIsNotStrict('XOR is not supported in strict mode', $this);
     res = ' XOR ';
 }
 
@@ -1046,18 +1046,18 @@ doublequoted_with_quotes(res) ::= QUOTE QUOTE. {
 }
 
 doublequoted_with_quotes(res) ::= QUOTE doublequoted(s) QUOTE. {
-    res = s->to_smarty_php();
+    res = s->toSmartyPHP();
 }
 
 
 doublequoted(res) ::= doublequoted(o1) doublequotedcontent(o2). {
-    o1->append_subtree(o2);
+    o1->appendSubtree(o2);
     res = o1;
 }
 
 doublequoted(res) ::= doublequotedcontent(o). {
     res = new Helpers\DoubleQuoted($this);
-    res->append_subtree(o);
+    res->appendSubtree(o);
 }
 
 doublequotedcontent(res) ::=  DOLLARID(i). {

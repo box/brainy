@@ -85,7 +85,11 @@ class ResourceFile extends Resource
         $offset = 0;
 
         // resolve simples
-        $path = preg_replace('#/\.' . DIRECTORY_SEPARATOR . '(\.' . DIRECTORY_SEPARATOR . ')*#', DIRECTORY_SEPARATOR, $path);
+        $path = preg_replace(
+            '#/\.' . DIRECTORY_SEPARATOR . '(\.' . DIRECTORY_SEPARATOR . ')*#',
+            DIRECTORY_SEPARATOR,
+            $path
+        );
         // resolve parents
         while (true) {
             $parent = strpos($path, DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR, $offset);
@@ -166,7 +170,9 @@ class ResourceFile extends Resource
         $_file_is_dotted = $file[0] == '.' && ($file[1] == '.' || $file[1] == DIRECTORY_SEPARATOR);
         if ($tpl && $tpl->parent instanceof Template && $_file_is_dotted) {
             if ($tpl->parent->source->type != 'file') {
-                throw new SmartyException("Template '{$file}' cannot be relative to template of resource type '{$tpl->parent->source->type}'");
+                throw new SmartyException(
+                    "Template '{$file}' cannot be relative to template of resource type '{$tpl->parent->source->type}'"
+                );
             }
             $file = dirname($tpl->parent->source->filepath) . DIRECTORY_SEPARATOR . $file;
             $_file_exact_match = true;

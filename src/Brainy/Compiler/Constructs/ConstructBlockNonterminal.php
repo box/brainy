@@ -63,7 +63,7 @@ class ConstructBlockNonterminal extends ClosedBaseConstruct
         try {
             return self::getRequiredArg($args, 'name');
         } catch (\Box\Brainy\Exceptions\SmartyCompilerException $e) {
-            $compiler->assert_is_not_strict('Block shorthand is not allowed in strict mode. Use the name="" attribute instead.');
+            $compiler->assertIsNotStrict('Block shorthand is not allowed in strict mode. Use the name="" attribute instead.');
             if (!isset($args[0])) {
                 throw $e;
             }

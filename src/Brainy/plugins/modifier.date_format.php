@@ -29,7 +29,7 @@
 function smarty_modifier_date_format($string, $format = null, $default_date = '', $formatter = 'auto')
 {
     if ($format === null) {
-        $format = Brainy::$_DATE_FORMAT;
+        $format = \Box\Brainy\Brainy::$_DATE_FORMAT;
     }
     /**
     * Include the {@link shared.make_timestamp.php} plugin

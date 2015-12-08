@@ -96,7 +96,9 @@ class Template extends TemplateBase
             } else {
                 $parent_resource = '';
             }
-            throw new SmartyException("Unable to load template {$this->source->type} '{$this->source->name}'{$parent_resource}");
+            throw new SmartyException(
+                "Unable to load template {$this->source->type} '{$this->source->name}'{$parent_resource}"
+            );
         }
         return ($this->smarty->force_compile ||
                     $this->source->recompiled ||
@@ -113,7 +115,11 @@ class Template extends TemplateBase
     {
         if (!$this->source->recompiled) {
             $this->properties['file_dependency'] = array();
-            $this->properties['file_dependency'][$this->source->uid] = array($this->source->filepath, $this->source->timestamp, $this->source->type);
+            $this->properties['file_dependency'][$this->source->uid] = array(
+                $this->source->filepath,
+                $this->source->timestamp,
+                $this->source->type
+            );
         }
         // compile locking
         if ($this->smarty->compile_locking && !$this->source->recompiled) {
@@ -142,7 +148,9 @@ class Template extends TemplateBase
             // write compiled template
             $_filepath = $this->compiled->filepath;
             if ($_filepath === false) {
-                throw new SmartyException('getCompiledFilepath() did not return a destination to save the compiled template to');
+                throw new SmartyException(
+                    'getCompiledFilepath() did not return a destination to save the compiled template to'
+                );
             }
             self::writeFile($_filepath, $code, $this->smarty);
             $this->compiled->exists = true;
@@ -167,7 +175,9 @@ class Template extends TemplateBase
                 foreach ($tmp as $data) {
                     $file = addslashes($data['file']);
                     if (is_Array($data['function'])) {
-                        $plugins_string .= "if (!is_callable(array('{$data['function'][0]}','{$data['function'][1]}'))) include '{$file}';\n";
+                        $func = $data['function'];
+                        $plugins_string .= "if (!is_callable(array('{$func[0]}', '{$func[1]}'))) ";
+                        $plugins_string .= "include '{$file}';\n";
                     } else {
                         $plugins_string .= "if (!is_callable('{$data['function']}')) include '{$file}';\n";
                     }
@@ -226,7 +236,7 @@ PHPDOC;
         }
 
         if ($this->smarty->compile_check
-            && empty($this->compiled->_properties)
+            && empty($this->compiled->properties)
             && !$this->compiled->isCompiled
             && !empty($this->properties['file_dependency'])
         ) {
@@ -252,7 +262,7 @@ PHPDOC;
             }
         }
         // store data in reusable Smarty_Template_Compiled
-        $this->compiled->_properties = $properties;
+        $this->compiled->properties = $properties;
 
         return true;
     }

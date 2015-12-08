@@ -50,7 +50,7 @@ class CompiledTemplate
      *
      * @var array
      */
-    public $_properties = null;
+    public $properties = null;
 
     /**
      * create Compiled Object container

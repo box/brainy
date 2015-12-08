@@ -17,7 +17,7 @@ class Expression extends ParseTree
     /**
      * @return string
      */
-    public function to_inline_data()
+    public function toInlineData()
     {
         throw new \Box\Brainy\Exceptions\SmartyException('PHP Expression cast to inline template data');
     }
@@ -27,7 +27,7 @@ class Expression extends ParseTree
      *
      * @return string content
      */
-    public function to_smarty_php()
+    public function toSmartyPHP()
     {
         return sprintf("(%s)", $this->data);
     }
@@ -35,7 +35,7 @@ class Expression extends ParseTree
     /**
      * @return bool
      */
-    public function can_combine_inline_data()
+    public function canCombineInlineData()
     {
         return false;
     }

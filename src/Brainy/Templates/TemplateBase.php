@@ -53,7 +53,7 @@ class TemplateBase
      * @return void
      * @throws BrainyStrictModeException
      */
-    public function assert_is_not_strict($reason)
+    public function assertIsNotStrict($reason)
     {
         if (Brainy::$strict_mode || $this->strict_mode) {
             throw new BrainyStrictModeException('Strict Mode: ' . $reason);
@@ -134,7 +134,9 @@ class TemplateBase
             if ($template->parent instanceof Template) {
                 $parent_resource = " in '{$template->parent->template_resource}'";
             }
-            throw new SmartyException("Unable to load template {$template->source->type} '{$template->source->name}'{$parent_resource}");
+            throw new SmartyException(
+                "Unable to load template {$template->source->type} '{$template->source->name}'{$parent_resource}"
+            );
         }
 
         $_smarty_tpl = $template;
@@ -144,16 +146,18 @@ class TemplateBase
             eval('?>' . $code);  // The closing PHP bit accounts for the opening PHP tag at the top of the compiled file
             unset($code);
         } else {
-            if (!$template->compiled->exists || ($template->smarty->force_compile && !$template->compiled->isCompiled)) {
+            if (!$template->compiled->exists || $template->smarty->force_compile && !$template->compiled->isCompiled) {
                 $template->compileTemplateSource();
             }
             if (!$template->compiled->loaded) {
                 $template->compiled->load($template);
             } else {
-                $template->decodeProperties($template->compiled->_properties, false);
+                $template->decodeProperties($template->compiled->properties, false);
             }
             if (empty($template->properties['unifunc']) || !is_callable($template->properties['unifunc'])) {
-                throw new SmartyException("Invalid compiled template for '{$template->template_resource}': no unifunc found");
+                throw new SmartyException(
+                    "Invalid compiled template for '{$template->template_resource}': no unifunc found"
+                );
             }
 
             // render compiled template
@@ -161,10 +165,17 @@ class TemplateBase
         }
 
         if (!$template->source->recompiled && empty($template->properties['file_dependency'][$template->source->uid])) {
-            $template->properties['file_dependency'][$template->source->uid] = array($template->source->filepath, $template->source->timestamp, $template->source->type);
+            $template->properties['file_dependency'][$template->source->uid] = array(
+                $template->source->filepath,
+                $template->source->timestamp,
+                $template->source->type
+            );
         }
         if ($template->parent instanceof Template) {
-            $template->parent->properties['file_dependency'] = array_merge($template->parent->properties['file_dependency'], $template->properties['file_dependency']);
+            $template->parent->properties['file_dependency'] = array_merge(
+                $template->parent->properties['file_dependency'],
+                $template->properties['file_dependency']
+            );
             foreach ($template->required_plugins as $code => $tmp1) {
                 foreach ($tmp1 as $name => $tmp) {
                     foreach ($tmp as $type => $data) {

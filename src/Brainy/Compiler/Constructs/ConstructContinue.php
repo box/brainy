@@ -14,7 +14,7 @@ class ConstructContinue extends BaseConstruct
         $levels = self::getOptionalArg($args, 'levels');
 
         if (!$levels && isset($args[0])) {
-            $compiler->assert_is_not_strict('Continue shorthand is not allowed in strict mode. Use the levels="" attribute instead.');
+            $compiler->assertIsNotStrict('Continue shorthand is not allowed in strict mode. Use the levels="" attribute instead.');
             $levels = $args[0];
         }
 

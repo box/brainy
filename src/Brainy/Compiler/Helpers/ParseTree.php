@@ -15,20 +15,20 @@ abstract class ParseTree
      *
      * @return string
      */
-    abstract public function to_smarty_php();
+    abstract public function toSmartyPHP();
 
     /**
      * Return the raw string contents of the node
      *
      * @return string
      */
-    abstract public function to_inline_data();
+    abstract public function toInlineData();
 
     /**
      * @param string $data
      * @return string
      */
-    public function echo_data($data)
+    public function echoData($data)
     {
         return "echo $data;\n";
     }
@@ -39,7 +39,7 @@ abstract class ParseTree
      * @param  string $toEscape
      * @return string escaped string
      */
-    protected function escape_data($toEscape)
+    protected function escapeData($toEscape)
     {
         $toEscape = (string) $toEscape;
         // Escape the data
@@ -51,5 +51,5 @@ abstract class ParseTree
     /**
      * @return bool
      */
-    abstract public function can_combine_inline_data();
+    abstract public function canCombineInlineData();
 }

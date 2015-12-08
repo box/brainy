@@ -15,7 +15,7 @@ class ConstructCapture extends ClosedBaseConstruct
         $assign = self::getOptionalArg($args, 'assign');
 
         if (!$name && !$assign && isset($args[0])) {
-            $compiler->assert_is_not_strict('Capture shorthand is not allowed in strict mode. Use the name="" attribute instead.');
+            $compiler->assertIsNotStrict('Capture shorthand is not allowed in strict mode. Use the name="" attribute instead.');
             $name = $args[0];
         }
 

@@ -50,7 +50,7 @@
 function smarty_function_html_table($params, $template)
 {
 
-    $template->assert_is_not_strict('`{html_table}` is a deprecated plugin and is not allowed in strict mode');
+    $template->assertIsNotStrict('`{html_table}` is a deprecated plugin and is not allowed in strict mode');
 
     $options = array(
         'table_attr' => 'border="1"',

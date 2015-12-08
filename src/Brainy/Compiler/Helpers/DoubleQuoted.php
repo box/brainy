@@ -19,7 +19,7 @@ class DoubleQuoted extends ParseTree
     /**
      * @param ParseTree $subtree parsetree buffer
      */
-    public function append_subtree(ParseTree $subtree)
+    public function appendSubtree(ParseTree $subtree)
     {
         if ($subtree instanceof Tag) {
             throw new \Box\Brainy\Exceptions\SmartyCompilerException('Cannot use tags inside double quoted strings');
@@ -30,21 +30,21 @@ class DoubleQuoted extends ParseTree
     /**
      * @return string
      */
-    public function to_inline_data()
+    public function toInlineData()
     {
-        return $this->to_smarty_php();
+        return $this->toSmartyPHP();
     }
 
     /**
      * @return string compiled template code
      */
-    public function to_smarty_php()
+    public function toSmartyPHP()
     {
         $code = '';
         $buffer = '';
         foreach ($this->subtrees as $subtree) {
-            if ($subtree->can_combine_inline_data()) {
-                $buffer .= $subtree->to_inline_data();
+            if ($subtree->canCombineInlineData()) {
+                $buffer .= $subtree->toInlineData();
                 continue;
             }
 
@@ -53,11 +53,11 @@ class DoubleQuoted extends ParseTree
             }
 
             if ($buffer) {
-                $code .= $this->escape_data($buffer) . '.';
+                $code .= $this->escapeData($buffer) . '.';
                 $buffer = '';
             }
 
-            $code .= $subtree->to_smarty_php();
+            $code .= $subtree->toSmartyPHP();
 
         }
 
@@ -65,7 +65,7 @@ class DoubleQuoted extends ParseTree
             if ($code) {
                 $code .= '.';
             }
-            $code .= $this->escape_data($buffer);
+            $code .= $this->escapeData($buffer);
         }
 
         return $code;
@@ -74,7 +74,7 @@ class DoubleQuoted extends ParseTree
     /**
      * @return bool
      */
-    public function can_combine_inline_data()
+    public function canCombineInlineData()
     {
         return false;
     }

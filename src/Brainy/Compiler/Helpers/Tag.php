@@ -19,7 +19,7 @@ class Tag extends ParseTree
     /**
      * @return string
      */
-    public function to_inline_data()
+    public function toInlineData()
     {
         throw new \Box\Brainy\Exceptions\SmartyException('Brainy tag cast to inline template data');
     }
@@ -29,7 +29,7 @@ class Tag extends ParseTree
      *
      * @return string content
      */
-    public function to_smarty_php()
+    public function toSmartyPHP()
     {
         return $this->data;
     }
@@ -37,7 +37,7 @@ class Tag extends ParseTree
     /**
      * @return bool
      */
-    public function can_combine_inline_data()
+    public function canCombineInlineData()
     {
         return false;
     }

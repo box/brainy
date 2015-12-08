@@ -18,7 +18,7 @@ class ConstructInclude extends BaseConstruct
         try {
             $file = self::getRequiredArg($args, 'file');
         } catch (SmartyCompilerException $e) {
-            $compiler->assert_is_not_strict('Include shorthand is not allowed in strict mode. Use the file="" attribute instead.');
+            $compiler->assertIsNotStrict('Include shorthand is not allowed in strict mode. Use the file="" attribute instead.');
             if (!isset($args[0])) {
                 throw $e;
             }
@@ -54,7 +54,7 @@ class ConstructInclude extends BaseConstruct
     protected static function getDisplayCode($templatePath, $compileID, $scope, $data)
     {
         if ($templatePath instanceof \Box\Brainy\Compiler\Helpers\ParseTree) {
-            $templatePath = $templatePath->to_smarty_php();
+            $templatePath = $templatePath->toSmartyPHP();
         }
 
         $data = self::flattenCompiledArray($data);
