@@ -65,8 +65,12 @@ class ConstructModifier extends BaseConstruct
                     return null;
                 }
 
+                $output = '(\Box\Brainy\Runtime\PluginLoader::loadPlugin(\Box\Brainy\Brainy::PLUGIN_MODIFIER, ' . var_export($modifier, true) . ', $_smarty_tpl->smarty) ?';
+
                 $func = PluginLoader::getPluginFunction(Brainy::PLUGIN_MODIFIER, $modifier);
-                $output = "{$func}({$params})";
+                $output .= "{$func}({$params})";
+
+                $output .= ' : null)';
 
             } elseif (is_callable($modifier)) {
 

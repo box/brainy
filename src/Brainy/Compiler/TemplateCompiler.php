@@ -200,6 +200,7 @@ class TemplateCompiler
 
         if (\Box\Brainy\Runtime\PluginLoader::loadPlugin(Brainy::PLUGIN_FUNCTION, $tag, $this->smarty)) {
             return (
+                '\Box\Brainy\Runtime\PluginLoader::loadPlugin(\Box\Brainy\Brainy::PLUGIN_FUNCTION, ' . var_export($tag, true) . ", \$_smarty_tpl->smarty);\n" .
                 'echo ' .
                 \Box\Brainy\Runtime\PluginLoader::getPluginFunction(Brainy::PLUGIN_FUNCTION, $tag) .
                 '(' . $this->formatStaticArgs($args, false) . ', $_smarty_tpl)' .
