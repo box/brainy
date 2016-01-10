@@ -4,5 +4,5 @@ php:
   - 5.5
   - 5.6
 install: composer install
-script: make test
+script: ./test/build-fail.sh && make test
 sudo: false
