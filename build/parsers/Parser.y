@@ -86,10 +86,18 @@
     public function compileVariable($variable)
     {
         $unsafe = '$_smarty_tpl->tpl_vars[' . $variable . ']';
-        if ($this->safe_lookups === 0) { // Unsafe lookups
-            return $unsafe;
+
+        switch ($this->safe_lookups) {
+            case \Box\Brainy\Brainy::LOOKUP_UNSAFE:
+                return $unsafe;
+            case \Box\Brainy\Brainy::LOOKUP_SAFE:
+                $safe = '\Box\Brainy\Runtime\Lookups::safeVarLookup($_smarty_tpl->tpl_vars, ' . $variable . ')';
+                break;
+            case \Box\Brainy\Brainy::LOOKUP_SAFE_WARN:
+                $safe = '\Box\Brainy\Runtime\Lookups::safeVarLookupWarn($_smarty_tpl->tpl_vars, ' . $variable . ')';
+                break;
         }
-        $safe = '\Box\Brainy\Runtime\Lookups::safeVarLookup($_smarty_tpl->tpl_vars, '. $variable .', ' . $this->safe_lookups . ')';
+
         return new Wrappers\SafeLookupWrapper($unsafe, $safe);
     }
 
@@ -101,10 +109,18 @@
     public function compileSafeLookupWithBase($base, $variable)
     {
         $unsafe = $base . '[' . $variable . ']';
-        if ($this->safe_lookups === 0) { // Unsafe lookups
-            return $unsafe;
+
+        switch ($this->safe_lookups) {
+            case \Box\Brainy\Brainy::LOOKUP_UNSAFE:
+                return $unsafe;
+            case \Box\Brainy\Brainy::LOOKUP_SAFE:
+                $safe = '\Box\Brainy\Runtime\Lookups::safeArrayLookup(' . $base . ', ' . $variable . ')';
+                break;
+            case \Box\Brainy\Brainy::LOOKUP_SAFE_WARN:
+                $safe = '\Box\Brainy\Runtime\Lookups::safeArrayLookupWarn(' . $base . ', ' . $variable . ')';
+                break;
         }
-        $safe = '\Box\Brainy\Runtime\Lookups::safeArrayLookup(' . $base . ', '. $variable .', ' . $this->safe_lookups . ')';
+
         return new Wrappers\SafeLookupWrapper($unsafe, $safe);
     }
 }
