@@ -29,15 +29,15 @@
 namespace Box\Brainy;
 
 /**
- * set SMARTY_DIR to absolute path to Smarty library files.
- * Sets SMARTY_DIR only if user application has not already defined it.
+ * set BRAINY_DIR to absolute path to Brainy library files.
+ * Sets BRAINY_DIR only if user application has not already defined it.
  */
-if (!defined('SMARTY_DIR')) {
-    define('SMARTY_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+if (!defined('BRAINY_DIR')) {
+    define('BRAINY_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 }
 
-if (!defined('SMARTY_PLUGINS_DIR')) {
-    define('SMARTY_PLUGINS_DIR', SMARTY_DIR . 'plugins' . DIRECTORY_SEPARATOR);
+if (!defined('BRAINY_PLUGINS_DIR')) {
+    define('BRAINY_PLUGINS_DIR', BRAINY_DIR . 'plugins' . DIRECTORY_SEPARATOR);
 }
 
 
@@ -392,7 +392,7 @@ class Brainy
         // set default dirs
         $this->setTemplateDir('.' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR)
             ->setCompileDir('.' . DIRECTORY_SEPARATOR . 'compiled' . DIRECTORY_SEPARATOR)
-            ->setPluginsDir(SMARTY_PLUGINS_DIR);
+            ->setPluginsDir(BRAINY_PLUGINS_DIR);
     }
 
 

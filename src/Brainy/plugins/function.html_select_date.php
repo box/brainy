@@ -9,11 +9,11 @@
 /**
  * @ignore
  */
-require_once SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php';
+require_once BRAINY_PLUGINS_DIR . 'shared.escape_special_chars.php';
 /**
  * @ignore
  */
-require_once SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php';
+require_once BRAINY_PLUGINS_DIR . 'shared.make_timestamp.php';
 
 /**
  * Smarty {html_select_date} plugin
