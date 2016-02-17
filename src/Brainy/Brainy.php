@@ -49,7 +49,7 @@ class Brainy
      * The current version string for the current version of Brainy.
      * @var string
      */
-    const SMARTY_VERSION = 'Brainy-3.0.0';
+    const SMARTY_VERSION = 'Brainy-3.1.0';
 
     /**
      * Represents local scope.
