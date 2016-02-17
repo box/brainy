@@ -34,7 +34,7 @@ function smarty_modifier_date_format($string, $format = null, $default_date = ''
     /**
     * Include the {@link shared.make_timestamp.php} plugin
     */
-    include_once SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php';
+    include_once BRAINY_PLUGINS_DIR . 'shared.make_timestamp.php';
     if ($string != '' && $string != '0000-00-00' && $string != '0000-00-00 00:00:00') {
         $timestamp = smarty_make_timestamp($string);
     } elseif ($default_date != '') {

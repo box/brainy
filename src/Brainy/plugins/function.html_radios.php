@@ -47,7 +47,7 @@ function smarty_function_html_radios($params, $template)
 
     $template->assertIsNotStrict('`{html_radios}` is a deprecated plugin and is not allowed in strict mode');
 
-    include_once SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php';
+    include_once BRAINY_PLUGINS_DIR . 'shared.escape_special_chars.php';
 
     $options = array(
         'name' => 'radio',

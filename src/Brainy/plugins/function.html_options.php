@@ -38,7 +38,7 @@ function smarty_function_html_options($params, $template)
 
     $template->assertIsNotStrict('`{html_options}` is a deprecated plugin and is not allowed in strict mode');
 
-    include_once SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php';
+    include_once BRAINY_PLUGINS_DIR . 'shared.escape_special_chars.php';
 
     $options = array(
         'name' => null,
