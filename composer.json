@@ -35,5 +35,10 @@
         "psr-4": {
             "Box\\Brainy\\": "src/Brainy/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Box\\Brainy\\Tests\\": "test/"
+        }
     }
 }
