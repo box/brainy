@@ -108,6 +108,22 @@ class Template extends TemplateBase
     }
 
     /**
+     * Recompiles the template and also writes a copy of the compiled code to
+     * a temporary destination to load from. This is so that stale compiled code
+     * will be refreshed in HHVM, which does not support requiring the same file
+     * twice even if it has been changed.
+     * @return void
+     */
+    public function recompileAndLoadCopy()
+    {
+        $code = $template->compileTemplateSource();
+        $tempFilepath = $this->compiled->filepath . '.temp' . uniqid() . '.php';
+        self::writeFile($tempFilepath, $code, $this->smarty);
+        $this->compiled->filepath = $tempFilepath;
+        $this->compiled->load($this);
+    }
+
+    /**
      * Compiles the template
      * @return string The compiled template source
      */
