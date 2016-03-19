@@ -116,7 +116,7 @@ class Template extends TemplateBase
      */
     public function recompileAndLoadCopy()
     {
-        $code = $template->compileTemplateSource();
+        $code = $this->compileTemplateSource();
         $tempFilepath = $this->compiled->filepath . '.temp' . uniqid() . '.php';
         self::writeFile($tempFilepath, $code, $this->smarty);
         $this->compiled->filepath = $tempFilepath;
@@ -245,7 +245,6 @@ PHPDOC;
             }
         }
         $this->properties['version'] = isset($properties['version']) ? $properties['version'] : '';
-        $this->properties['unifunc'] = $properties['unifunc'];
         // check file dependencies at compiled code
         if ($this->properties['version'] != Brainy::SMARTY_VERSION) {
             return false;
@@ -278,6 +277,7 @@ PHPDOC;
             }
         }
         // store data in reusable Smarty_Template_Compiled
+        $this->properties['unifunc'] = $properties['unifunc'];
         $this->compiled->properties = $properties;
 
         return true;

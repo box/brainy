@@ -153,7 +153,7 @@ class TemplateBase
                 // the timestamp on its stored dependency, we will not be able
                 // to decode the properties of the compiled template. Thus the
                 // template needs to be recompiled here.
-                if (!is_callable($template->properties['unifunc'])) {
+                if (empty($template->properties['unifunc']) || !is_callable($template->properties['unifunc'])) {
                     $template->recompileAndLoadCopy();
                 }
             } else {
