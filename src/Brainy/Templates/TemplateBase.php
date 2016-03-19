@@ -149,6 +149,13 @@ class TemplateBase
             }
             if (!$template->compiled->loaded) {
                 $template->compiled->load($template);
+                // If the template source's timestamp is greater than that of
+                // the timestamp on its stored dependency, we will not be able
+                // to decode the properties of the compiled template. Thus the
+                // template needs to be recompiled here.
+                if (empty($template->properties['unifunc']) || !is_callable($template->properties['unifunc'])) {
+                    $template->recompileAndLoadCopy();
+                }
             } else {
                 $template->decodeProperties($template->compiled->properties, false);
             }
