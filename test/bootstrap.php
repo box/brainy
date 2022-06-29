@@ -4,13 +4,14 @@ namespace Box\Brainy\Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use PHPUnit\Framework\TestCase;
 
-class Smarty_TestCase extends \PHPUnit_Framework_TestCase
+class Smarty_TestCase extends TestCase
 {
     protected $smarty = null;
     protected $smartyBC = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->smarty = new \Box\Brainy\Brainy();
         $this->setUpInstance($this->smarty);
@@ -23,7 +24,6 @@ class Smarty_TestCase extends \PHPUnit_Framework_TestCase
         \Box\Brainy\Resources\Resource::reset();
 
         $this->clearFiles();
-        parent::setUp();
     }
 
     protected function setUpInstance($smarty)

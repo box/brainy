@@ -11,7 +11,7 @@ namespace Box\Brainy\Tests;
 
 class FunctionTest extends Smarty_TestCase
 {
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
         $this->smarty->enableSecurity();

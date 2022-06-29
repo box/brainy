@@ -11,7 +11,7 @@ namespace Box\Brainy\Tests;
 
 class CompileIncludeTest extends Smarty_TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         parent::setUp();
         $this->smarty->force_compile = true;
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;

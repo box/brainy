@@ -262,7 +262,7 @@ class PluginFunctionHtmlRadiosTest extends Smarty_TestCase
     }
 
     protected $_errors = array();
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
+    public function error_handler($errno, $errstr, $errfile = null, $errline = null, $errcontext = null) {
         $this->_errors[] = $errstr;
     }
 

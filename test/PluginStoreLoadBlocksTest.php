@@ -5,7 +5,7 @@ namespace Box\Brainy\Tests;
 
 class PluginStoreLoadBlocksTest extends Smarty_TestCase
 {
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
         $this->smarty->assign('varname', 'poison');

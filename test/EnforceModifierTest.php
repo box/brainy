@@ -5,7 +5,7 @@ namespace Box\Brainy\Tests;
 
 class EnforceModifierTest extends Smarty_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // We want to show all errors for this test suite.
