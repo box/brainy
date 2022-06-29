@@ -82,12 +82,6 @@ class EnforceModifierTest extends Smarty_TestCase
         $this->smarty->display('eval:{foreach [] as $foo name="foo"}{/foreach}{$smarty.foreach.foo.first}');
     }
 
-    public function testProtectedSmartyVariablesThrow()
-    {
-        \Box\Brainy\Brainy::$enforce_expression_modifiers = array('escape');
-        $this->smarty->fetch('string:{foreach [] as $foo name="foo"}{$smarty.foreach.foo.last|escape}{/foreach}');
-    }
-
     public function testNonStaticModifiersThrow()
     {
         $this->expectException(\Box\Brainy\Exceptions\BrainyModifierEnforcementException::class);
