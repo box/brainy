@@ -291,15 +291,17 @@ class TemplateCompiler
      * If parameter $args contains a string this is used as error message
      *
      * @param  string      $args            individual error message or null
-     * @param  string      $line            line-number
+     * @param  int         $line            line-number
      * @param  string|void $exception_class The name of the exception class to raise
      * @throws SmartyCompilerException when an unexpected token is found
      */
-    public function trigger_template_error($args = null, $line = null, $exception_class = '\Box\Brainy\Exceptions\SmartyCompilerException')
+    public function trigger_template_error($args = null, $line = 0, $exception_class = '\Box\Brainy\Exceptions\SmartyCompilerException')
     {
         // get template source line which has error
         if (!isset($line)) {
             $line = $this->lex->line;
+        } else {
+            $line = intval($line);
         }
         $match = preg_split("/\n/", $this->lex->data);
         $error_text = 'Syntax error in template "' . ($this->template->source->filepath) . '" on line ' . ($line + $this->lex->line)  . ' "' . trim(preg_replace('![\t\r\n]+!', ' ', $match[$line - 1])) . '" ';
