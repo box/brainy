@@ -46,10 +46,9 @@ class StrictModeTest extends Smarty_TestCase
 
     /**
      * @dataProvider banned_constructs_provider
-     * @expectedException \Box\Brainy\Exceptions\BrainyStrictModeException
-     * @expectedExceptionMessage Strict Mode:
      */
     public function test_banned_constructs_are_not_allowed($source) {
+        $this->expectException(\Box\Brainy\Exceptions\BrainyStrictModeException::class);
         $this->smarty->createTemplate("eval:{* set strict *}\n" . $source)->compileTemplateSource();
     }
 
@@ -98,10 +97,9 @@ class StrictModeTest extends Smarty_TestCase
 
     /**
      * @dataProvider banned_plugin_provider
-     * @expectedException \Box\Brainy\Exceptions\BrainyStrictModeException
-     * @expectedExceptionMessage Strict Mode:
      */
     public function test_banned_plugins_are_not_allowed($source) {
+        $this->expectException(\Box\Brainy\Exceptions\BrainyStrictModeException::class);
         $this->smarty->display('eval:{* set strict *}' . $source);
     }
 

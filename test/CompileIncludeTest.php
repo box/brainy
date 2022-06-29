@@ -42,9 +42,9 @@ class CompileIncludeTest extends Smarty_TestCase
         $this->smarty->assign('foo', 1);
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\'} after include {$foo}', null, null, $this->smarty);
         $content = $this->smarty->fetch($tpl);
-        $this->assertContains('befor include 1', $content);
-        $this->assertContains('in include 2', $content);
-        $this->assertContains('after include 1', $content);
+        $this->assertStringContainsString('befor include 1', $content);
+        $this->assertStringContainsString('in include 2', $content);
+        $this->assertStringContainsString('after include 1', $content);
     }
 
     public function testIncludeParentScope() {
@@ -57,10 +57,10 @@ class CompileIncludeTest extends Smarty_TestCase
         );
         $content = $this->smarty->fetch($tpl);
         $content2 = $this->smarty->fetch('eval: root value {$foo}');
-        $this->assertContains('befor include 1', $content);
-        $this->assertContains('in include 2', $content);
-        $this->assertContains('after include 2', $content);
-        $this->assertContains('root value 1', $content2);
+        $this->assertStringContainsString('befor include 1', $content);
+        $this->assertStringContainsString('in include 2', $content);
+        $this->assertStringContainsString('after include 2', $content);
+        $this->assertStringContainsString('root value 1', $content2);
     }
 
     public function testIncludeRootScope() {
@@ -68,10 +68,10 @@ class CompileIncludeTest extends Smarty_TestCase
         $this->smarty->assign('foo', 1);
         $content = $this->smarty->fetch($tpl);
         $content2 = $this->smarty->fetch('eval: smarty value {$foo}');
-        $this->assertNotContains('befor include 1', $content);
-        $this->assertContains('in include 2', $content);
-        $this->assertContains('after include 2', $content);
-        $this->assertContains('smarty value 1', $content2);
+        $this->assertStringNotContainsString('befor include 1', $content);
+        $this->assertStringContainsString('in include 2', $content);
+        $this->assertStringContainsString('after include 2', $content);
+        $this->assertStringContainsString('smarty value 1', $content2);
     }
 
     public function testIncludeRootScope2() {
@@ -79,24 +79,24 @@ class CompileIncludeTest extends Smarty_TestCase
         $tpl = $this->smarty->createTemplate('eval: befor include {$foo} {include file=\'eval:{$foo=2} in include {$foo}\' scope = root} after include {$foo}', null, $this->smarty);
         $content = $this->smarty->fetch($tpl);
         $content2 = $this->smarty->fetch('eval: smarty value {$foo}');
-        $this->assertContains('befor include 1', $content);
-        $this->assertContains('in include 2', $content);
-        $this->assertContains('after include 1', $content);
-        $this->assertContains('smarty value 2', $content2);
+        $this->assertStringContainsString('befor include 1', $content);
+        $this->assertStringContainsString('in include 2', $content);
+        $this->assertStringContainsString('after include 1', $content);
+        $this->assertStringContainsString('smarty value 2', $content2);
     }
 
     public function testRecursiveIncludes1() {
         $this->smarty->assign('foo', 1);
         $this->smarty->assign('bar','bar');
         $content = $this->smarty->fetch('test_recursive_includes.tpl');
-        $this->assertContains("before 1 bar<br>\nbefore 2 bar<br>\nbefore 3 bar<br>\n\nafter 3 bar<br>\n\nafter 2 bar<br>\n\nafter 1 bar<br>", $content);
+        $this->assertStringContainsString("before 1 bar<br>\nbefore 2 bar<br>\nbefore 3 bar<br>\n\nafter 3 bar<br>\n\nafter 2 bar<br>\n\nafter 1 bar<br>", $content);
     }
 
     public function testRecursiveIncludes2() {
         $this->smarty->assign('foo', 1);
         $this->smarty->assign('bar','bar');
         $content = $this->smarty->fetch('test_recursive_includes2.tpl');
-        $this->assertContains("before 1 bar<br>\nbefore 3 bar<br>\nbefore 5 bar<br>\n\nafter 5 bar<br>\n\nafter 3 bar<br>\n\nafter 1 bar<br>", $content);
+        $this->assertStringContainsString("before 1 bar<br>\nbefore 3 bar<br>\nbefore 5 bar<br>\n\nafter 5 bar<br>\n\nafter 3 bar<br>\n\nafter 1 bar<br>", $content);
     }
 
 }

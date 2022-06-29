@@ -88,10 +88,9 @@ class CompileAssignTest extends Smarty_TestCase
         $this->assertEquals("a9b8c7d6", $this->smarty->fetch($tpl));
     }
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
-     */
     public function testInvalidScope() {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyCompilerException::class);
+        $this->expectExceptionMessage('missing "value" attribute');
         $this->smarty->display('eval:{assign var=foo scope="foo"}');
     }
 }

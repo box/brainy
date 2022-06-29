@@ -295,7 +295,7 @@ class TemplateCompiler
      * @param  string|void $exception_class The name of the exception class to raise
      * @throws SmartyCompilerException when an unexpected token is found
      */
-    public function trigger_template_error($args = null, $line = 0, $exception_class = '\Box\Brainy\Exceptions\SmartyCompilerException')
+    public function trigger_template_error($args = null, $line = null, $exception_class = '\Box\Brainy\Exceptions\SmartyCompilerException')
     {
         // get template source line which has error
         if (!isset($line)) {

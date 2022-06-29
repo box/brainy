@@ -40,11 +40,9 @@ class FileResourceTest extends Smarty_TestCase
     public function testTemplateFileNotExists2() {
         $this->assertFalse($this->smarty->templateExists('notthere.tpl'));
     }
-    /**
-     * @expectedException \Box\Brainy\Exceptions\SmartyException
-     * @expectedExceptionMessage Unable to load template file 'notthere.tpl'
-     */
     public function testTemplateFileNotExists3() {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyException::class);
+        $this->expectExceptionMessage("Unable to load template file 'notthere.tpl'");
         $this->smarty->display('notthere.tpl');
     }
 
@@ -108,27 +106,25 @@ class FileResourceTest extends Smarty_TestCase
 
     public function testRelativeInclude() {
         $result = $this->smarty->fetch('relative.tpl');
-        $this->assertContains('hello world', $result);
+        $this->assertStringContainsString('hello world', $result);
     }
 
     public function testRelativeIncludeSub() {
         $result = $this->smarty->fetch('sub/relative.tpl');
-        $this->assertContains('hello world', $result);
+        $this->assertStringContainsString('hello world', $result);
     }
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\SmartyException
-     * @expectedExceptionMessage Unable to load template
-     */
-    public function testRelativeIncludeFail() {
+    public function testRelativeIncludeFail()
+    {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyException::class);
+        $this->expectExceptionMessage("Unable to load template");
         $this->smarty->display('relative_sub.tpl');
     }
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\SmartyException
-     * @expectedExceptionMessage Unable to load template file './hello.tpl' in 'relative_notexist.tpl'
-     */
-    public function testRelativeIncludeFailOtherDir() {
+    public function testRelativeIncludeFailOtherDir()
+    {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyException::class);
+        $this->expectExceptionMessage("Unable to load template file './hello.tpl' in 'relative_notexist.tpl'");
         $this->smarty->addTemplateDir('test/templates_2');
         $this->smarty->display('relative_notexist.tpl');
     }

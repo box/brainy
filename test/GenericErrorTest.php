@@ -5,45 +5,37 @@ namespace Box\Brainy\Tests;
 
 class GenericErrorTest extends Smarty_TestCase
 {
-    /**
-     * @expectedException \Box\Brainy\Exceptions\SmartyException
-     * @expectedExceptionMessage Unable to load template
-     */
     public function testNoneExistingTemplateError()
     {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyException::class);
+        $this->expectExceptionMessage('Unable to load template');
         $this->smarty->display('eval:{include file=\'no.tpl\'}');
     }
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\SmartyException
-     * @expectedExceptionMessage Call to undefined function 'unknown'. Defined functions: <none>
-     */
     public function testUnknownTagError()
     {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyException::class);
+        $this->expectExceptionMessage('Call to undefined function \'unknown\'. Defined functions: <none>');
         $this->smarty->display('eval:{unknown}');
     }
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
-     * @expectedExceptionMessage "{if true}" unclosed {if} tag
-     */
     public function testUnclosedTagError()
     {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyCompilerException::class);
+        $this->expectExceptionMessage('"{if true}" unclosed {if} tag');
         $this->smarty->display('eval:{if true}');
     }
-    /**
-     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
-     * @expectedExceptionMessage "{assign var=}"  - Unexpected "}"
-     */
     public function testSyntaxError()
     {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyCompilerException::class);
+        $this->expectExceptionMessage('"{assign var=}"  - Unexpected "}"');
         $this->smarty->display('eval:{assign var=}');
     }
 
     public function testEmptyTemplate()
     {
         $tpl = $this->smarty->createTemplate('eval:');
-        $this->assertEquals('', $this->smarty->display($tpl));
+        $this->assertEmpty($this->smarty->display($tpl));
     }
 
 }

@@ -95,11 +95,11 @@ class ModifierTest extends Smarty_TestCase
         $tpl->assign('foo', 1);
         $this->assertEquals("mymodifier static 1", $this->smarty->fetch($tpl));
     }
-    /**
-     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
-     * @expectedExceptionMessage Unknown modifier: "unknown"
-     */
-    public function testUnknownModifier() {
+
+    public function testUnknownModifier()
+    {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyCompilerException::class);
+        $this->expectExceptionMessage('Unknown modifier: "unknown"');
         $this->smarty->display('eval:{"hello world"|unknown}');
     }
     /**

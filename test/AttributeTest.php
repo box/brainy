@@ -5,12 +5,10 @@ namespace Box\Brainy\Tests;
 
 class AttributeTest extends Smarty_TestCase
 {
-
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage missing "var" attribute
-     */
-    public function testRequiredAttributeVar() {
+    public function testRequiredAttributeVar()
+    {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyCompilerException::class);
+        $this->expectExceptionMessage('missing "var" attribute');
         $this->smarty->display('eval:{assign value=1}');
     }
 
