@@ -322,8 +322,8 @@ function smarty_function_html_select_date($params, $template)
 
         for ($i = 1; $i <= 12; $i++) {
             $_val = sprintf('%02d', $i);
-            $_text = isset($options['month_names']) ? smarty_function_escape_special_chars($options['month_names'][$i]) : ($options['month_format'] == "%m" ? $_val : strftime($options['month_format'], $_month_timestamps[$i]));
-            $_value = $options['month_value_format'] == "%m" ? $_val : strftime($options['month_value_format'], $_month_timestamps[$i]);
+            $_text = isset($options['month_names']) ? smarty_function_escape_special_chars($options['month_names'][$i]) : ($options['month_format'] == "%m" ? $_val : __brainy_format_month($options['month_format'], $_month_timestamps[$i]));
+            $_value = $options['month_value_format'] == "%m" ? $_val : __brainy_format_month($options['month_value_format'], $_month_timestamps[$i]);
             $_html_months .= '<option value="' . $_value . '"'
                 . ($_val == $timeData['_month'] ? ' selected="selected"' : '')
                 . '>' . $_text . '</option>' . $options['option_separator'];
@@ -408,4 +408,23 @@ function smarty_function_html_select_date($params, $template)
     }
 
     return $_html;
+}
+
+/**
+ * This function behaves like strftime(). strftime() is deprecated, though,
+ * so this translates the format to a `DateTime::format`-compatible format for
+ * use with date().
+ */
+function __brainy_format_month($strftime_format, $value) {
+    switch ($strftime_format) {
+        case '%b':
+        case '%h':
+            return date('M', $value);
+        case '%B':
+            return date('F', $value);
+        case '%m':
+            return date('m', $value);
+        default:
+            throw new \Box\Brainy\Exceptions\SmartyException("Cannot use month format '$strftime_format'");
+    }
 }
