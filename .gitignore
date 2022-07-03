@@ -30,6 +30,5 @@ coverage/
 test/compiled
 vendor/
 *.dat
-composer.lock
 
 .phpunit.result.cache
