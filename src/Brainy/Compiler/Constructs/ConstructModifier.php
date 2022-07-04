@@ -48,7 +48,6 @@ class ConstructModifier extends BaseConstruct
             }
         }
 
-        $params = implode(', ', $parameters);
         $output = '';
 
         if (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIERCOMPILER][$modifier])) {
@@ -70,11 +69,29 @@ class ConstructModifier extends BaseConstruct
 
             $func = PluginLoader::getPluginFunction(Brainy::PLUGIN_MODIFIERCOMPILER, $modifier);
             $output = call_user_func($func, $parameters, $compiler);
-        } elseif (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][$modifier])) {
-            $function = $compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][$modifier];
-            $output = "{$function}({$params})";
-        } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIER, $modifier, $compiler->smarty)) {
+        } else {
+            $params = implode(', ', $parameters);
+            $output = self::compileSingleRuntimeModifier($compiler, $modifier, $params);
+        }
 
+        if ($modifierIsStatic || in_array($modifier, Brainy::$enforce_expression_modifiers ?: array())) {
+            $output = new StaticWrapper($output);
+        }
+        return $output;
+    }
+
+    /**
+     * @param  \Box\Brainy\Compiler\TemplateCompiler $compiler A compiler reference
+     * @param @modifier string
+     * @param $params string
+     * @return string|StaticWrapper
+     */
+    public static function compileSingleRuntimeModifier(\Box\Brainy\Compiler\TemplateCompiler $compiler, $modifier, $params)
+    {
+        if (isset($compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][$modifier])) {
+            $function = $compiler->smarty->registered_plugins[Brainy::PLUGIN_MODIFIER][$modifier];
+            return "{$function}({$params})";
+        } elseif (PluginLoader::loadPlugin(Brainy::PLUGIN_MODIFIER, $modifier, $compiler->smarty)) {
             if (
                 is_object($compiler->smarty->security_policy)
                 && !$compiler->smarty->security_policy->isTrustedModifier($modifier, $compiler)
@@ -89,6 +106,7 @@ class ConstructModifier extends BaseConstruct
             $output .= "{$func}({$params})";
 
             $output .= ' : null)';
+            return $output;
         } elseif (is_callable($modifier)) {
 
             if (
@@ -99,15 +117,10 @@ class ConstructModifier extends BaseConstruct
                 // unreachable;
             }
 
-            $output = "{$modifier}({$params})";
+            return "{$modifier}({$params})";
         } else {
             $compiler->trigger_template_error('Unknown modifier: "' . $modifier . '"');
             // unreachable
         }
-
-        if ($modifierIsStatic || in_array($modifier, Brainy::$enforce_expression_modifiers ?: array())) {
-            $output = new StaticWrapper($output);
-        }
-        return $output;
     }
 }
