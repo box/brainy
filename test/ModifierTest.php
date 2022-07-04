@@ -123,9 +123,16 @@ class ModifierTest extends Smarty_TestCase
 
         $tpl = $this->smarty->createTemplate("eval:{\$foo=[1,2,3,4,5]}{\$bar = \$foo|array_pop}{\$bar}");
         $this->assertEquals("5", $this->smarty->fetch($tpl));
+    }
+    public function testNestedModifierArrayMethodsInSafeMode()
+    {
+        $this->smarty->security_policy->php_modifiers = ['array_pop', 'strval'];
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
 
-        $tpl = $this->smarty->createTemplate("eval:{\$foo=[1,2,3,4,5]}{\$bar = \$foo|array_shift}{\$bar}");
-        $this->assertEquals("1", $this->smarty->fetch($tpl));
+        // This is the same test as above, but array_pop isn't the outermost modifier.
+
+        $tpl = $this->smarty->createTemplate("eval:{\$foo=[1,2,3,4,5]}{\$bar = \$foo|array_pop|strval}{\$bar}");
+        $this->assertEquals("5", $this->smarty->fetch($tpl));
     }
 
 
