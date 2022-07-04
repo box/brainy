@@ -112,6 +112,22 @@ class ModifierTest extends Smarty_TestCase
         $this->assertEquals('&lt;bar&gt;', $this->smarty->fetch($tpl));
     }
 
+    public function testModifierArrayMethodsInSafeMode()
+    {
+        $this->smarty->security_policy->php_modifiers = ['array_pop', 'array_shift'];
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
+
+        // Safe mode compiles lookups to function calls, which cannot be used as arguments
+        // that are passed by reference. Calling `array_pop` on anything that is not
+        // _syntactically_ a variable is illegal and will throw.
+
+        $tpl = $this->smarty->createTemplate("eval:{\$foo=[1,2,3,4,5]}{\$bar = \$foo|array_pop}{\$bar}");
+        $this->assertEquals("5", $this->smarty->fetch($tpl));
+
+        $tpl = $this->smarty->createTemplate("eval:{\$foo=[1,2,3,4,5]}{\$bar = \$foo|array_shift}{\$bar}");
+        $this->assertEquals("1", $this->smarty->fetch($tpl));
+    }
+
 
     public static function staticcall($value) {
         return "mymodifier static $value";
