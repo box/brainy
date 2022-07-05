@@ -16,7 +16,7 @@ class ClearAllAssignTest extends Smarty_TestCase
     protected $_dataBC = null;
     protected $_tplBC = null;
 
-    public function setUp() {
+    public function setup(): void {
         parent::setUp();
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
         $this->smartyBC->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;

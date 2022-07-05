@@ -11,7 +11,7 @@ namespace Box\Brainy\Tests;
 
 class IndexedFileResourceTest extends Smarty_TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         parent::setUp();
         $this->smarty->addTemplateDir(dirname(__FILE__) .'/templates_2');
         // note that 10 is a string!

@@ -11,18 +11,16 @@ namespace Box\Brainy\Tests;
 
 class FunctionTest extends Smarty_TestCase
 {
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
         $this->smarty->enableSecurity();
     }
 
-    /**
-     * @expectedExceptionMessage PHP function 'unknown' not allowed by security setting
-     * @expectedException \Box\Brainy\Exceptions\SmartyCompilerException
-     */
     public function testUnknownFunction()
     {
+        $this->expectException(\Box\Brainy\Exceptions\SmartyCompilerException::class);
+        $this->expectExceptionMessage("PHP function 'unknown' not allowed by security setting");
         $this->smarty->display('eval:{unknown()}');
     }
 

@@ -4,7 +4,7 @@ namespace Box\Brainy\Tests;
 
 class CompileForeachTest extends Smarty_TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         parent::setUp();
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
     }

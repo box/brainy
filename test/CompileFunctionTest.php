@@ -59,7 +59,7 @@ class CompileFunctionTest extends Smarty_TestCase
     public function testExternalDefinedFunction() {
         $tpl = $this->smarty->createTemplate('string:{include file="template_function_lib.tpl"}{call name=template_func1}');
         $tpl->assign('foo', 'foo');
-        $this->assertContains('foo', $this->smarty->fetch($tpl));
+        $this->assertStringContainsString('foo', $this->smarty->fetch($tpl));
     }
 
 

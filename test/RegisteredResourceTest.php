@@ -11,7 +11,7 @@ namespace Box\Brainy\Tests;
 
 class RegisteredResourceTest extends Smarty_TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         parent::setUp();
         $this->smarty->registerResource("rr", array(
             "\Box\Brainy\Tests\RegisteredResourceTest::rr_get_template",

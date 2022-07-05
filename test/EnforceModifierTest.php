@@ -5,7 +5,7 @@ namespace Box\Brainy\Tests;
 
 class EnforceModifierTest extends Smarty_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // We want to show all errors for this test suite.
@@ -45,21 +45,17 @@ class EnforceModifierTest extends Smarty_TestCase
     }
 
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\BrainyModifierEnforcementException
-     */
     public function testDeeplyModifiedExpressionsThrow()
     {
+        $this->expectException(\Box\Brainy\Exceptions\BrainyModifierEnforcementException::class);
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array('foo');
         $this->smarty->assign('foo', 'bar');
         $this->smarty->display('eval:{$foo|escape|capitalize}');
     }
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\BrainyModifierEnforcementException
-     */
     public function testModifiedExpressionsWithAttributesThrow()
     {
+        $this->expectException(\Box\Brainy\Exceptions\BrainyModifierEnforcementException::class);
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array('foo');
         $this->smarty->display('eval:{$foo|escape:"hex"}');
     }
@@ -79,36 +75,24 @@ class EnforceModifierTest extends Smarty_TestCase
         $this->smarty->display('eval:{"foo"|escape:"hex"}');
     }
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\BrainyModifierEnforcementException
-     */
     public function testBareSmartyVariablesThrow()
     {
+        $this->expectException(\Box\Brainy\Exceptions\BrainyModifierEnforcementException::class);
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array('escape');
         $this->smarty->display('eval:{foreach [] as $foo name="foo"}{/foreach}{$smarty.foreach.foo.first}');
     }
 
-    public function testProtectedSmartyVariablesThrow()
-    {
-        \Box\Brainy\Brainy::$enforce_expression_modifiers = array('escape');
-        $this->smarty->fetch('string:{foreach [] as $foo name="foo"}{$smarty.foreach.foo.last|escape}{/foreach}');
-    }
-
-    /**
-     * @expectedException \Box\Brainy\Exceptions\BrainyModifierEnforcementException
-     */
     public function testNonStaticModifiersThrow()
     {
+        $this->expectException(\Box\Brainy\Exceptions\BrainyModifierEnforcementException::class);
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array('foo');
         $this->smarty->assign('escapetype', 'html');
         $this->smarty->display('eval:{"foo"|escape:$escapetype}');
     }
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\BrainyModifierEnforcementException
-     */
     public function testNestedNonStaticModifiersThrow()
     {
+        $this->expectException(\Box\Brainy\Exceptions\BrainyModifierEnforcementException::class);
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array('foo');
         $this->smarty->assign('escapetype', 'html');
         $this->smarty->display('eval:{"foo"|escape:$escapetype|capitalize}');
@@ -135,11 +119,9 @@ class EnforceModifierTest extends Smarty_TestCase
     }
 
 
-    /**
-     * @expectedException \Box\Brainy\Exceptions\BrainyModifierEnforcementException
-     */
     public function testTernaryOperator()
     {
+        $this->expectException(\Box\Brainy\Exceptions\BrainyModifierEnforcementException::class);
         \Box\Brainy\Brainy::$enforce_expression_modifiers = array('foo');
         $this->smarty->assign('foo', 'x');
         $this->smarty->display('eval:{(true)?$foo:$bar}');

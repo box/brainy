@@ -8,33 +8,33 @@
 
 namespace Box\Brainy\Tests;
 
+use RuntimeException;
 
 class LookupSafetyTest extends Smarty_TestCase
 {
 
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
         error_reporting(E_ALL);
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error_Notice
-     */
-    public function testUnsafeLookupsThrowException() {
+    public function testUnsafeLookupsThrowException()
+    {
+        // As of PHP8, these are warnings
+        $this->expectWarning('Undefined array key');
         $this->expectOutputString('');
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
         $this->smarty->display('eval:{$does_not_exist}');
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error_Notice
-     */
     public function testUnsafeIndexLookupsThrowException() {
+        // As of PHP8, these are warnings
+        $this->expectWarning('Undefined array key');
         $this->expectOutputString('');
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
         $this->smarty->assign('foo', array());
-        $this->smarty->display('eval:{$foo[0]}');
+        $this->smarty->display('eval:{$foo[0][0]}');
     }
 
     /*
@@ -78,22 +78,20 @@ class LookupSafetyTest extends Smarty_TestCase
     The tests below test the LOOKUP_SAFE_WARN behavior.
     */
 
-    /**
-     * @expectedException PHPUnit_Framework_Error_Warning
-     */
-    public function testSafeWarnLookupsThrowWarning() {
+    public function testSafeWarnLookupsThrowWarning()
+    {
+        $this->expectWarning();
         $this->expectOutputString('');
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE_WARN;
         $this->smarty->display('eval:{$does_not_exist}');
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error_Warning
-     */
-    public function testSafeWarnIndexLookupsThrowWarning() {
+    public function testSafeWarnIndexLookupsThrowWarning()
+    {
+        $this->expectWarning();
         $this->expectOutputString('');
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE_WARN;
         $this->smarty->assign('foo', array());
-        $this->smarty->display('eval:{$foo[0]}');
+        $this->smarty->display('eval:{$foo[0][0]}');
     }
 }

@@ -17,7 +17,7 @@ namespace Box\Brainy\Tests;
 
 class PluginFunctionHtmlSelectDateTest extends Smarty_TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         parent::setUp();
 
         $this->now = mktime( 15, 0, 0, 2, 20, 2014 );
