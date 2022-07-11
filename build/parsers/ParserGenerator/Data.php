@@ -1017,14 +1017,14 @@ class PHP_ParserGenerator_Data
      * Print a #line directive line to the output file.
      */
     private function tplt_linedir($out, $lineno, $filename) {
-        fwrite($out, '#line ' . $lineno . ' "' . $filename . "\"\n");
+        fwrite($out, '#line ' . intval($lineno) . ' "' . $filename . "\"\n");
     }
 
     /**
      * Print a string to the file and keep the linenumber up to date
      */
     private function tplt_print($out, $str, $strln, &$lineno) {
-        if ($str == '') {
+        if (empty($str)) {
             return;
         }
         $this->tplt_linedir($out, $strln, $this->filename);
