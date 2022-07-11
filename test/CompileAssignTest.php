@@ -87,6 +87,17 @@ class CompileAssignTest extends Smarty_TestCase
         $tpl = $this->smarty->createTemplate("eval:{\$foo=['a'=>9,'b'=>8,'c'=>7,'d'=>6]}{foreach \$foo as \$k => \$x}{\$k}{\$x}{/foreach}");
         $this->assertEquals("a9b8c7d6", $this->smarty->fetch($tpl));
     }
+    public function testAssignMemberInSafeMode()
+    {
+        $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_SAFE;
+
+        // This test previously failed because safe mode caused invalid code generation.
+        // `{$foo.bar =` compiled to `lookup(lookup('foo'), 'bar') = ...`, which is
+        // syntactiaclly invalid. The fix for this bug involved eliminating the safe mode
+        // wrapper on the final output of the LHS of the assignment.
+        $tpl = $this->smarty->createTemplate('eval:{$foo = []}{$foo.bar = 123}{$foo.bar}');
+        $this->assertEquals("5", $this->smarty->fetch($tpl));
+    }
 
     public function testInvalidScope() {
         $this->expectException(\Box\Brainy\Exceptions\SmartyCompilerException::class);
