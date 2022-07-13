@@ -95,8 +95,8 @@ class CompileAssignTest extends Smarty_TestCase
         // `{$foo.bar =` compiled to `lookup(lookup('foo'), 'bar') = ...`, which is
         // syntactiaclly invalid. The fix for this bug involved eliminating the safe mode
         // wrapper on the final output of the LHS of the assignment.
-        $tpl = $this->smarty->createTemplate('eval:{$foo = []}{$foo.bar = 123}{$foo.bar}');
-        $this->assertEquals("5", $this->smarty->fetch($tpl));
+        $tpl = $this->smarty->createTemplate("eval:{\$foo = []}\n{\$foo.bar = 123}\n{\$foo.bar}");
+        $this->assertEquals("123", $this->smarty->fetch($tpl), $tpl->compileTemplateSource());
     }
 
     public function testInvalidScope() {
