@@ -85,20 +85,14 @@
      */
     public function compileVariable($variable)
     {
-        $unsafe = '$_smarty_tpl->tpl_vars[' . $variable . ']';
-
         switch ($this->safe_lookups) {
             case \Box\Brainy\Brainy::LOOKUP_UNSAFE:
-                return $unsafe;
+                return '$_smarty_tpl->tpl_vars[' . $variable . ']';
             case \Box\Brainy\Brainy::LOOKUP_SAFE:
-                $safe = '\Box\Brainy\Runtime\Lookups::safeVarLookup($_smarty_tpl->tpl_vars, ' . $variable . ')';
-                break;
+                return new Wrappers\SubscriptableSafeLookupWrapper('$_smarty_tpl->tpl_vars', '$_smarty_tpl->tpl_vars', $variable);
             case \Box\Brainy\Brainy::LOOKUP_SAFE_WARN:
-                $safe = '\Box\Brainy\Runtime\Lookups::safeVarLookupWarn($_smarty_tpl->tpl_vars, ' . $variable . ')';
-                break;
+                return new Wrappers\SubscriptableWarnSafeLookupWrapper('$_smarty_tpl->tpl_vars', '$_smarty_tpl->tpl_vars', $variable);
         }
-
-        return new Wrappers\SafeLookupWrapper($unsafe, $safe);
     }
 
     /**
@@ -108,20 +102,15 @@
      */
     public function compileSafeLookupWithBase($base, $variable)
     {
-        $unsafe = $base . '[' . $variable . ']';
-
+        $unsafeBase = $base instanceof Wrappers\SafeLookupWrapper ? $base->getUnsafeRecursive() : $base;
         switch ($this->safe_lookups) {
             case \Box\Brainy\Brainy::LOOKUP_UNSAFE:
-                return $unsafe;
+                return $base . '[' . $variable . ']';
             case \Box\Brainy\Brainy::LOOKUP_SAFE:
-                $safe = '\Box\Brainy\Runtime\Lookups::safeArrayLookup(' . $base . ', ' . $variable . ')';
-                break;
+                return new Wrappers\ArraySafeLookupWrapper($unsafeBase, $base, $variable);
             case \Box\Brainy\Brainy::LOOKUP_SAFE_WARN:
-                $safe = '\Box\Brainy\Runtime\Lookups::safeArrayLookupWarn(' . $base . ', ' . $variable . ')';
-                break;
+                return new Wrappers\ArrayWarnSafeLookupWrapper($unsafeBase, $base, $variable);
         }
-
-        return new Wrappers\SafeLookupWrapper($unsafe, $safe);
     }
 }
 
@@ -357,7 +346,11 @@ smartytag(res) ::= LDEL expr(e). {
 // Smarty tags start here
 //
 smartytag(res) ::= LDEL variable(vi) EQUAL expr(e). {
-    res = vi . ' = (' . e . ');';
+    $base = vi;
+    if ($base instanceof Wrappers\SafeLookupWrapper) {
+        $base = $base->getUnsafeRecursive();
+    }
+    res = $base . ' = (' . e . ');';
 }
 
 smartytag(res) ::= LDEL DOLLAR ID(i) EQUAL value(e). {
