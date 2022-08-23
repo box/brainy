@@ -167,7 +167,7 @@ class ResourceFile extends Resource
         $_file_exact_match = false;
 
         // go relative to a given template?
-        $_file_is_dotted = $file[0] == '.' && ($file[1] == '.' || $file[1] == DIRECTORY_SEPARATOR);
+        $_file_is_dotted = ($file[0] ?? null) == '.' && (($file[1] ?? null) == '.' || ($file[1] ?? null) == DIRECTORY_SEPARATOR);
         if ($tpl && $tpl->parent instanceof Template && $_file_is_dotted) {
             if ($tpl->parent->source->type != 'file') {
                 throw new SmartyException(

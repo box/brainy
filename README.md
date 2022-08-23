@@ -31,7 +31,7 @@ page on the wiki.
 
 ### Minimum Requirements
 
-- PHP 7.4+
+- PHP 7.3+
 - `mbstring` PHP extension
 
 The `mbstring` extension is required in order to properly support Unicode in templates and user-provided content. Brainy 3 cannot be run in a mode that does not handle Unicode properly.

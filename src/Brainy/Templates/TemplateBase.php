@@ -193,7 +193,7 @@ class TemplateBase
 
 
     /**
-     * Assigns $value to the variale $var.
+     * Assigns $value to the variable $var.
      *
      * @param  string $var   the template variable name
      * @param  mixed  $value the value to assign

@@ -21,16 +21,24 @@ class LookupSafetyTest extends Smarty_TestCase
 
     public function testUnsafeLookupsThrowException()
     {
-        // As of PHP8, these are warnings
-        $this->expectWarning('Undefined array key');
+        if (PHP_VERSION < 80000) {
+            $this->expectNotice('Undefined array key');
+        } else {
+            // As of PHP8, these are warnings
+            $this->expectWarning('Undefined array key');
+        }
         $this->expectOutputString('');
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
         $this->smarty->display('eval:{$does_not_exist}');
     }
 
     public function testUnsafeIndexLookupsThrowException() {
-        // As of PHP8, these are warnings
-        $this->expectWarning('Undefined array key');
+        if (PHP_VERSION < 80000) {
+            $this->expectNotice('Undefined array key');
+        } else {
+            // As of PHP8, these are warnings
+            $this->expectWarning('Undefined array key');
+        }
         $this->expectOutputString('');
         $this->smarty->safe_lookups = \Box\Brainy\Brainy::LOOKUP_UNSAFE;
         $this->smarty->assign('foo', array());

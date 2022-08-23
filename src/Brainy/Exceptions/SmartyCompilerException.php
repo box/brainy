@@ -11,7 +11,7 @@ class SmartyCompilerException extends SmartyException
     {
         return ' --> Smarty Compiler: ' . $this->message . ' <-- ';
     }
-    public int $line;
+    public $line;
     /**
      * The template source snippet relating to the error
      * @var string|null
